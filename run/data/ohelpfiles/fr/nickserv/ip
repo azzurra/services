@@ -1,0 +1,6 @@
+*** NickServ Operator Help - Command: IP ***
+Returns the real IP and the crypted (+x) one of the given user.
+ 
+Syntax: IP nickname
+ 
+*** End of OHelp ***

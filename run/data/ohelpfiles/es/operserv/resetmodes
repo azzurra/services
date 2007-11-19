@@ -1,0 +1,7 @@
+*** OperServ Operator Help - Command: RESETMODES ***
+Clears all channel modes.
+ 
+Syntax: RESETMODES #channel
+ 
+This command is limited to Services Administrators.
+*** End of OHelp ***

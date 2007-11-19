@@ -1,0 +1,19 @@
+*** ChanServ Help - Comando: SET VERBOSE ***
+Permette di scegliere quali comandi di ChanServ
+debbano inviare una opnotice al canale quando eseguiti
+con successo. Il livello di default di Verbose e' 0.
+ 
+Livello 0: Non verra' inviata alcuna opnotice al canale.
+Livello 1: Solo i comandi DEOP/DEVOICE/MKICK/MDEOP/MDEVOICE/OP/UNBAN/VOICE inviano opnotice al canale.
+Livello 2: Anche ogni modifica delle liste VOP/HOP/AOP/SOP/CF/AKICK invia una opnotice al canale.
+Livello 3: Anche ogni modifica ai settaggi col comando SET invia una opnotice al canale.
+ 
+Sintassi:
+/cs SET #canale VERBOSE livello
+ 
+Esempi:
+/cs SET #IRCHelp VERBOSE 3
+/cs SET #Italia VERBOSE 1
+ 
+Per ulteriori chiarimenti, digita /join #IRCHelp
+*** Fine dell'Help ***

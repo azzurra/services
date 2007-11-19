@@ -1,0 +1,8 @@
+*** NickServ Operator Help - Command: UMODE ***
+Show the usermode(s) of the given user from the Services point of view.
+Only usermodes aAhiorwxz will be shown, if any.
+ 
+Syntax: UMODE nickname
+ 
+This command is limited to Services Help Operators.
+*** End of OHelp ***

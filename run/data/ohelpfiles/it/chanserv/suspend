@@ -1,0 +1,10 @@
+*** ChanServ Operator Help - Command: SUSPEND ***
+Suspending a channel will kick all users residing or joining the channel.
+Similar to FORBID however its time limited, and the registration is not dropped.
+Time is in minutes. If '0' is given for time then the channel is closed
+permanetly. A channel may be re-opened if DEL is used.
+ 
+Syntax: SUSPEND [ADD|DEL|LIST] #channel time
+ 
+This command is limited to Services Operators.
+*** End of OHelp ***

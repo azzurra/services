@@ -1,0 +1,7 @@
+*** NickServ Operator Help - Command: FORBID ***
+Disallows a nickname from being registered or used by anyone. May be cancelled by deleting the nick.
+ 
+Syntax: FORBID nickname
+ 
+This command is limited to Services Administrators.
+*** End of OHelp ***

@@ -1,0 +1,17 @@
+*** ChanServ Help - Comando: UNBAN ***
+Implica que Chanserv quite uno o todos los bans en el canal especificado.
+ 
+Sintaxis:
+/cs UNBAN #canal <ME|ALL>
+ 
+ME remueve todos los bans que no te dejan acceder en el canal.
+Necesitas ser minimo VOP en el canal para utilizar este comando.
+ 
+ALL remueve todos los bans del canal. Minimo ser SOP para utilizar el comando.
+ 
+Ejemplo:
+/cs UNBAN #IRCHelp ME
+/cs UNBAN #España ALL
+ 
+Para mas informaciòn, digita /join #IRCHelp
+*** Fin del Help ***

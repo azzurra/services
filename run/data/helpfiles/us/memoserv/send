@@ -1,0 +1,13 @@
+*** MemoServ Help - Command: SEND ***
+Sends a memo to the given nick, with the given message.
+The recipient will receive a notice that a new memo has arrived.
+The recipient's nickname must be registered with NickServ.
+ 
+Syntax:
+/ms SEND nickname message
+ 
+Example:
+/ms SEND Miki I'll meet you tonight in #Adachi.
+ 
+Type /join #IRCHelp for more information.
+*** End of Help ***

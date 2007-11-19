@@ -1,0 +1,15 @@
+*** MemoServ Help - Comando: FORWARD ***
+Reenvia todos los memos enviados al nick utilizado en el momento en el que ejecutes
+el comando, incluso los enviados a canales en los que estès registrados,  al nick
+especificado, lo cual tiene que estar registrado por NickServ y ya identificado.
+Para desactivar esta funciòn especifìca NONE como nick.
+ 
+Sintaxis:
+/ms FORWARD nick
+ 
+Ejemplos:
+/ms FORWARD Miki
+/ms FORWARD NONE
+ 
+Para mas informaciòn, digita /join #IRCHelp
+*** Fin del Help ***

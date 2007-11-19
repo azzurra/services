@@ -1,0 +1,14 @@
+*** NickServ Help - Commande: RECOVER ***
+Te permet de reprendre ton nick dans le cas où quelqu'un
+d'autre l'utilise. NickServ changera le nick de l'autre usager
+en Guest, en libérant le tien. En outre, tu seras identifié
+automatiquement au nick.
+ 
+Syntaxe:
+/ns RECOVER nick mot-de-passe
+ 
+Exemple:
+/ns RECOVER Napal pommedeterre
+ 
+Pour tout renseignement, tape /join #IRCHelp
+*** Fin de l'Help ***

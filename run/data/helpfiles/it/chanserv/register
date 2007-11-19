@@ -1,0 +1,31 @@
+*** ChanServ Help - Comando: REGISTER ***
+Registra un canale nel database di ChanServ. Per poter usare questo comando devi essere
+operatore nel canale che intendi registrare. La password ti servira' in seguito per
+identificarti come founder e modificare le opzioni del canale. L'ultimo parametro,
+che deve essere incluso, e' una breve descrizione generale degli argomenti trattati
+nel canale.
+ 
+Al momento della registrazione del canale il tuo nick sara' settato come founder, e in
+qualita' di founder avrai la possibilita' di modificare tutte le opzioni del canale.
+Inoltre ChanServ ti oppera' automaticamente quando entri nel tuo canale, ma solamente
+se ti sei precedentemente identificato al nick con il quale risulti founder.
+ 
+Se il nick del founder dovesse scadere causa inutilizzo o venire droppato,
+anche tutti i canali registrati dallo stesso verranno droppati.
+ 
+N.B.: Per poter registrare un canale e' necessario usare un nick registrato con NickServ.
+Per sapere come registrare il tuo nick digita /ns HELP register.
+ 
+ATTENZIONE: MAI dare la password del canale ad altre persone, anche se fidate. Nel caso
+una di queste persone decida un giorno di cambiare password e rubarti il canale, non sara'
+possibile ridartelo in alcun modo, in quanto il passaggio e' avvenuto in maniera legittima.
+ 
+Sintassi:
+/cs REGISTER #canale password descrizione
+ 
+Esempi:
+/cs REGISTER #IRCHelp pippo Il canale di aiuto ufficiale di AzzurraNet
+/cs REGISTER #linux devnull Il canale per tutti gli appassionati di linux
+ 
+Per ulteriori chiarimenti, digita /join #IRCHelp
+*** Fine dell'Help ***

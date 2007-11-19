@@ -1,0 +1,18 @@
+*** NickServ Help - Comando: DROP ***
+Anula la registraciòn te un nick ya registrado. Este comando puede ser
+utilizado unicamente por el propietario, tras haberse identificado por el
+comando IDENTIFY. La registraciòn se anularà en el mismo momento que se
+autorice por medio de un codigo enviado por E-Mail a la direcciòn
+asociada al nick. Tienes maximo 1 dìa para autorizar la pedida de drop del nick,
+tras el cual la autorizaciòn expirarà y el nick quedarà registrado.
+ 
+N.B.: Sòlo puedes utilizar este comando 1 vez por dia.
+ 
+Sintaxis:
+/ns DROP nick
+ 
+Ejemplo:
+/ns DROP SuperPicci
+ 
+Para mas informaciòn, digita /join #IRCHelp
+*** Fin del Help ***

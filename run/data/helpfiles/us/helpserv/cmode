@@ -1,0 +1,25 @@
+*** Channel Modes ***
+  b  - Bans a mask in the nick!user@host format from a channel.
+  c  - Blocks all messages containing colors sent to the channel.
+  C  - Blocks all CTCPs sent to the channel.
+  d  - Only channel operators and voices can change nick while in channel.
+  h  - Gives halfops to a nick in the channel.
+  i  - Sets the channel invite only.
+  j  - Only users identified to a registered nick can join the channel.
+  k  - Sets a key to the channel.
+  l  - Sets the maximum number of users allowed in the channel.
+  m  - Sets channel moderation; only operators, half-operators and voices can talk.
+  M  - Sets channel moderation; only users with a registered nick can talk.
+  n  - Blocks all outside messages to channel.
+  o  - Gives ops to a nick in the channel.
+  O  - (IRCop Only) Only IRC Operators can join the channel.
+  p  - Channel is private (does not show in /WHOIS, topic is hidden in /LIST ).
+  r  - (Services Only) Channel is registered with ChanServ.
+  R  - Only users with registered nicks can join the channel.
+  s  - Channel is secret (does not show in /WHOIS or /LIST ).
+  S  - Only SSL client can join the channel.
+  t  - Only channel operators can change the topic.
+  u  - Blocks PART/QUIT messages sent to the channel.
+  U  - Allow users without a registered nick on .US and .EU robins to join the channel. 
+  v  - Gives voice to a nickname in the channel.
+*** End of List ***

@@ -1,0 +1,7 @@
+*** ChanServ Operator Help - Command: ISON ***
+Check if the given nick is on the specified channel from the Services point of view.
+ 
+Syntax: ISON nick
+ 
+This command is limited to Services Help Operators.
+*** End of OHelp ***

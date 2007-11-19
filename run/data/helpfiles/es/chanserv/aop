@@ -1,0 +1,44 @@
+*** ChanServ Help - Comando: AOP ***
+Maneja la Auto-Op list de un canal.  Esta lista especifìca cuales usuarios
+tienen op automatico entrando en el canal especificado.
+ 
+Sintaxis:
+/cs AOP #canal ADD <nick|mask>
+/cs AOP #canal DEL <mask|numero>
+/cs AOP #canal LIST [mask]
+/cs AOP #canal FIND [mask]
+/cs AOP #canal CLEAN
+/cs AOP #canal EXPLIST
+/cs AOP #canal WIPE
+/cs AOP #canal LOCK
+/cs AOP #canal UNLOCK
+ 
+ADD agrega la mask o el nick especificado en la Auto-Op list del canal. Si el nick
+o la mask ya se encuentran en otra lista, su acceso se cambiarà en AOP.
+ 
+DEL remueve la mask o el nick especificado de la Auto-Op list del canal, o el
+numero correspondiente a una mask o nick si especificado.
+ 
+LIST visualiza la lista completa de los Auto-Op del canal, o en todo caso sòlo 
+los que tengan la mask especificada.
+ 
+FIND búsqueda de los elementos que reflejan la mask especificada (en el formato nick!user@host)
+ 
+CLEAN remueve de la Auto-Op list todos los nicks que estèn expirados.
+ 
+EXPLIST muestra los nick caducados presentes en la lista
+ 
+WIPE remueve todos los nicks y las masks presentes en la Auto-Op list.
+ 
+LOCK bloquea la lista, permitiendo unicamente al fundador modificarla.
+ 
+UNLOCK desbloquea la lista, en caso de que estè bloqueada por el comando LOCK.
+ 
+Ejemplos:
+/cs AOP #IRCHelp ADD Gastaman
+/cs AOP #IRCHelp ADD *!*gastaman@*.azzurranet.org
+/cs AOP #IRCHelp DEL 2
+/cs AOP #IRCHelp LIST *.it
+ 
+Para mas informaciòn, digita /join #IRCHelp
+*** Fin del Help ***

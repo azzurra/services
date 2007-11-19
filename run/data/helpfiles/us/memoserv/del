@@ -1,0 +1,25 @@
+*** MemoServ Help - Command: DEL ***
+Marks one or more memos as deleted. Memos that are marked
+are not actually erased until you use PURGE or when you
+log offline. Memos that have been deleted will be shown
+with a "D" to the left of the memo number in LIST.
+ 
+Syntax:
+/ms DEL number
+/ms DEL ALL [CHANNEL|NEW|USER]
+ 
+ALL will mark all your memos.
+ 
+ALL CHANNEL will mark all memos sent to channels.
+ 
+ALL NEW will mark all new memos (unread).
+ 
+ALL USER will mark all memos sent by other users.
+ 
+Examples:
+/ms DEL 6
+/ms DEL ALL
+/ms DEL ALL USER
+ 
+Type /join #IRCHelp for more information.
+*** End of Help ***

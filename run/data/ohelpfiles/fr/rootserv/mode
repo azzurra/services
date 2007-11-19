@@ -1,0 +1,7 @@
+*** RootServ Operator Help - Command: MODE ***
+Similar to OperServ MODE, it also lets roots add/remove
+user modes aAoOz.
+ 
+Syntax: MODE nick [+|-]modes
+ 
+*** End of OHelp ***

@@ -1,0 +1,37 @@
+*** NickServ Help - Comando: SET EMAIL ***
+Permette di gestire l'indirizzo E-Mail associato al tuo nick.
+ 
+Sintassi:
+/ns SET EMAIL nuova-e-mail
+/ns SET EMAIL <HIDE|SHOW|UNDO>
+/ns SET EMAIL AUTH <codice>
+ 
+HIDE nasconde l'indirizzo E-Mail a chiunque chieda un INFO sul tuo nick.
+ 
+SHOW rende l'indirizzo E-Mail visibile a chiunque chieda un INFO sul tuo nick.
+ 
+AUTH permette di autorizzare una richiesta di cambio indirizzo E-Mail. Il codice
+da inserire e' quello contenuto nella E-Mail inviata al vecchio indirizzo E-Mail
+al momento della richiesta del cambio.
+ 
+UNDO permette di cancellare una richiesta di cambio E-Mail in corso.
+ 
+Specificando una nuova E-Mail e' possibile chiedere un cambio dell'indirizzo. Una
+E-Mail contenente il codice di registrazione verra' inviata al vecchio indirizzo
+e sara' necessario inserire il codice tramite il comando AUTH per confermare il
+cambio. Nel caso in cui il vecchio indirizzo non sia piu' valido, o sia sbagliato,
+il cambio verra' effettuato automaticamente dopo un periodo di 7 giorni durante
+il quale sara' possibile cancellare la richiesta con il comando UNDO per impedire
+il cambio.
+ 
+ATTENZIONE: La validita' del nuovo indirizzo non sara' controllata; e' nel tuo
+interesse inserire un indirizzo E-Mail valido, in quanto se ci dovessero essere
+problemi con il tuo nick, o ti dimentichi la password, non sara' possibile aiutarti
+in alcun modo se l'indirizzo E-Mail non e' valido.
+ 
+Esempi:
+/ns SET EMAIL maya@kitajima.qz
+/ns SET EMAIL HIDE
+ 
+Per ulteriori chiarimenti, digita /join #IRCHelp
+*** Fine dell'Help ***

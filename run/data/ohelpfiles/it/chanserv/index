@@ -1,0 +1,40 @@
+ChanServ Operator Commands:
+
+These commands are available to Help Operators:
+
+AUTHRESET     Removes a channel's DROP authorization code
+SENDCODE      E-mails the channel's DROP authorization code
+CMODE         Shows the channel mode(s) of the given channel (from the Services pov)
+ISON          Checks if the given nick is on the specified channel
+ISOP          Checks if the given nick is a channel operator of the specified channel
+ISVOICE       Checks if the given nick is a voice of the specified channel
+ISHALFOP      Checks if the given nick is a halfop of the specified channel
+SENDPASS      E-Mails the channel password to the founder
+ 
+These commands are available to Services Operators:
+ 
+FREEZE        Prevents ChanServ from interacting with a channel
+LEVEL         Sets channel access level
+LISTREG       Lists all registered channels that match a given pattern
+SUSPEND       Suspends a channel temporarily
+UNFREEZE      Removes the FREEZE flag from a channel
+ 
+These commands are available to Services Admins:
+ 
+CHANSET       Changes some channel variables (Founder, Password, etc)
+CLOSE         Closes a channel indefinitely
+FORBID        Forbids the use of a channel
+GETPASS       Retrieves the founder password for a channel
+HOLD          Prevents a channel from expiring
+OPEN          Reopens a closed channel
+UNFORBID      Removes the FORBID flag for a channel
+UNHOLD        Removes the HELD flag for a channel
+ 
+These commands are available to Services Roots:
+ 
+DELETE        Drops a channel from the ChanServ database
+MARK          Prevents the GETPASSing of a channel
+UNMARK        Removes the MARK flag for a channel
+WIPE          Wipes channel access lists
+ 
+*** End of OHelp ***

@@ -1,0 +1,17 @@
+*** MemoServ Help - Comando: SET IGNORETYPE ***
+Permette di decidere la modalita' d'uso della Memo Ignore List.
+ 
+Sintassi:
+/ms SET IGNORETYPE parametro
+ 
+I parametri disponibili sono:
+ 
+    1  - Ignorerai memo inviati da tutti i nick presenti nella tua Memo Ignore List.
+    2  - Ignorerai memo inviati da tutti i nick tranne quelli presenti nella tua Memo Ignore List.
+ 
+Esempi:
+/ms SET IGNORETYPE 1
+/ms SET IGNORETYPE 2
+ 
+Per ulteriori chiarimenti, digita /join #IRCHelp
+*** Fine dell'Help ***

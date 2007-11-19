@@ -1,0 +1,14 @@
+*** ChanServ Help - Command: OP ***
+Gives channel operator status to the selected nick(s) on
+a channel. You can specify up to 6 nicks on the same line. You
+must have at least AOP access to the channel to use this command.
+ 
+Syntax:
+/cs OP #channel nick [nick2] ... [nick6]
+ 
+Examples:
+/cs OP #IRCHelp Shaka
+/cs OP #IRCHelp ^Faust^ Wolf7 Aptivo
+ 
+Type /join #IRCHelp for more information.
+*** End of Help ***

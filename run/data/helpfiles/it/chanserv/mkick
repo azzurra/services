@@ -1,0 +1,14 @@
+*** ChanServ Help - Comando: MKICK ***
+Fa kickare da ChanServ tutti gli utenti presenti nel
+canale specificato, compreso chi da' il comando. Il
+canale sara' inoltre non disponibile per alcuni minuti.
+Bisogna essere almeno SOP per poter usare questo comando.
+ 
+Sintassi:
+/cs MKICK #canale [motivo]
+ 
+Esempio:
+/cs MKICK #lamer Andate via lamers!
+ 
+Per ulteriori chiarimenti, digita /join #IRCHelp
+*** Fine dell'Help ***

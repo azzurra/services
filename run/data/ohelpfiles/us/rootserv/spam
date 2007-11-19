@@ -1,0 +1,20 @@
+*** RootServ Operator Help - Command: SPAM ***
+Manages the list of strings blocked by the ircd for spam.
+ 
+Syntax: SPAM ADD text type reason
+        SPAM DEL text
+        SPAM SET text TYPE newtype
+        SPAM SET text ENABLE|DISABLE
+        SPAM LIST [start [end]] [pattern]
+ 
+ADD adds a SPAM entry matching the given string. type
+can be one of the following:
+ 
+ 0: String is blocked, no further action taken.
+ 1: String is blocked, and a GLOBOPS is sent.
+ 2: String is blocked, and a notice is sent to #security.
+ 3: String is blocked, and both a GLOBOPS and a notice to #security are sent.
+ 4: String is not blocked, and a notice is sent to #security.
+ 5: String is blocked, both a GLOBOPS and a notice to #security are sent, and the user is shunned.
+ 
+*** End of OHelp ***

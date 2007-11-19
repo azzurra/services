@@ -1,0 +1,27 @@
+*** MemoServ Help - Comando: SENDTO ***
+Invia un memo a tutti gli utenti registrati sulle
+liste di un canale, con la possibilita' di scegliere
+a quali liste mandarlo.
+ 
+Sintassi:
+/ms SENDTO #canale <VOP|HOP|AOP|SOP|CF> messaggio
+ 
+VOP inviera' il memo a tutti i VOP/HOP/AOP/SOP/CF.
+ 
+HOP inviera' il memo a tutti gli HOP/AOP/SOP/CF.
+ 
+AOP inviera' il memo a tutti gli AOP/SOP/CF.
+ 
+SOP inviera' il memo a tutti i SOP/CF.
+ 
+CF inviera' il memo solo ai Co-Founders.
+ 
+N.B.: Il founder ricevera' comunque i memo,
+a prescindere dalla scelta del livello.
+ 
+Esempi:
+/ms SENDTO #IRCHelp ALL Congratulazioni al nuovo operatore Miki!
+/ms SENDTO #Italia SOP Per favore non aggiungete nuovi AOP.
+ 
+Per ulteriori chiarimenti, digita /join #IRCHelp
+*** Fine dell'Help ***

@@ -1,0 +1,22 @@
+*** RootServ Operator Help ***
+ 
+These commands are available to Services Roots:
+ 
+BOT           Modifies the server-bot list
+CONF          Sets registration limits and welcome notice
+CRYPTKEY      Changes the crypt key
+FLOODRESET    Resets an user's flood levels
+INJECT        Forces users to perform commands to Services
+LANG          Manages the languages list
+MODE          Similar to OperServ's MODE, with support for usermodes aAoOz
+NOOP          Temporarily freezes all O:lines of a server remotely
+QUIT          Shuts down Services WITHOUT saving databases
+REGIONS       Manages the regions list
+REHASH        Rehashes the services.conf and oper.conf files
+RESTART       Saves databases and restart Services
+SEARCH        Search log files
+SET           Sets various global Services options
+SHUTDOWN      Saves databases and shuts down Services
+SPAM          Manages the Spam list
+ 
+*** End of OHelp ***

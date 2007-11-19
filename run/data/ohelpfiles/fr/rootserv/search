@@ -1,0 +1,22 @@
+*** RootServ Operator Help - Command: SEARCH ***
+SEARCH allows services roots to retreive any case-insensitive sub-string
+search from the log files. start defaults to 0, end to 50.
+ 
+Syntax: SEARCH [TODAY|AAAA-MM-GG[>TODAY|AAAA-MM-GG] [WHERE [start [[+]end]]]]] *text*
+ 
+WHERE can be one of the following:
+ 
+CS     ChanServ main logfile
+CSA    ChanServ Access List changes
+CSI    ChanServ (failed) identifies
+DEB    Debug logfile
+ERR    Errors logfile
+MS     MemoServ main logfile
+NS     NickServ main logfile
+NSA    NickServ Access List changes
+NSI    NickServ (failed) identifies
+OS     OperServ main logfile
+PANIC  Panic logfile
+RS     RootServ main logfile
+ 
+*** End of OHelp ***

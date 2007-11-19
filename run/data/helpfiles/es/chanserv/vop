@@ -1,0 +1,46 @@
+*** ChanServ Help - Comando: VOP ***
+Maneja la Voice-Op list de un canal. Esta lista especifìca cuales usuarios se
+ponen automaticamente +v cuando acceden al canal especificado. Los VOPs tambien
+pueden pedir invitaciòn a ChanServ en un canal si este està puesto en +k, +i o +l.
+ 
+Sintaxis:
+ 
+/cs VOP #canal ADD <nick|mask>
+/cs VOP #canal DEL <nick|mask|numero>
+/cs VOP #canal LIST [mask]
+/cs VOP #canal FIND [mask]
+/cs VOP #canal CLEAN
+/cs VOP #canal EXPLIST
+/cs VOP #canal WIPE
+/cs VOP #canal LOCK
+/cs VOP #canal UNLOCK
+ 
+ADD agrega la mask o el nick especificado en la Voice-Op list del canal. Si el nick
+o la mask ya se encuentran en otra lista, su nivèl de acceso se cambiarà en VOP.
+ 
+DEL remueve la mask o el nick especificado de la Voice-Op list del canal, o el
+numero correspondiente de una mask o un nick si especificado.
+ 
+LIST visualiza la lista completa de los Voice-Op del canal, o en todo caso sòlo 
+los que tengan la mask especificada.
+ 
+FIND búsqueda de los elementos que reflejan la mask especificada (en el formato nick!user@host)
+ 
+CLEAN vacia de la Voice-Op list todos los nicks expirados.
+ 
+EXPLIST muestra los nick caducados presentes en la lista
+ 
+WIPE remueve todos los nicks y las masks incluydas en la Voice-Op list.
+ 
+LOCK bloquea la lista, permitiendo unicamente al fundador modificarla.
+ 
+UNLOCK desbloquea la lista, en caso de que haya sido bloqueada por el comando LOCK.
+ 
+Ejemplos:
+/cs VOP #IRCHelp ADD Kab00m
+/cs VOP #IRCHelp ADD *!*pippo@*.carota.net
+/cs VOP #IRCHelp DEL 4
+/cs VOP #IRCHelp LIST pippo*
+ 
+Para mas informaciòn, digita /join #IRCHelp
+*** Fin del Help ***

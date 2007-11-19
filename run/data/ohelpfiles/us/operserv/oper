@@ -1,0 +1,18 @@
+*** OperServ Operator Help - Command: OPER ***
+Manages the services access lists.
+ 
+Syntax: OPER ADD nick level
+        OPER DEL nick
+        OPER INFO nick
+        OPER SET ENABLED YES|NO
+        OPER LIST [level]
+ 
+ADD adds the given nick with the given level, which can
+be one of HOP/SOP/SA/SRA/CODER. If a nick is already on a
+list, it will be raised/demoted to the new list accordingly.
+ 
+Note: All entries must be enabled after being added
+in order to work.
+ 
+This command is limited to Services Administrators.
+*** End of OHelp ***

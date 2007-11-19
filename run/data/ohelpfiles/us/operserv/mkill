@@ -1,0 +1,10 @@
+*** OperServ Operator Help - Command: MKILL ***
+Kills all users matching the given IP or hostname, if any.
+If a nickname is given instead of an IP/Host it will kill
+that user and all their clones, if present.
+Default reason is "Cloning".
+ 
+Syntax: MKILL [IP|HOST|NICK] [reason]
+ 
+This command is limited to Services Administrators.
+*** End of OHelp ***

@@ -1,0 +1,7 @@
+*** NickServ Operator Help - Command: GETPASS ***
+Returns the password for the given nickname.
+ 
+Syntax: GETPASS nickname
+ 
+This command is limited to Services Administrators.
+*** End of OHelp ***

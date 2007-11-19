@@ -1,0 +1,15 @@
+*** NickServ Help - Comando: SET NOOP ***
+Non permette ad altri utenti di aggiungerti a nessuna delle liste
+VOP/HOP/AOP/SOP/CF di nessun canale, o di trasferirti la foundership di
+altri canali. Questo comando non ti cancellera' da eventuali liste
+in cui il tuo nick e' stato aggiunto in precedenza.
+ 
+Sintassi:
+/ns SET NOOP <ON|OFF>
+ 
+Esempi:
+/ns SET NOOP ON
+/ns SET NOOP OFF
+ 
+Per ulteriori chiarimenti, digita /join #IRCHelp
+*** Fine dell'Help ***

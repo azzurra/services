@@ -1,0 +1,23 @@
+*** NickServ Help - Command: ACC ***
+Returns whether the user using the given nickname
+is recognized as the owner of the nickname.
+ 
+Syntax:
+ 
+/ns ACC nick
+ 
+The response consists of a code, that can be one of the following:
+ 
+  0 - Nick unregistered
+  1 - Nick registered, but offline
+  2 - Not identified
+  3 - Identified via password authentication
+  4 - Identified via Access List
+  5 - Frozen nickname
+  6 - Forbidden nickname
+ 
+Example:
+/ns ACC Alexx
+ 
+Type /join #IRCHelp for more information.
+*** End of Help ***

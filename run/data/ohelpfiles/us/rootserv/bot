@@ -1,0 +1,27 @@
+*** RootServ Operator Help - Command: BOT ***
+Permette di gestire la lista dei BOT ufficiali del network.
+Ad un client riconosciuto come BOT viene automaticamente
+assegnato l'usermode +z (Services Agent). In caso di mancato
+riconoscimento il client viene disconnesso dal network.
+ 
+Sintassi: BOT ADD nick
+          BOT INFO nick
+          BOT LIST
+          BOT SET USER|HOST|HOST2|MODE|SERVER|SERVER2 valore
+          BOT SET ENABLED YES|NO
+ 
+ADD Aggiunge un nuovo BOT alla lista. Il BOT deve poi
+essere configurato con il comando SET.
+ 
+DEL Rimuove il BOT specificato dalla lista.
+ 
+SET Imposta i parametri di connessione del BOT indicato
+(HOST2 e SERVER2 sono valori alternativi per i campi HOST
+e SERVER, ENABLED abilita o disabilita il bot, MODE imposta
+i mode da aggiungere/rimuovere al connect).
+ 
+LIST Elenca i nomi di tutti i BOT presenti nella lista.
+ 
+INFO Restituisce informazioni sul BOT indicato.
+ 
+*** End of OHelp ***

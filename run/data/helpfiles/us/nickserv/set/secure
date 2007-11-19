@@ -1,0 +1,16 @@
+*** NickServ Help - Command: SET SECURE ***
+Turns NickServ's security features ON or OFF for your
+nick. With SECURE set, you must enter your password
+before you will be recognized as the owner of the nick,
+regardless of whether your address is on the Access List.
+ 
+Syntax:
+ 
+/ns SET SECURE <ON|OFF>
+ 
+Examples:
+/ns SET SECURE ON
+/ns SET SECURE OFF
+ 
+Type /join #IRCHelp for more information.
+*** End of Help ***

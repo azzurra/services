@@ -1,0 +1,29 @@
+*** ChanServ Help ***
+ChanServ es un servicio que les permite registrar uno o mas canales, para configurarlos
+segun sus preferencias. Registrar un canal significa limitar el numero de personas que tienen
+acceso al mismo, haciendo imposible un takeover. Los comandos disponibles se 
+encuentran en seguida; para poderlos utilizar necesitas escribir /cs COMANDO. 
+ 
+    Comando  -  Descripciòn
+ 
+    REGISTER -  Registra un canal
+    IDENTIFY -  Te identifica a tu canal, con tu contraseña
+    SET      -  Permite configurar las opciones de un canal
+    CFOUNDER -  Maneja la Co-Founder list
+    SOP      -  Maneja la Super-Op list
+    AOP      -  Maneja la Auto-Op list
+    HOP      -  Maneja la Auto-HalfOp list
+    VOP      -  Maneja la Voice-Op list
+    AKICK    -  Maneja la AutoKick list
+    DROP     -  Anula la registraciòn de un canal
+    WHY      -  Te informa sobre la razòn por la que un usuario es operador en el canal
+    REMOVE   -  Te remueve de la lista VOP/HOP/AOP/SOP/CF de un canal
+ 
+Otros comandos disponibles:
+COUNT, DEHALFOP, DEOP, DEVOICE, HALFOP, INFO, INVITE, MDEHALFOP, 
+MDEOP, MDEVOICE, MKICK, MODE, OP, RESETMODES, UNBAN, VOICE.
+ 
+Para mas informaciòn sobre estos comandos sòlo digita /cs HELP comando.
+ 
+Para mas informaciòn, digita /join #IRCHelp
+*** Fin del Help ***

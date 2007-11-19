@@ -1,0 +1,14 @@
+*** ChanServ Help - Comando: SET WELCOME ***
+Setta un messaggio che ChanServ inviera' come notice a tutti
+gli utenti che entrano nel canale specificato. Per rimuovere
+il messaggio corrente bisogna specificare NONE come messaggio.
+ 
+Sintassi:
+/cs SET #canale WELCOME messaggio
+ 
+Esempi:
+/cs SET #Italia WELCOME Benvenuti nel canale degli italiani!
+/cs SET #IRCHelp WELCOME NONE
+ 
+Per ulteriori chiarimenti, digita /join #IRCHelp
+*** Fine dell'Help ***

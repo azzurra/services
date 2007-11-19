@@ -1,0 +1,22 @@
+*** MemoServ Help - Comando: LIST ***
+Mostra tutti i memo che hai. Eventuali memo non
+ancora letti appariranno con un "*" vicino, mentre
+eventuali memo segnati come da cancellare avranno
+una "D" vicino. Specificando l'opzione NEW verranno
+mostrati solo i memo nuovi (non letti).
+ 
+Sintassi:
+/ms LIST [CHANNEL|NEW|USER]
+ 
+CHANNEL mostra solo i memo inviati a canali.
+ 
+NEW mostra solo i memo nuovi (non letti).
+ 
+USER mostra solo i memo inviati da altri utenti.
+ 
+Esempi:
+/ms LIST
+/ms LIST NEW
+ 
+Per ulteriori chiarimenti, digita /join #IRCHelp
+*** Fine dell'Help ***

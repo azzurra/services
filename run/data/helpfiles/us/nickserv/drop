@@ -1,0 +1,23 @@
+*** NickServ Help - Command: DROP ***
+Drops your nickname from the NickServ database.
+A nick that has been dropped is free for anyone to re-register.
+ 
+You must be identified to the nick you want to drop,
+and you will need to authorize this action by supplying
+the drop code that will be sent to the E-Mail address
+of the nick along with further instructions.
+ 
+To undo a drop request supply UNDO as code.
+ 
+Note: You can use this command only once per day.
+ 
+Syntax:
+ 
+/ns DROP nickname [code|UNDO]
+ 
+Example:
+/ns DROP SuperPicci
+/ns DROP BabboNatale UNDO
+ 
+Type /join #IRCHelp for more information.
+*** End of Help ***

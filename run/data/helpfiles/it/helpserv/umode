@@ -1,0 +1,29 @@
+*********** User Modes ***********
+  a  - (Services Only) Contraddistingue un Services Administrator.
+  A  - (IRCop Only) Contraddistingue un Server Administrator.
+  b  - (IRCop Only) Permette la visione dei messaggi CHATOPS.
+  c  - (IRCop Only) Visualizza le connessioni/disconnessioni dei client.
+  d  - (IRCop Only) Permette la visione dei messaggi di Debug.
+  e  - (IRCop Only) Permette la visione dei messaggi di DCC non valide.
+  f  - (IRCop Only) Permette la visione dei messaggi di Flood.
+  F  - (IRCop Only) Rende un client esente dalle limitazioni per Flood.
+  g  - (IRCop Only) Permette la visione dei messaggi GLOBOPS.
+  h  - (Services Only) Contraddistingue un Help Operator.
+  i  - Invisibile agli utenti che eseguono il comando /names o il comando /who.
+  I  - (IRCop Only) Permette di nascondere l'idle time ai WHOIS.
+  j  - Contraddistingue un client che chatta dal web tramite Java.
+  k  - (IRCop Only) Permette la visione dei messaggi di Kill da parte di client non U:Lined.
+  K  - (IRCop Only) Permette la visione dei messaggi di Kill da parte di client U:Lined.
+  m  - (IRCop Only) Permette la visione dei messaggi di Spam.
+  n  - (IRCop Only) Permette la visione dei messaggi di Routing.
+  o  - (IRCop Only) Contraddistingue un IRC Operator globale.
+  O  - (IRCop Only) Contraddistingue un IRC Operator locale.
+  r  - (Services Only) Contraddistingue un nick registrato con NickServ e identificato.
+  R  - Accetta query solo da nick registrati con NickServ e identificati.
+  s  - Permette la visione dei messaggi del server (Kills, etc), solo se si e' IRCop.
+  S  - Contraddistingue un client che si connette via SSL (Secure Sockets Layer).
+  w  - Permette la visione dei messaggi WALLOPS.
+  x  - Cripta parte dell'host o dell'IP.
+  y  - (IRCop Only) Visualizza la notifica di alcuni comandi (/ADMIN, /LINKS, /WHOIS, etc.).
+  z  - (Services Only) Contraddistingue un Services Agent.
+*** Fine della Lista ***

@@ -1,0 +1,15 @@
+*** ChanServ Help - Comando: SET FOUNDER ***
+Cambia il nick del founder del canale specificato.
+Il nick specificato deve essere registrato ed online.
+Per poter utilizzare questo comando e' necessario essere
+identificati sia al nick dell'attuale founder che al
+canale con il comando IDENTIFY.
+ 
+Sintassi:
+/cs SET #canale FOUNDER nick
+ 
+Esempio:
+/cs SET #pippo FOUNDER Fry
+ 
+Per ulteriori chiarimenti, digita /join #IRCHelp
+*** Fine dell'Help ***

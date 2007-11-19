@@ -1,0 +1,20 @@
+*** ChanServ Help - Comando: SET SUCCESSOR ***
+Permite especificar un Successor para el canal. Si el nick del fundador
+expira o si se anula su registraciòn, el canal se pasa
+automaticamente al Successor lo cual va a ser el nuevo fundador.
+El Successor debe de ser un Co-Founder del canal.
+ 
+Para remover el Successor de un canal necesitas especificar NONE como nick.
+ 
+N.B.: Si un canal no tiene Successor y el nick del fundador
+expira o se le dà de baja, el canal se anularà
+inmediatamente y quedarà registrable por cualquier otro usuario.
+ 
+Sintaxis:
+/cs SET #canal SUCCESSOR nick
+ 
+Ejemplo:
+/cs SET #pippo SUCCESSOR Fry
+ 
+Para mas informaciòn, digita /join #IRCHelp
+*** Fin del Help ***

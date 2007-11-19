@@ -1,0 +1,16 @@
+*** OperServ Operator Help - Command: GLOBAL ***
+Allows IRCops to send messages to all users on the network.
+The message will be sent from the nick Azzurra.
+ 
+Syntax: GLOBAL target message
+ 
+target can be a host, a language (IT, US, ES, FR), or a server.
+Use ALL as target to send the message to all users.
+ 
+Examples:
+/os GLOBAL *.home.com Please don't dump me after I like you!
+/os GLOBAL fastweb.azzurra.org This server is rebooting in 5 minutes.
+/os GLOBAL IT Messaggio riservato agli italiani
+ 
+This command is limited to Services Administrators.
+*** End of OHelp ***

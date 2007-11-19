@@ -1,0 +1,20 @@
+*** MemoServ Help - Command: SET NOTIFY ***
+Lets you decide when you will be notified about new memos.
+ 
+Syntax:
+/ms SET NOTIFY option
+ 
+Available options:
+ 
+    ON     -   You will be notified of memos when you log on, 
+                 and when they are sent to you.
+    LOGON  -   You will only be notified of memos when you log on.
+    NEW    -   You will only be notified of memos when they are sent to you.
+    OFF    -   You will not receive any notification of memos.
+ 
+Examples:
+/ms SET NOTIFY LOGON
+/ms SET NOTIFY OFF
+ 
+Type /join #IRCHelp for more information.
+*** End of Help ***

@@ -1,0 +1,14 @@
+*** RootServ Operator Help - Command: CONF ***
+Changes some Services conf options dynamically.
+ 
+Syntax: CONF SET option value
+        CONF SHOW
+ 
+Option names currently defined are:
+ 
+    CSLIMIT : numero massimo di canali registrabili.
+    NSLIMIT : numero massimo di nick registrabili.
+    WNOTICE : notice mandata alla connessione ai
+                singoli utenti (NONE per disattivarla).
+ 
+*** End of OHelp ***

@@ -1,0 +1,48 @@
+*** ChanServ Help - Comando: SOP ***
+Mantiene la Super-Op List di un canale. I SOP vengono oppati automaticamente quando
+entrano nel canale, e possono gestire l'AutoKick list, la AOP list, la HOP list e la VOP list.
+ 
+Sintassi:
+/cs SOP #canale ADD <nick|mask>
+/cs SOP #canale DEL <mask|numero>
+/cs SOP #canale LIST [mask]
+/cs SOP #canale FIND <mask>
+/cs SOP #canale CLEAN
+/cs SOP #canale EXPLIST
+/cs SOP #canale WIPE
+/cs SOP #canale LOCK [nick|mask]
+/cs SOP #canale UNLOCK [nick|mask]
+ 
+ADD aggiunge la mask o il nick specificato alla Super-Op list del canale. Se il nick
+o la mask sono gia' presenti in un'altra lista, il loro accesso verra' cambiato in SOP.
+ 
+DEL cancella la mask o il nick specificato dalla Super-Op list del canale, oppure il
+numero a cui corrisponde una mask o un nick se specificato.
+ 
+LIST visualizza la lista completa dei Super-Op del canale, o eventualmente solo 
+quelli che contengono la mask specificata.
+ 
+FIND ricerca gli elementi che rispecchiano la mask specificata (nel formato nick!user@host)
+ 
+CLEAN cancella dalla Super-Op list tutti i nick che risultano scaduti.
+ 
+EXPLIST mostra i nick scaduti presenti nella lista
+ 
+WIPE cancella tutti i nick e le mask presenti nella Super-Op list.
+ 
+LOCK blocca la lista, permettendo solo al founder di manipolarla. Se viene
+specificata una delle mask gia' in lista, verra' bloccata solo quella.
+ 
+UNLOCK sblocca la lista, nel caso fosse stata bloccata col comando LOCK.
+Se viene specificata una mask, verra' sbloccata solo quella.
+ 
+Esempi:
+/cs SOP #IRCHelp ADD [^BodyZen
+/cs SOP #IRCHelp ADD *!*pippo@*.carota.net
+/cs SOP #IRCHelp DEL 5
+/cs SOP #IRCHelp LIST *carota*
+/cs SOP #IRCHelp LOCK [^BodyZen
+/cs SOP #IRCHelp UNLOCK EvilMaio
+ 
+Per ulteriori chiarimenti, digita /join #IRCHelp
+*** Fine dell'Help ***

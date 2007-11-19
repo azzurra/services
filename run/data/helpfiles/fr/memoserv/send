@@ -1,0 +1,14 @@
+*** MemoServ Help - Commande: SEND ***
+Envoie un mémo au nick spécifié. Le nick du
+destinataire doit être enregistré avec NickServ.
+Si le destinataire est connecté, on l'avertira
+automatiquement lorsque le mémo est envoyé.
+ 
+Syntaxe:
+/ms SEND nick message
+ 
+Exemple:
+/ms SEND Odin_Eidolon Rendez-vous ce soir sur #Pizza
+ 
+Pour tout renseignement, tape /join #IRCHelp
+*** Fin de l'Help ***

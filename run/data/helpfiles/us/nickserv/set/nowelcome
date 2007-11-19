@@ -1,0 +1,12 @@
+*** NickServ Help - Commando: SET NOWELCOME ***
+Disables receiving channel welcome messages on join.
+ 
+Syntax:
+/ns SET NOWELCOME <ON|OFF>
+ 
+Examples:
+/ns SET NOWELCOME ON
+/ns SET NOWELCOME OFF
+ 
+Type /join #IRCHelp for more information.
+*** End of Help ***

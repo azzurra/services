@@ -1,0 +1,15 @@
+*** ChanServ Help - Command: DEVOICE ***
+Removes channel voice status from the selected nick(s) on a
+channel. You can specify up to 6 nicks on the same line. You
+must have at least VOP access to the channel to use this command
+on yourself, and at least AOP to use it on other people.
+ 
+Syntax:
+/cs DEVOICE #channel nick [nick2] ... [nick6]
+ 
+Examples:
+/cs DEVOICE #IRCHelp Shaka
+/cs DEVOICE #IRCHelp ^Faust^ Wolf7 Aptivo
+ 
+Type /join #IRCHelp for more information.
+*** End of Help ***

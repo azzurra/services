@@ -1,0 +1,7 @@
+*** ChanServ Operator Help - Command: SENDPASS ***
+Sends the channel password to the Channel Founder's E-Mail address.
+ 
+Syntax: SENDPASS #channel
+ 
+This command is limited to Services Help Operators.
+*** End of OHelp ***

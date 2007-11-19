@@ -1,0 +1,14 @@
+*** MemoServ Help - Comando: READ ***
+Visualizza il testo del messaggio corrispondente
+al numero specificato. Per leggere l'ultimo memo
+arrivato basta specificare LAST come numero.
+ 
+Sintassi:
+/ms READ <numero|LAST>
+ 
+Esempi:
+/ms READ 6
+/ms READ LAST
+ 
+Per ulteriori chiarimenti, digita /join #IRCHelp
+*** Fine dell'Help ***

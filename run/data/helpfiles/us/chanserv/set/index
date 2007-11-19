@@ -1,0 +1,39 @@
+*** ChanServ Help - Command: SET ***
+Allows the channel founder to set various channel options and other
+information. Identification to either the channel or the founder's
+nick is required to use this command.
+ 
+Syntax:
+/cs SET #channel OPTION parameters
+ 
+Available options:
+ 
+    AUTOOP    -  Op all users who join the channel
+    AUTOHALFOP-  Give all users who join the channel halfop status
+    AUTOVOICE -  Give all users who join the channel voice status
+    BANTYPE   -  Sets the default type of ban to be used with the RESTRICT option
+    DESC      -  Set the channel description
+    EMAIL     -  Associate an E-Mail address with the channel
+    FOUNDER   -  Set the founder of a channel
+    IDENT     -  Require identification to get ops by ChanServ
+    KEEPTOPIC -  Retain topic when channel is not in use
+    LANG      -  Set the channel default language
+    MEMOLEVEL -  Set the minimum channel memo level
+    MLOCK     -  Lock channel modes on or off
+    NEVEROP   -  Disables onjoin auto-opping for AOP/SOP/CF/Founder
+    NOMKICK   -  Disables the MKICK command for a channel
+    OPGUARD   -  Prevent users from gaining operator status
+    PASSWD    -  Set the channel password
+    PROTECT   -  Enable extra channel ops protection
+    RESTRICT  -  Restrict access to the channel
+    SUCCESSOR -  Set a CF as channel Successor
+    TOPIC     -  Has ChanServ change the channel topic
+    TOPICLOCK -  Only allow people on the access lists to change the topic
+    URL       -  Associate a URL with the channel
+    VERBOSE   -  Send channel notices upon some commands' usage
+    WELCOME   -  Set an on-join welcome message to the channel
+ 
+For more information on a specific option, type: /cs HELP SET OPTION.
+ 
+Type /join #IRCHelp for more information.
+*** End of Help ***

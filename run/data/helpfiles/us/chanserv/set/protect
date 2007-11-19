@@ -1,0 +1,11 @@
+*** ChanServ Help - Command: SET PROTECT ***
+Enables or disables the Protect option for a channel.
+When turned ON, any user found on the channel access
+lists (VOP/HOP/AOP/SOP/CF) will be re-oped if they are set -o.
+When OFF is specified this option is disabled.
+ 
+Syntax:
+/cs SET #channel PROTECT <ON|OFF>
+ 
+Type /join #IRCHelp for more information.
+*** End of Help ***

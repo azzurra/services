@@ -1,0 +1,7 @@
+*** NickServ Operator Help - Command: UNFORBID ***
+Removes the FORBID flag from the given nickname. Also drops it from the NickServ database.
+ 
+Syntax: UNFORBID nickname
+ 
+This command is limited to Services Administrators.
+*** End of OHelp ***

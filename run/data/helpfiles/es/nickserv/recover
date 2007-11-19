@@ -1,0 +1,13 @@
+*** NickServ Help - Comando: RECOVER ***
+Permite reapropiarte de tu nick en caso de que otro usuario lo estè utilizando.
+NickServ cambiarà el nick de ese usuario, y el tuyo
+con el nick especificado. Ademas te identificaràs con tu nick automaticamente.
+ 
+Sintaxis:
+/ns RECOVER nick contraseña
+ 
+Ejemplo:
+/ns RECOVER Napal andrea
+ 
+Para mas informaciòn, digita /join #IRCHelp
+*** Fin del Help ***

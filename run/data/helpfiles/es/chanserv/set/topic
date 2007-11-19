@@ -1,0 +1,12 @@
+*** ChanServ Help - Comando: SET TOPIC ***
+Implìca que ChanServ cambie el topic del canal especificado con el
+nuevo topic especificado.
+ 
+Sintaxis:
+/cs SET #canal TOPIC nuevo-topic
+ 
+Ejemplo:
+/cs SET #IRCHelp TOPIC Bienvenidos en el canal de ayuda oficial de AzzurraNet
+ 
+Para mas informaciòn, digita /join #IRCHelp
+*** Fin del Help ***

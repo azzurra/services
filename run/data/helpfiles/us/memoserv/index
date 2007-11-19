@@ -1,0 +1,28 @@
+*** MemoServ Help ***
+MemoServ allows IRC users to send short messages
+to other IRC users, whether they are online at the
+time or not. Both sender and recipient must have
+their nicknames registered with NickServ in order
+to send a memo. MemoServ's commands are listed below;
+to use them, type: /ms COMMANDNAME
+ 
+    Command   -  Description
+ 
+    DEL     -  Mark one or all memos as deleted.
+    FORWARD -  Have memos forwarded to another registered nick.
+    IGNORE  -  Modify the Memo Ignore List.
+    LIST    -  Display all your memos.
+    NEWS    -  Read current Network News.
+    PURGE   -  Erase all memos marked as deleted.
+    READ    -  Read a memo.
+    SEND    -  Send a memo to a registered nick.
+    SENDTO  -  Send a channel memo.
+    SET     -  Modify memo-related options.
+    UNDEL   -  Unmark one or all memos as deleted.
+    UNSEND  -  Retrieve a memo sent to a user.
+ 
+For more information on a specific command, type:
+/ms HELP commandname
+ 
+Type /join #IRCHelp for more information.
+*** End of Help ***

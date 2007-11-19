@@ -1,0 +1,12 @@
+*** MemoServ Help - Comando: UNSEND ***
+Retrieves the latest memo you sent to the given
+user or channel.
+ 
+Syntax:
+/ms UNSEND <nick|#channel>
+ 
+Example:
+/ms UNSEND Miki
+ 
+Type /join #IRCHelp for more information.
+*** End of Help ***

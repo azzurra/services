@@ -1,0 +1,7 @@
+*** OperServ Operator Help - Command: FIND ***
+Returns all clients matching the specified mask.
+Mask can be in both nick!user@host and user@host format.
+ 
+Syntax: FIND mask
+ 
+*** End of OHelp ***

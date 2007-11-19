@@ -1,0 +1,7 @@
+*** NickServ Operator Help - Command: UNHOLD ***
+Removes the HELD flag set on a nickname with the command HOLD.
+ 
+Syntax: UNHOLD nickname
+ 
+This command is limited to Services Administrators.
+*** End of OHelp ***

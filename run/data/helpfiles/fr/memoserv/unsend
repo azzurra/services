@@ -1,0 +1,13 @@
+*** MemoServ Help - Commande: UNSEND ***
+Récupère le dernier mémo que tu as envoyé au 
+nick spécifié et l'efface. Il n'est pas possible
+de récupérer de mémos déjà lus par le destinataire.
+ 
+Syntaxe:
+/ms UNSEND nick
+ 
+Exemple:
+/ms UNSEND Miki
+ 
+Pour tout renseignement, tape /join #IRCHelp
+*** Fin de l'Help ***

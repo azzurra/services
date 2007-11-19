@@ -1,0 +1,34 @@
+*** NickServ Help - Comando: REGISTER ***
+Registrare un nick permette di sfruttare a pieno il servizio NickServ.
+Potrete, fra le altre cose, disconnettere chiunque lo stia usando in
+qualsiasi momento, registrare canali, etc.
+ 
+La password deve essere una stringa di un numero di caratteri compreso tra 5 e 32, 
+e non puo' essere uguale al nick per motivi di sicurezza. E' inoltre sconsigliato usare
+come password il proprio nome, in quanto spesso troppo facile da indovinare.
+ 
+Al momento della registrazione verra' inviato via E-Mail all'indirizzo specificato un
+codice di autorizzazione per confermare la registrazione del nick. Finche' il nick non
+sara' autorizzato non sara' possibile registrare canali o farsi aggiungere ad alcuna
+lista VOP/HOP/AOP/SOP/CF. Non sara' inoltre possibile cambiare le opzioni del nick stesso.
+Per confermare la registrazione del nick basta seguire le semplici istruzioni
+contenute nella E-Mail.
+ 
+ATTENZIONE: Se la registrazione non verra' completata entro 24 ore, il nick verra'
+automaticamente cancellato e potra' essere registrato da altri utenti. Assicuratevi
+quindi di fornire un indirizzo E-Mail reale a cui avete accesso. Se verra' inserito
+un indirizzo non valido bisognera' attendere la scadenza del nick dopo 24 ore per
+poterlo registrare di nuovo.
+ 
+N.B.: L'indirizzo E-Mail fornito alla registrazione NON e' visibile dagli utenti
+tramite il comando INFO. Potra' essere impostato visibile se si desidera. Lo staff
+utilizzera' questo indirizzo solo nei casi di richiesta della password o di abuso.
+ 
+Sintassi:
+/ns REGISTER password e-mail
+ 
+Esempio:
+/ns REGISTER 4zzUrrA tua@email.qz
+ 
+Per ulteriori chiarimenti, digita /join #IRCHelp
+*** Fine dell'Help ***

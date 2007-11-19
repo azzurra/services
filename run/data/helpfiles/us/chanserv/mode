@@ -1,0 +1,15 @@
+*** ChanServ Help - Command: MODE ***
+Has ChanServ sets one or more channel modes. You must have at
+least SOP access to the channel in order to use this command.
+You can specify up to 6 modes on the same command.
+ 
+Syntax:
+/cs MODE #channel [+|-]mode[mode2...mode6]
+ 
+Examples:
+/cs MODE #Italia -l
+/cs MODE #IRCHelp -sp+c
+/cs MODE #linux +mi-k *
+ 
+Type /join #IRCHelp for more information.
+*** End of Help ***

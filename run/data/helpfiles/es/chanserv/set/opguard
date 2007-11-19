@@ -1,0 +1,13 @@
+*** ChanServ Help - Comando: SET OPGUARD ***
+Cuando la opciòn OPGUARD està activada, unicamente los que estèn registrados en
+las listas AOP/SOP/CF, a parte el fundador, pueden recibir el op.
+ 
+Sintaxis:
+/cs SET #canal OPGUARD <ON|OFF>
+ 
+Ejemplos:
+/cs SET #IRCHelp OPGUARD ON
+/cs SET #España OPGUARD OFF
+ 
+Para mas informaciòn, digita /join #IRCHelp
+*** Fin del Help ***

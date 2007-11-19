@@ -1,0 +1,7 @@
+*** ChanServ Operator Help - Command: CMODE ***
+Show the channel mode(s) of the given channel from the Services point of view.
+ 
+Syntax: CMODE #channel
+ 
+This command is limited to Services Help Operators.
+*** End of OHelp ***

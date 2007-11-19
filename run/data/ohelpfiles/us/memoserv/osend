@@ -1,0 +1,9 @@
+*** MemoServ Operator Help - Command: OSEND ***
+OSEND allows network Operators to send global memos to one another. Similar to WALLOPS
+and GLOBOPS except its with memos. SOP will memo all network staff, SA will memo all
+Services Admins and Roots, SRA will only send the memo to Services Roots.
+ 
+Syntax: OSEND [SOP|SA|SRA] message
+ 
+This command is limited to Services Operators.
+*** End of OHelp ***

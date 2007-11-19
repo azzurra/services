@@ -1,0 +1,40 @@
+*** ChanServ Help - Commande: CFOUNDER ***
+Gère la Co-Founder list d'un canal. Les Co-Founders ont accès à
+toutes les commandes où a accès le propriétaire excepté: SET FOUNDER, SET PASSWD,
+SET NOMKICK, SET SUCCESSOR et SET MEMOLEVEL. Les Co-Founders ont automatiquement
+l'op quand ils entrent et peuvent gérer les listes SOP, AOP, HOP, VOP, AKICK.
+ 
+Syntaxe:
+/cs CFOUNDER #canal ADD <nick|masque>
+/cs CFOUNDER #canal DEL <nick|masque|muméro>
+/cs CFOUNDER #canal LIST [masque]
+/cs CFOUNDER #canal FIND <masque>
+/cs CFOUNDER #canal CLEAN
+/cs CFOUNDER #canal EXPLIST
+/cs CFOUNDER #canal WIPE
+ 
+ADD ajoute le masque ou le nick spécifié à la Co-Founder list du canal. Si le nick
+ou le masque sont déjà dans une autre liste, leur accès sera changé en Co-Founder.
+ 
+DEL efface le masque ou le nick spécifié dans la Co-Founder list du canal, ou le
+numéro qui indique un masque ou un nick, si spécifié.
+ 
+LIST montre la liste complète des Co-Founders du canal, ou 
+éventuellement seulement ceux qui contiennent le masque spécifié.
+ 
+FIND recheche les éléments qui refléttes la mask spécifiée (dans le format nick!user@host)
+ 
+CLEAN efface de la Co-Founder list les nicks expirés.
+ 
+EXPLIST montre les nick périmés preésent dans la liste.
+ 
+WIPE efface toute la Co-Founder list.
+
+Exemples:
+/cs CFOUNDER #Lamer ADD picci
+/cs CFOUNDER #IRCHelp ADD *!*pippo@*.carotte.net
+/cs CFOUNDER #IRCHelp DEL 3
+/cs CFOUNDER #IRCHelp LIST *pippo*
+ 
+Pour tout renseignement, tape /join #IRCHelp
+*** Fin de l'Help ***

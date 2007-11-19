@@ -1,0 +1,13 @@
+*** ChanServ Help - Comando: OP ***
+Pone el Op al nick especificado, en el canal especificado. Se puede especificar mas de
+un nick. Necesitas ser minimo un AOP en el canal para poder utilizar este comando.
+ 
+Sintaxis:
+/cs OP #canal nick(s)
+ 
+Ejemplos:
+/cs OP #IRCHelp Shaka
+/cs OP #IRCHelp ^Faust^ Wolf7 Aptivo
+ 
+Para mas informaciòn, digita /join #IRCHelp
+*** Fin del Help ***

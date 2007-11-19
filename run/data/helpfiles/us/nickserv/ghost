@@ -1,0 +1,25 @@
+*** NickServ Help - Command: GHOST ***
+Terminates a "ghost" IRC session using your nick.
+A "ghost" session is one which is not actually
+connected, but which the IRC server believes is
+still online for one reason or another. Typically,
+this happens if your computer crashes or your Internet
+or modem connection goes down while you're on IRC.
+ 
+Please note that if someone else is using your nick
+and you want to get it back, this is NOT the right
+command. Please use RECOVER instead.
+ 
+If your nick is held by services through an enforcer,
+again this is NOT the right command. Please use
+RELEASE instead.
+ 
+Syntax:
+ 
+/ns GHOST nickname password
+ 
+Example:
+/ns GHOST gogeta14 andrea
+ 
+Type /join #IRCHelp for more information.
+*** End of Help ***

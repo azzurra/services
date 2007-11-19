@@ -1,0 +1,8 @@
+*** RootServ Operator Help - Command: QUIT ***
+Causes Services to do an immediate shutdown.
+It is a good idea to update the databases using
+the UPDATE command beforehand.
+ 
+Syntax: QUIT
+ 
+*** End of OHelp ***

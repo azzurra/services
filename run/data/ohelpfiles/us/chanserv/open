@@ -1,0 +1,7 @@
+*** ChanServ Operator Help - Command: OPEN ***
+This commands will reopen a CLOSED channel.
+ 
+Syntax: /CS OPEN #channel
+ 
+This command is limited to Services Administrators.
+*** End of OHelp ***

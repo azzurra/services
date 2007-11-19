@@ -1,0 +1,11 @@
+*** MemoServ Help - Command: NEWS ***
+Lists current network news updates. When logging
+in, if news is updated, services will notify you.
+After you have read the news, services will no longer
+notify you until more news is ready to be read.
+ 
+Syntax:
+/ms NEWS
+ 
+Type /join #IRCHelp for more information.
+*** End of Help ***

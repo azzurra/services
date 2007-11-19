@@ -1,0 +1,13 @@
+*** NickServ Help - Comando: SET NOWELCOME ***
+Permette, se attivata, di non ricevere nessun Welcome Message al
+join di un canale registrato, anche se il founder lo ha impostato.
+ 
+Sintassi:
+/ns SET NOWELCOME <ON|OFF>
+ 
+Esempi:
+/ns SET NOWELCOME ON
+/ns SET NOWELCOME OFF
+ 
+Per ulteriori chiarimenti, digita /join #IRCHelp
+*** Fine dell'Help ***

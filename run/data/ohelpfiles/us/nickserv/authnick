@@ -1,0 +1,7 @@
+*** NickServ Operator Help - Command: AUTHNICK ***
+Authorizes the specified nickname, using the given E-Mail address if none is set.
+ 
+Syntax: AUTHNICK nickname [email]
+ 
+This command is limited to Services Help Operators.
+*** End of OHelp ***

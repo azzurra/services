@@ -1,0 +1,15 @@
+*** ChanServ Help - Command: SET AUTOHALFOP ***
+Turns the Auto HalfOp option ON or OFF. When it is ON, ChanServ
+will give HalfOp status to everyone who joins the channel.
+ 
+Note: No changes will be made to the HOP list by this option.
+ 
+Syntax:
+/cs SET #channel AUTOHALFOP <ON|OFF>
+ 
+Examples:
+/cs SET #IRCHelp AUTOHALFOP OFF
+/cs SET #debian AUTOHALFOP ON
+ 
+Type /join #IRCHelp for more information.
+*** End of Help ***

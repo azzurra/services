@@ -1,0 +1,21 @@
+*** NickServ Operator Help - Command: NICKSET ***
+Lets you change some nickname variables.
+ 
+Syntax: NICKSET nick [CHANNELCOUNT|LASTSEEN|PASS|REALNAME|REGDATE|URL|USERMASK] value
+ 
+CHANNELCOUNT changes the channelcount value (Coder Only).
+ 
+LASTSEEN changes the nick's last seen time (Coder Only).
+ 
+PASS changes the nick's password.
+ 
+REALNAME changes the nick's real name.
+ 
+REGDATE changes the nick's registration date.
+ 
+URL changes the nick's URL.
+ 
+USERMASK changes the nick's last usermask.
+ 
+This command is limited to Services Administrators.
+*** End of OHelp ***

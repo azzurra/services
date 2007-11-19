@@ -1,0 +1,43 @@
+OperServ Operator Commands:
+ 
+FIND          Searches an user by mask
+STATS         Shows Services and Network status
+UPTIME        Shows services uptime
+VERSION       Shows services version number
+ 
+These commands are available to Services Operators:
+ 
+AKILL         Manipulates the AKILL list
+BAN           Kickbans an user from a channel
+BLACKLIST     Manipulates the E-Mail blacklist
+GLOBAL        Sends a message to all users
+IGNORE        Manipulates the IGNORE list
+KICK          Kicks an user from a channel
+SETTINGS      Shows Services settings
+TAGLINE       Manipulates the TAGLINE list
+TRIGGER       Controls clone warnings
+UINFO         Shows additional details about a client
+ 
+These commands are available to Services Admins:
+ 
+JUPE          Jupes a server
+MDEOP         Removes +o mode from all channel operators
+MDEVOICE      Removes +v mode from all channel voices
+MKICK         Kickbans all users from the channel
+MKILL         Kills all clients matching an IP/Host
+MODE          Changes some user/channel modes
+MOP           Sets +o mode to all channel users
+MUNBAN        Wipes channel bans
+MVOICE        Sets +v mode to all channel users
+OPER          Modifies the Services access lists
+RESERVED      Manipulates the RESERVED names list
+RESETMODES    Restores standard (mlocked) channel modes
+SGLINE        Has services (UN)SGLINE a realname field
+SQLINE        Has services (UN)SQLINE a nick
+UPDATE        Flushes DataBases to disk
+ 
+These commands are available to Services Admins:
+ 
+COUNT         Shows OperServ commands usage
+ 
+*** End of OHelp ***

@@ -1,0 +1,30 @@
+*** ChanServ Operator Help - Command: LISTREG ***
+Lists all registered channels matching the given pattern.
+ 
+Syntax: LISTREG LIST type pattern page_number
+LISTREG COUNT type pattern
+LISTREG MAIL type pattern
+ 
+LIST lists all channels matching the given type/pattern.
+ 
+COUNT counts the number of channels matching the given type/pattern.
+ 
+MAIL sends the complete list of channels matching criteria to your email address.
+ 
+"type" is one of:
+ 
+ NAME [N]: search by name
+ DESC [D]: search by description
+ TOPIC [T]: search by topic
+ URL [U]: search by URL
+ REGBY [R]: search by registrant
+ DROP [DR]: channels with DROP request
+ NOURL [NU]: channels with no URL set
+ HOLD [H]: channels held
+ MARK [K]: channels marked
+ FORBID [F]: channels forbidden
+ FREEZE [Z]: channels frozen
+ CLOSED [C]: channels closed
+ 
+This command is limited to Services Operators.
+*** End of OHelp ***

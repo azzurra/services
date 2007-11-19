@@ -1,0 +1,48 @@
+*** ChanServ Help - Comando: AOP ***
+Mantiene la Auto-Op list di un canale. Questa lista specifica quali utenti
+sono oppati automaticamente quando entrano nel canale specificato.
+ 
+Sintassi:
+/cs AOP #canale ADD <nick|mask>
+/cs AOP #canale DEL <mask|numero>
+/cs AOP #canale LIST [mask]
+/cs AOP #canale FIND <mask>
+/cs AOP #canale CLEAN
+/cs AOP #canale EXPLIST
+/cs AOP #canale WIPE
+/cs AOP #canale LOCK [nick|mask]
+/cs AOP #canale UNLOCK [nick|mask]
+ 
+ADD aggiunge la mask o il nick specificato alla Auto-Op list del canale. Se il nick
+o la mask sono gia' presenti in un'altra lista, il loro accesso verra' cambiato in AOP.
+ 
+DEL cancella la mask o il nick specificato dalla Auto-Op list del canale,
+oppure il numero a cui corrisponde una mask o un nick se specificato.
+ 
+LIST visualizza la lista completa degli Auto-Op del canale,
+o eventualmente solo quelli che contengono la mask specificata.
+ 
+FIND ricerca gli elementi che rispecchiano la mask specificata (nel formato nick!user@host)
+ 
+CLEAN cancella dalla Auto-Op list tutti i nick che risultano scaduti.
+ 
+EXPLIST mostra i nick scaduti presenti nella lista
+ 
+WIPE cancella tutti i nick e le mask presenti nella Auto-Op list.
+ 
+LOCK blocca la lista, permettendo solo al founder di manipolarla. Se
+viene specificata una delle mask gia' in lista, verra' bloccata solo quella.
+ 
+UNLOCK sblocca la lista, nel caso fosse stata bloccata col comando LOCK.
+Se viene specificata una mask, verra' sbloccata solo quella.
+ 
+Esempi:
+/cs AOP #IRCHelp ADD Wolf7
+/cs AOP #IRCHelp ADD *!*pippo@*.carota.net
+/cs AOP #IRCHelp DEL 2
+/cs AOP #IRCHelp LIST *.it
+/cs AOP #IRCHelp LOCK Wolf7
+/cs AOP #IRCHelp UNLOCK Aptivo
+ 
+Per ulteriori chiarimenti, digita /join #IRCHelp
+*** Fine dell'Help ***

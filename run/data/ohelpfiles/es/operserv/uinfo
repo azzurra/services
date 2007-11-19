@@ -1,0 +1,8 @@
+*** OperServ Operator Help - Command: UINFO ***
+Allows IRC Operators to view additional status about a client,
+such as flood levels, or channels joined regardless of modes (+s).
+ 
+Syntax: UINFO nick
+ 
+This command is limited to Services Operators.
+*** End of OHelp ***

@@ -1,0 +1,14 @@
+*** MemoServ Help - Comando: PURGE ***
+Cancella tutti i memo segnati come cancellati,
+quelli cioe' che appaiono con una "D" vicino
+ad ogni comando LIST.
+ 
+ATTENZIONE: una volta dato il comando PURGE
+non sara' piu' possibile recuperare i messaggi
+cancellati.
+ 
+Sintassi:
+/ms PURGE
+ 
+Per ulteriori chiarimenti, digita /join #IRCHelp
+*** Fine dell'Help ***

@@ -1,0 +1,26 @@
+*** RootServ Operator Help - Command: REGIONS ***
+Manipulates the Regions list.
+ 
+Syntax: REGIONS ADDCIDR mask region reason
+        REGIONS ADDHOST mask region reason
+        REGIONS DELCIDR mask
+        REGIONS DELHOST mask
+        REGIONS CHREASON mask new-reason
+        REGIONS RLIST
+        REGIONS LIST [region] [start [end]] [pattern]
+ 
+ADDCIDR adds a CIDR-type host (i.e. 127.0.0.0/8) to the region specified.
+ 
+DELCIDR removes a CIDR-type host from the region specified, if present.
+ 
+ADDHOST adds a host (i.e. *.azzurra.org) to the region specified.
+ 
+DELHOST removes a host from the region specified, if present.
+ 
+CHREASON changes the reason for a host/CIDR.
+ 
+RLIST returns a list of currently available regions.
+ 
+LIST returns a list of CIDRs/hosts for the specified region.
+ 
+*** End of OHelp ***

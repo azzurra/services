@@ -1,0 +1,11 @@
+*** ChanServ Help - Command: SET OPGUARD ***
+Enables or disables the Op Guard option for a channel.
+When it is set to ON, only people with at least AOP access to
+the channel will be permitted operator status.
+When OFF is specified this option is disabled.
+ 
+Syntax:
+/cs SET #channel OPGUARD <ON|OFF>
+ 
+Type /join #IRCHelp for more information.
+*** End of Help ***

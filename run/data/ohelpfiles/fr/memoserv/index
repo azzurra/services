@@ -1,0 +1,16 @@
+MemoServ Operator Commands:
+ 
+These commands are available to Services Operators:
+ 
+OSEND      Sends a global memo to all SOPs/SAs/SRAs/CODERs
+ 
+These commands are available to Services Administrators:
+ 
+LIMIT      Sets the maximum number of memos a user is allowed to have
+ 
+These commands are available to Services Roots:
+ 
+GLOBAL     Sends a memo to ALL registered nicks
+INFO       Shows the given user's memos status
+ 
+*** End of OHelp ***

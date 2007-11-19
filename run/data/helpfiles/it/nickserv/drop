@@ -1,0 +1,24 @@
+*** NickServ Help - Comando: DROP ***
+Cancella la registrazione del nick specificato. Questo comando puo' essere
+usato solo dal possessore del nick, che deve essersi identificato con il
+comando IDENTIFY. La registrazione verra' cancellata al momento della
+autorizzazione tramite il codice che verra' inviato via E-Mail all'indirizzo
+associato al nick. Hai tempo 1 giorno per autorizzare la richiesta di drop,
+dopodiche' verra' cancellata e il nick rimarra' registrato.
+ 
+In caso di richiesta inviata erroneamente e' possibile cancellare il drop. In
+questo caso, anche inserendo il codice ricevuto via E-Mail, non sara' possibile
+droppare il nick, e sara' necessario chiederne uno nuovo dopo 24 ore.
+Per cancellare una richiesta di drop, e' sufficiente inserire UNDO come codice.
+ 
+N.B.: E' possibile utilizzare questo comando solo una volta al giorno.
+ 
+Sintassi:
+/ns DROP nick [codice|UNDO]
+ 
+Esempio:
+/ns DROP SuperPicci
+/ns DROP BabboNatale UNDO
+ 
+Per ulteriori chiarimenti, digita /join #IRCHelp
+*** Fine dell'Help ***

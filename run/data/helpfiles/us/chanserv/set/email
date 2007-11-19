@@ -1,0 +1,16 @@
+*** ChanServ Help - Command: SET EMAIL ***
+Associates the given E-Mail Address with the channel.
+This E-Mail Address will be displayed whenever someone
+requests information on the channel with the INFO
+command. When NONE is specified the E-Mail Address
+will be removed from the channel information.
+ 
+Syntax:
+/cs SET #channel EMAIL address
+ 
+Examples:
+/cs SET #Services EMAIL irc@azzurra.org
+/cs SET #italia EMAIL NONE
+ 
+Type /join #IRCHelp for more information.
+*** End of Help ***

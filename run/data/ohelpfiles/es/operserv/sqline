@@ -1,0 +1,11 @@
+*** OperServ Operator Help - Command: SQLINE ***
+SQ:Lines are Q:Lines sent by services to all servers
+during burst, and after each database save.
+They work just like normal Q:Lines.
+ 
+Syntax: SQLINE ADD field reason
+        SQLINE DEL field
+        SQLINE LIST [start [end]] [pattern]
+ 
+This command is limited to Services Administrators.
+*** End of OHelp ***

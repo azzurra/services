@@ -1,0 +1,7 @@
+*** RootServ Operator Help - Command: INJECT ***
+Inject allows Services Roots to inject any services
+command to any online client.
+ 
+Syntax: INJECT nick service command
+ 
+*** End of OHelp ***

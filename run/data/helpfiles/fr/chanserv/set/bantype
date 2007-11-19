@@ -1,0 +1,28 @@
+*** ChanServ Help - Commande: SET BANTYPE ***
+Cette commande permet de spécifier le type de ban
+employé par ChanServ (par exemple pour un akick ou
+pour la commande RESTRICT). Il y a 10 types de bans:
+
+0: Bannit *!user@host
+1: Bannit *!*user@host
+2: Bannit *!*@host
+3: Bannit *!*user@*.host
+4: Bannit *!*@*.host
+5: Bannit nick!user@host
+6: Bannit nick!*user@host
+7: Bannit nick!*@host
+8: Bannit nick!*user@*.host
+9: Bannit nick!*@*.host
+
+La valeur de défault pour le BANTYPE (configurée à
+l'enregistrement) est 2.
+
+Syntaxe:
+/cs SET #canal BANTYPE <numéro>
+
+Exemples:
+/cs SET #IRCHelp BANTYPE 4
+/cs SET #Italia BANTYPE 7
+
+Pour tout renseignement, tape /join #IRCHelp
+*** Fin de l'Help ***

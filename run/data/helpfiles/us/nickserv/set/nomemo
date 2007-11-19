@@ -1,0 +1,15 @@
+*** NickServ Help - Commando: SET NOMEMO ***
+Disables receiving memos from other users for your
+current nick. This does not disable you from sending
+memos, it will only block receieving memos to you
+from others.
+ 
+Syntax:
+/ns SET NOMEMO <ON|OFF>
+ 
+Examples:
+/ns SET NOMEMO ON
+/ns SET NOMEMO OFF
+ 
+Type /join #IRCHelp for more information.
+*** End of Help ***

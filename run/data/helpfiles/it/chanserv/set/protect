@@ -1,0 +1,14 @@
+*** ChanServ Help - Comando: SET PROTECT ***
+L'opzione PROTECT fa in modo che nel canale specificato
+tutti gli utenti registrati sulle liste AOP/SOP/CF vengano
+automaticamente rioppati nel caso in cui qualcuno li deoppi.
+ 
+Sintassi:
+/cs SET #canale PROTECT <ON|OFF>
+ 
+Esempi:
+/cs SET #Italia PROTECT ON
+/cs SET #IRCHelp PROTECT OFF
+ 
+Per ulteriori chiarimenti, digita /join #IRCHelp
+*** Fine dell'Help ***

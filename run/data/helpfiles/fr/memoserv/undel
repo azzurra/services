@@ -1,0 +1,17 @@
+*** MemoServ Help - Commande: UNDEL ***
+Si le mémo spécifié avait été marqué précédemment
+comme "à effacer", et donc il était précédé par un "D",
+ce dernier sera enlevé, et le message ne sera effacé
+lorsque tu te déconnecteras ou emploieras la commande PURGE.
+En specifiant ALL à la place du numéro du mémo, le "D" sera
+enlevé de tous les messages que tu avais marqués comme "à effacer".
+ 
+Syntaxe:
+/ms UNDEL <numéro|ALL>
+ 
+Exemples:
+/ms UNDEL 4
+/ms UNDEL ALL
+ 
+Pour tout renseignement, tape /join #IRCHelp
+*** Fin de l'Help ***

@@ -1,0 +1,28 @@
+*** NickServ Help - Comando: REGISTER ***
+Registering your nick opens a variety of options to choose from.
+These include, but not limited to, killing your ghosts, registering
+channels, and preventing others from using your nick.
+ 
+The password supplied may not be shorter than 5 characters nor
+longer than 32. It cannot be the same as your nickname, and should
+not be anything easy to guess, like your real name or birth date.
+ 
+In order to complete a nickname registration you need to authorize it by
+supplying an authorization code that will be sent to the E-Mail address
+specified. Please make sure the E-Mail address is real and working, for
+all unauthorized nicknames will expire after one day.
+ 
+Note: Your E-Mail address will be hidden for everyone except yourself.
+The staff will use only use this address in case of abuse, or to send you
+the password should you forget it.
+Type /ns HELP SET EMAIL for more information regarding E-Mail addresses.
+ 
+Syntax:
+ 
+/ns REGISTER password e-mail
+ 
+Example:
+/ns REGISTER 4zzUrr4 pippo@carota.eu
+ 
+Type /join #IRCHelp for more information.
+*** End of Help ***

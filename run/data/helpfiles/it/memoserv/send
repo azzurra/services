@@ -1,0 +1,14 @@
+*** MemoServ Help - Comando: SEND ***
+Invia un memo al nick specificato. Il nick del
+destinatario deve essere registrato con NickServ.
+Il destinatario verra' immediatamente notificato
+dell'arrivo del messaggio da te inviato, se online.
+ 
+Sintassi:
+/ms SEND nick messaggio
+ 
+Esempio:
+/ms SEND Miki Ci vediamo stasera su #adachi
+ 
+Per ulteriori chiarimenti, digita /join #IRCHelp
+*** Fine dell'Help ***

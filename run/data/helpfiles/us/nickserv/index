@@ -1,0 +1,32 @@
+*** NickServ Help ***
+NickServ allows you to "register" a nickname and
+prevent others from using it. The following commands
+allow for registration and maintenance of nicknames;
+to use them, type: /ns COMMAND
+ 
+Command        Description
+ 
+ACC        - View current access of a nickname
+ACCESS     - Modify the list of authorized addresses
+DROP       - Cancel the registration of a nickname
+GHOST      - Terminates a "ghost" IRC session using your nick
+IDENTIFY   - Identify yourself with your password
+INFO       - Display information on a registered nickname
+LISTCHANS  - Display channels you have access to
+RECOVER    - Regain your nickname if someone else is using it
+REGISTER   - Register a nickname
+RELEASE    - Release services custody on a nickname
+SET        - Set various nickname options
+ 
+For more information on a specific command,
+type: /ns HELP command
+ 
+Note: This service is intended to provide a way for IRC
+users to ensure their identity is not compromised. It is
+NOT intended to facilitate "stealing" of nicknames or
+other malicious actions. Abuse of NickServ will result in,
+at minimum, loss of the abused nickname(s) and channels
+registered by them.
+ 
+Type /join #IRCHelp for more information.
+*** End of Help ***

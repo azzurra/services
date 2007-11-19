@@ -1,0 +1,7 @@
+*** OperServ Operator Help - Command: MUNBAN ***
+Clears all channel bans.
+ 
+Syntax: MUNBAN #channel
+ 
+This command is limited to Services Administrators.
+*** End of OHelp ***

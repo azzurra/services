@@ -1,0 +1,15 @@
+*** ChanServ Help - Command: SET AUTOOP ***
+Turns the Auto Op option ON or OFF. When it is ON, ChanServ
+will give operator status to everyone who joins the channel.
+ 
+Note: No changes to the AOP/SOP/CF lists will be made by this option.
+ 
+Syntax:
+/cs SET #channel AUTOOP <ON|OFF>
+ 
+Examples:
+/cs SET #IRCHelp AUTOOP OFF
+/cs SET #debian AUTOOP ON
+ 
+Type /join #IRCHelp for more information.
+*** End of Help ***

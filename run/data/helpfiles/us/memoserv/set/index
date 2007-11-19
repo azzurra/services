@@ -1,0 +1,16 @@
+*** MemoServ Help - Command: SET ***
+Sets various memo-related options. You must be identified
+to your nickname in order to use this command.
+ 
+Syntax:
+/ms SET OPTION parameters
+ 
+Available options:
+ 
+    IGNORETYPE - Set usage of your Memo Ignore List.
+    NOTIFY     - Decide when you will be notified about new memos.
+ 
+For more information on a specific option, type: /ms HELP SET option
+ 
+Type /join #IRCHelp for more information.
+*** End of Help ***

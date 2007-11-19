@@ -1,0 +1,17 @@
+*** ChanServ Help - Comando: SET AUTOVOICE ***
+Quando l'opzione AUTOVOICE e' settata ON, ChanServ dara' il
+voice automaticamente a tutti quelli che entreranno nel canale,
+indiscriminatamente.
+ 
+N.B.: Il voice conferito dall'opzione AUTOVOICE e' solo
+temporaneo, nessun nick verra' aggiunto o rimosso dalla lista VOP.
+ 
+Sintassi:
+/cs SET #canale AUTOVOICE <ON|OFF>
+ 
+Esempi:
+/cs SET #IRCHelp AUTOVOICE OFF
+/cs SET #debian AUTOVOICE ON
+ 
+Per ulteriori chiarimenti, digita /join #IRCHelp
+*** Fine dell'Help ***

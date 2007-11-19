@@ -1,0 +1,16 @@
+*** ChanServ Help - Commande: SET IDENT ***
+Quand l'option IDENT est active, ChanServ donnera
+l'op automatiquement seulement aux AOP/SOP/CF identifiés aux nicks.
+ 
+Important: Si l'option IDENT est active, les listes AOP/SOP/CF ne peuvent pas
+contenir de masques, mais seulement des nicks enregistrés.
+ 
+Syntaxe:
+/cs SET #canal IDENT <ON|OFF>
+ 
+Exemples:
+/cs SET #IRCHelp IDENT ON
+/cs SET #linux IDENT OFF
+ 
+Pour tout renseignement, tape /join #IRCHelp
+*** Fin de l'Help ***

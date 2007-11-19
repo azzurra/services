@@ -1,0 +1,6 @@
+*** RootServ Operator Help - Command: REHASH ***
+Forces re-read of the services configuration files.
+ 
+Syntax: REHASH
+ 
+*** End of OHelp ***

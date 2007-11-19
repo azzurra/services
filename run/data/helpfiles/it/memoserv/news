@@ -1,0 +1,13 @@
+*** MemoServ Help - Comando: NEWS ***
+Mostra le ultime NEWS sullo stato della rete.
+Se sono presenti dei nuovi NEWS memo, MemoServ te
+lo notifichera' appena ti identifichi al tuo nick,
+e a lettura avvenuta non riceverai piu' messaggi da
+MemoServ fino a che non verra' inviato un nuovo NEWS
+memo. L'invio di NEWS memo e' riservato ai soli IRCop.
+ 
+Sintassi:
+/ms NEWS
+ 
+Per ulteriori chiarimenti, digita /join #IRCHelp
+*** Fine dell'Help ***

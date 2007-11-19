@@ -1,0 +1,13 @@
+*** ChanServ Help - Comando: DEOP ***
+Quita el op al nick especificado, en el canal especificado. Se puede especificar mas
+de un nick. Necesitas ser minimo AOP en el canal para utilizar este comando.
+ 
+Sintaxis:
+/cs DEOP #canal nick(s)
+ 
+Ejemplos:
+/cs DEOP #IRCHelp Tenerone
+/cs DEOP #IRCHelp picci Alduccio gogeta14
+ 
+Para mas informaciòn, digita /join #IRCHelp
+*** Fin del Help ***

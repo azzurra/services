@@ -1,0 +1,16 @@
+*** NickServ Help - Commande: SET NEVEROP ***
+Si l'option NEVEROP est active, ChanServ ne te donnera pas
+l'op quand tu entreras dans un canal où tu es AOP ou supérieur.
+En outre, ChanServ t'enlèvera l'op lorsqu'un autre usager
+essaiera de te le donner. L'unique moyen pour être opérateur avec
+NEVEROP active est celui d'employer la commande OP de ChanServ.
+ 
+Syntaxe:
+/ns SET NEVEROP <ON|OFF>
+ 
+Exemples:
+/ns SET NEVEROP ON
+/ns SET NEVEROP OFF
+ 
+Pour tout renseignement, tape /join #IRCHelp
+*** Fin de l'Help ***

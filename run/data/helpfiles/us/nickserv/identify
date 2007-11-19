@@ -1,0 +1,20 @@
+*** NickServ Help - Command: IDENTIFY ***
+Tells NickServ that you are really the owner of this nick.
+Many commands require you to authenticate yourself with
+this command in order to use them.
+By supplying a nick, you can identify to nicks other than the
+one you're currently using, provided you know the password(s).
+ 
+Syntax:
+ 
+/ns IDENTIFY [nickname] password
+ 
+Example:
+/ns IDENTIFY 33523carota
+/ns IDENTIFY Arya Stark
+ 
+Note: you can also use /pass password to identify
+the nick you're currently using.
+ 
+Type /join #IRCHelp for more information.
+*** End of Help ***

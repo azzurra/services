@@ -1,0 +1,8 @@
+*** NickServ Operator Help - Command: MARK ***
+Disallows a nickname from being GETPASSed. MARK is generally used if a Services Admin has denied a
+user from receiving a password, and is used to inform the rest of the network not to getpass the nick.
+ 
+Syntax: MARK nickname
+ 
+This command is limited to Services Roots.
+*** End of OHelp ***

@@ -1,0 +1,447 @@
+# #####################################################################
+#           Example services.conf for Azzurra IRC Services            #
+#                                                                     #
+#   Originally written by John_1 for SirvNET Services (c) 1998-2001   #
+#   Trevor Klingbeil                                                  #
+#                                                                     #
+# #####################################################################
+
+# #####################################################################
+#   *-------------------------------------------------------------*   #
+#   |        CONNECTION INFORMATION LINE - (C: LINE)              |   #
+#   *-------------------------------------------------------------*   #
+# Syntax - C:<services name>:<remote password>:<remote server>:<port> #
+#                                                                     #
+# Services name: What you wish the services server to be called.      #
+# Remote password: The connection password you will share with the    #
+#  server that services will be connected to. This is the same        #
+#  password you place in your C/N lines in ircd.conf.                 #
+# Remote server: The IP of the server that services connect to.       #
+# Port: The socket port services will use to connect to the server.   #
+#                                                                     #
+# #####################################################################
+# C:services.azzurra.org:*password*:1.1.1.1:6667
+
+
+# #####################################################################
+#   *-------------------------------------------------------------*   #
+#   |        DESCRIPTION LINE - (D: LINE)                         |   #
+#   *-------------------------------------------------------------*   #
+# Syntax - D:DESCRIPTION                                              #
+#                                                                     #
+# This is the description of the server viewed in a /LINKS            #
+#                                                                     #
+# #####################################################################
+D:Azzurra IRC Services
+
+# #####################################################################
+#   *-------------------------------------------------------------*   #
+#   |        USER LINE - (U: LINE)                                |   #
+#   *-------------------------------------------------------------*   #
+# Syntax - U:USER:HOST                                                #
+#                                                                     #
+# The user line is the ident and host field each services client will #
+# use.                                                                #
+#                                                                     #
+# #####################################################################
+U:service:azzurra.org
+
+
+# #####################################################################
+#   *-------------------------------------------------------------*   #
+#   |        NETWORK NAME LINE - (A: LINE)                        |   #
+#   *-------------------------------------------------------------*   #
+# Syntax - A:NAME                                                     #
+#                                                                     #
+# This line defines the name of your Network                          #
+#                                                                     #
+# #####################################################################
+A:Azzurra
+
+
+# #####################################################################
+#   *-------------------------------------------------------------*   #
+#   |        SERVICES MASTER LINE - (M: LINE)                     |   #
+#   *-------------------------------------------------------------*   #
+# Syntax - M:Nickname                                                 #
+#                                                                     #
+# This line should contain the nickname of the network CEO or founder #
+# The Master nickname should be the first nickname registered, and    #
+# should be added to the SRA list. /msg RootServ SRA add NickName     #
+# NOTE: There can be only one Services Master                         #
+#                                                                     #
+# #####################################################################
+M:debiAn
+
+
+# #####################################################################
+# These lines define the names of services on your Network            #
+#                                                                     #
+# #####################################################################
+NS:NickServ
+CS:ChanServ
+MS:MemoServ
+HS:HelpServ
+OS:OperServ
+RS:RootServ
+Global:Azzurra
+
+
+# #####################################################################
+# The number of seconds between DataBase update/expires               #
+#                                                                     #
+# #####################################################################
+UPDATE:1200
+
+
+# #####################################################################
+# This line is the number of seconds between routine checking.        #
+# This may need to be adjusted for optimal performance.  Slower       #
+# systems should set this around 5 or 6.  Quicker systems could       #
+# handle even down to 1 or 2 seconds. If you are daring, possibly 0,  #
+# but your CPU will really have a work-out.                           #
+#                                                                     #
+# #####################################################################
+TIMEOUT:2
+
+
+# #####################################################################
+# The number of invalid channel/nickname password attempts            #
+# before services kills the user.                                     #
+#                                                                     #
+# #####################################################################
+P:5:300:5:30
+
+# #####################################################################
+# Number maximum number of memos a nickname can have.                 #
+#                                                                     #
+# #####################################################################
+MEMOMAX:32
+
+
+# #####################################################################
+# Number of seconds that must elapse between sending memos.           #
+#                                                                     #
+# #####################################################################
+MEMO_DELAY:20
+
+
+# #####################################################################
+# The number of days until an unused nickname expires.                #
+#                                                                     #
+# #####################################################################
+NICKEXP:40
+
+
+# #####################################################################
+# The number of days until an unused channel expires.                 #
+#                                                                     #
+# #####################################################################
+CHANEXP:40
+
+
+# #####################################################################
+# The number of days until memos expire.                              #
+#                                                                     #
+# #####################################################################
+MEMOEXP:21
+
+
+# #####################################################################
+# Default AKILL expiry time in seconds. 86400 seconds is 1 day        #
+#                                                                     #
+# #####################################################################
+AKILLEXP:3600
+
+
+# #####################################################################
+# Default IGNORE expiry time in seconds. 86400 seconds is 1 day       #
+#                                                                     #
+# #####################################################################
+IGNEXP:10800
+
+
+# #####################################################################
+# Maximum permitted enteries per channel access list.                 #
+# 300 AOPs + 150 SOPs + 45 AVOICEs + 5 CFOUNDERs == 500 enteries      #
+#                                                                     #
+# #####################################################################
+CHAN_ACC_MAX:400
+
+
+# #####################################################################
+# Maximum permitted access list enteries per nickname.                #
+#                                                                     #
+# #####################################################################
+U_ACC_MAX:5
+
+
+# #####################################################################
+# Enable (1) to allow services to use nickname registration           #
+# authorization. Sendmail must be working on the box services are     #
+# running on. Set this to 0 to completely disable email functions.    #
+#                                                                     #
+# #####################################################################
+EMAIL:1
+
+
+# #####################################################################
+# TLEV is the maximum number of messages allowed to be sent to        #
+#      services before a flood level (FLEV) is reached. After the     #
+#      4th FLEV, the user is killed for flooding services.            #
+#                                                                     #
+# RESET is the amount of time that must elapse before services resets #
+#       the TLEV value.                                               #
+#                                                                     #
+# Once each FLEV has been reached, a different action is taken        #
+#  FLEV 1 - Grace Level                                               #
+#  FLEV 2 - Warns user, globops network                               #
+#  FLEV 3 - Warns user, globops network again with "SEVERELY" message #
+#  FLEV 4 - User is killed.                                           #
+#                                                                     #
+# Example: TLEV set to 5.  RESET set to 10                            #
+#          If a user sends 20 (5 for each FLEV) messages to services  #
+#          without a 10 second pause he is killed.                    #
+#                                                                     #
+# #####################################################################
+F:6:10:90
+
+
+# #####################################################################
+# Enable (1) having taglines (random quotes) given with each          #
+# services update.                                                    #
+#                                                                     #
+# #####################################################################
+TAGLINES:1
+
+
+# #####################################################################
+# The number of seconds to automatically release an enforced nick.    #
+#                                                                     #
+# #####################################################################
+RELEASE:300
+
+
+# #####################################################################
+# Time to wait for every registration                                 #
+#                                                                     #
+# #####################################################################
+REGDELAY:20
+
+
+# #####################################################################
+# This option is not limited entirely to snoop, but also log files.   #
+# When enabled (1), extra information will be logged, and if snoop    #
+# is enabled, sent to the snoop channel. On larger networks,          #
+# it may be wise to disable (0) this to save on disk space for logs   #
+# and avoid being flooded in the snoop channel. Only non-essential    #
+# information will be stripped, ie: valid identifies, etc.            #
+#                                                                     #
+# #####################################################################
+EXTRA_SNOOP:0
+
+
+# #####################################################################
+# Maximum channels permitted to be registered per user.               #
+#                                                                     #
+# #####################################################################
+USERACC:40
+
+
+# #####################################################################
+# The maximum number of akicks each channel is allowed.               #
+# Enter 0 for no limit.                                               #
+# #####################################################################
+AKICK:300
+
+
+# #####################################################################
+# Enable (1) this to display routine database expire and save global  #
+# notices.                                                            #
+#                                                                     #
+# #####################################################################
+DISPLAY_UPDATES:1
+
+
+# #####################################################################
+# After a channel masskick, suspension or when users join a forbidden #
+# channel, it's possible for them to instantly rejoin because the     #
+# channel ban is removed when the channel clears causing a severe     #
+# services flood.  ChanServ can join these channels for X seconds to  #
+# prevent such a flood.                                               #
+# NOTE: Time is in seconds.                                           #
+#                                                                     #
+# #####################################################################
+CHANNEL_INHABIT:60
+
+
+# #####################################################################
+# Enter the default MLOCK when channels are registered.               #
+# Valid modes are tnimspcR.                                           #
+#                                                                     #
+# #####################################################################
+MLOCK:+nt
+
+
+# #####################################################################
+# Services can prevent an akill from being placed if it effects over  #
+# a certain percentage of the networks users.  This could be a bad    #
+# idea for small networks with very few users.  Enter 101 to disable. #
+#                                                                     #
+# #####################################################################
+PERCENT:51
+
+
+# #####################################################################
+# Enter 1 to enable flood levels.  These are used to warn the network #
+# of abusive users that are flooding. Services will first warn via    #
+# globops, and notice the user, then warn if the user is severely     #
+# flooding services.  Further abuse results in the user being killed. #
+# NOTE: This only enables/disables at startup.                        #
+# Can be turned on/off manually via /msg RootServ SET FLOOD ON/OFF    #
+#                                                                     #
+# #####################################################################
+FLOOD:1
+
+
+# #####################################################################
+# Enter 1 to enable clone detection.                                  #
+# NOTE: This only enables/disables at startup.                        #
+# Can be turned on/off manually via /msg RootServ SET CLONES ON/OFF   #
+#                                                                     #
+# #####################################################################
+CLONES:1
+
+
+# #####################################################################
+# Enter 1 to enable the Snoop channel.  Snoop is a large security     #
+# risk if not set up correctly.  When enabled, this feature will send #
+# filtered logs to the channel #Snoop.  These logs contain OperServ   #
+# commands, along with failed/successful identifies, nick/chan        #
+# registration and drops, etc.  If this option is enabled, I highly   #
+# suggest having #Snoop set to a level such as Services Roots Only,   #
+# however this is up to you.  To set the security of the channel,     #
+# /msg chanserv OHELP LEVEL                                           #
+#                                                                     #
+# #####################################################################
+SNOOP:1
+
+
+# #####################################################################
+# This changes the default snoop channel if SNOOP is enabled.         #
+#                                                                     #
+# #####################################################################
+SNOOPCHAN:#snoop
+
+
+# #####################################################################
+# This changes the default snoop channel if SNOOP is enabled.         #
+#                                                                     #
+# #####################################################################
+DEBUGCHAN:#bugs
+
+
+# #####################################################################
+# This feature will allow services to create a duplicate back-up      #
+# database after <num> database updates.  The backup database will be #
+# stored in data/backup.                                              #
+# Enter 0 to disable automatic backups.                               #
+#                                                                     #
+# #####################################################################
+BACKUP:10
+
+
+# #####################################################################
+# Services can send an email to a nickname reminding them (num) days  #
+# before their nickname/channel drops.                                #
+# NOTE: EMAIL must be enabled (1)                                     #
+# Enter 0 to disable.  3 == email 3 days before nick/channel drops.   #
+#                                                                     #
+# #####################################################################
+REMIND:0
+
+
+# #####################################################################
+# If you know of a different path to sendmail, enter it here, else    #
+# leave it as the default.                                            #
+#                                                                     #
+# #####################################################################
+SENDMAIL:/var/qmail/bin/sendmail
+
+
+# #####################################################################
+# Enter a return email address to be used with services sent email.   #
+# NOTE: This can be admin@yournet.com, or support@aol.com.. whatever. #
+#                                                                     #
+# #####################################################################
+RETURN:return@email.com
+
+
+# #####################################################################
+# Strictly enforces nick authorization. When enabled, unauthorized    #
+# nicks will not be permitted to use the NS SET commands, register    #
+# any channel, or be added to any channel access list.                #
+# NOTE: EMAIL must be enabled for this to take effect.                #
+#                                                                     #
+# #####################################################################
+FORCE_AUTH:1
+
+
+# #####################################################################
+# Enter a number of days to automatically drop un-authorized nicks.   #
+# EMAIL must be enabled   .                                           #
+#                                                                     #
+# #####################################################################
+AUTODEL:1
+
+
+# #####################################################################
+# Debug should ONLY be used if you know what you're doing.  Debug     #
+# sends EVERYTHING services receive to a debug.log which can easily   #
+# be a few hundred megs in an hour.                                   #
+#                                                                     #
+# #####################################################################
+DEBUG:1
+
+
+# #####################################################################
+# The maximum number of clients from one host before services         #
+# warn about "possible" clones.                                       #
+#                                                                     #
+# #####################################################################
+MAX_CLONES:4
+
+
+# #####################################################################
+# The number of seconds between consecutive clone warnings from       #
+# the same host.  Services will not keep warning unless more clones   #
+# are loaded.                                                         #
+#                                                                     #
+# #####################################################################
+CLONE_WARN:10
+
+
+# #####################################################################
+# Set this target number as the number of clones detected until       #
+# services will akill the host.  I do NOT recommened using this       #
+# option for multiple reasons.  The largest reason is because not all #
+# clone warnings are true clones!  Some are legitimate users on       #
+# Shared IP's at schools and internet cafes.                          #
+# If you are running a small network, this is probably not the case   #
+# and this feature will be of some use.  However, larger networks:    #
+# USE THIS WITH CARE!                                                 #
+# NOTE: A triggered host will NEVER be automaticalled akilled.        #
+#                                                                     #
+# #####################################################################
+CLONEKILL:5
+
+
+# #####################################################################
+# Set this to how long you want the automated clone akill to be.      #
+# Example: 30 minutes == 30m                                          #
+#          1 day == 1d or 24h                                         #
+#                                                                     #
+# #####################################################################
+CLONETIME:600
+
+SCANV6:5

@@ -1,0 +1,7 @@
+*** ChanServ Operator Help - Command: UNHOLD ***
+Removes the HELD flag from a channel.
+ 
+Syntax: UNHOLD #channel
+ 
+This command is limited to Services Administrators.
+*** End of OHelp ***

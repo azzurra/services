@@ -1,0 +1,13 @@
+*** ChanServ Help - Comando: RESETMODES ***
+Fa togliere a ChanServ i seguenti modes dal canale specificato:
+c, C, d, i, k, l, m, M, n, p, R, s, t, u.
+Bisogna essere almeno SOP per poter usare questo comando.
+ 
+Sintassi:
+/cs RESETMODES #canale
+ 
+Esempio:
+/cs RESETMODES #take
+ 
+Per ulteriori chiarimenti, digita /join #IRCHelp
+*** Fine dell'Help ***

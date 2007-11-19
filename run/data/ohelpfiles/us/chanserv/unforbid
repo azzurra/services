@@ -1,0 +1,7 @@
+*** ChanServ Operator Help - Command: UNFORBID ***
+Removes the FORBIDDEN flag from a channel. Also drops it from the ChanServ database.
+ 
+Syntax: UNFORBID #channel
+ 
+This command is limited to Services Administrators.
+*** End of OHelp ***

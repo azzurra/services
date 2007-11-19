@@ -1,0 +1,12 @@
+*** ChanServ Help - Comando: MDEVOICE ***
+Implìca que ChanServ quite el voice a todos los usuarios del canal.
+Tienes que ser minimo SOP para poder utilizar este comando.
+ 
+Sintaxis:
+/cs MDEVOICE #canal
+ 
+Ejemplo:
+/cs MDEVOICE #iac
+ 
+Para mas informaciòn, digita /join #IRCHelp
+*** Fin del Help ***

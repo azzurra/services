@@ -1,0 +1,9 @@
+*** ChanServ Operator Help - Command: AUTHRESET ***
+This command removes the authorization information from a channel.
+Use of this command is for a user to be able retreive another authorization code for
+verification to drop a channel.
+ 
+Syntax: AUTHRESET #channel
+ 
+This command is limited to Services Help Operators.
+*** End of OHelp ***

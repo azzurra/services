@@ -1,0 +1,25 @@
+*** Modes du Canal ***
+  b  - Permet de bannir un masque d'un canal avec le format nick!user@host
+  c  - Empêche d'envoyer au canal des messages avec les couleurs
+  C  - Empêche d'envoyer des CTCP au canal
+  d  - Empêche de changer nick à qui n'est pas opérateur du canal
+  d  - Rend un nick Half-Op du canal
+  i  - Permet d'entrer dans le canal seulement par invitation
+  j  - Permet que seulement les usagers identifiés aux nicks enregistrés entrent dans le canal.
+  k  - Permet d'entrer dans le canal seulement par mot de passe
+  l  - Configure une limite maximale d'usagers pour le canal
+  m  - Rend le canal modéré: seulement les +o, les +h et les +v peuvent parler
+  M  - Rend le canal modéré: seulement le nicks enregistrés avec NickServ peuvent parler
+  n  - Empêche d'envoyer au canal des messages de l'extérieur
+  o  - Rend un nick opérateur du canal
+  O  - (IRCop Only) Permet d'entrer seulement aux IRCops
+  p  - Rend le canal privé (ne résulte pas dans le /whois )
+  r  - (Services Only) Marque un canal enregistré avec ChanServ
+  R  - Permet d'entrer seulement aux nicks enregistrés
+  s  - Rend le canal sécret (ne résulte pas dans le /list )
+  S  - Seulement les usagers connectés par SSL peuvent entrer dans le canal
+  t  - Permet de changer le topic seulement aux opérateurs
+  u  - Ne montre pas les messages de QUIT ou PART
+  U  - Permet qu'aussi les usagers non-italiens pas identifiés aux nicks entrent dans le canal
+  v  - Donne à un nick la permission de parler dans un canal modéré (+m)
+*** Fin de la liste ***

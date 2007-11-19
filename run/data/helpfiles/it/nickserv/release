@@ -1,0 +1,16 @@
+*** NickServ Help - Comando: RELEASE ***
+Fa si' che NickServ disconnetta il finto client che aveva messo su con il tuo
+nick in seguito al mancato inserimento della password del tuo nick da parte
+tua o di un altro utente nel caso tu abbia attivato l'opzione KILL.
+NickServ disconnette il finto client automaticamente dopo 1 minuto, ma con
+questo comando puoi abbreviare i tempi. Per poter utilizzare questo comando
+e' necessario conoscere la password del nick specificato.
+ 
+Sintassi:
+/ns RELEASE nick password
+ 
+Esempio:
+/ns RELEASE gogeta14 andrea
+ 
+Per ulteriori chiarimenti, digita /join #IRCHelp
+*** Fine dell'Help ***

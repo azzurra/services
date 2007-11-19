@@ -1,0 +1,6 @@
+*** RootServ Operator Help - Command: FLOODRESET ***
+Resets the given user's flood levels.
+ 
+Syntax: FLOODRESET nickname
+ 
+*** End of OHelp ***

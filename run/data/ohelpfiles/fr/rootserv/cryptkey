@@ -1,0 +1,7 @@
+*** RootServ Operator Help - Command: CRYPTKEY ***
+Changes the key used to crypt the users's host via
+usermode +x.
+ 
+Syntax: CRYPTKEY newkey
+ 
+*** End of OHelp ***

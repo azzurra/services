@@ -1,0 +1,16 @@
+*** MemoServ Help - Commande: LIST ***
+Montre tous les mémos que tu as. Les mémos pas encore
+lus seront précédés par un "*", tandis que les mémos 
+marqués comme "à effacer" seront précédés par un "D".
+En spécifiant l'option NEW, seulement les nouveaux 
+mémos (pas encore lus) seront montrés.
+ 
+Syntaxe:
+/ms LIST [NEW]
+ 
+Exemples:
+/ms LIST
+/ms LIST NEW
+ 
+Pour tout renseignement, tape /join #IRCHelp
+*** Fin de l'Help ***

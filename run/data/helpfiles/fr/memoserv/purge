@@ -1,0 +1,13 @@
+*** MemoServ Help - Commande: PURGE ***
+Efface tous les mémo marqués comme "à effacer",
+c'est-à-dire ceux qui sont précédés par un "D"
+à chaque commande LIST.
+ 
+ATTENTION: Lorsque on emploie la commande PURGE
+il ne sera plus possible de récupérer les messages effacés.
+ 
+Syntaxe:
+/ms PURGE
+ 
+Pour tout renseignement, tape /join #IRCHelp
+*** Fin de l'Help ***

@@ -1,0 +1,10 @@
+*** ChanServ Operator Help - Command: CLOSE ***
+The CLOSE command is similar to the SUSPEND one,
+but it will close the channel permanentely.
+The registration will NOT be dropped and 
+the channel may be reopened by using the OPEN command
+ 
+Syntax: /CS CLOSE #channel
+ 
+This command is limited to Services Administrators.
+*** End of OHelp ***

@@ -1,0 +1,14 @@
+*** ChanServ Help - Comando: DEHALFOP ***
+Toglie l'HalfOp al nick specificato, nel canale specificato. Si possono
+specificare fino a 6 nick nello stesso comando. 
+Bisogna Minimo HOP per usarlo su se stessi, minimo AOP per usarlo su altri.
+ 
+Sintassi:
+/cs DEHALFOP #canale nick [nick2] ... [nick6]
+ 
+Esempi:
+/cs DEHALFOP #IRCHelp Tenerone
+/cs DEHALFOP #IRCHelp picci Alduccio gogeta14
+ 
+Per ulteriori chiarimenti, digita /join #IRCHelp
+*** Fine dell'Help ***

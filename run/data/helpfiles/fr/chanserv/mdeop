@@ -1,0 +1,12 @@
+*** ChanServ Help - Commande: MDEOP ***
+Permet que ChanServ enlève l'op à tous les opérateurs du canal.
+Il faut être au moins SOP pour pouvoir employer cette commande.
+ 
+Syntaxe:
+/cs MDEOP #canal
+ 
+Exemple:
+/cs MDEOP #IRCHelp
+ 
+Pour tout renseignement, tape /join #IRCHelp
+*** Fin de l'Help ***

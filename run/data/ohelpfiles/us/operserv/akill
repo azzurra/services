@@ -1,0 +1,30 @@
+*** OperServ Operator Help - Command: AKILL ***
+Allows IRCops to manipulate the AKILL list. If a user
+matching an AKILL mask attempts to connect, Services
+will instruct all servers to add an AKILL for the mask
+which the user matched.
+ 
+Syntax: AKILL ADD|PERM user@host reason
+        AKILL TIME expiry user@host reason
+        AKILL DESC user@host description
+        AKILL ENABLE|DISABLE user@host
+        AKILL ID id_number
+        AKILL REASON user@host newreason
+        AKILL LIST [start [end]] [pattern]
+ 
+TIME adds a temporary AKILL. expiry must be an integer
+followed by one of d (days), h (hours), or m (minutes).
+If a unit specifier is not included, the default is days
+(so +30 by itself means 30 days).
+ 
+ID returns the user@host mask of an AKILL.
+You cannot remove an AKILL by ID.
+ 
+DESC adds a description to the given AKILL, viewable
+only by opers.
+ 
+ENABLE and DISABLE temporarily enable/disable an
+AKILL without having to remove it and readd it later.
+ 
+This command is limited to Services Operators.
+*** End of OHelp ***

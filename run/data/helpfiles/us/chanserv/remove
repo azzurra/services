@@ -1,0 +1,13 @@
+*** ChanServ Help - Command: REMOVE ***
+This will remove your nick from any of the channel's access
+lists (VOP/HOP/AOP/SOP/CF). This will not delete any access masks,
+only registered nick that you are identified to and currently using.
+ 
+Syntax:
+/cs REMOVE #channel
+ 
+Example:
+/cs REMOVE #Founders
+ 
+Type /join #IRCHelp for more information.
+*** End of Help ***

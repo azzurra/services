@@ -1,0 +1,12 @@
+*** MemoServ Help - Comando: PURGE ***
+Borra todos los memos marcados para borrarse, osea los que tienen
+una "D" a lado por cada comando LIST enviado.
+ 
+ATTENCION: despues haber enviado el comando PURGE no va a ser posible
+recuperar los mensajes ya borrados.
+ 
+Sintaxis:
+/ms PURGE
+ 
+Para mas informaciòn, digita /join #IRCHelp
+*** Fin del Help ***

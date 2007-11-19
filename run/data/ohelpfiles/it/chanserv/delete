@@ -1,0 +1,7 @@
+*** ChanServ Operator Help - Command: DELETE ***
+Removes the specified registered channel from the database.
+ 
+Syntax: DELETE #channel
+ 
+This command is limited to Services Roots.
+*** End of OHelp ***

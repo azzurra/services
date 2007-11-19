@@ -1,0 +1,18 @@
+*** MemoServ Help - Commande: DEL ***
+Marque comme "à effacer" le mémo corréspondant au numéro spécifié, autrement les
+signes tous si comme numéro vous spécifiez ALL. Chaque mémo marqué sera précédé
+par un "D" à chaque commande LIST. Ces mémos seront effacés seulement
+lorsque la commande PURGE sera employée, autrement ils seront effacés automatiquement
+lorsque tu te déconnecteras.
+ 
+Important: Aucun mémo n'est jamais marqué automatiquement comme "à effacer".
+ 
+Syntaxe:
+/ms DEL <numéro|ALL>
+ 
+Exemples:
+/ms DEL 6
+/ms DEL ALL
+ 
+Pour tout renseignement, tape /join #IRCHelp
+*** Fin de l'Help ***

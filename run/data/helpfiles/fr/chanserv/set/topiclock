@@ -1,0 +1,16 @@
+*** ChanServ Help - Commande: SET TOPICLOCK ***
+Active ou désactive l'option Topic Lock pour le canal spécifié. Quand
+elle est active, seulement qui a le niveau minimum d'accès demandé aura
+la possibilité de changer le topic du canal. Niveau peut être VOP/AOP/SOP/COFOUNDER/FOUNDER. 
+Pour désactiver cette option il faut spécifier OFF comme niveau.
+ 
+Syntaxe:
+/cs SET #canal TOPICLOCK niveau
+ 
+Exemples:
+/cs SET #IRCHelp TOPICLOCK AOP
+/cs SET #Italia TOPICLOCK FOUNDER
+/cs SET #SoleLuna TOPICLOCK OFF
+ 
+Pour tout renseignement, tape /join #IRCHelp
+*** Fin de l'Help ***

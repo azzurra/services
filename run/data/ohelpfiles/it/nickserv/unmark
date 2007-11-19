@@ -1,0 +1,7 @@
+*** NickServ Operator Help - Command: UNMARK ***
+Removes the MARK flag set on a nickname with the command MARK.
+ 
+Syntax: UNMARK nickname
+ 
+This command is limited to Services Roots.
+*** End of OHelp ***

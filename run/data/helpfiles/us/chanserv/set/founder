@@ -1,0 +1,14 @@
+*** ChanServ Help - Command: SET FOUNDER ***
+Changes the channel's founder. The new founder's nick must
+be registered with NickServ, and must be online. You must
+be identified to both the Founder's nick and the channel
+to use this command.
+ 
+Syntax:
+/cs SET #channel FOUNDER nick
+ 
+Example:
+/cs SET #pippo FOUNDER Fry
+ 
+Type /join #IRCHelp for more information.
+*** End of Help ***

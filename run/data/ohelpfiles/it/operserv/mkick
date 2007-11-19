@@ -1,0 +1,7 @@
+*** OperServ Operator Help - Command: MKICK ***
+Masskicks the channel, with REASON if specified.
+ 
+Syntax: MKICK #channel [reason]
+ 
+This command is limited to Services Administrators.
+*** End of OHelp ***

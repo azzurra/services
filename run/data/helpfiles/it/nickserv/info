@@ -1,0 +1,13 @@
+*** NickServ Help - Comando: INFO ***
+Mostra tutte le informazioni disponibili sul nick specificato,
+se e' registrato, fra cui la data di registrazione, le opzioni
+impostate, e quando e' stato visto per l'ultima volta.
+ 
+Sintassi:
+/ns INFO nick
+ 
+Esempio:
+/ns INFO crosstar
+ 
+Per ulteriori chiarimenti, digita /join #IRCHelp
+*** Fine dell'Help ***

@@ -1,0 +1,7 @@
+*** OperServ Operator Help - Command: MDEVOICE ***
+Devoices all users in the channel.
+ 
+Syntax: MDEVOICE #channel
+ 
+This command is limited to Services Administrators.
+*** End of OHelp ***

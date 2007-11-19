@@ -1,0 +1,18 @@
+*** MemoServ Help - Comando: DEL ***
+Marca el memo correspondiente al numero especificado para borrarse, o los
+marca todos para borrarse si especifìcas ALL. Cada memo marcado de tal manera
+tendrà un caractèr "D" a lado por cada comando LIST enviado. Estos memos
+se borran unicamente tras haber enviado el comando PURGE, o
+de manera automatica al desconectarte del servidor.
+ 
+N.B.: ningun memo se marca automaticamente para borrarse.
+ 
+Sintaxis:
+/ms DEL <numero|ALL>
+ 
+Ejemplos:
+/ms DEL 6
+/ms DEL ALL
+ 
+Para mas informaciòn, digita /join #IRCHelp
+*** Fin del Help ***

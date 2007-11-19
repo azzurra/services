@@ -1,0 +1,48 @@
+*** ChanServ Help - Command: SOP ***
+Maintains the Super-Op List for a channel. SOP's are auto-opped when they join
+the channel, and they can maintain the AutoKick, the AOP, the HOP and the VOP list.
+ 
+Syntax:
+/cs SOP #channel ADD <nick|mask>
+/cs SOP #channel DEL <nick|mask|number>
+/cs SOP #channel LIST [pattern]
+/cs SOP #channel FIND <mask>
+/cs SOP #channel CLEAN
+/cs SOP #channel EXPLIST
+/cs SOP #channel WIPE
+/cs SOP #channel LOCK [nick|mask]
+/cs SOP #channel UNLOCK [nick|mask]
+ 
+The SOP ADD command adds the given nickname to the Super-Op list. If the nick or
+mask is already present on the list, its access level is changed to the SOP level.
+ 
+The SOP DEL command removes the given nick or mask from the Super-Op list.
+ 
+The SOP LIST command displays the current Super-Op list; if a mask is given,
+only those entries matching the mask are displayed.
+ 
+The AOP FIND command search the entries matching the given mask (in the nick!user@host format)
+ 
+The SOP CLEAN command removes all the expired nicks from the Super-Op list.
+ 
+The SOP EXPLIST command displays all the expired nicks in the Super-Op list.
+ 
+The SOP WIPE command removes all nicks and masks from the Super-Op list.
+ 
+The SOP LOCK command locks the Super-Op list. Only the founder will be able
+to maintain it if it's locked. If a single entry is specified, only that one
+will be locked.
+ 
+The SOP UNLOCK command unlocks the Super-Op list if it was previously locked.
+If a single entry is specified, only that one will be unlocked.
+ 
+Examples:
+/cs SOP #IRCHelp ADD [^BodyZen
+/cs SOP #IRCHelp ADD *!*pippo@*.carota.net
+/cs SOP #IRCHelp DEL 5
+/cs SOP #IRCHelp LIST *carota*
+/cs SOP #IRCHelp LOCK Wolf7
+/cs SOP #IRCHelp UNLOCK Aptivo
+ 
+Type /join #IRCHelp for more information.
+*** End of Help ***

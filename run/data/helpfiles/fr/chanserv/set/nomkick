@@ -1,0 +1,15 @@
+*** ChanServ Help - Commande: SET NOMKICK ***
+Quand l'option NOMKICK est ON, la commande MKICK de
+ChanServ est interdite pour ce canal. Pour modifier
+cette option il faut être identifiés aussi bien au 
+nick du propriétaire qu'au canal.
+ 
+Syntaxe:
+/cs SET #canal NOMKICK <ON|OFF>
+ 
+Exemples:
+/cs SET #IRCHelp NOMKICK ON
+/cs SET #linux NOMKICK OFF
+ 
+Pour tout renseignement, tape /join #IRCHelp
+*** Fin de l'Help ***

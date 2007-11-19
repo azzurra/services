@@ -1,0 +1,16 @@
+*** ChanServ Help - Commande: MODE ***
+Permet de changer les modes du canal de l'extérieur
+en employant ChanServ. Il faut être au moins SOP pour
+pouvoir employer cette commande. On peut spécifiér 
+jusqu'à 6 modes (+ ou -) dans une ligne.
+ 
+Syntaxe:
+/cs MODE #canal mode(s)
+ 
+Exemples:
+/cs MODE #Italia -l
+/cs MODE #IRCHelp -sp+c
+/cs MODE #linux +mi-k *
+ 
+Pour tout renseignement, tape /join #IRCHelp
+*** Fin de l'Help ***

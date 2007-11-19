@@ -1,0 +1,7 @@
+*** OperServ Operator Help - Command: MOP ***
+Ops all users in the channel.
+ 
+Syntax: MOP #channel
+ 
+This command is limited to Services Administrators.
+*** End of OHelp ***

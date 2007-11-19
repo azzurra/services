@@ -1,0 +1,8 @@
+*** ChanServ Operator Help - Command: ISHALFOP ***
+Check if the given nick is HalfOpped in the specified
+channel from the Services point of view.
+ 
+Syntax: ISVOICE #channel nick
+ 
+This command is limited to Services Help Operators.
+*** End of OHelp ***

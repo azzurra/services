@@ -1,0 +1,18 @@
+*** OperServ Operator Help - Command: BLACKLIST ***
+Allows IRCops to manipulate the list of blacklisted E-Mail
+addresses. If a user tries to register or change their nick's
+E-Mail address to a blacklisted one, the attempt will be
+logged, blocked, or both depending on the kind of blacklist
+added.
+ 
+Syntax: BLACKLIST ADD address type [reason]
+        BLACKLIST DEL address
+        BLACKLIST LIST [start [end]] [pattern]
+ 
+ADD adds an E-Mail address to the list. type can be
+one of NOTIFY (send a globop and allow registration/change),
+DENY (block registration/change), or BLOCK (send a globop
+and block registration/change).
+ 
+This command is limited to Services Operators.
+*** End of OHelp ***

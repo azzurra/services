@@ -1,0 +1,17 @@
+*** NickServ Help - Comando: SET NOMEMO ***
+Se attivata non permette ad altri utenti di mandarti alcun
+memo. Continuerai tuttavia a ricevere memo inviati ai canali
+in cui sei in lista. Per non ricevere piu' neanche quelli, e'
+necessario abilitare anche l'opzione NOCHANMEMO.
+Potrai comunque continuare a mandare memo ad altri utenti
+anche con l'opzione NOMEMO attiva.
+ 
+Sintassi:
+/ns SET NOMEMO <ON|OFF>
+ 
+Esempi:
+/ns SET NOMEMO ON
+/ns SET NOMEMO OFF
+ 
+Per ulteriori chiarimenti, digita /join #IRCHelp
+*** Fine dell'Help ***

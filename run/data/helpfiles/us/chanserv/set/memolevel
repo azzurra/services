@@ -1,0 +1,16 @@
+*** ChanServ Help - Command: SET MEMOLEVEL ***
+This command sets the channel's minimum access level
+required to send channel memos. level may be: VOP,
+HOP, AOP, SOP, CF, or FOUNDER. When NONE is specified,
+channel memos are disabled.
+ 
+Syntax:
+/cs SET #channel MEMOLEVEL level
+ 
+Examples:
+/cs SET #IRCHelp MEMOLEVEL AOP
+/cs SET #Italia MEMOLEVEL FOUNDER
+/cs SET #SoleLuna MEMOLEVEL NONE
+ 
+Type /join #IRCHelp for more information.
+*** End of Help ***

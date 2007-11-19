@@ -1,0 +1,7 @@
+*** RootServ Operator Help - Command: RESTART ***
+Tells Services to save databases and restart
+(i.e. exit and immediately re-run the executable).
+ 
+Syntax: RESTART
+ 
+*** End of OHelp ***

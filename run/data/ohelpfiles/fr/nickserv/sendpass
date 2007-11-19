@@ -1,0 +1,7 @@
+*** NickServ Operator Help - Command: SENDPASS ***
+Sends the password via E-Mail to the nick's E-Mail address.
+ 
+Syntax: SENDPASS nickname
+ 
+This command is limited to Services Help Operators.
+*** End of OHelp ***

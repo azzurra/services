@@ -1,0 +1,25 @@
+*** Channel Modes ***
+  b  - Permette di bannare una mask nel formato nick!user@host da un canale.
+  c  - Impedisce di inviare al canale messaggi che contengano colori.
+  C  - Impedisce di inviare CTCP al canale.
+  d  - Impedisce di cambiare nick a chi non e' operatore o voice nel canale.
+  h  - Permette di settare un nickname come half operator del canale.
+  i  - Rende il canale solo ad invito.
+  j  - Permette solo a chi è identificato ad un nick registrato di entrare nel canale.
+  k  - Rende il canale protetto da password.
+  l  - Setta il massimo numero di utenti che possono stare nel canale.
+  m  - Rende il canale moderato: solo i +o, +h e +v possono parlare.
+  M  - Rende il canale moderato: solo chi ha il nick registrato con NickServ puo' parlare.
+  n  - Proibisce l'invio al canale di messaggi dall' esterno.
+  o  - Permette di settare un nickname come operatore del canale.
+  O  - (IRCop Only) Permette di entrare solo agli IRC Operators.
+  p  - Rende il canale privato (non appare nei /WHOIS, il topic e' nascosto nei /LIST ).
+  r  - (Services Only) Contraddistingue un canale registrato con ChanServ.
+  R  - Permette solo ai nick registrati con NickServ di entrare nel canale.
+  s  - Rende il canale segreto (non appare nei /WHOIS o nei /LIST ).
+  S  - Permette solo ai nick connessi in SSL di entrare nel canale.
+  t  - Permette solo agli operatori di cambiare il topic.
+  u  - Non mostra i messaggi di QUIT e PART di utenti del canale.
+  U  - Permette agli utenti esteri non identificati di entrare nel canale.
+  v  - Concede ad un nickname il permesso di parlare in un canale moderato (+m).
+*** Fine della Lista ***

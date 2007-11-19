@@ -1,0 +1,21 @@
+*** MemoServ Help - Command: LIST ***
+Lists any memos you currently have. Unread memos are
+displayed with a "*" to the left of the memo number.
+Memos marked as deleted are displayed with a "D" to
+the left of the memo number.
+ 
+Syntax:
+/ms LIST [CHANNEL|NEW|USER]
+ 
+CHANNEL will list all memos sent to channels.
+ 
+NEW will list all new (unread) memos.
+ 
+USER will list all memos sent by other users.
+ 
+Examples:
+/ms LIST
+/ms LIST NEW
+ 
+Type /join #IRCHelp for more information.
+*** End of Help ***

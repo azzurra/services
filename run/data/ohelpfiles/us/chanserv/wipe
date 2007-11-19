@@ -1,0 +1,7 @@
+*** ChanServ Operator Help - Command: WIPE ***
+Wipes the given access list of a channel.
+ 
+Syntax: WIPE #channel [CFOUNDER|SOP|AOP|VOP|AKICK|ALL]
+ 
+This command is limited to Services Roots.
+*** End of OHelp ***

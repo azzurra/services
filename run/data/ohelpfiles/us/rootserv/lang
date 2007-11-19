@@ -1,0 +1,20 @@
+*** RootServ Operator Help - Command: LANG ***
+Manipulates the language files and options.
+ 
+Syntax: LANG RELOAD langID
+        LANG LIST
+        LANG REHASH
+        LANG OFFLINE langID
+        LANG ONLINE langID
+ 
+RELOAD reloads a language file.
+ 
+LIST returns a list of available languages and relative langIDs.
+ 
+REHASH reloads all language files and variables.
+ 
+OFFLINE disables a language temporarily.
+ 
+ONLINE re-enables a disabled language.
+ 
+*** End of OHelp ***

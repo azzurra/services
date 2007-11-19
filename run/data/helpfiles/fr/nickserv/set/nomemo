@@ -1,0 +1,13 @@
+*** NickServ Help - Commande: SET NOMEMO ***
+Ne permet pas à d'autres usagers de t'envoyer de mémos. Tu pourras
+continuer à envoyer des mémos aux autres usagers même si cette option est activée.
+ 
+Syntaxe:
+/ns SET NOMEMO <ON|OFF>
+ 
+Exemples:
+/ns SET NOMEMO ON
+/ns SET NOMEMO OFF
+ 
+Pour tout renseignement, tape /join #IRCHelp
+*** Fin de l'Help ***

@@ -1,0 +1,7 @@
+*** ChanServ Operator Help - Command: HOLD ***
+Prevents a channel from being expired.
+ 
+Syntax: HOLD #channel
+ 
+This command is limited to Services Administrators.
+*** End of OHelp ***

@@ -1,0 +1,14 @@
+*** ChanServ Help - Command: SET NEVEROP ***
+Enables or disables the Never Op option for a channel.
+If it is enabled, AOPs and up will not be automatically
+opped by ChanServ upon joining the channel.
+ 
+Syntax:
+/cs SET #channel NEVEROP <ON|OFF>
+ 
+Examples:
+/cs SET #IRCHelp NEVEROP ON
+/cs SET #Services NEVEROP OFF
+ 
+Type /join #IRCHelp for more information.
+*** End of Help ***

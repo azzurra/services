@@ -1,0 +1,13 @@
+*** OperServ Operator Help - Command: JUPE ***
+Has services create a fake server which prevents the
+real server of that name from connecting. The jupe may
+not be removed using a standard SQUIT.
+This command is to be used only in a situation where
+a server is disrupting the network and must be juped.
+ 
+Syntax: JUPE ADD servername reason
+        JUPE DEL servername
+        JUPE LIST [start [end]] [pattern]
+ 
+This command is limited to Services Administrators.
+*** End of OHelp ***

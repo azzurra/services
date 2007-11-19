@@ -1,0 +1,18 @@
+*** MemoServ Help - Comando: UNDEL ***
+Se il memo specificato era stato precedentemente
+segnato come da cancellare, ovvero ha una "D" vicino,
+questa viene tolta, e il messaggio non sara' cancellato
+quando ti disconnetti o usi il comando PURGE.
+Specificando ALL al posto del numero del memo, la "D"
+verra' tolta da tutti quanti i messaggi che avevi
+segnato come da cancellare.
+ 
+Sintassi:
+/ms UNDEL <numero|ALL>
+ 
+Esempi:
+/ms UNDEL 4
+/ms UNDEL ALL
+ 
+Per ulteriori chiarimenti, digita /join #IRCHelp
+*** Fine dell'Help ***

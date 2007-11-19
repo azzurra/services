@@ -1,0 +1,8 @@
+*** MemoServ Operator Help - Command: LIMIT ***
+Sets the maximum number of memos a user is allowed to have. Setting the limit to
+0 disables this and allows the user to receive and keep as many memos as they want.
+ 
+Syntax: LIMIT nickname value
+ 
+This command is limited to Services Administrators.
+*** End of OHelp ***

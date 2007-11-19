@@ -1,0 +1,11 @@
+*** MemoServ Help - Command: PURGE ***
+Erases all memos marked as deleted.
+ 
+WARNING: Once a memo has been purged,
+there is NO way to get it back.
+ 
+Syntax:
+/ms PURGE
+ 
+Type /join #IRCHelp for more information.
+*** End of Help ***

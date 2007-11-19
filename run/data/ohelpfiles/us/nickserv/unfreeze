@@ -1,0 +1,7 @@
+*** NickServ Operator Help - Command: UNFREEZE ***
+Removes the FREEZE flag from the given nickname, re-allowing the owner to ident to it and use it.
+ 
+Syntax: UNFREEZE nickname
+ 
+This command is limited to Services Operators.
+*** End of OHelp ***

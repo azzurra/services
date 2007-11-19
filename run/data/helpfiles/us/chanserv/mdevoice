@@ -1,0 +1,12 @@
+*** ChanServ Help - Command: MDEVOICE ***
+Removes channel voice status from all users in the channel.
+You must have at least SOP access to the channel to use this command.
+ 
+Syntax:
+/cs MDEVOICE #channel
+ 
+Example:
+/cs MDEVOICE #iac
+ 
+Type /join #IRCHelp for more information.
+*** End of Help ***

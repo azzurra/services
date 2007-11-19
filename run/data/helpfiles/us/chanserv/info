@@ -1,0 +1,13 @@
+*** ChanServ Help - Command: INFO ***
+Lists information about the given channel, if it's registered, including
+its founder, time of registration, last time used, description, and mode
+lock, if any. Channel topic will not be shown if the channel is secret (+s).
+ 
+Syntax:
+/cs INFO #channel
+ 
+Example:
+/cs INFO #IRCHelp
+ 
+Type /join #IRCHelp for more information.
+*** End of Help ***

@@ -1,0 +1,12 @@
+*** ChanServ Help - Command: IDENTIFY ***
+Authenticates you to ChanServ as the founder of the given channel.
+Many commands require you to identify yourself before using them.
+ 
+Syntax:
+/cs IDENTIFY #channel password
+ 
+Example:
+/cs IDENTIFY #lamer ImALam0r
+ 
+Type /join #IRCHelp for more information.
+*** End of Help ***

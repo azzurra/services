@@ -1,0 +1,28 @@
+*** NickServ Help - Comando: SET ***
+Questo comando ti permette di modificare le opzioni del tuo nick.
+Per poter utilizzare questo comando bisogna identificarsi al nick di cui
+si vogliono cambiare le opzioni.
+ 
+N.B.: I nick non autorizzati non possono cambiare le loro opzioni.
+ 
+Sintassi:
+/ns SET OPZIONE parametri
+ 
+Le opzioni disponibili sono:
+ 
+    EMAIL      - Gestisce l'indirizzo E-Mail associato al tuo nick.
+    KILL       - Fa in modo che nessuno possa usare il tuo nick quando non ci sei.
+    LANG       - Imposta il linguaggio usato dai servizi.
+    NEVEROP    - Fa in modo che ChanServ non ti oppi in nessun canale.
+    NOMEMO     - Fa in modo che un nick non possa ricevere memo da altri utenti.
+    NOCHANMEMO - Non ti fa ricevere memo inviati a canali in cui e' in lista.
+    NOWELCOME  - Permette di non ricevere nessun Welcome Message all'entrata.
+    NOOP       - Non permette ad altri utenti di aggiungere il tuo nick a nessuna lista.
+    PASSWD     - Permette di cambiare la password di un nick.
+    SECURE     - Aumenta la sicurezza del tuo nick non tenendo conto dell'Access List.
+    URL        - Associa un URL al tuo nick.
+ 
+Per avere maggiori informazioni su queste opzioni digita: /ns HELP SET opzione
+ 
+Per ulteriori chiarimenti, digita /join #IRCHelp
+*** Fine dell'Help ***

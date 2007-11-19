@@ -1,0 +1,7 @@
+*** OperServ Operator Help - Command: BAN ***
+Kickbans nickname from the channel specified.
+ 
+Syntax: BAN #channel nickname [reason]
+ 
+This command is limited to Services Operators.
+*** End of OHelp ***

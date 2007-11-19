@@ -1,0 +1,8 @@
+*** RootServ Operator Help - Command: NOOP ***
+Lets you freeze all O:lines of the given server and kill
+all IRCops currently on it to prevent them from rehashing
+the server (because this would just cancel the effect).
+ 
+Syntax: NOOP server <ON|OFF>
+ 
+*** End of OHelp ***

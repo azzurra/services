@@ -1,0 +1,8 @@
+*** MemoServ Operator Help - Command: INFO ***
+Displays Memo Information of a nick.
+If a number is given, it will read the specified memo.
+ 
+Syntax: INFO nickname [number]
+ 
+This command is limited to Services Roots.
+*** End of OHelp ***

@@ -1,0 +1,18 @@
+*** NickServ Help - Comando: IDENTIFY ***
+Informa a NickServ que eres el propietario del nick que estàs utilizando.
+Muchos comandos sòlo funcionan tras haber identificado tu nick.
+Es posible identificarse a nicks diferentes especificando los mismos
+antes de poner la contraseña.
+ 
+Sintaxis:
+/ns IDENTIFY [nick] contraseña
+ 
+Ejemplo:
+/ns IDENTIFY 33523carota
+/ns IDENTIFY Edric Storm
+ 
+N.B.: para identificarte al nick que estàs utilizando actualmente digita
+/pass contraseña para obtener el mismo resultado.
+ 
+Para mas informaciòn, digita /join #IRCHelp
+*** Fin del Help ***

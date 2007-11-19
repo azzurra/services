@@ -1,0 +1,15 @@
+*** ChanServ Help - Command: SET URL ***
+Associates the given URL with the channel. This URL
+will be displayed whenever someone requests information
+on the channel with the INFO command. When NONE is
+specified the URL will be removed from the channel information.
+ 
+Syntax:
+/cs SET #channel URL url
+ 
+Example:
+/cs SET #IRCHelp URL http://help.azzurra.org
+/cs SET #italia URL NONE
+ 
+Type /join #IRCHelp for more information.
+*** End of Help ***

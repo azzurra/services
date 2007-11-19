@@ -1,0 +1,13 @@
+*** ChanServ Help - Command: INVITE ***
+Tells ChanServ to invite you into the given channel.
+Use this command if the channel is +i, +l or +k, or if you are banned.
+You must have at least VOP access to the channel to use this command.
+ 
+Syntax:
+/cs INVITE #channel
+ 
+Example:
+/cs INVITE #IRCHelp
+ 
+Type /join #IRCHelp for more information.
+*** End of Help ***

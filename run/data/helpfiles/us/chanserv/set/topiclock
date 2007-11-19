@@ -1,0 +1,18 @@
+*** ChanServ Help - Command: SET TOPICLOCK ***
+Enables or disables the Topic Lock option for a channel.
+When it is set, ChanServ will not allow the channel topic
+to be changed unless access permits. Also, ChanServ will only
+give access to the TOPIC command to the level you specify.
+level can be VOP, HOP, AOP, SOP, CFOUNDER or FOUNDER.
+When OFF is specified this option is disabled.
+ 
+Syntax:
+/cs SET #channel TOPICLOCK level
+ 
+Examples:
+/cs SET #IRCHelp TOPICLOCK AOP
+/cs SET #Italia TOPICLOCK FOUNDER
+/cs SET #SoleLuna TOPICLOCK OFF
+ 
+Type /join #IRCHelp for more information.
+*** End of Help ***

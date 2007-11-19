@@ -1,0 +1,22 @@
+*** NickServ Operator Help - Command: LISTREG ***
+Lists all registered nicks matching the given pattern.
+ 
+Syntax:
+LISTREG type [pattern] [first [last]]
+ 
+type is one of:
+ 
+- NICK [N]: nick
+- MASK [M]: Last usermask
+- REALNAME [RN]: Last real name (gcos)
+- EMAIL [E]: E-Mail address
+- NOEMAIL [NE]: Empty E-Mail address
+- NOTAUTH [NA]: Unauthorized nick
+- INAUTH [IA]: Authorized nick
+- HOLD [H]: Nick is held
+- MARK [K]: Nick is marked
+- FORBID [F]: Nick is forbidden
+- FREEZE [Z]: Nick is frozen
+ 
+This command is limited to Services Operators.
+*** End of OHelp ***

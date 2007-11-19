@@ -1,0 +1,29 @@
+*** NickServ Help - Comando: SET ***
+Sets various nickname options. You need to identify to
+your nickname in order to be able to use this command.
+ 
+Note: Unauthorized nicknames may not set any options
+until they authorize.
+ 
+Syntax:
+/ns SET OPTION parameters
+ 
+Available options are:
+ 
+    EMAIL        - Manage the E-Mail address associated with your nickname.
+    KILL         - Doesn't let anyone else use this nick.
+    LANG         - Set language used by services
+    NEVEROP      - Prevent ChanServ granting you operator status.
+    NOCHANMEMO   - Prevent your nick from receiving channel memos.
+    NOMEMO       - Prevent your nick from receiving memos from other users.
+    NOOP         - Prevent your nick from being added to channel access lists.
+    NOWELCOME    - Doesn't show channel welcome messages on join.
+    PASSWD       - Set your nickname password.
+    SECURE       - Ignore all masks on the Access List.
+    URL          - Associate an URL to your nickname.
+ 
+For more information on a specific command, type:
+/ns HELP SET COMMAND
+ 
+Type /join #IRCHelp for more information.
+*** End of Help ***

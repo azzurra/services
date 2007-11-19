@@ -1,0 +1,7 @@
+*** NickServ Operator Help - Command: DELETE ***
+Drops the specified nickname from the NickServ database.
+ 
+Syntax: DELETE nickname
+ 
+This command is limited to Services Roots.
+*** End of OHelp ***

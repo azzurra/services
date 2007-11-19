@@ -1,0 +1,16 @@
+*** ChanServ Help - Comando: SET EMAIL ***
+Setta una E-Mail associata al canale specificato. Questo
+indirizzo E-Mail e' quello che risultera' ad ogni utente che
+richieda le informazioni del canale tramite il comando INFO.
+Per rimuovere l'E-Mail corrente bisogna specificare NONE come
+indirizzo E-Mail.
+ 
+Sintassi:
+/cs SET #canale EMAIL indirizzo
+ 
+Esempi:
+/cs SET #IT-Opers EMAIL irc@azzurra.org
+/cs SET #IRCHelp EMAIL NONE
+ 
+Per ulteriori chiarimenti, digita /join #IRCHelp
+*** Fine dell'Help ***

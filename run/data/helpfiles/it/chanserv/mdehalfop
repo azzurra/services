@@ -1,0 +1,12 @@
+*** ChanServ Help - Comando: MDEHALFOP ***
+Fa in modo che ChanServ rimuova tutti gli HalfOp del canale.
+Bisogna essere almeno SOP per poter usare questo comando.
+ 
+Sintassi:
+/cs MDEHALFOP #canale
+ 
+Esempio:
+/cs MDEHALFOP #IRCHelp
+ 
+Per ulteriori chiarimenti, digita /join #IRCHelp
+*** Fine dell'Help ***

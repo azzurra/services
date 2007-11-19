@@ -1,0 +1,16 @@
+*** OperServ Operator Help - Command: TAGLINE ***
+Allows IRCops to manipulate the TAGLINE list. Taglines
+are shown at each database update, if enabled.
+ 
+Syntax: TAGLINE ADD|DEL text
+        TAGLINE LIST [start [end]] [pattern]
+ 
+ADD adds a tagline to the database.
+ 
+DEL removes the given tagline from the database. Numbers are allowed.
+ 
+LIST shows all current taglines, or only those matching a pattern
+if one is given. By default only the first 30 entries will be listed.
+ 
+This command is limited to Services Administrators.
+*** End of OHelp ***

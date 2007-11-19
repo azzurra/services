@@ -1,0 +1,48 @@
+*** ChanServ Help - Command: HOP ***
+Maintains the Auto-HalfOp List for a channel. HOP's are auto-halfopped when they join
+the channel, and have access to the UNBAN and INVITE commands.
+ 
+Syntax:
+/cs HOP #channel ADD <nick|mask>
+/cs HOP #channel DEL <nick|mask|number>
+/cs HOP #channel LIST [pattern]
+/cs HOP #channel FIND <mask>
+/cs HOP #channel CLEAN
+/cs HOP #channel EXPLIST
+/cs HOP #channel WIPE
+/cs HOP #channel LOCK [nick|mask]
+/cs HOP #channel UNLOCK [nick|mask]
+ 
+The HOP ADD command adds the given nickname to the Auto-HalfOp list. If the nick or
+mask is already present on the list, its access level is changed to the HOP level.
+ 
+The HOP DEL command removes the given nick or mask from the Auto-HalfOp list.
+ 
+The HOP LIST command displays the current Auto-HalfOp list; if a mask is given,
+only those entries matching the mask are displayed.
+ 
+The AOP FIND command search the entries matching the given mask (in the nick!user@host format)
+ 
+The HOP CLEAN command removes all the expired nicks from the Auto-HalfOp list.
+ 
+The HOP EXPLIST command displays all the expired nicks in the Auto-HalfOp list.
+ 
+The HOP WIPE command removes all nicks and masks from the Auto-HalfOp list.
+ 
+The HOP LOCK command locks the Auto-HalfOp list. Only the founder will be able
+to maintain it if it's locked. If a single entry is specified, only that one
+will be locked.
+ 
+The HOP UNLOCK command unlocks the Auto-HalfOp list if it was previously locked.
+If a single entry is specified, only that one will be unlocked.
+ 
+Examples:
+/cs HOP #IRCHelp ADD [^BodyZen
+/cs HOP #IRCHelp ADD *!*pippo@*.carota.net
+/cs HOP #IRCHelp DEL 5
+/cs HOP #IRCHelp LIST *carota*
+/cs HOP #IRCHelp LOCK Wolf7
+/cs HOP #IRCHelp UNLOCK Aptivo
+ 
+Type /join #IRCHelp for more information.
+*** End of Help ***

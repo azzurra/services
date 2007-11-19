@@ -1,0 +1,13 @@
+*** MemoServ Help - Command: READ ***
+Displays the text of the specified memo, or of the
+last one if LAST is given instead of a number.
+ 
+Syntax:
+/ms READ <number|LAST>
+ 
+Examples:
+/ms READ 6
+/ms READ LAST
+ 
+Type /join #IRCHelp for more information.
+*** End of Help ***

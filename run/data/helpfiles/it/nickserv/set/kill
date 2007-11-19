@@ -1,0 +1,21 @@
+*** NickServ Help - Comando: SET KILL ***
+Attiva l'opzione Kill del tuo nick, richiedendo a chiunque provi
+ad utilizzarlo l'inserimento della password di registrazione.
+Iniziera' quindi un conto alla rovescia, allo scadere del quale, se
+la password non e' stata inserita, il nick verra' cambiato in Guest.
+ 
+Sintassi:
+/ns SET KILL <SLOW|NORMAL|FAST|OFF>
+ 
+SLOW (alias di ON) imposta un conto alla rovescia di 60 secondi.
+ 
+NORMAL imposta un conto alla rovescia di 20 secondi.
+ 
+FAST imposta un conto alla rovescia di 5 secondi.
+ 
+Esempi:
+/ns SET KILL NORMAL
+/ns SET KILL OFF
+ 
+Per ulteriori chiarimenti, digita /join #IRCHelp
+*** Fine dell'Help ***

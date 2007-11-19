@@ -1,0 +1,33 @@
+*** NickServ Help - Commande: REGISTER ***
+Enregistrer un nick ça veut dire exploiter complètement le service NickServ.
+Vous pourriez, par exemple, déconnecter n'importe qui est en train
+de l'utiliser en n'importe quel moment, enregistrer des canaux, etc.
+ 
+Le mot de passe doit contenir de 5 à 32 caractères, et ne peut être égale
+au nick pour des raisons de securité. En outre, on déconseille d'employer comme mot
+de passe un nom propre, parce que c'est trop facile à deviner.
+ 
+Au moment de l'enregistrement, un code d'autorisation sera envoyé par E-Mail à
+l'adresse spécifiée pour confirmer l'enregistrement du nick. Jusqu'au moment où le nick
+sera autorisé il ne sera pas possible d'enregistrer de canaux ou de se faire ajouter aux listes
+VOP/AOP/SOP/CF. En outre, il ne sera pas possible de changer les options du nick même.
+Pour confirmer l'enregistrement il faut suivir les simples instructions qu'on trouve
+dans l'E-Mail.
+ 
+ATTENTION: Si l'enregistrement ne sera complété dans 24 heures, le nick sera
+automatiquement effacé et pourra être enregistré par des autres usagers. Assurez-vous
+de spécifier une adresse E-Mail vraie à laquelle vous avez accès. Si une adresse fausse
+sera spécifiée, il faudra attendre l'expiration du nick après 24 heures pour le pouvoir
+enregistrer de nouveau. En outre, l'adresse E-Mail spécifiée pendant l'enregistrement
+ne peut être vue par d'autres usagers par la commande INFO. Seulement si vous voulez,
+vous la pourrez rendre visible aux autres. L'amministration emploiera cette adresse
+seulement dans les cas de demande de mot de passe ou d'abus.
+ 
+Syntaxe:
+/ns REGISTER mot-de-passe e-mail
+ 
+Exemple:
+/ns REGISTER 4zzUrr4 adachi@hotmail.com
+ 
+Pour tout renseignement, tape /join #IRCHelp
+*** Fin de l'Help ***

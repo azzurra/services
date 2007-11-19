@@ -1,0 +1,21 @@
+*** NickServ Help - Comando: GHOST ***
+Termina una connessione "fantasma" che usa il tuo nick.
+Una sessione ghost avviene quando ad esempio il tuo
+computer crasha mentre sei su IRC, e il server crede
+che tu sia ancora collegato.
+ 
+Nel caso in cui qualcun altro stia usando il vostro nick,
+NON e' questo il comando giusto da usare. Usa invece RECOVER.
+ 
+Se vuoi invece far disconnettere il finto client caricato
+dai servizi per custodire il tuo nick NON devi usare questo
+comando; usa invece RELEASE.
+ 
+Sintassi:
+/ns GHOST nick password
+ 
+Esempio:
+/ns GHOST gogeta14 andrea
+ 
+Per ulteriori chiarimenti, digita /join #IRCHelp
+*** Fine dell'Help ***

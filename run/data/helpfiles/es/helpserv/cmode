@@ -1,0 +1,24 @@
+*** Channel Modes ***
+  b  - Permite banear una mask en el formato nick!user@host de un canal
+  c  - Bloquea el envìo al canal de mensajes que tengan colores
+  C  - Bloquea el envìo al canal de mensajes CTCP
+  d  - No deja cambiar de nick a los que no sean operadores en el canal
+  h  - Permite poner un nickname como half-operador en el canal
+  i  - Ajusta el canal en modalidad de sòla invitaciòn
+  j  - Permite solamente a quien està identificado a un nick registrado entrar en el canal
+  k  - Proteje el canal con clave secreta
+  l  - Ajusta el numero maximo de usuarios que pueden acceder al canal
+  m  - Pone el canal moderado: sòlo los +o, los +h y +v pueden escribir
+  M  - Pone el canal moderado: sòlo los que tengan su nick registrado con NickServ pueden escribir
+  n  - Prohibe el envìo de mensajes exteriores a un canal
+  o  - Permite poner un nickname como operador en el canal
+  O  - (IRCop Only) Permite el acceso unicamente a los IRC Operators
+  p  - Pone el canal privado (no sale con /whois )
+  r  - (Services Only) Indìca un canal registrado por ChanServ
+  R  - Permite el acceso nada mas a los nicks registrados
+  s  - Pone el canal secreto (no se visualiza con /list )
+  S  - Solamente los clientes SSL pueden entrar en el canal
+  t  - Permite el cambio de topic del canal unicamente a los op's
+  U  - Permite a los usuarios sin nick registrado en los robins .US y .EU entrar en un canal
+  v  - Permite a los nicknames con +v escribir en un canal moderado (+m)
+*** Fin de la Lista ***

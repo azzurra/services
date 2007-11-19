@@ -1,0 +1,25 @@
+*** MemoServ Help - Command: SENDTO ***
+Sends a memo to all users with equal or higher
+access to the channel than the one specified.
+ 
+Syntax:
+/ms SENDTO #channel <VOP|HOP|AOP|SOP|CF> message
+ 
+VOP will send a memo to all VOPs/HOPs/AOPs/SOPs/CFs.
+ 
+HOP will send a memo to all HOPs/AOPs/SOPs/CFs.
+ 
+AOP will send a memo to all AOPs/SOPs/CFs.
+ 
+SOP will send a memo to all SOPs/CFs.
+ 
+CF will send a memo to all Co-Founders.
+ 
+Note: The channel founder will receive the memo from any selection.
+ 
+Examples:
+/ms SENDTO #IRCHelp VOP Congratulations to our new AOP, Miki!
+/ms SENDTO #Italia SOP Please do not AOP anyone else.
+ 
+Type /join #IRCHelp for more information.
+*** End of Help ***

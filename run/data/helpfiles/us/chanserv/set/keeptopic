@@ -1,0 +1,12 @@
+*** ChanServ Help - Command: SET KEEPTOPIC ***
+Enables or disables the Topic Retention option for a channel.
+When it is set to ON, the topic for the channel will be remembered
+by ChanServ even after the last user leaves the channel, and will be
+restored the next time the channel is created.
+When OFF is specified this option is disabled.
+ 
+Syntax:
+/cs SET #channel KEEPTOPIC <ON|OFF>
+ 
+Type /join #IRCHelp for more information.
+*** End of Help ***

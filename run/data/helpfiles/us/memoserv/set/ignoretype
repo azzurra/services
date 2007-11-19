@@ -1,0 +1,17 @@
+*** MemoServ Help - Command: SET IGNORETYPE ***
+Lets you decide how to use your Memo Ignore List.
+ 
+Syntax:
+/ms SET NOTIFY option
+ 
+Available options:
+ 
+    1  -  Memos from nicks on your Memo Ignore List will be ignored.
+    2  -  Memos from all nicks but those on your Memo Ignore List will be ignored.
+ 
+Examples:
+/ms SET IGNORETYPE 1
+/ms SET IGNORETYPE 2
+ 
+Type /join #IRCHelp for more information.
+*** End of Help ***

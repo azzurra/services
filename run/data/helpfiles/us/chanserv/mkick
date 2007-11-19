@@ -1,0 +1,13 @@
+*** ChanServ Help - Command: MKICK ***
+Kicks all users from the given channel including yourself.
+ChanServ will also join the channel and keep it closed for a few minutes.
+You must have at least SOP access to the channel to use this command.
+ 
+Syntax:
+/cs MKICK #channel [reason]
+ 
+Example:
+/cs MKICK #lamer Go away lamers!
+ 
+Type /join #IRCHelp for more information.
+*** End of Help ***

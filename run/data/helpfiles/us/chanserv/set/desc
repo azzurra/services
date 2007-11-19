@@ -1,0 +1,13 @@
+*** ChanServ Help - Command: SET DESC ***
+Changes the channel's description. It will be displayed
+whenever someone requests information on the channel with
+the INFO command.
+ 
+Syntax:
+/cs SET #channel DESC description
+ 
+Example:
+/cs SET #IRCHelp DESC The official Azzurra Help Channel
+ 
+Type /join #IRCHelp for more information.
+*** End of Help ***

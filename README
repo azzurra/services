@@ -1,0 +1,17 @@
+Azzurra IRC Services
+----------------------------------------
+
+Azzurra IRC Services is (c) 2001-2005 Azzurra IRC Network (irc@azzurra.org)
+
+Original coding by Shaka (shaka@azzurra.org) and Gastaman (gastaman@azzurra.org)
+
+Contributions by Mav (mav@azzurra.org), INT24 (int@azzurra.org), vjt (vjt@openssl.it), snagg (snagg@azzurra.org)
+
+Some portions of the code are based on the following projects:
+  - Epona (c) 2000-2002, 2004 PegSoft <epona@pegsoft.net>
+  - SirvNET Services (c) 1998-2002 Trevor Klingbeil <priority1@dal.net>
+
+This program is free but copyrighted software; see the file COPYING for details.
+
+Latest information about Azzurra IRC Services can be found on the Azzurra
+IRC Network website, at http://devel.azzurra.org

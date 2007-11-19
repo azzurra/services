@@ -1,0 +1,13 @@
+*** ChanServ Help - Commande: DROP ***
+Efface l'enregistrement du canal spécifié. Cette commande
+peut être employée seulement par le propriétaire du canal,
+qui doit être identifié par la commande IDENTIFY.
+ 
+Syntaxe:
+/cs DROP #canal
+ 
+Exemple:
+/cs DROP #lamer
+ 
+Pour tout renseignement, tape /join #IRCHelp
+*** Fin de l'Help ***

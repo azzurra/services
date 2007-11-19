@@ -1,0 +1,22 @@
+*** HelpServ Help ***
+HelpServ es un servicio que provee informaciòn y ayuda sobre IRC y sobre los comandos
+de los servicios. Para una mejor consultaciòn de informaciòn sobre los servicios les consejamos
+utilizar el comando HELP por cada servicio:
+ 
+Para ayuda sobre registraciòn y control del nick, digita /msg NickServ HELP
+ 
+Para ayuda sobre registraciòn y control de canales, digita /msg ChanServ HELP
+ 
+Para ayuda sobre el servicio envio mensajes a usuarios no conectados, digita /msg MemoServ HELP
+ 
+Tambien son disponibles los siguentes comandos, consultables digitando /msg HelpServ comando :
+ 
+          UMODE - Visualiza los User Modes disponibles en esta red
+          CMODE - Visualiza los Channel Modes disponibles en esta red
+ 
+Les recordamos que es posible abreviàr los comandos /msg NickServ , /msg ChanServ ,
+/msg MemoServ con los comandos /nickserv , /chanserv , /memoserv ,  o con los
+comandos /ns , /cs , /ms similmente, obteniendo el mismo resultado.
+ 
+Para mas informaciòn, digita /join #IRCHelp
+*** Fin del Help ***

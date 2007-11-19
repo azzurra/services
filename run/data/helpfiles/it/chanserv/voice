@@ -1,0 +1,15 @@
+*** ChanServ Help - Comando: VOICE ***
+Da' il voice al nick specificato, nel canale specificato. E' possibile
+specificare fino a 6 nick nello stesso comando. Bisogna essere almeno VOP
+nel canale per poter usare questo comando su se' stessi, e almeno AOP per
+poterlo usare sugli altri utenti.
+ 
+Sintassi:
+/cs VOICE #canale nick [nick2] ... [nick6]
+ 
+Esempi:
+/cs VOICE #IRCHelp Kripto
+/cs VOICE #lamer lamer1 lamer2 lamer3
+ 
+Per ulteriori chiarimenti, digita /join #IRCHelp
+*** Fine dell'Help ***

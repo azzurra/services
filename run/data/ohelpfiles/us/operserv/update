@@ -1,0 +1,7 @@
+*** OperServ Operator Help - Command: UPDATE ***
+Forces a database update.
+ 
+Syntax: UPDATE
+ 
+This command is limited to Services Administrators.
+*** End of OHelp ***

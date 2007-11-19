@@ -1,0 +1,16 @@
+*** ChanServ Help - Comando: SET MEMOLEVEL ***
+La opciòn MEMOLEVEL permite especificar el nivel minimo de acceso requerido
+para poder enviar memos a todo el canal. El paràmetro livello puede
+ser cualquier entre VOP, AOP, SOP, CF o FOUNDER. Para hacer que no se pueda
+enviar algun memo a todo el canal necesitas especificar NONE como nivel.
+ 
+Sintaxis:
+/cs SET #canal MEMOLEVEL nivel
+ 
+Ejemplos:
+/cs SET #IRCHelp MEMOLEVEL AOP
+/cs SET #España MEMOLEVEL FOUNDER
+/cs SET #SolyLuna MEMOLEVEL NONE
+ 
+Para mas informaciòn, digita /join #IRCHelp
+*** Fin del Help ***

@@ -1,0 +1,26 @@
+*** MemoServ Help - Command: IGNORE ***
+Modifies or displays the Memo Ignore List for your
+nick. This is the list of registered nicknames
+whose memos will be ignored. Only registered
+nicknames can be added to this list.
+ 
+Syntax:
+/ms IGNORE ADD nick
+/ms IGNORE DEL nick
+/ms IGNORE LIST
+/ms IGNORE WIPE
+ 
+ADD adds a registered nick to your Memo Ignore List.
+ 
+DEL removes a nick from your Memo Ignore List.
+ 
+LIST displays the current Memo Ignore List.
+ 
+WIPE removes all nicks from your Memo Ignore List.
+ 
+Examples:
+/ms IGNORE ADD Horse
+/ms IGNORE DEL Kab00m
+ 
+Type /join #IRCHelp for more information.
+*** End of Help ***

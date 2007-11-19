@@ -1,0 +1,628 @@
+#!/bin/sh
+#
+# Configuration script for Azzurra IRC Services.
+# Based on SirvNET Services (c) 1998-2002 Trevor Klingbeil (priority1@dal.net)
+###########################################################################
+
+# Nifty handy functions.
+
+echo2 () {
+	$ECHO2 "$*$ECHO2SUF"	# these are defined later
+}
+
+log () {
+	echo >&3 "$MODE: $*"
+}
+
+run () {
+	echo >&3 "$MODE: >>> $*"
+	$* >&3 2>&3 </dev/null
+}
+
+###########################################################################
+
+# Test for the presence of a given include file or function.  If the
+# variable TEST is non-empty, it contains code to be placed at the end of
+# main(), and should return 0 if everything is okay, else 1.
+#
+# For includes: Pass the include filename as an argument.  The variable
+# HAVE_include_name, where "include_name" is the name of the include file
+# with letters uppercased and non-alphanumerics replaced by underscores, is
+# set to 1 if the include file is present, else 0.
+#
+# For functions: Pass the return type, function name, and prototype as
+# arguments.  The variable HAVE_function, where "function" is the name
+# of the function with letters uppercased, is set to 1 if the function is
+# available, else 0.
+#
+# For both: The result code of the function will be 0 (true) if the entity
+# is present, else 1 (false).
+
+test_include () {
+	include="$1"
+	inc2="`echo $include | tr '[a-z]/.-' '[A-Z]___'`"
+	if [ -f "/usr/include/$include" ] ; then
+		eval "HAVE_${inc2}=1"
+		log "found $include in /usr/include"
+		return 0
+	fi
+	cat >tmp/test.c <<EOT
+#include <$include>
+int main() { return 0; }
+EOT
+	if run $CC $CC_FLAGS tmp/test.c $CC_LIBS -o tmp/test ; then
+		eval "HAVE_${inc2}=1"
+		log "found $include"
+		return 0
+	else
+		eval "HAVE_${inc2}=0"
+		log "didn't find $include"
+		return 1
+	fi
+}
+
+test_function () {
+	rettype="$1"
+	func="$2"
+	proto="$3"
+	if [ ! "$rettype" -o ! "$func" ] ; then
+		log "test_function: missing parameter(s)"
+		return 1
+	fi
+	if [ ! "$proto" ] ; then
+		proto="(...)"
+	fi
+	func2=`echo $func | tr '[a-z]' '[A-Z]'`
+	if [ ! "$TEST" ] ; then
+		TEST="return 0;"
+	fi
+	cat >tmp/test.c <<EOT
+	int main() {
+		extern int $func$proto;
+		$TEST
+	}
+EOT
+	if run $CC $CC_FLAGS tmp/test.c $CC_LIBS -o tmp/test && run tmp/test ; then
+		eval "HAVE_${func2}=1"
+		log "found $func"
+		return 0
+	else
+		eval "HAVE_${func2}=0"
+		log "didn't find $func"
+		return 1
+	fi
+}
+
+###########################################################################
+
+# Create a temporary directory for our use.
+
+if [ -d tmp ] ; then
+	rm -rf tmp
+fi
+if mkdir tmp ; then : ; else
+	echo "Failed to create temporary directory!  Exiting."
+	exit 2
+fi
+if chmod u+rwx tmp ; then : ; else
+	echo "Cannot write to temporary directory!  Exiting."
+	exit 2
+fi
+
+###########################################################################
+
+# Variable initialization.
+
+PROGRAM=services
+BINDEST=.
+DATDEST=./data
+
+SOCKSMONITOR=
+SERVICES="USE_SERVICES"
+STATS=
+
+CC=
+CC_LIBS=
+CC_FLAGS=bonkle
+CC_LFLAGS=bonkle
+
+OSTYPE=bonkle
+
+HAVE_SYS_RESOURCE_H=0
+HAVE_GETHOSTBYNAME=0
+HAVE_STRERROR=0
+HAVE_SYS_ERRLIST=0
+HAVE_STRSIGNAL=0
+
+###########################################################################
+
+# How can we echo something without going to the next line?
+
+ECHO2SUF=''
+if [ "`echo -n a ; echo -n b`" = "ab" ] ; then
+	ECHO2='echo -n'
+elif [ "`echo 'a\c' ; echo 'b\c'`" = "ab" ] ; then
+	ECHO2='echo' ; ECHO2SUF='\c'
+elif [ "`printf 'a' 2>&1 ; printf 'b' 2>&1`" = "ab" ] ; then
+	ECHO2='printf "%s"'
+else
+	# oh well...
+	ECHO2='echo'
+fi
+export ECHO2 ECHO2SUF
+
+###########################################################################
+
+# Command-line parsing.
+
+USER_CC=
+USER_CC_FLAGS=bonkle
+USER_CC_LFLAGS=bonkle
+USER_CC_LIBS=
+
+export USER_CC USER_CC_FLAGS USER_CC_LFLAGS USER_CC_LIBS
+
+while [ $# -gt 0 ] ; do
+	if [ "$1" = "-cc" ] ; then
+		shift
+		USER_CC=$1
+	elif [ "$1" = "-cflags" ] ; then
+		shift
+		USER_CC_FLAGS=$1
+	elif [ "$1" = "-lflags" ] ; then
+		shift
+		USER_CC_LFLAGS=$1
+	elif [ "$1" = "-libs" ] ; then
+		shift
+		USER_CC_LIBS=$1
+	elif [ "$1" = "-os2" ] ; then
+		PROGRAM=services.exe
+	else
+		if [ "$1" != "-help" -a "$1" != "-h" -a "$1" != "--help" ]; then
+			echo >&2 Unknown option/parameter: "$1"
+			exitval=1
+		else
+			exitval=0
+		fi
+		cat >&2 <<EOT
+Available options:
+	-os2		Indicate that this is an OS/2 system.
+	-cc			Specify C compiler to use (overrides check)
+	-cflags		Specify compilation flags (defaults: -O2 for gcc,
+			    -O for other compilers; overrides check)
+	-lflags		Specify link flags for C compiler (default: none)
+	-libs		Specify extra link libraries to use (default: none)
+EOT
+		exit $exitval
+	fi
+	shift
+done
+
+###########################################################################
+
+echo ""
+echo "Beginning Services configuration."
+echo ""
+
+ok=0
+echo "What do you want to compile?"
+echo "     1) Standard IRC Services (NickServ, ChanServ, etc)"
+echo "     2) Proxy Scanner (requires threading support)"
+echo "     3) Statistical Services (StatServ, SeenServ)"
+while [ $ok -eq 0 ] ; do
+	echo2 "[1] "
+	if read INPUT ; then : ; else echo "" ; exit 1 ; fi
+	if [ ! "$INPUT" ] ; then
+		INPUT=1
+	fi
+	case $INPUT in
+		no\ default)
+			echo "You must specify your choice."
+			;;
+
+		1)
+					SERVICES="USE_SERVICES"
+					SOCKSMONITOR=
+					STATS=
+			ok=1
+			;;
+		2)
+					SERVICES=
+					SOCKSMONITOR="USE_SOCKSMONITOR"
+					STATS=
+			ok=1
+			;;
+
+		3)
+					SERVICES=
+					SOCKSMONITOR=
+					STATS="USE_STATS"
+			ok=1
+			;;
+
+		*)
+			echo "Please enter a valid option number."
+			;;
+	esac
+done
+echo ""
+
+###########################################################################
+
+# Set up log file for automated tests, so we have a clue what's going on if
+# something dies.
+
+exec 3>configure.log
+
+MODE="                "
+TEST=""
+export MODE TEST
+
+###########################################################################
+
+# Search for a compiler.
+
+MODE="find_cc         "
+echo2 "Searching for a suitable compiler... "
+if [ "$USER_CC" ] ; then
+	CC="$USER_CC"
+	echo "(supplied) using $CC."
+	log user supplied \`"$USER_CC'"
+elif run gcc --version ; then
+	echo "great, found gcc!"
+	CC=gcc
+	DEF_CC_FLAGS=-O2
+	log using \`gcc\'
+else
+	echo "gcc not found."
+	echo2 "    Looking for alternatives... "
+	echo >tmp/test.c "int main(){return 1;}"
+	if run cc tmp/test.c -o tmp/test ; then
+		CC=cc
+	elif run c89 tmp/test.c -o tmp/test ; then
+		CC=c89
+	else
+		echo "no C compiler found!"
+		echo "    Use the -cc command line option to specify your C compiler."
+		log "automatic tests failed"
+		exit 2
+	fi
+	# See if it handles ANSI.
+	cat >tmp/test.c <<EOT
+	int main(int argc, char **argv) {
+		extern void foo(int bar);
+	}
+EOT
+	log "test for ANSI..."
+	if run $CC tmp/test.c -o tmp/test ; then
+		echo "using $CC."
+		log using \`"$CC'"
+	else
+		echo "found $CC, but it's not ANSI-compliant!"
+		echo "    Use the -cc command line option to specify your C compiler."
+		log \`"$CC' not ANSI-compliant"
+		exit 2
+	fi
+	DEF_CC_FLAGS=-O
+fi
+
+
+# Test compiler options.
+
+MODE="find_ccopts     "
+if [ "$USER_CC_FLAGS" != bonkle ] ; then
+	CC_FLAGS="$USER_CC_FLAGS"
+	echo "Compiler flags supplied: $CC_FLAGS"
+	log user supplied flags: \`"$CC_FLAGS'"
+else
+	CC_FLAGS=$DEF_CC_FLAGS
+	echo2 "Testing default compiler flags ($CC_FLAGS)... "
+	cat >tmp/test.c <<EOT
+	int main(int argc, char **argv) {
+		extern void foo(int bar);
+	}
+EOT
+	if run $CC $CC_FLAGS -c tmp/test.c -o tmp/test.o ; then
+		echo "looks good."
+	else
+		echo "no luck!  Using no flags."
+		echo "    If you know what flags you want, use the -cflags option to configure."
+		CC_FLAGS=
+	fi
+	log using flags: \`"$CC_FLAGS'"
+fi
+
+###########################################################################
+
+# Set linker flags.
+
+MODE="find_lflags     "
+if [ "$USER_CC_LFLAGS" != "bonkle" ] ; then
+	CC_LFLAGS=$USER_CC_LFLAGS
+	log user supplied \`"$CC_LFLAGS'"
+else
+	log using no flags
+	CC_LFLAGS=""
+fi
+
+###########################################################################
+
+# See what libraries we have that we might need.
+
+MODE="find_libs       "
+echo2 "Let's see what libraries are lying around... "
+if run $CC $CC_FLAGS tmp/test.c -lnsl -o tmp/test ; then
+	CC_LIBS="$CC_LIBS -lnsl"
+	echo2 "-lnsl "
+fi
+if run $CC $CC_FLAGS tmp/test.c -lsocket -o tmp/test ; then
+	CC_LIBS="$CC_LIBS -lsocket"
+	echo2 "-lsocket "
+fi
+if run $CC $CC_FLAGS tmp/test.c -lresolv -o tmp/test ; then
+	CC_LIBS="$CC_LIBS -lresolv"
+	echo2 "-lresolv "
+fi
+if run $CC $CC_FLAGS tmp/test.c -lbsd -o tmp/test ; then
+	CC_LIBS="$CC_LIBS -lbsd"
+	echo2 "-lbsd "
+fi
+
+if [ "$SOCKSMONITOR" = "USE_SOCKSMONITOR" ] ; then
+	if run $CC $CC_FLAGS -D_REENTRANT tmp/test.c -pthread -o tmp/test ; then
+		CC_FLAGS="$CC_FLAGS -D_REENTRANT"
+		CC_LIBS="$CC_LIBS -pthread"
+		echo2 "-pthread "
+	elif run $CC $CC_FLAGS -D_REENTRANT tmp/test.c -lpthread -o tmp/test ; then
+		CC_FLAGS="$CC_FLAGS -D_REENTRANT"
+		CC_LIBS="$CC_LIBS -lpthread"
+		echo2 "-lpthread "
+	else
+	   	SOCKSMONITOR=""
+		echo ""
+		echo "Configure was not able to determine how to compile"
+		echo "services with threading support; disabled it." 
+	fi
+fi
+
+echo ""
+CC_LIBS="`echo $CC_LIBS | sed 's/^ +//'`"
+
+if [ "$USER_CC_LIBS" ] ; then
+	CC_LIBS="$CC_LIBS $USER_CC_LIBS"
+	echo "Additional user-supplied libraries: $USER_CC_LIBS"
+	log user added \`"$USER_CC_LIBS'"
+fi
+
+###########################################################################
+
+# OS specific behaviour
+
+if [ "$SOCKSMONITOR" = "USE_SOCKSMONITOR" ] ; then
+
+	echo2 "Looking for OS specific needs... "
+
+	if [ `uname -s` = "Linux" ] ; then
+		VER=`uname -r`
+		case $VER in
+			2.0*|2.1*)
+				OSTYPE="LINUX20"
+				echo2 "Linux 2.0 or 2.1 thread handling; "
+				;;
+			*)
+				OSTYPE="LINUX22"
+				echo2 "Linux 2.2+ thread handling; "
+				;;
+		esac
+	fi
+
+	echo ""
+fi
+
+###########################################################################
+
+# Look for include files that might or might not be here.
+echo "Checking for presence of include files:"
+
+MODE="check_sysres    "
+echo2 "    sys/resource.h... "
+if test_include sys/resource.h ; then
+    HAVE_SYS_RESOURCE_H=1
+	echo "present"
+else
+    HAVE_SYS_RESOURCE_H=0
+	echo "not present"
+fi
+
+###########################################################################
+
+# Look for missing/broken built-in routines, and similar compatibility
+# stuff.
+
+MODE="check_strerror  "
+echo2 "How to complain when something goes wrong... "
+cat >tmp/test.c <<EOT
+int main() {
+	extern void strerror(void);
+	strerror();
+}
+EOT
+if run $CC $CC_FLAGS tmp/test.c $CC_LIBS -o tmp/test ; then
+	HAVE_STRERROR=1
+	echo "ah, strerror() is here."
+	log "using strerror()"
+else
+	HAVE_STRERROR=0
+	echo "no strerror()."
+	cat >tmp/test.c <<EOT
+int main() {
+	extern char *sys_errlist[];
+	char *s;
+	s = sys_errlist[0];
+}
+EOT
+	log "trying sys_errlist..."
+	if run $CC $CC_FLAGS tmp/test.c $CC_LIBS -o tmp/test ; then
+		HAVE_SYS_ERRLIST=1
+		echo "    But you have sys_errlist, which will do nicely."
+		log "using sys_errlist"
+	else
+		HAVE_SYS_ERRLIST=0
+		echo "    You don't have sys_errlist either, so we'll have to make do."
+		log "using pseudo sys_errlist"
+	fi
+fi
+
+###########################################################################
+
+echo2 "Looking for other routines we want that you don't have... "
+
+MODE="check_snprintf  "
+TEST='char buf[16];
+	int res;
+	buf[0] = 0;
+	res = snprintf(buf, 8, "%d", 123456789);
+	if (strcmp(buf, "1234567") != 0) {
+		printf("test: snprintf broken (bad result in buffer: wanted 1234567, got \"%s\")\n", buf);
+		if (strlen(buf) > 7)
+			printf("test: your snprintf does not check buffer size!\n");
+		return 1;
+	}
+
+	return 0;'
+if test_function int snprintf "(char *, int, const char *, ...)" ; then : ; else
+	echo2 "snprintf "
+	echo ""
+	echo "Your snprintf() is not compatible with services' needs."
+	echo "Please install a library with a working snprintf() on your system."
+	exit 4
+fi
+
+MODE="check_strsignal "
+TEST="(void) strsignal(1); return 0;"
+if test_function "char *" strsignal "(int)" ; then : ; else
+	echo2 "strsignal "
+fi
+
+MODE="check_gethostbyname"
+TEST='(void) gethostbyname("localhost"); return 0;'
+if test_function "struct hostent *" gethostbyname "(const char *)" ; then : ; else
+	echo2 "gethostbyname "
+fi
+
+echo ""
+
+if [ $HAVE_GETHOSTBYNAME = 0 ] ; then
+echo ""
+echo "Your system does not seem to have the gethostbyname() function."
+echo "This function is required to translate hostnames into IP addresses."
+echo "Please install a library with a working gethostbyname() and try again."
+exit 4
+fi
+
+###########################################################################
+
+MODE="check_binary"
+echo2 "Checking how to name the binary... "
+
+if [ "$STATS" = "USE_STATS" -a ! "$SOCKSMONITOR" -a ! "$SERVICES" ] ; then
+	PROGRAM="stats"
+	echo "$PROGRAM"
+	log "binary: stats"
+
+elif [ "$SOCKSMONITOR" = "USE_SOCKSMONITOR" -a ! "$STATS" -a ! "$SERVICES" ] ; then
+	PROGRAM="cybcop"
+	echo "$PROGRAM"
+	log "binary: cybcop"
+
+else
+	PROGRAM="services"
+	echo "$PROGRAM"
+	log "binary: services"
+fi
+
+###########################################################################
+
+# Create files.
+
+echo2 "Creating sysconf.h... "
+cat >inc/sysconf.h <<EOT
+/*
+ * This file is generated automatically by "configure".  Any changes made
+ * to it will be erased next time "configure" is run.
+ */
+
+#define SERVICES_BIN		"$BINDEST/$PROGRAM"
+#define SERVICES_DIR		"$DATDEST"
+
+EOT
+
+if [ "$SERVICES" ] ; then cat >>inc/sysconf.h <<EOT ; fi
+#define $SERVICES
+EOT
+
+if [ "$SOCKSMONITOR" ] ; then cat >>inc/sysconf.h <<EOT ; fi
+#define $SOCKSMONITOR
+EOT
+
+if [ "$STATS" ] ; then cat >>inc/sysconf.h <<EOT ; fi
+#define $STATS
+EOT
+
+if [ "$OSTYPE" != "bonkle" ] ; then cat >>inc/sysconf.h <<EOT ; fi
+#define $OSTYPE 
+EOT
+
+if [ $HAVE_SYS_RESOURCE_H = 1 ] ; then cat >>inc/sysconf.h <<EOT ; fi
+#define HAVE_SYS_RESOURCE_H	$HAVE_SYS_RESOURCE_H
+EOT
+
+if [ $HAVE_STRSIGNAL = 1 ] ; then cat >>inc/sysconf.h <<EOT ; fi
+#define HAVE_STRSIGNAL		$HAVE_STRSIGNAL
+EOT
+
+if [ $HAVE_STRERROR = 1 ] ; then
+cat >>inc/sysconf.h <<EOT
+#define HAVE_STRERROR		$HAVE_STRERROR
+EOT
+elif [ $HAVE_SYS_ERRLIST = 1 ] ; then
+cat >>inc/sysconf.h <<EOT
+#define HAVE_SYS_ERRLIST	$HAVE_SYS_ERRLIST
+EOT
+fi
+
+if [ "$SOCKSMONITOR" ] ; then cat >>inc/sysconf.h <<EOT ; fi
+#define HAVE_GETHOSTBYNAME	$HAVE_GETHOSTBYNAME
+EOT
+
+echo "done."
+
+echo2 "Creating Makefile.inc... "
+cat >Makefile.inc <<EOT
+# This file is generated automatically by "configure".  Any changes made
+# to it will be erased next time "configure" is run.
+
+CC=$CC
+BASE_CFLAGS=$CC_FLAGS
+LFLAGS=$CC_LFLAGS
+LIBS=$CC_LIBS
+
+PROGRAM=$PROGRAM
+BINDEST=$BINDEST
+DATDEST=$DATDEST
+
+EOT
+echo "done."
+
+###########################################################################
+
+# Delete the temporary directory we created.
+
+rm -rf tmp
+
+###########################################################################
+
+cat <<EOT
+All done!  Now run "make" to compile Azzurra IRC Services.
+EOT
+exit 0

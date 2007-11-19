@@ -1,0 +1,45 @@
+*** ChanServ Help - Comando: AKICK ***
+Mantiene la AutoKick List per un canale. Se qualcuno nella AKick list
+entra nel canale, verra' bannato e subito dopo kickato da ChanServ.
+ 
+Sintassi:
+/cs AKICK #canale ADD mask [bantype] [ragione]
+/cs AKICK #canale DEL mask
+/cs AKICK #canale LIST [mask]
+/cs AKICK #canale WIPE
+/cs AKICK #canale LOCK [mask]
+/cs AKICK #canale UNLOCK [mask]
+ 
+ADD aggiunge la mask o il nick specificato alla AutoKick list. E' possibile
+specificare il tipo di ban da applicare agli utenti che entrano e rispecchiano
+la mask posta in AKick. Ci sono 10 tipi di ban disponibili, gli stessi del comando
+SET BANTYPE. Per avere la lista basta digitare: /cs HELP SET BANTYPE
+Se viene specificata una ragione, questa verra' usata come ragione al momento del
+kick, altrimenti verra' usata quella di default: "Sei bannato da questo canale."
+ 
+DEL rimuove la mask o il nick specificato dalla AutoKick list. Non toglie 
+pero' eventuali ban messi da ChanServ in seguito ad AutoKick precedenti; questi 
+ultimi vanno rimossi manualmente.
+ 
+LIST visualizza la lista completa delle AutoKick del canale, o eventualmente 
+solo quelle che contengono la mask specificata.
+ 
+WIPE cancella tutte le mask e i nick presenti nella AutoKick list.
+ 
+LOCK blocca la lista, permettendo solo al founder di manipolarla. Se viene
+specificata una delle mask gia' in lista, verra' bloccata solo quella.
+ 
+UNLOCK sblocca la lista, nel caso fosse stata bloccata col comando LOCK.
+Se viene specificata una mask, verra' sbloccata solo quella.
+ 
+Esempi:
+/cs AKICK #IRCHelp ADD Saitta 3 Basta spammare!
+/cs AKICK #IRCHelp ADD *!*saitta@*.dialup.tiscali.it
+/cs AKICK #IRCHelp DEL *!*pippo@*.carota.net
+/cs AKICK #IRCHelp LIST *saitta*
+/cs AKICK #IRCHelp WIPE
+/cs AKICK #IRCHelp LOCK Saitta
+/cs AKICK #IRCHelp UNLOCK *!*pippo@*.carota.net
+ 
+Per ulteriori chiarimenti, digita /join #IRCHelp
+*** Fine dell'Help ***

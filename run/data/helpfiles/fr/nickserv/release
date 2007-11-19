@@ -1,0 +1,17 @@
+*** NickServ Help - Commande: RELEASE ***
+Fait que NickServ déconnecte le faux client qu'avait
+connecté avec ton nick après que ton mot de passe n'a pas
+été tapé par toi ou par un autre usager dans le cas où 
+l'option KILL est active. NickServ déconnecte le faux 
+client automatiquement après une minute, mais par cette 
+commande tu peux abréger le temps. Pour pouvoir employer cette commande
+il est nécessaire de connaître le mot de passe du nick spécifié.
+ 
+Syntaxe:
+/ns RELEASE nick mot-de-passe
+ 
+Exemple:
+/ns RELEASE gogeta14 Marc
+ 
+Pour tout renseignement, tape /join #IRCHelp
+*** Fin de l'Help ***

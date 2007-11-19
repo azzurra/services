@@ -1,0 +1,38 @@
+*** NickServ Help - Command: SET EMAIL ***
+Lets you modify the E-Mail address associated to your
+nickname. By specifying a new E-Mail address, an E-Mail
+containing an authorization code will be sent to the
+old address. You will need to supply this code to authorize
+the change. If the old address is no longer valid, your
+address will be changed after a period of 7 days, during
+which you can cancel the request and keep the old address
+with the UNDO option.
+ 
+Note: The validity of the new E-Mail address will not
+be checked. It is in your best interests to see that it
+is real and working; we will NOT be able to send you
+your nickname password, should you forget it, if the E-Mail
+address is fake.
+ 
+Syntax:
+ 
+/ns SET EMAIL new@email.eu
+/ns SET EMAIL <HIDE|SHOW|UNDO>
+/ns SET EMAIL AUTH <code>
+ 
+HIDE hides your E-Mail address to everyone except
+yourself (default).
+ 
+SHOW sets your address as public. Anyone doing
+an INFO on your nick will see it.
+ 
+AUTH authorizes a mail change request.
+ 
+UNDO cancels an ongoing mail change request.
+ 
+Examples:
+/ns SET EMAIL pippo@carota.eu
+/ns SET EMAIL AUTH 1034993210
+ 
+Type /join #IRCHelp for more information.
+*** End of Help ***

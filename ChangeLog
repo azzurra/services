@@ -1,0 +1,8 @@
+Azzurra services (2.2.3)
+
+* Fixed clone v6 function
+* Added chanserv sendcode function for helpop+
+* Added chanserv find usable on every list in a channel
+* Added chanserv explist on every list in a channel
+* Fixed a segfault in rootserv lang reload
+* Reduced the high-predicibility of the authentication codes 

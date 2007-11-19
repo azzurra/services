@@ -1,0 +1,15 @@
+*** RootServ Operator Help - Command: SET ***
+Sets various global Services options. Option names currently defined are:
+ 
+    CLONES       Clone Detection
+    EXTRASNOOP   Extra Snooping
+    FLOOD        Flood Levels
+    NOEXPIRE     No-Expire Mode
+    READONLY     Set read-only or read-write mode
+    SCANV6       IPv6 Clone Detection
+    SNOOP        Snoop Channel
+ 
+Syntax: SET option ON|OFF
+        SET SCANV6 1-7
+ 
+*** End of OHelp ***

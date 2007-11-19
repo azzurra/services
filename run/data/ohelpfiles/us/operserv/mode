@@ -1,0 +1,8 @@
+*** OperServ Operator Help - Command: MODE ***
+Places/removes user/channel modes. User modes aAchoOrz
+and channel mode r cannot be changed with this command.
+ 
+Syntax: MODE nick|#channel [+|-]modes
+ 
+This command is limited to Services Administrators.
+*** End of OHelp ***

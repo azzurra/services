@@ -1,0 +1,39 @@
+*** ChanServ Help - Commande: SET ***
+Cette commande permet au propriétaire du canal spécifié de changer les
+options du canal. Pour pouvoir employer cette commande il faut être identifiés
+au nick du propriétaire.
+ 
+Syntaxe de la commande SET:
+/cs SET #canal OPTION paramètres
+ 
+Les options disponibles sont les suivantes:
+ 
+    AUTOOP    - Donne l'op à tous les usagers qui entrent dans le canal
+    AUTOHALFOP- Donne le halfop à tous les usagers qui entrent dans le canal
+    AUTOVOICE - Donne le voice à tous les usagers qui entrent dans le canal
+    BANTYPE   - Configure le type de ban employé par ChanServ
+    DESC      - Configure la description du canal
+    EMAIL     - Associe une E-Mail au canal
+    FOUNDER   - Change le propriétaire d'un canal
+    IDENT     - Donne l'op seulement aux nicks identifiés à NickServ
+    KEEPTOPIC - Mantient le topic même si dans le canal il n'y a personne
+    LANG      - Configure la langue du canal
+    MEMOLEVEL - Configure le niveau minimum nécessaire pour envoyer des mémos au canal
+    MLOCK     - Bloque les modes du canal
+    NEVEROP   - Ne donne pas automatiquement l'op aux AOP et supérieurs
+    NOMKICK   - Interdit le Mass Kick
+    OPGUARD   - Ne permet pas aux usagers normaux d'avoir l'op
+    PASSWD    - Configure le mot de passe d'un canal
+    PROTECT   - Protège les opérateurs enregistrés dans les listes
+    RESTRICT  - Permet que seulement les nicks enregistrés puissent entrer dans le canal
+    SUCCESSOR - Configure le successeur d'un canal
+    TOPIC     - Change le topic du canal
+    TOPICLOCK - Permet le changement du topic seulement à qui est dans les listes du canal
+    URL       - Associe un URL au canal
+    VERBOSE   - Permet de choisir de recevoir certaines opnotices
+    WELCOME   - Configure un message d'accueil
+ 
+Pour avoir des renseignements sur ces options tape: /cs HELP SET option
+ 
+Pour tout renseignement, tape /join #IRCHelp
+*** Fin de l'Help ***

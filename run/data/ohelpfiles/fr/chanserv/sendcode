@@ -1,0 +1,7 @@
+*** ChanServ Operator Help - Command: SENDCODE ***
+Sends the channel DROP code to the Channel Founder's E-Mail address.
+ 
+Syntax: SENDCODE #channel
+ 
+This command is limited to Services Help Operators.
+*** End of OHelp ***

@@ -1,0 +1,7 @@
+*** NickServ Operator Help - Command: FREEZE ***
+Disallows a nickname from being used or identified to by anyone. It does not delete it from databases.
+ 
+Syntax: FREEZE nickname
+ 
+This command is limited to Services Operators.
+*** End of OHelp ***

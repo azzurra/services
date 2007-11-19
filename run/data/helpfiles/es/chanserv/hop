@@ -1,0 +1,44 @@
+*** ChanServ Help - Comando: AOP ***
+Maneja la Auto-HalfOp list de un canal.  Esta lista especifìca cuales usuarios
+tienen halfop automatico entrando en el canal especificado.
+ 
+Sintaxis:
+/cs HOP #canal ADD <nick|mask>
+/cs HOP #canal DEL <mask|numero>
+/cs HOP #canal LIST [mask]
+/cs HOP #canal FIND [mask]
+/cs HOP #canal CLEAN
+/cs HOP #canal EXPLIST
+/cs HOP #canal WIPE
+/cs HOP #canal LOCK
+/cs HOP #canal UNLOCK
+ 
+ADD agrega la mask o el nick especificado en la Auto-HalfOp list del canal. Si el nick
+o la mask ya se encuentran en otra lista, su acceso se cambiarà en HOP.
+ 
+DEL remueve la mask o el nick especificado de la Auto-HalfOp list del canal, o el
+numero correspondiente a una mask o nick si especificado.
+ 
+LIST visualiza la lista completa de los Auto-HalfOp del canal, o en todo caso sòlo 
+los que tengan la mask especificada.
+ 
+FIND búsqueda de los elementos que reflejan la mask especificada (en el formato nick!user@host)
+ 
+CLEAN remueve de la Auto-HalfOp list todos los nicks que estèn expirados.
+ 
+EXPLIST muestra los nick caducados presentes en la lista
+ 
+WIPE remueve todos los nicks y las masks presentes en la Auto-HalfOp list.
+ 
+LOCK bloquea la lista, permitiendo unicamente al fundador modificarla.
+ 
+UNLOCK desbloquea la lista, en caso de que estè bloqueada por el comando LOCK.
+ 
+Ejemplos:
+/cs HOP #IRCHelp ADD Gastaman
+/cs HOP #IRCHelp ADD *!*gastaman@*.azzurranet.org
+/cs HOP #IRCHelp DEL 2
+/cs HOP #IRCHelp LIST *.it
+ 
+Para mas informaciòn, digita /join #IRCHelp
+*** Fin del Help ***

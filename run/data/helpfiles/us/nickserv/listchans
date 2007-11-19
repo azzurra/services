@@ -1,0 +1,9 @@
+*** NickServ Help - Command: LISTCHANS ***
+Displays a list of all the channels you have
+VOP/HOP/AOP/SOP/CF or Founder access to.
+ 
+Syntax:
+/ns LISTCHANS
+ 
+Type /join #IRCHelp for more information.
+*** End of Help ***

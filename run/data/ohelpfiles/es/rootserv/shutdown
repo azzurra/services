@@ -1,0 +1,6 @@
+*** RootServ Operator Help - Command: SHUTDOWN ***
+Tells Services to shut down, but save databases.
+ 
+Syntax: SHUTDOWN
+ 
+*** End of OHelp ***

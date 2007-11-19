@@ -1,0 +1,12 @@
+*** OperServ Operator Help - Command: SGLINE ***
+SG:Lines are G:Lines sent by services to all servers
+during burst, and after each database save.
+Any connecting clients with a realname matching a
+G:Line will be disconnected immediately.
+ 
+Syntax: SGLINE ADD field reason
+        SGLINE DEL field
+        SGLINE LIST [start [end]] [pattern]
+ 
+This command is limited to Services Administrators.
+*** End of OHelp ***

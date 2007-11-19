@@ -1,0 +1,15 @@
+*** ChanServ Help - Comando: SET LANG ***
+Cambia la lingua usata da ChanServ per inviare messaggi
+al tuo canale, nel caso l'opzione VERBOSE sia attiva.
+ 
+Usa LIST come numero per la lista di lingue disponibili.
+ 
+Sintassi:
+/cs SET #canale LANG numero
+ 
+Esempi:
+/cs SET #IRCHelp LANG 1
+/cs SET #IRCHelp LANG LIST
+ 
+Digita /join #IRCHelp per maggiori informazioni.
+*** Fine dell'Help ***

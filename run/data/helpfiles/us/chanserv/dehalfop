@@ -1,0 +1,15 @@
+*** ChanServ Help - Command: DEHALFOP ***
+Removes channel half operator status from the selected nick(s)
+on a channel. You can specify up to 6 nicks on the same line.
+You need to be at least HOP to use this command with your ownnick, 
+and at least AOP to use it with others.
+ 
+Syntax:
+/cs DEHALFOP #channel nick [nick2] ... [nick6]
+ 
+Examples:
+/cs DEHALFOP #IRCHelp Tenerone
+/cs DEHALFOP #IRCHelp picci Alduccio gogeta14
+ 
+Type /join #IRCHelp for more information.
+*** End of Help ***

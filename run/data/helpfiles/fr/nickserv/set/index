@@ -1,0 +1,26 @@
+*** NickServ Help - Commande: SET ***
+Cette commande te permet de modifier les options de ton nick.
+Pour pouvoir employer cette commande il faut être identifiés
+au nick dont on veut changer les options.
+ 
+Important: Les nicks qui ne sont pas autorisés ne peuvent pas modifier ces options.
+ 
+Syntaxe:
+/ns SET OPTION paramètres
+ 
+Les options disponibles sont:
+ 
+    EMAIL      - Gère l'adresse E-Mail associée à ton nick.
+    KILL       - Fait que personne ne peut employer ton nick lorsque tu n'est pas là.
+    LANG       - Configure la langue employée par les services.
+    NEVEROP    - Fait que ChanServ ne te donne l'op dans aucun canal.
+    NOMEMO     - Fait que un nick ne peut pas recevoir de mémos.
+    NOOP       - Ne permet pas que d'autres usagers t'ajoutent dans aucune liste.
+    PASSWD     - Permet de changer le mot de passe d'un nick.
+    SECURE     - Augmente la sécurité de ton nick, en ignorant ta Liste d'accès.
+    URL        - Associe une URL à ton nick.
+ 
+Pour avoir des renseignements sur ces options tape: /ns HELP SET option
+ 
+Pour tout renseignement, tape /join #IRCHelp
+*** Fin de l'Help ***

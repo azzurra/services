@@ -1,0 +1,13 @@
+*** ChanServ Help - Commande: IDENTIFY ***
+T'identifie comme propriétaire du canal spécifié.
+Quelques commandes de ChanServ ont besoin de 
+l'identification avant d'être employées.
+ 
+Syntaxe:
+/cs IDENTIFY #canal mot-de-passe
+ 
+Exemple:
+/cs IDENTIFY #lamer JeSuisUnLamer
+ 
+Pour tout renseignement, tape /join #IRCHelp
+*** Fin de l'Help ***

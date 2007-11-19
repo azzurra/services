@@ -1,0 +1,7 @@
+*** MemoServ Operator Help - Command: GLOBAL ***
+Services roots may send global memos. This command should never be used.
+ 
+Syntax: GLOBAL message
+ 
+This command is limited to Services Roots.
+*** End of OHelp ***

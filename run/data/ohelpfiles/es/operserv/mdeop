@@ -1,0 +1,7 @@
+*** OperServ Operator Help - Command: MDEOP ***
+Deops all users in the channel.
+ 
+Syntax: MDEOP #channel
+ 
+This command is limited to Services Administrators.
+*** End of OHelp ***

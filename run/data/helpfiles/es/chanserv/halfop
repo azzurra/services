@@ -1,0 +1,14 @@
+*** ChanServ Help - Comando: HALFOP ***
+Pone el HalfOp al nick especificado, en el canal especificado. Se puede especificar mas de
+un nick. Necesitas ser minimo HOP para utilizarlo con tu propio nick, minimo AOP para 
+utilizarlo con otros nicks.
+ 
+Sintaxis:
+/cs HALFOP #canal nick(s)
+ 
+Ejemplos:
+/cs HALFOP #IRCHelp Shaka
+/cs HALFOP #IRCHelp ^Faust^ Wolf7 Aptivo
+ 
+Para mas informaciòn, digita /join #IRCHelp
+*** Fin del Help ***

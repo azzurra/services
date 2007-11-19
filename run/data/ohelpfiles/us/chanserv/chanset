@@ -1,0 +1,13 @@
+*** ChanServ Operator Help - Command: CHANSET ***
+Lets you change some channel variables.
+ 
+Syntax: CHANSET #channel [FOUNDER|PASSWD|TOPIC] value
+ 
+FOUNDER Sets the specified nick as founder (and Real Founder) of the channel.
+ 
+PASSWD Changes the channel password.
+ 
+TOPIC Changes the channel topic.
+ 
+This command is limited to Services Administrators.
+*** End of OHelp ***

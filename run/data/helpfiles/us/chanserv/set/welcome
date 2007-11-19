@@ -1,0 +1,15 @@
+*** ChanServ Help - Command: SET WELCOME ***
+Changes the channel's Welcome Notice. If it is set,
+ChanServ will send a notice to anyone joining the
+channel. By default, no welcome message is used.
+When NONE is specified the Welcome Message will be disabled.
+ 
+Syntax:
+/cs SET #channel WELCOME message
+ 
+Examples:
+/cs SET #IRCHelp WELCOME Welcome to #IRCHelp!
+/cs SET #Services WELCOME NONE
+ 
+Type /join #IRCHelp for more information.
+*** End of Help ***

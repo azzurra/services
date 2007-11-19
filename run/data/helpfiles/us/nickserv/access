@@ -1,0 +1,32 @@
+*** NickServ Help - Command: ACCESS ***
+Modifies or displays the Access List for your nick.
+This is the list of addresses which will be automatically
+recognized by NickServ as allowed to use the nick. If you
+want to use the nick from a different address, you need to
+send an IDENTIFY command to make NickServ recognize you.
+ 
+Note: The Access List will be ignored if you have
+the SECURE option enabled.
+ 
+Syntax:
+ 
+/ns ACCESS ADD mask
+/ns ACCESS DEL mask
+/ns ACCESS LIST
+/ns ACCESS WIPE
+ 
+ADD adds a mask to the nick's Access List.
+ 
+DEL removes a mask from the nick's Access List.
+ 
+LIST displays the current Access List.
+ 
+WIPE removes all entries from the nick's Access List.
+ 
+Examples:
+/ns ACCESS ADD capoz@*.aruba.it
+/ns ACCESS DEL manu@*.jnet.it
+/ns ACCESS WIPE
+ 
+Type /join #IRCHelp for more information.
+*** End of Help ***

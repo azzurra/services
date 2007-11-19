@@ -1,0 +1,14 @@
+*** NickServ Help - Comando: SET SECURE ***
+Attiva l'opzione Secure per il tuo nick. Con Secure settata, NickServ non
+terra' piu' in considerazione la tua Access List; dovrai quindi identificarti
+al tuo nick con la tua password ogni volta che ti colleghi.
+ 
+Sintassi:
+/ns SET SECURE <ON|OFF>
+ 
+Esempi:
+/ns SET SECURE ON
+/ns SET SECURE OFF
+ 
+Per ulteriori chiarimenti, digita /join #IRCHelp
+*** Fine dell'Help ***

@@ -1,0 +1,14 @@
+*** ChanServ Help - Comando: REMOVE ***
+Quita tu nick de las listas (VOP/HOP/AOP/SOP/CF) del canal especificado. Es ùtil
+si alguien te agrega en una lista sin tu permiso. Para poder utilizar
+este comando es necesario estar identificados al nick que quieras remover.
+No es posible con este comando remover una mask que incluya la tuya actual.
+ 
+Sintaxis:
+/cs REMOVE #canal
+ 
+Ejemplo:
+/cs REMOVE #Founders
+ 
+Para mas informaciòn, digita /join #IRCHelp
+*** Fin del Help ***

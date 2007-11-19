@@ -1,0 +1,30 @@
+*** NickServ Help - Commande: ACCESS ***
+Montre et gère la Liste d'Accès de ton nick.
+Lorsque tu te connecteras en employant un des masques
+de cette liste, NickServ te reconnaîtra comme propriétaire
+du nick, sans besoin de taper ton mot de passe, et ChanServ
+te donnera l'op dans les canaux dans lesquels tu es enregistré.
+Pour modifier les options du nick, toutefois, on demande toujours
+l'identification au nick par la commande IDENTIFY.
+ 
+Syntaxe:
+/ns ACCESS ADD masque
+/ns ACCESS DEL masque
+/ns ACCESS LIST
+/ns ACCESS WIPE
+ 
+ADD ajoute un masque à ta Liste d'accès.
+ 
+DEL efface un masque de ta Liste d'accès.
+ 
+LIST montre ta Liste d'accès.
+ 
+WIPE efface ta Liste d'accès.
+ 
+Exemples:
+/ns ACCESS ADD capoz@*.aruba.it
+/ns ACCESS DEL manu@*.jnet.it
+/ns ACCESS WIPE
+ 
+Pour tout renseignement, tape /join #IRCHelp
+*** Fin de l'Help ***

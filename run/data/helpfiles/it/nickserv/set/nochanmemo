@@ -1,0 +1,13 @@
+*** NickServ Help - Comando: SET NOCHANMEMO ***
+Se attivata, non riceverai alcun memo inviato a qualsiasi canale
+in cui sei in lista, ad eccezione di quelli di cui risulti founder.
+ 
+Sintassi:
+/ns SET NOCHANMEMO <ON|OFF>
+ 
+Esempi:
+/ns SET NOCHANMEMO ON
+/ns SET NOCHANMEMO OFF
+ 
+Per ulteriori chiarimenti, digita /join #IRCHelp
+*** Fine dell'Help ***

@@ -1,0 +1,15 @@
+*** ChanServ Help - Command: SET AUTOVOICE ***
+Turns the Auto Voice option ON or OFF. When it is ON, ChanServ
+will give voice status to everyone who joins the channel.
+ 
+Note: No changes will be made to the VOP list by this option.
+ 
+Syntax:
+/cs SET #channel AUTOVOICE <ON|OFF>
+ 
+Examples:
+/cs SET #IRCHelp AUTOVOICE OFF
+/cs SET #debian AUTOVOICE ON
+ 
+Type /join #IRCHelp for more information.
+*** End of Help ***

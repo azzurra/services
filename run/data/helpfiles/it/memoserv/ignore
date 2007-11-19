@@ -1,0 +1,25 @@
+*** MemoServ Help - Comando: IGNORE ***
+Visualizza e permette di modificare la Memo Ignore List
+del tuo nick. Tutti i memo inviati da un nick presente
+nella Memo Ignore List saranno ignorati.
+ 
+Sintassi:
+/ms IGNORE ADD nick
+/ms IGNORE DEL nick
+/ms IGNORE LIST
+/ms IGNORE WIPE
+ 
+ADD aggiunge un nick registrato alla tua Memo Ignore List.
+ 
+DEL cancella un nick dalla tua Memo Ignore List.
+ 
+LIST visualizza i nick presenti nella tua Memo Ignore List.
+ 
+WIPE cancella tutti i nick dalla tua Memo Ignore List.
+ 
+Esempi:
+/ms IGNORE ADD Napal
+/ms IGNORE DEL Kab00m
+ 
+Per ulteriori chiarimenti, digita /join #IRCHelp
+*** Fine dell'Help ***

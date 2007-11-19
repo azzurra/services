@@ -1,0 +1,48 @@
+*** ChanServ Help - Command: AOP ***
+Maintains the Auto-Op List for a channel. AOP's are auto-opped when they join
+the channel, and have access to the UNBAN and INVITE commands.
+ 
+Syntax:
+/cs AOP #channel ADD <nick|mask>
+/cs AOP #channel DEL <nick|mask|number>
+/cs AOP #channel LIST [pattern]
+/cs AOP #channel FIND <mask>
+/cs AOP #channel CLEAN
+/cs AOP #channel EXPLIST
+/cs AOP #channel WIPE
+/cs AOP #channel LOCK [nick|mask]
+/cs AOP #channel UNLOCK [nick|mask]
+ 
+The AOP ADD command adds the given nickname to the Auto-Op list. If the nick or
+mask is already present on the list, its access level is changed to the AOP level.
+ 
+The AOP DEL command removes the given nick or mask from the Auto-Op list.
+ 
+The AOP LIST command displays the current Auto-Op list; if a mask is given,
+only those entries matching the mask are displayed.
+ 
+The AOP FIND command search the entries matching the given mask (in the nick!user@host format)
+ 
+The AOP CLEAN command removes all the expired nicks from the Auto-Op list.
+ 
+The AOP EXPLIST command displays all the expired nicks in the Auto-Op List.
+ 
+The AOP WIPE command removes all nicks and masks from the Auto-Op list.
+ 
+The AOP LOCK command locks the Auto-Op list. Only the founder will be able
+to maintain it if it's locked. If a single entry is specified, only that one
+will be locked.
+ 
+The AOP UNLOCK command unlocks the Auto-Op list if it was previously locked.
+If a single entry is specified, only that one will be unlocked.
+ 
+Examples:
+/cs AOP #IRCHelp ADD [^BodyZen
+/cs AOP #IRCHelp ADD *!*pippo@*.carota.net
+/cs AOP #IRCHelp DEL 5
+/cs AOP #IRCHelp LIST *carota*
+/cs AOP #IRCHelp LOCK Wolf7
+/cs AOP #IRCHelp UNLOCK Aptivo
+ 
+Type /join #IRCHelp for more information.
+*** End of Help ***

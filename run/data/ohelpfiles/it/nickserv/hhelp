@@ -1,0 +1,33 @@
+*** NickServ Help Operator Help ***
+
+AUTHNICK nick [e-mail]
+Conferma l'autorizzazione del nick specificato. Specificando anche l'indirizzo e-mail
+e' possibile reimpostare l'indirizzo di registrazione del nick
+Utilizzare questo comando con ESTREMA cautela.
+
+AUTHRESET nick
+Cancella l'email di autorizzazione del nick specificato
+Utilizzare questo comando con cautela.
+
+LISTCHANS nick
+Elenca i canali a cui ha accesso il nick specificato
+ 
+UMODE nick
+Visualizza gli usermode nell'utente indicato (solo quelli riconosciuti dai servizi)
+
+SENDCODE nick
+Invia il codice di registrazione, cambio email o drop del nick indicato alla e-mail 
+fornita all'atto della registrazione.
+Utilizzare questo comando con cautela.
+ 
+SENDPASS nick
+Invia la password del nick indicato alla e-mail fornita all'atto della registrazione.
+Utilizzare questo comando con cautela.
+ 
+ISONACCESS nick [nick2]
+Informa se nick e' sulla access list di nick2 (o di nick se nick2 non e' specificato)
+ 
+Si raccomanda di utilizzare questi comandi con giudizio senza abusarne.
+Ogni utilizzo di questi comandi e' loggato.
+ 
+*** End of HHelp ***

@@ -1,0 +1,39 @@
+*** ChanServ Help - Comando: SET ***
+Questo comando permette al founder del canale specificato di cambiare le
+opzioni del canale stesso. Per poter utilizzare questo comando bisogna essere
+identificati al nick del founder.
+ 
+Sintassi del comando SET:
+/cs SET #canale OPZIONE parametri
+ 
+Le opzioni disponibili sono:
+ 
+    AUTOOP    - Da lo status di operatore a tutti quelli che entrano nel canale
+    AUTOHALFOP- Da lo status di halfop a tutti quelli che entrano nel canale
+    AUTOVOICE - Da' il voice a tutti quelli che entrano nel canale
+    BANTYPE   - Imposta il tipo di ban da usare con l'opzione Restrict
+    DESC      - Setta la descrizione del canale
+    EMAIL     - Associa una E-mail al canale
+    FOUNDER   - Setta il founder del canale
+    IDENT     - Oppa solo dietro previa identificazione del nick
+    KEEPTOPIC - Lascia il topic anche quando non c'e' nessuno
+    LANG      - Imposta il linguaggio del canale
+    MEMOLEVEL - Setta il livello minimo richiesto per poter mandare memo al canale
+    MLOCK     - Blocca i mode nel canale
+    NEVEROP   - Non fa oppare automaticamente AOP e superiori al join del canale
+    NOMKICK   - Disabilita il comando MKICK di ChanServ per un canale
+    OPGUARD   - Non permette agli utenti normali di essere oppati
+    PASSWD    - Setta la password del canale
+    PROTECT   - Protegge gli operatori registrati nelle liste
+    RESTRICT  - Limita l'accesso al canale ai soli nick registrati nelle liste
+    SUCCESSOR - Permette di impostare un Successor per il canale
+    TOPIC     - Cambia il topic del canale
+    TOPICLOCK - Il topic puo' essere cambiato solo con SET TOPIC
+    URL       - Associa un URL al canale
+    VERBOSE   - Permette di scegliere quali opnotice ricevere
+    WELCOME   - Setta un messaggio di benvenuto
+ 
+Per avere maggiori informazioni su queste opzioni digita: /cs HELP SET opzione
+ 
+Per ulteriori chiarimenti, digita /join #IRCHelp
+*** Fine dell'Help ***

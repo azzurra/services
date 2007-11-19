@@ -1,0 +1,13 @@
+*** ChanServ Help - Comando: INVITE ***
+Chiede a ChanServ di invitarti nel canale specificato.
+E' utile nel caso di canali +i, +l o +k, o se c'e' un ban su di te.
+Bisogna essere almeno VOP per poter usare questo comando.
+ 
+Sintassi:
+/cs INVITE #canale
+ 
+Esempio:
+/cs INVITE #IRCHelp
+ 
+Per ulteriori chiarimenti, digita /join #IRCHelp
+*** Fine dell'Help ***

@@ -1,0 +1,15 @@
+*** ChanServ Help - Commande: SET RESTRICT ***
+Active ou désactive l'option Restricted Access pour le canal spécifié.
+Quand cette option est active, seulement qui est dans les listes VOP/AOP/SOP/CF
+et le propriétaire peut entrer dans le canal, tous les autres seront bannis et
+kickés par ChanServ.
+ 
+Syntaxe:
+/cs SET #canal RESTRICT <ON|OFF>
+ 
+Exemples:
+/cs SET #Italia RESTRICT ON
+/cs SET #IRCHelp RESTRICT OFF
+ 
+Pour tout renseignement, tape /join #IRCHelp
+*** Fin de l'Help ***

@@ -1,0 +1,26 @@
+*** MemoServ Help ***
+MemoServ es un servicio que permite enviar pequeños mensajes 
+a otros usuarios, que estèn o menos online cuando se los envies. El nick
+de origen y èl de destino tienen que estar registrados por NickServ para
+disfrutar del servicio. Los comandos disponibles se encuentran en seguida;
+para utilizarlos sòlo escribe: /ms COMANDO
+ 
+    Comando  Descripciòn
+ 
+    DEL     - Marca un memo para "borrarse"
+    FORWARD - Reenvia los memos a otro nick registrado
+    IGNORE  - Permite manejar la lista Memo Ignore
+    LIST    - Marca todos tus memos
+    NEWS    - Lee las NEWS del network
+    PURGE   - Borra todos los memos ya marcados para borrarse
+    READ    - Lee un memo
+    SEND    - Envia un memo a otro nick registrado
+    SENDTO  - Envia un memo a un canal
+    SET     - Permite ajustar las opciones de MemoServ
+    UNDEL   - Quita la marca "para borrarse" de un memo
+    UNSEND  - Recupèra un memo ya enviado a un nick
+ 
+Para recibir mas informaciòn sobre los comandos sòlo escribe: /ms HELP comando
+ 
+Para mas informaciòn, digita /join #IRCHelp
+*** Fin del Help ***

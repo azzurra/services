@@ -1,0 +1,29 @@
+*** NickServ Help ***
+NickServ e' un servizio che ti permette di registrare il tuo nick, e non permette
+ad altri di usarlo. I comandi disponibili sono elencati qui sotto; per poterli
+usare basta scrivere: /ns NOMEDELCOMANDO
+ 
+Comando        Descrizione
+ 
+ACC        - Mostra l'Access level di un nick
+ACCESS     - Gestisce l'Access List del tuo nick
+DROP       - Cancella la registrazione di un nick
+GHOST      - Disconnette una tua connessione "fantasma"
+IDENTIFY   - Ti identifica al tuo nick, con la tua password
+INFO       - Visualizza le informazioni disponibili di un nick registrato
+LISTCHANS  - Mostra i canali a cui hai accesso
+RECOVER    - Permette di riappropriarti del tuo nick
+REGISTER   - Registra un nick
+RELEASE    - Rimuove il finto client caricato dai servizi per custodire il tuo nick
+SET        - Permette di configurare le opzioni del tuo nick
+ 
+Per avere maggiori informazioni sui comandi basta scrivere /ns HELP nomedelcomando
+ 
+N.B.: Questo servizio e' da intendersi come un modo per gli utenti di rendersi
+conto se la persona con cui stanno chattando e' effettivamente la persona che
+conoscono. NON e' inteso come un servizio atto ad accaparrarsi il maggior numero
+di nicks possibile per non farli usare agli altri. Qualsiasi abuso di questo servizio
+comportera', come minimo, la perdita di tutti i nick e dei canali con essi registrati.
+ 
+Per ulteriori chiarimenti, digita /join #IRCHelp
+*** Fine dell'Help ***

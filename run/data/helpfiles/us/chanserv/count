@@ -1,0 +1,13 @@
+*** ChanServ Help - Command: COUNT ***
+Displays amount of nicks under each channel access list in
+the following format: CF: 0, SOP: 1, AOP: 11, HOP: 3, VOP: 2, AKICK: 1
+You must have at least VOP access to the channel to use this command.
+ 
+Syntax:
+/cs COUNT #channel
+ 
+Example:
+/cs COUNT #IRCHelp
+ 
+Type /join #IRCHelp for more information.
+*** End of Help ***

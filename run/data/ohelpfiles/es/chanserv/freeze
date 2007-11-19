@@ -1,0 +1,7 @@
+*** ChanServ Operator Help - Command: FREEZE ***
+Prevents ChanServ from interacting with the channel.
+ 
+Syntax: FREEZE channel
+ 
+This command is limited to Services Operators.
+*** End of OHelp ***

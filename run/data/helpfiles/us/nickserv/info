@@ -1,0 +1,14 @@
+*** NickServ Help - Command: INFO ***
+Displays information about the given nickname,
+such as the nick's owner, last seen address and
+time, language used, and nick options.
+ 
+Syntax:
+ 
+/ns INFO nick
+ 
+Example:
+/ns INFO crosstar
+ 
+Type /join #IRCHelp for more information.
+*** End of Help ***

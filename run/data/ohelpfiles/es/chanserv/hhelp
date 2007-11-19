@@ -1,0 +1,36 @@
+*** ChanServ Help Operator Help ***
+ 
+AUTHRESET #chan
+Rimuove il codice di autorizzazione al DROP del canale specificato
+Utilizzare questo comando con cautela
+ 
+SENDCODE #chan
+Invia il code di DROP del canale indicato alla email fornita all'atto della registrazione del nick del founder.
+Utilizzare questo comando con cautela
+ 
+CMODE #chan
+Visualizza i channelmode nel canale indicato (solo quelli riconosciuti dai servizi)
+ 
+ISHALFOP #chan nickname
+Indica se, per i servizi, l'utente indicato e' halfop (+h) nel canale #chan
+ 
+ISON #chan nickname
+Indica se, per i servizi, l'utente indicato e' presente nel canale #chan
+ 
+ISOP #chan nickname
+Indica se, per i servizi, l'utente indicato e' operatore (+o) nel canale #chan
+ 
+ISVOICE #chan nickname
+Indica se, per i servizi, l'utente indicato e' voice (+v) nel canale #chan
+ 
+SENDPASS #chan
+Invia la password del canale indicato alla email fornita all'atto della registrazione del nick del founder.
+Utilizzare questo comando con cautela
+ 
+E' inoltre possibile utilizzare il parametro LIST dei comandi VOP/HOP/AOP/SOP/CFOUNDER/AKICK
+ed il comando WHY.
+ 
+Si raccomanda di utilizzare questi comandi con giudizio senza abusarne.
+Ogni utilizzo di questi comandi e' loggato.
+ 
+*** End of HHelp ***

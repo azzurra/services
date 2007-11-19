@@ -1,0 +1,29 @@
+*********** User Modes ***********
+  a  - (Services Only) This user is a Services Administrator.
+  A  - (IRCop Only) This user is a Server Administrator.
+  b  - (IRCop Only) Receive CHATOPS messages.
+  c  - (IRCop Only) Shows server connects/disconnects.
+  d  - (IRCop Only) Receive DEBUG messages.
+  e  - (IRCop Only) Receive INVALID DCC messages.
+  f  - (IRCop Only) Receive FLOOD messages.
+  F  - (IRCop Only) This user is immune from server flood protections.
+  g  - (IRCop Only) Receive GLOBOPS messages.
+  h  - (Services Only) This user is a Help Operator.
+  i  - Invisible mode (you will not show up in /WHO or /NAMES ).
+  I  - (IRCop Only) Hides idle time in a /WHOIS.
+  j  - This user is chatting from the web using Java.
+  k  - (IRCop Only) Receive KILL messages from non-U:Lined clients.
+  K  - (IRCop Only) Receive KILL messages from U:Lined clients.
+  m  - (IRCop Only) Receive SPAM messages.
+  n  - (IRCop Only) Receive ROUTING messages.
+  o  - (IRCop Only) This user is a Global Operator.
+  O  - (IRCop Only) This user is a Local Operator.
+  r  - (Services Only) This user registered their nickname with NickServ.
+  R  - Block all private messages from non-registered nicknames.
+  s  - Receive server messages (Kills, Errors, etc.), works only for IRCops.
+  S  - This user is connecting through SSL (Secure Sockets Layer).
+  w  - Receive WALLOPS messages.
+  x  - This user is masking their hostname (enabled by default).
+  y  - (IRCop Only) Receive commands notification (/ADMIN, /LINKS, /WHOIS, etc.).
+  z  - (Services Only) This user is a Services Agent.
+*** End of List ***

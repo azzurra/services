@@ -1,0 +1,37 @@
+*** ChanServ Help - Comando: SET ***
+Este comando permite al fundador del canal modificar todas las
+opciones del canal mismo. Para poder utilizar este comando necesitas
+estar identificado con el nick del fundador.
+ 
+Sintaxis del comando SET:
+/cs SET #canal OPCION paràmetros
+ 
+Las opciones disponibles son:
+ 
+    AUTOOP    - Op automatico para todos los que entren en el canal
+    AUTOHALFOP- HalfOp automatico para todos los que entren en el canal
+    AUTOVOICE - Voice automatico para todos los que entren en el canal
+    DESC      - Modifìca la descripciòn del canal
+    EMAIL     - Asocia una E-mail al canal
+    FOUNDER   - Especifìca el fundador del canal
+    IDENT     - Op unicamente para nicks identificados
+    KEEPTOPIC - Deja el topic aun nadie estè en el canal
+    LANG      - Ajusta el idioma del canal
+    MEMOLEVEL - Ajusta el nivèl minimo para enviar memos al canal
+    MLOCK     - Bloquea los modes del canal
+    NOMKICK   - Desabilita el comando MKICK de ChanServ para un canal
+    OPGUARD   - No deja que los usuarios normales reciban Op
+    PASSWD    - Ajusta la contraseña del canal
+    PROTECT   - Proteje los operadores registrados en las listas
+    RESTRICT  - Permite el acceso en el canal nada mas a los usuarios registrados en las listas
+    SUCCESSOR - Especifìca un Successor para el canal
+    TOPIC     - Cambia el topic del canal
+    TOPICLOCK - El topic sòlo se puede cambiar por medio del comando SET TOPIC
+    URL       - Asocia un URL al canal
+    VERBOSE   - Permite seleccionar los opnotices para recibir
+    WELCOME   - Especifìca un mensaje de bienvenido
+ 
+Para mas informaciòn sobre estos comandos sòlo digita: /cs HELP SET opciòn
+ 
+Para mas informaciòn, digita /join #IRCHelp
+*** Fin del Help ***

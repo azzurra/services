@@ -1,0 +1,13 @@
+*** ChanServ Help - Command: WHY ***
+ChanServ will give information on why a user has ops
+in a channel. You must have at least VOP access to the
+channel to use this command.
+ 
+Syntax:
+/cs WHY #channel nick
+ 
+Esempio:
+/cs WHY #IRCHelp kernella
+ 
+Type /join #IRCHelp for more information.
+*** End of Help ***

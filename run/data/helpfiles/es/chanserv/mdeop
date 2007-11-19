@@ -1,0 +1,12 @@
+*** ChanServ Help - Comando: MDEOP ***
+Implìca que ChanServ quite el op a todos los operadores en el canal.
+Tienes que ser minimo SOP para poder utilizar este comando.
+ 
+Sintaxis:
+/cs MDEOP #canal
+ 
+Ejemplo:
+/cs MDEOP #IRCHelp
+ 
+Para mas informaciòn, digita /join #IRCHelp
+*** Fin del Help ***

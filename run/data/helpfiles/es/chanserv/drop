@@ -1,0 +1,12 @@
+*** ChanServ Help - Comando: DROP ***
+Anula la registraciòn del canal especificado. Este comando puede ser utilizado 
+unicamente por el fundador del canal, despues haberse identificado por el comando IDENTIFY.
+ 
+Sintaxis:
+/cs DROP #canal
+ 
+Ejemplo:
+/cs DROP #lamer
+ 
+Para mas informaciòn, digita /join #IRCHelp
+*** Fin del Help ***

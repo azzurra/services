@@ -1,0 +1,21 @@
+*** NickServ Help - Command: SET KILL ***
+Enables or disables the Enforced option for your nick.
+With enforcement on, if another user tries to take your
+nick, they will be forced to change to another nick,
+or be forcibly renamed to a random Guest nick.
+ 
+Syntax:
+/ns SET KILL <SLOW|NORMAL|FAST|OFF>
+ 
+SLOW changes the user's nick after 60 seconds (default).
+ 
+NORMAL changes the user's nick after 20 seconds.
+ 
+FAST changes the user's nick after 5 seconds.
+ 
+Examples:
+/ns SET KILL NORMAL
+/ns SET KILL OFF
+ 
+Type /join #IRCHelp for more information.
+*** End of Help ***

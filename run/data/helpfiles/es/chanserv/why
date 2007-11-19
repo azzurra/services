@@ -1,0 +1,12 @@
+*** ChanServ Help - Comando: WHY ***
+ChanServ te comunicarà la razòn por la que un usuario se encuetra operador en
+el canal especificado. Necesitas ser minimo VOP para poder utilizar este comando.
+ 
+Sintaxis:
+/cs WHY #canal nick
+ 
+Ejemplo:
+/cs WHY #IRCHelp kernella
+ 
+Para mas informaciòn, digita /join #IRCHelp
+*** Fin del Help ***

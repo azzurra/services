@@ -1,0 +1,25 @@
+*** MemoServ Help - Comando: DEL ***
+Segna uno o piu' memo come da cancellare. Ogni memo
+segnato in questo modo apparira' con una "D" vicino ad
+ogni comando LIST. Questi memo saranno effettivamente
+cancellati solo una volta usato il comando PURGE, oppure
+verranno automaticamente cancellati appena ti disconnetti.
+ 
+N.B.: nessun memo e' mai segnato come da cancellare automaticamente.
+ 
+Sintassi:
+/ms DEL numero
+/ms DEL ALL [CHANNEL|NEW|USER]
+ 
+ALL segna tutti i memo come da cancellare.
+ALL CHANNEL segna tutti i memo inviati a canali.
+ALL NEW segna tutti i memo non ancora letti.
+ALL USER segna tutti i memo inviati da altri utenti.
+ 
+Esempi:
+/ms DEL 6
+/ms DEL ALL
+/MS DEL ALL USER
+ 
+Per ulteriori chiarimenti, digita /join #IRCHelp
+*** Fine dell'Help ***

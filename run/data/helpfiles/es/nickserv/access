@@ -1,0 +1,28 @@
+*** NickServ Help - Comando: ACCESS ***
+Visualiza y permite modificar la Access list de tu nick.
+Cada vez te conectes utilizando una mask que quede en la Access List, NickServ
+te reconoce como propietario del nick sin que tengas que proveer la contraseña;
+Chanserv te darà el Op en los canales en los que estès registrado y recibiràs memos, pero
+para modificar tus datos deberàs como quiera identificar tu nick por el comando IDENTIFY.
+ 
+Sintaxis:
+/ns ACCESS ADD mask
+/ns ACCESS DEL mask
+/ns ACCESS LIST
+/ns ACCESS WIPE
+ 
+ADD agrega una mask en tu Access list.
+ 
+DEL remueve una mask de tu Access list.
+ 
+LIST visualiza las masks incluydas en tu Access list
+ 
+WIPE remueve todas las masks incluydas en tu Access list
+ 
+Ejemplos:
+/ns ACCESS ADD capoz@*.aruba.it
+/ns ACCESS DEL manu@*.jnet.it
+/ns ACCESS WIPE
+ 
+Para mas informaciòn, digita /join #IRCHelp
+*** Fin del Help ***

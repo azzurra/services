@@ -1,0 +1,13 @@
+*** ChanServ Help - Comando: IDENTIFY ***
+Ti identifica come fondatore del canale specificato.
+Alcuni comandi di ChanServ necessitano l'identificazione
+prima di poter essere utilizzati.
+ 
+Sintassi:
+/cs IDENTIFY #canale password
+ 
+Esempio:
+/cs IDENTIFY #lamer SonoUnLamer
+ 
+Per ulteriori chiarimenti, digita /join #IRCHelp
+*** Fine dell'Help ***

@@ -1,0 +1,17 @@
+*** MemoServ Help - Command: FORWARD ***
+Forwards all memos comming to your current nick
+to the one you have specified. The specified nick
+to have memos being forwarded to must be registered
+with NickServ and you must be identified to it.
+Channel memo's will automatically be forwarded as well.
+When NONE is given as nick, this option will be disabled.
+ 
+Syntax:
+/ms FORWARD nick
+ 
+Examples:
+/ms FORWARD Miki
+/ms FORWARD NONE
+ 
+Type /join #IRCHelp for more information.
+*** End of Help ***

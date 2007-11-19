@@ -1,0 +1,28 @@
+*** ChanServ Help - Command: SET BANTYPE ***
+This option lets you choose the type of ban applied to
+users who join your channel and are automatically kickbanned
+by ChanServ due to the Restrict option being enabled.
+There are 10 ban types available, and they are:
+ 
+  0: Ban in the *!user@host format
+  1: Ban in the *!*user@host format
+  2: Ban in the *!*@host format
+  3: Ban in the *!*user@*.host format
+  4: Ban in the *!*@*.host format
+  5: Ban in the nick!user@host format
+  6: Ban in the nick!*user@host format
+  7: Ban in the nick!*@host format
+  8: Ban in the nick!*user@*.host format
+  9: Ban in the nick!*@*.host format
+ 
+The default bantype value for a channel is 2.
+ 
+Syntax:
+/cs SET #canale BANTYPE <value>
+ 
+Examples:
+/cs SET #IRCHelp BANTYPE 4
+/cs SET #debian BANTYPE 7
+ 
+Type /join #IRCHelp for more information.
+*** End of Help ***

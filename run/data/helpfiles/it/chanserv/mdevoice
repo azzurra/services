@@ -1,0 +1,12 @@
+*** ChanServ Help - Comando: MDEVOICE ***
+Fa in modo che ChanServ tolga il voice a tutti gli utenti del canale.
+Devi essere almeno SOP per poter usare questo comando.
+ 
+Sintassi:
+/cs MDEVOICE #canale
+ 
+Esempio:
+/cs MDEVOICE #iac
+ 
+Per ulteriori chiarimenti, digita /join #IRCHelp
+*** Fine dell'Help ***

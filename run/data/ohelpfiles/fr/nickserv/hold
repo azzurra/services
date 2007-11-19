@@ -1,0 +1,7 @@
+*** NickServ Operator Help - Command: HOLD ***
+Prevents a nickname from being expired.
+ 
+Syntax: HOLD nickname
+ 
+This command is limited to Services Administrators.
+*** End of OHelp ***

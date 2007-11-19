@@ -1,0 +1,14 @@
+*** ChanServ Help - Comando: VOICE ***
+Pone el voice al nick especificado, en el canal especificado. Se puede especificar mas de
+un nick. Tienes que ser minimo VOP en el canal para utilizar el comando sobre tì
+mismo, y minimo AOP para poderlo utilizar con los de mas.
+ 
+Sintaxis:
+/cs VOICE #canal nick(s)
+ 
+Ejemplos:
+/cs VOICE #IRCHelp Kripto
+/cs VOICE #lamer lamer1 lamer2 lamer3
+ 
+Para mas informaciòn, digita /join #IRCHelp
+*** Fin del Help ***

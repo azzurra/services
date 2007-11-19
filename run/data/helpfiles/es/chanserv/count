@@ -1,0 +1,13 @@
+*** ChanServ Help - Comando: COUNT ***
+Visualiza el numero de usuarios por cada lista del canal de la manera siguente:
+CF: 0, SOP: 1, AOP: 11, HOP: 3, VOP: 2, AKICK: 1
+Tienes que ser minimo VOP para poder utilizar este comando.
+ 
+Sintaxis:
+/cs COUNT #canal
+ 
+Ejemplo:
+/cs COUNT #IRCHelp
+ 
+Para mas informaciòn, digita /join #IRCHelp
+*** Fin del Help ***

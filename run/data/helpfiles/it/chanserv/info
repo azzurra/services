@@ -1,0 +1,15 @@
+*** ChanServ Help - Comando: INFO ***
+Mostra tutte le informazioni disponibili sul canale
+specificato - se registrato - fra cui chi lo ha fondato,
+quando e' stato registrato, la descrizione, e i mode locks,
+se ce ne sono. Il topic del canale non verra' mostrato se
+il canale e' segreto (+s).
+ 
+Sintassi:
+/cs INFO #canale
+ 
+Esempio:
+/cs INFO #IRCHelp
+ 
+Per ulteriori chiarimenti, digita /join #IRCHelp
+*** Fine dell'Help ***

@@ -1,0 +1,38 @@
+*** ChanServ Help - Comando: AKICK ***
+Maneja la AutoKick list para un canal. Si alguien en la AKICK list entra 
+en el canal, va a recibir un kick/ban de una vez por ChanServ.
+ 
+Sintaxis:
+/cs AKICK #canal ADD mask [razòn]
+/cs AKICK #canal DEL mask
+/cs AKICK #canal LIST [mask]
+/cs AKICK #canal WIPE
+/cs AKICK #canal LOCK
+/cs AKICK #canal UNLOCK
+ 
+ADD agrega la mask o el nick especificado en la AutoKick list. Si se 
+especifica una razòn, esta va a ser la razòn en el momento del kick mismo, 
+sino se va a utilizar la razon de default: "Estàs baneado de este canal"
+ 
+DEL remueve la mask especificada o el nick de la Autokick list. No quita 
+ningun AutoKick puesto por Chanserv en epoca anterior; estos mismos 
+se van a tener que quitar manualmente.
+ 
+LIST visualiza la lista completa de la AutoKick list del canal, o en todo caso 
+las que tienen la mask especificada.
+ 
+WIPE remueve todas las masks o nicks que estàn en la Akick list del canal.
+ 
+LOCK bloquea la lista, permetiendo nada mas al fundador de modificarla.
+ 
+UNLOCK desbloquea la lista, en caso de que haya sido bloqueada por el comando LOCK.
+ 
+Ejemplos:
+/cs AKICK #IRCHelp ADD picci*!*@*
+/cs AKICK #IRCHelp ADD *!*picci@*.dialup.tiscalinet.it
+/cs AKICK #IRCHelp DEL *!*pippo@*.carota.net
+/cs AKICK #IRCHelp LIST *picci*
+/cs AKICK #IRCHelp WIPE
+ 
+Para mas informaciòn, digita /join #IRCHelp
+*** Fin del Help ***

@@ -1,0 +1,7 @@
+*** ChanServ Operator Help - Command: GETPASS ***
+Returns the password for the given channel.
+ 
+Syntax: GETPASS #channel
+ 
+This command is limited to Services Administrators.
+*** End of OHelp ***

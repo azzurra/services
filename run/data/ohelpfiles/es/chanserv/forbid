@@ -1,0 +1,8 @@
+*** ChanServ Operator Help - Command: FORBID ***
+Disallows a channel from being registered or used by anyone.
+Will be cancelled if the channel is deleted.
+ 
+Syntax: FORBID #channel
+ 
+This command is limited to Services Administrators.
+*** End of OHelp ***

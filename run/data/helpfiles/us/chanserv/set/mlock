@@ -1,0 +1,24 @@
+*** ChanServ Help - Command: SET MLOCK ***
+Sets the mode-lock parameter for the channel. ChanServ allows you to define
+certain channel modes to be always on (or off). The modes that can be locked
+with this command are c, C, i, k, l, m, M, n, p, R,
+s, t, u and U; each of these modes can be locked on, locked off, or not locked.
+The <modes> parameter is constructed exactly the same way as a /MODE command;
+modes followed by a + are locked on, and modes followed by a - are locked off.
+When NONE is specified, mode-lock is disabled.
+
+Note: If your current channel modelock is +nt and you want to add +s to it,
+you will have to use +nst as modes, and NOT +s, which would lock +s only.
+ 
+Syntax:
+/cs SET #channel MLOCK modes
+ 
+Examples:
+/cs SET #Italia MLOCK +nt-iklps
+/cs SET #fano MLOCK +k SecretKey
+/cs SET #SoleLuna MLOCK +l 2316
+/cs SET #Chattiamo MLOCK -k
+/cs SET #IRCHelp MLOCK NONE
+ 
+Type /join #IRCHelp for more information.
+*** End of Help ***

@@ -1,0 +1,29 @@
+*** ChanServ Help ***
+ChanServ allows you to register and control various aspects of channels.
+ChanServ can often prevent malicious users from "taking over" channels by limiting
+who is allowed channel operator priviliges. ChanServ's commands are listed below;
+to use them, type: /cs COMMANDNAME
+ 
+    Command    -  Description
+ 
+    REGISTER -  Register a channel
+    IDENTIFY -  Identify yourself with your password
+    SET      -  Set channel options and information
+    CFOUNDER -  Maintain the Co-Founder list
+    SOP      -  Maintain the Super-Op list
+    AOP      -  Maintain the Auto-Op list
+    HOP      -  Maintain the Auto-HalfOp list
+    VOP      -  Maintain the Voice-Op list
+    AKICK    -  Maintain the AutoKick list
+    DROP     -  Cancel the registration of a channel
+    WHY      -  Find out why a user has ops
+    REMOVE   -  Delete yourself from a channel access list
+ 
+Other commands:
+COUNT, DEHALFOP, DEOP, DEVOICE, HALFOP, INFO, INVITE, MDEHALFOP, 
+MDEOP, MDEVOICE, MKICK, MODE, OP, RESETMODES, UNBAN, VOICE.
+ 
+For more information on a specific command, type: /cs HELP COMMANDNAME
+ 
+Type /join #IRCHelp for more information.
+*** End of Help ***

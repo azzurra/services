@@ -1,0 +1,29 @@
+*********** User Modes ***********
+  a  - (Services Only) Marque un Services Administrator
+  A  - (IRCop Only) Marque un Server Administrator
+  b  - (IRCop Only) Permet la vision des messages CHATOPS
+  c  - (IRCop Only) Visualise les connexions/déconnexions des clients
+  d  - (IRCop Only) Permet la vision des messages de Debug
+  e  - (IRCop Only) Permet la vision des messages de DCC pas valides
+  f  - (IRCop Only) Permet la vision des messages de Flood
+  F  - (IRCop Only) Exempte un nick des limitations de Flood
+  g  - (IRCop Only) Permet la vision des messages GLOBOPS
+  h  - (Services Only) Marque un Help Operator
+  i  - Invisible aux usagers qui employent la commande /names ou /who
+  I  - (IRCop Only) Permet de cacher le temps d'inactivité dans le WHOIS
+  j  - Marque un client Java
+  k  - (IRCop Only) Permet la vision des messages de Kill par clients non U:Lined
+  K  - (IRCop Only) Permet la vision des messages de Kill par clients U:Lined
+  m  - (IRCop Only) Permet la vision des messages de Spam
+  n  - (IRCop Only) Permet la vision des messages de Routing
+  o  - (IRCop Only) Marque un IRC Operator global
+  O  - (IRCop Only) Marque un IRC Operator local
+  r  - (Services Only) Marque un nick enregistré et identifié avec NickServ
+  R  - Accepte query seulement par nicks enregistrés et identifiés avec NickServ
+  s  - Permet la vision des messages du serveur (par exemple les Kills)
+  S  - Marque un client connexe par SSL (Secure Sockets Layer)
+  w  - Permet la vision des messages WALLOPS
+  x  - Encrypte partie de l'host ou de l'adresse IP
+  y  - (IRCop Only) Visualise la notification du whois e des commandes comme ADMIN, INFO, etc.
+  z  - (Services Only) Marque un Services Agent
+*** Fin de la liste ***

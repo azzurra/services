@@ -1,0 +1,32 @@
+*** ChanServ Help - Commande: REGISTER ***
+Enregistre un canal par ChanServ. Pour pouvoir employer cette commande tu dois être
+opérateur dans le canal que tu veux enregistrer. Il te faudra ensuite le mot de passe pour
+t'identifier comme propriétaire et modifier les options du canal. Le dernier paramètre,
+qui doit être inclus, est une brève description générale des arguments traités
+dans le canal.
+ 
+Au moment de l'enregistrement du canal ton nick sera configuré comme propriétaire, et 
+tu auras la possibilité de modifier toutes les options du canal. En outre ChanServ te 
+donnera l'op automatiquement quand tu entreras dans le canal, mais seulement si tu 
+t'es identifié précédemment au nick par lequel tu es propriétaire.
+ 
+Si le nick du propriétaire expire ou est effacé,
+aussi tous les canaux enregistrés à son nom seront effacés.
+ 
+Important: Pour pouvoir enregistrer un canal il faut employer un nick enregistré 
+avec NickServ. Pour savoir comment enregistrer ton nick tape /ns HELP register.
+ 
+ATTENTION: NE JAMAIS donner le mot de passe du canal à d'autres personnes, même si de
+confiance. Dans le cas où une de ces personnes décide un jour de changer le mot de passe
+et de te voler le canal, il ne sera pas possible de te le donner de nouveau dans aucune façon,
+du moment que le passage est légitime.
+ 
+Syntaxe:
+/cs REGISTER #canal mot-de-passe description
+ 
+Exemples:
+/cs REGISTER #IRCHelp pippo Le canal officiel d'Azzurra
+/cs REGISTER #linux devnull Le canal de Linux
+ 
+Pour tout renseignement, tape /join #IRCHelp
+*** Fin de l'Help ***

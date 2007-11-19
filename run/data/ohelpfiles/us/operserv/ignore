@@ -1,0 +1,24 @@
+*** OperServ Operator Help - Command: IGNORE ***
+IGNORE is a useful tool to prevent abusive users from using services.
+When an ignore mask is set, any user matching the mask will be ignored by services.
+ 
+Syntax: IGNORE ADD|PERM mask reason
+        IGNORE TIME expiry mask
+        IGNORE DEL mask
+        IGNORE LIST
+ 
+ADD adds the given user@host mask to the IGNORE list for 60 minutes.
+ 
+DEL removes the given mask from the IGNORE list if it is present.
+ 
+LIST shows all current IGNOREs or only the ones matching the given mask, if any.
+ 
+PERM adds the given user@host mask to the IGNORE list permanently.
+ 
+TIME temporarily adds the given user@host mask to the IGNORE list.
+expiry must be an integer followed by one of d (days), h (hours),
+or m (minutes). If a unit specifier is not included, the default is
+days (so +30 by itself means 30 days).
+ 
+This command is limited to Services Operators.
+*** End of OHelp ***

@@ -1,0 +1,17 @@
+** NickServ Help - Command: SET URL ***
+Associates the given URL with your nickname.
+This URL will be displayed whenever someone
+requests information on your nick with the
+INFO command. Your URL will not be
+displayed if NONE is specified.
+ 
+Syntax:
+ 
+/ns SET URL url
+ 
+Examples:
+/ns SET URL http://www.azzurra.org
+/ns SET URL NONE
+ 
+Type /join #IRCHelp for more information.
+*** End of Help ***

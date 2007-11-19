@@ -1,0 +1,15 @@
+*** NickServ Help - Command: SET NOOP ***
+Disallows your nick to be added to channel access lists.
+This option will not delete you from any current channel
+access lists your nick is currently set.
+ 
+Syntax:
+ 
+/ns SET NOOP <ON|OFF>
+ 
+Examples:
+/ns SET NOOP ON
+/ns SET NOOP OFF
+ 
+Type /join #IRCHelp for more information.
+*** End of Help ***

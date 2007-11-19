@@ -1,0 +1,15 @@
+*** NickServ Help - Commando: SET NOCHANMEMO ***
+Disables receiving memos sent to channels for your
+current nick. This does not disable you from sending
+memos, it will only block receieving channel memos
+to you from others.
+ 
+Syntax:
+/ns SET NOCHANMEMO <ON|OFF>
+ 
+Examples:
+/ns SET NOCHANMEMO ON
+/ns SET NOCHANMEMO OFF
+ 
+Type /join #IRCHelp for more information.
+*** End of Help ***

@@ -1,0 +1,14 @@
+** NickServ Help - Comando: SET URL ***
+Permite asociar un URL al nick especificado. Este URL es el que le sale
+a cualquier usuario pida informaciòn sobre tu nick por el  comando INFO. 
+Para remover el URL actual necesitas especificar NONE como URL.
+ 
+Sintaxis:
+/ns SET URL url
+ 
+Ejemplo:
+/ns SET URL http://www.azzurra.org
+/ns SET URL NONE
+ 
+Para mas informaciòn, digita /join #IRCHelp
+*** Fin del Help ***

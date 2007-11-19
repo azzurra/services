@@ -1,0 +1,22 @@
+*** NickServ Help - Comando: ACC ***
+Ti informa se l'utente che sta usando il nick specificato
+si e' identificato come proprietario del nick o meno.
+ 
+Sintassi:
+/ns ACC nick
+ 
+La riposta conterra' un codice, che puo' essere uno dei seguenti:
+ 
+  0 - Nick non registrato
+  1 - Registrato ma offline
+  2 - Non identificato
+  3 - Identificato tramite immissione della password
+  4 - Identificato tramite l'Access List del nick
+  5 - Nick bloccato
+  6 - Nick proibito
+ 
+Esempio:
+/ns ACC Alexx
+ 
+Per ulteriori chiarimenti, digita /join #IRCHelp
+*** Fine dell'Help ***

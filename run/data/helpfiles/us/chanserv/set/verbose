@@ -1,0 +1,19 @@
+*** ChanServ Help - Command: SET VERBOSE ***
+Has ChanServ send notices to channel operators upon
+usage of certain commands. You can monitor all channel
+activity with Verbose. The default level is 0.
+ 
+Level 0: No notices sent (default).
+Level 1: Use of DEOP/DEVOICE/MKICK/MDEOP/MDEVOICE/OP/UNBAN/VOICE will send a channel opnotice.
+Level 2: Changes to VOP/HOP/AOP/SOP/CF/AKICK lists also will send a channel opnotice.
+Level 3: Changes to channel settings via the SET command also will send an opnotice.
+ 
+Syntax:
+/cs SET #channel VERBOSE level
+ 
+Examples:
+/cs SET #IRCHelp VERBOSE 3
+/cs SET #Italia VERBOSE 1
+ 
+Type /join #IRCHelp for more information.
+*** End of Help ***

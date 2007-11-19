@@ -1,0 +1,16 @@
+*** NickServ Help - Command: RELEASE ***
+Instructs NickServ to remove any hold on your
+nickname by services when someone tries to use
+your nick and you have the KILL option enabled.
+By default, such hold lasts for one minute;
+this command gets rid of it sooner.
+ 
+Syntax:
+ 
+/ns RELEASE nickname password
+ 
+Example:
+/ns RELEASE gogeta14 andrea
+ 
+Type /join #IRCHelp for more information.
+*** End of Help ***

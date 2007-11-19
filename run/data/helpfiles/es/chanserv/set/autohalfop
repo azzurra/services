@@ -1,0 +1,16 @@
+*** ChanServ Help - Comando: SET AUTOHALFOP ***
+Cuando la opciòn AUTOHALFOP està en ON, ChanServ darà el voice automaticamente
+a todos los que entren en el canal, sin distinciòn.
+ 
+N.B.: El voice recibido por AUTOHALFOP sòlo es temporaneo, ningun nick
+va a ser agregado o removido de la lista HOP.
+ 
+Sintaxis:
+/cs SET #canal AUTOHALFOP <ON|OFF>
+ 
+Ejemplos:
+/cs SET #IRCHelp AUTOHALFOP OFF
+/cs SET #debian AUTOHALFOP ON
+ 
+Para mas informaciòn, digita /join #IRCHelp
+*** Fin del Help ***

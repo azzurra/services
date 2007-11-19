@@ -1,0 +1,32 @@
+*** ChanServ Help - Command: REGISTER ***
+Registers a channel in the ChanServ database. In order to use this command, you must
+first be a channel operator on the channel you're trying to register. The password
+is used with the IDENTIFY command to allow you to make changes to the channel
+settings at a later time. The last parameter, which must be included, is a general
+description of the channel's purpose.
+ 
+When you register a channel, you are recorded as the "founder" of the channel.
+The channel founder is allowed to change all of the channel settings for the channel;
+ChanServ will also automatically give you channel-operator privileges when you
+enter the channel, provided you identified to your nick before joining.
+ 
+In order to register a channel, you must first registered your nickname.
+If you haven't, type /ns HELP register for information on how to do so.
+ 
+NOTICE: If you let the channel founder's nickname expire, and no Successor is set,
+the channel will expire along with it and you will lose both.
+ 
+WARNING: NEVER give your password to anyone else, even if you trust them.
+Anyone knowing the channel password might be able to set himself as founder and
+change it, and you would NOT be able to get the channel back.
+ 
+Syntax:
+ 
+/cs REGISTER #channel password description
+ 
+Examples:
+/cs REGISTER #IRCHelp pippo The official AzzurraNet Help Channel
+/cs REGISTER #linux-it devnull The italian linux fans channel
+ 
+Type /join #IRCHelp for more information.
+*** End of Help ***

@@ -1,0 +1,16 @@
+*** ChanServ Help - Comando: SET NEVEROP ***
+Quando l'opzione NEVEROP e' settata ON, gli AOP e superiori
+non verranno oppati da ChanServ all'entrata, anche se gia'
+identificati al proprio nick. Per avere l'op dovranno
+necessariamente ricorrere al comando OP di ChanServ in
+qualsiasi momento lo desiderino.
+ 
+Sintassi:
+/cs SET #canale NEVEROP <ON|OFF>
+ 
+Esempi:
+/cs SET #IRCHelp NEVEROP ON
+/cs SET #debian NEVEROP OFF
+ 
+Per ulteriori chiarimenti, digita /join #IRCHelp
+*** Fine dell'Help ***

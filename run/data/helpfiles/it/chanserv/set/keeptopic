@@ -1,0 +1,15 @@
+*** ChanServ Help - Comando: SET KEEPTOPIC ***
+Attiva o disattiva l'opzione Topic Retention per il
+canale specificato. Quando essa e' attiva, ChanServ
+memorizzera' il topic quando il canale rimane vuoto, e
+lo settera' di nuovo nel momento in cui entra qualcuno.
+ 
+Sintassi:
+/cs SET #canale KEEPTOPIC <ON|OFF>
+ 
+Esempi:
+/cs SET #IRCHelp KEEPTOPIC ON
+/cs SET #Italia KEEPTOPIC OFF
+ 
+Per ulteriori chiarimenti, digita /join #IRCHelp
+*** Fine dell'Help ***

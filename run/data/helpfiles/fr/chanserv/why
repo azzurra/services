@@ -1,0 +1,13 @@
+*** ChanServ Help - Commande: WHY ***
+ChanServ vous dira le motif pour lequel un nick
+est opérateur dans le canal spécifié.
+Il faut être au moins VOP pour pouvoir employer cette commande.
+ 
+Syntaxe:
+/cs WHY #canal nick
+ 
+Exemple:
+/cs WHY #IRCHelp Huma_Dragonbane
+ 
+Pour tout renseignement, tape /join #IRCHelp
+*** Fin de l'Help ***

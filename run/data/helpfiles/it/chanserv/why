@@ -1,0 +1,13 @@
+*** ChanServ Help - Comando: WHY ***
+ChanServ vi dira' il motivo per cui il nick specificato
+e' operatore nel canale specificato. Bisogna essere almeno
+VOP per poter usare questo comando.
+ 
+Sintassi:
+/cs WHY #canale nick
+ 
+Esempio:
+/cs WHY #IRCHelp Koper
+ 
+Per ulteriori chiarimenti, digita /join #IRCHelp
+*** Fine dell'Help ***

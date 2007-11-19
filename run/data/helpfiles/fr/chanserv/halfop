@@ -1,0 +1,14 @@
+*** ChanServ Help - Commande: HALFOP ***
+Donne le halfop au nick spécifié, dans le canal spécifié.
+On peut spécifier jusqu'à 6 nicks. Il faut être au moins HOP
+dans le canal pour pouvoir employer cette commande sur soi-même
+et au moins AOP pour le pouvoir employer sur les autres.
+ 
+Syntaxe:
+/cs HALFOP #canal nick [nick2] ... [nick6]
+ 
+Exemples:
+/cs HALFOP #IRCHelp Raynk
+ 
+Pour tout renseignement, tape /join #IRCHelp
+*** Fin de l'Help ***

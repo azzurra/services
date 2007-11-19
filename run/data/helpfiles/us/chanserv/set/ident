@@ -1,0 +1,12 @@
+*** ChanServ Help - Command: SET IDENT ***
+Enables or disables the Ident option for a channel.
+When it is set to ON, ChanServ will only op people
+who have identified to their nick. Also, with IDENT
+set, channel access lists must only contain nicknames.
+When OFF is specified this option is disabled.
+ 
+Syntax:
+/cs SET #channel IDENT <ON|OFF>
+ 
+Type /join #IRCHelp for more information.
+*** End of Help ***

@@ -1,0 +1,12 @@
+*** ChanServ Help - Command: SET NOMKICK ***
+Enables or disables the No MassKick option for a
+channel. When it is set to ON, ChanServ's MKICK
+command is disabled for a specific channel. You need
+to be identified to both the Founder's nick and the
+channel to modify this option.
+ 
+Syntax:
+/cs SET #channel NOMKICK <ON|OFF>
+ 
+Type /join #IRCHelp for more information.
+*** End of Help ***

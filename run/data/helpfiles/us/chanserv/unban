@@ -1,0 +1,20 @@
+*** ChanServ Help - Command: UNBAN ***
+Has ChanServ remove all bans preventing you from entering
+the given channel, or clear the channel's banlist.
+ 
+Syntax:
+/cs UNBAN #channel <ME|ALL>
+ 
+The UNBAN ME command removes all bans preventing you
+from entering the given channel. You must have at least
+VOP access to the channel to use to use this command.
+ 
+The UNBAN ALL command removes all bans on the given channel.
+You must have at least SOP access to the channel to use this command.
+ 
+Examples:
+/cs UNBAN #IRCHelp ME
+/cs UNBAN #Italia ALL
+ 
+Type /join #IRCHelp for more information.
+*** End of Help ***

@@ -1,0 +1,30 @@
+*** OperServ Operator Help - Command: TRIGGER ***
+Triggers are used to control clone warnings. The value specified
+will be the number of clones from that user@host until services
+warns the network. If the user@host already exists, the value is
+re-triggered, and the network is notified.
+ 
+Syntax: TRIGGER ADD user@host value [reason]
+        TRIGGER DEL user@host
+        TRIGGER LIST [start [end]] [pattern]
+        TRIGGER CHECK user@host
+ 
+ADD adds a trigger, or updates it if it's already present.
+The reason can be omitted when updating an existing trigger's value.
+Hosts have full CIDR support, and all triggers should be added
+as CIDR or IP rather than host whenever possible.
+ 
+DEL removes a trigger.
+ 
+LIST shows the current trigger list. By default only the first
+30 entries will be shown. If a pattern is specified, only the entries
+matching it will be shown.
+ 
+CHECK matches the given mask against all triggers and reports if
+it is triggered or not.
+ 
+Note: If automatic clone akill is enabled, triggered hosts
+will never be auto-akilled.
+ 
+This command is limited to Services Operators.
+*** End of OHelp ***

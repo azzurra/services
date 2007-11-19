@@ -1,0 +1,16 @@
+*** MemoServ Help - Command: UNDEL ***
+If the memo specified is marked as deleted, the mark
+flag will be removed from it. After the memo has been
+undeleted, it will not be erased when you go offline
+or use PURGE. Memos are never automatically marked.
+ALL will unmark all marked memos.
+ 
+Syntax:
+/ms UNDEL <number|ALL>
+ 
+Examples:
+/ms UNDEL 4
+/ms UNDEL ALL
+ 
+Type /join #IRCHelp for more information.
+*** End of Help ***

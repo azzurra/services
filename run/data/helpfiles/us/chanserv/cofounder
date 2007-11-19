@@ -1,0 +1,39 @@
+*** ChanServ Help - Command: CFOUNDER ***
+Maintains the Co-Founder list for a channel. CF's are auto-opped
+when they join the channel, can maintain the AutoKick, SOP, AOP and
+VOP lists, and have access to all the SET commands except:
+SET FOUNDER, SET PASSWD, SET SUCCESSOR, SET MEMOLEVEL and SET NOMKICK.
+ 
+Syntax:
+/cs CF #channel ADD <nick|mask>
+/cs CF #channel DEL <nick|mask|number>
+/cs CF #channel LIST [pattern]
+/cs CF #channel FIND <mask>
+/cs CF #channel CLEAN
+/cs CF #channel EXPLIST
+/cs CF #channel WIPE
+ 
+The CF ADD command adds the given nickname to the Co-Founder list. If the nick or
+mask is already present on the list, its access level is changed to the CF level.
+ 
+The CF DEL command removes the given nick or mask from the Co-Founder list.
+ 
+The CF LIST command displays the current Co-Founder list; if a mask is given,
+only those entries matching the mask are displayed.
+ 
+The AOP FIND command search the entries matching the given mask (in the nick!user@host format)
+ 
+The CF CLEAN command removes all the expired nicks from the Co-Founder list.
+ 
+The CF EXPLIST command displays all the expired nicks in the Co-Founder list.
+ 
+The CF WIPE command removes all nicks and masks from the Co-Founder list.
+ 
+Examples:
+/cs CF #Lamer ADD picci
+/cs CF #IRCHelp ADD *!*pippo@*.carota.net
+/cs CF #IRCHelp DEL 3
+/cs CF #IRCHelp LIST *pippo*
+ 
+Type /join #IRCHelp for more information.
+*** End of Help ***

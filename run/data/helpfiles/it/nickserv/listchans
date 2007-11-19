@@ -1,0 +1,9 @@
+*** NickServ Help - Comando: LISTCHANS ***
+Mostra la lista dei canali a cui il nick che stai usando ha accesso.
+Verranno visualizzati i canali in cui sei VOP/HOP/AOP/SOP/CF o Founder.
+ 
+Sintassi:
+/ns LISTCHANS
+ 
+Per ulteriori chiarimenti, digita /join #IRCHelp
+*** Fine dell'Help ***

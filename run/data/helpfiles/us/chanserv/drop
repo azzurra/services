@@ -1,0 +1,13 @@
+*** ChanServ Help - Command: DROP ***
+Cancels registration of the given channel. Can only be used by
+the channel founder, who must be identified to the founder
+nick and to the channel through the IDENTIFY command.
+ 
+Syntax:
+/cs DROP #channel
+ 
+Example:
+/cs DROP #lamer
+ 
+Type /join #IRCHelp for more information.
+*** End of Help ***

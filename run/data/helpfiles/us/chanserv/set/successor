@@ -1,0 +1,17 @@
+*** ChanServ Help - Command: SET SUCCESSOR ***
+Lets you add or remove a Successor for your channel. Should your nickname
+expire or be dropped, the channel's foundership will be passed to the
+Successor immediately. If the channel doesn't have a Successor, it will
+be dropped and anyone will be able to register it.
+The Successor must be a channel Co-Founder.
+ 
+When NONE is specified as nick, the channel Successor will be removed.
+ 
+Syntax:
+/cs SET #channel SUCCESSOR nickname
+ 
+Example:
+/cs SET #women SUCCESSOR Fry
+ 
+Type /join #IRCHelp for more information.
+*** End of Help ***

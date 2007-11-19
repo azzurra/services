@@ -1,0 +1,21 @@
+*** MemoServ Help - Comando: SET NOTIFY ***
+Permette di decidere in quale momento si vuole essere
+notificati della presenza di nuovi memo.
+ 
+Sintassi:
+/ms SET NOTIFY parametro
+ 
+I parametri disponibili sono:
+ 
+    ON     -    Verrai notificato ogni volta che ti identifichi al tuo
+                nick, e quando ti vengono inviati.
+    LOGON  -    Verrai notificato solo quando ti identifichi al tuo nick.
+    NEW    -    Verrai notificato solo quando i memo ti vengono inviati.
+    OFF    -    Non verrai mai notificato.
+ 
+Esempi:
+/ms SET NOTIFY LOGON
+/ms SET NOTIFY OFF
+ 
+Per ulteriori chiarimenti, digita /join #IRCHelp
+*** Fine dell'Help ***

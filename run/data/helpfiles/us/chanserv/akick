@@ -1,0 +1,47 @@
+*** ChanServ Help - Command: AKICK ***
+Maintains the AutoKick list for a channel. If a user on the AutoKick list
+attempts to join the channel, ChanServ will ban that user from the channel,
+then kick the user.
+ 
+Syntax:
+/cs AKICK #channel ADD <nick|mask> [bantype] [reason]
+/cs AKICK #channel DEL <nick|mask|number>
+/cs AKICK #channel LIST [pattern]
+/cs AKICK #channel WIPE
+/cs AKICK #channel LOCK [nick|mask]
+/cs AKICK #channel UNLOCK [nick|mask]
+ 
+The AKICK ADD command adds the given nick or usermask to the AutoKick list.
+It is possible to specify the kind of ban applied to users who match a single
+AKick entry. There are 10 available ban types, and they are the same as the
+SET BANTYPE command. For a listing, type: /cs HELP SET BANTYPE
+If a reason is given with the command, that reason will be used when the user
+is kicked; if not, the default reason is "You have been banned from the channel."
+ 
+The AKICK DEL command removes the given nick or mask from the AutoKick list.
+It does not, however, remove any bans placed by an AutoKick; those must be
+removed manually.
+ 
+The AKICK LIST command displays the AutoKick list, or optionally only those
+AutoKick entries matching the given mask.
+ 
+The AKICK WIPE command removes all the nicks and masks from the AutoKick list.
+ 
+The AKICK LOCK command locks the AutoKick list. Only the founder will be able
+to manage it when it's locked. If a single entry is specified, only that one
+will be locked.
+ 
+The AKICK UNLOCK command unlocks the AutoKick list if it was previously
+locked. If a single entry is specified, only that one will be unlocked.
+ 
+Examples:
+/cs AKICK #IRCHelp ADD Saitta 3 Stop spamming!
+/cs AKICK #IRCHelp ADD *!*saitta@*.dialup.tiscali.it
+/cs AKICK #IRCHelp DEL *!*pippo@*.carota.net
+/cs AKICK #IRCHelp LIST *saitta*
+/cs AKICK #IRCHelp WIPE
+/cs AKICK #IRCHelp LOCK Saitta
+/cs AKICK #IRCHelp UNLOCK *!*pippo@*.carota.net
+ 
+Type /join #IRCHelp for more information.
+*** End of Help ***

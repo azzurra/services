@@ -1,0 +1,26 @@
+*** OperServ Operator Help - Command: RESERVED ***
+Reserved nicknames/channels can be set not to be
+registered or used.
+ 
+Syntax: RESERVED ADD field reason
+        RESERVED DEL field
+        RESERVED SET field +|-flags
+        RESERVED INFO field
+        RESERVED LIST [start [end]] [pattern]
+        RESERVED ENABLE|DISABLE
+ 
+Flags include:
+    N = Pattern applies to nicknames.
+    C = Pattern applies to channels.
+ 
+    U = Nick/Channel cannot be used.
+    R = Nick/Channel cannot be registered.
+ 
+    W = Sends a wallops when someone tries to use the nick/channel.
+    K = Kill whoever tries to use the nick/channel
+    A = AKill whoever tries to use the nick/channel (via /os AKILL ADD)
+ 
+    E = Enable this entry.
+ 
+This command is limited to Services Administrators.
+*** End of OHelp ***

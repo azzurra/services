@@ -1,0 +1,16 @@
+*** NickServ Help - Comando: RECOVER ***
+Allows you to recover your registered nickname if
+someone else has taken it. When you give this command,
+NickServ will change the user's nickname to a Guest
+nick and yours to the nick you recovered, and
+identifies to it automatically.
+ 
+Syntax:
+ 
+/ns RECOVER nickname password
+ 
+Example:
+/ns RECOVER Napal andrea
+ 
+Type /join #IRCHelp for more information.
+*** End of Help ***

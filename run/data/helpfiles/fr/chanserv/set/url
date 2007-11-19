@@ -1,0 +1,14 @@
+*** ChanServ Help - Commande: SET URL ***
+Associe un URL au canal spécifié. Cet URL est celui qui
+sera montré aux usagers qui employeront la commande INFO.
+Pour effacer l'URL actuel il faut spécifier NONE comme URL.
+ 
+Syntaxe:
+/cs SET #canal URL url
+ 
+Exemples:
+/cs SET #IRCHelp URL http://help.azzurra.org
+/cs SET #Italia URL NONE
+ 
+Pour tout renseignement, tape /join #IRCHelp
+*** Fin de l'Help ***

@@ -1,0 +1,15 @@
+*** NickServ Help - Comando: SET NEVEROP ***
+Fa in modo che ChanServ non ti oppi automaticamente quando entri in un canale
+in cui sei registrato su una delle liste. Verrai inoltre deoppato da ChanServ
+ogniqualvolta un altro utente provi ad opparti. L'unico modo per avere l'op
+quando NEVEROP e' attivo e' usare il comando OP di ChanServ.
+ 
+Sintassi:
+/ns SET NEVEROP <ON|OFF>
+ 
+Esempi:
+/ns SET NEVEROP ON
+/ns SET NEVEROP OFF
+ 
+Per ulteriori chiarimenti, digita /join #IRCHelp
+*** Fine dell'Help ***

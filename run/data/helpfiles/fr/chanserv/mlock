@@ -1,0 +1,24 @@
+*** ChanServ Help - Commande: SET MLOCK ***
+Configure le bloque des modes du canal. ChanServ te permet de faire si que
+certains modes soient toujours activés ou désactivés. Les modes qui peuvent 
+être bloqués sont c, C, d, i, k, l, m, M, n, p, R, s, t, u.
+Les paramètres ont la même syntaxe de la commande /MODE: ceux précédés
+par un + sont activés et ceux précédés par un - sont désactivés.
+Pour annuler le Mode Lock il faut spécifier NONE comme mode.
+ 
+Important: Si le Mode Lock d'un canal est maintenant +nt et on veut qu'il soit
+bloqué aussi le mode +s, il faut spécifier +nts comme mode, et non +s, qui
+bloquerait au contraire seulement le mode +s et pas aussi les modes +nt.
+ 
+Syntaxe:
+/cs SET #canal MLOCK mode
+ 
+Exemples:
+/cs SET #Italia MLOCK +nt-iklps
+/cs SET #Lamerz MLOCK +k Mot-de-passe
+/cs SET #Soleluna MLOCK +l 2316
+/cs SET #Chat MLOCK -k *
+/cs SET #IRCHelp MLOCK NONE
+ 
+Pour tout renseignement, tape /join #IRCHelp
+*** Fin de l'Help ***

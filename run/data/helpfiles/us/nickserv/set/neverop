@@ -1,0 +1,16 @@
+*** NickServ Help - Command: SET NEVEROP ***
+Prevent ChanServ from giving you channel operator
+status upon joining a registered channel. ChanServ will
+also set -o if someone gives you operator status. You
+may still use the OP command to have services set you +o.
+ 
+Syntax:
+ 
+/ns SET NEVEROP <ON|OFF>
+ 
+Examples:
+/ns SET NEVEROP ON
+/ns SET NEVEROP OFF
+ 
+Type /join #IRCHelp for more information.
+*** End of Help ***

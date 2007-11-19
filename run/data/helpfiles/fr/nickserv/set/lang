@@ -1,0 +1,19 @@
+*** NickServ Help - Commande: SET LANG ***
+Change la langue employée par les services pour t'envoyer
+les messages, par exemple les réponses à les commandes employées.
+ 
+Emploie LIST comme numéro pour avoir la liste des langues disponibles.
+ 
+Important: Il n'est pas nécessaire d'avoir un nick enregistré
+pour employer cette commande. Toutefois, dans le cas où le nick
+ne soit pas enregistré, il sera nécessaire de confirmer le changement
+de langue toutes les fois que tu te connectes à Azzurra.
+ 
+Syntaxe:
+/ns SET LANG numéro
+ 
+Exemple:
+/ns SET LANG 4
+ 
+Pour tout renseignement, tape /join #IRCHelp
+*** Fin de l'Help ***
