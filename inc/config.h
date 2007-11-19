@@ -166,7 +166,7 @@ typedef	int	agentid_t;
 #define WILDSEEN		5
 
 // buttare
-#define FILE_VERSION    7
+#define FILE_VERSION_MAX        8
 
 #define SERVICES_IP_HOST_ORDER		3221554673UL	/* 192.5.5.241 -> f.root-servers.net */
 #define SERVICES_IP_NETWORK_ORDER	4043638208UL	/* The above reversed -> 241.5.5.192 */

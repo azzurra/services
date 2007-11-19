@@ -30,8 +30,8 @@
  * Version stuff                                         *
  *********************************************************/
 
-#define	CHANSERV_DB_CURRENT_VERSION		7
-#define CHANSERV_DB_SUPPORTED_VERSION	"7"
+#define	CHANSERV_DB_CURRENT_VERSION		8
+#define CHANSERV_DB_SUPPORTED_VERSION	"7, 8"
 
 
 /*********************************************************
@@ -147,6 +147,45 @@ struct _ChannelInfo_V7 {
 
 };
 
+typedef struct _ChannelInfo_V8		ChannelInfo_V8;
+struct _ChannelInfo_V8 {
+
+    ChannelInfo_V8	*next, *prev;
+    char			name[CHANMAX];
+    char			founder[NICKMAX];				/* Always a reg'd nick */
+    char			founderpass[PASSMAX];
+    char			*desc;
+    time_t			time_registered;
+    time_t			last_used;
+    long			accesscount;
+    ChanAccess_V7	*access;					/* List of authorized users */
+    long			akickcount;
+    AutoKick_V7		*akick;
+    flags_t			mlock_on, mlock_off;			/* See channel modes below */
+    long			mlock_limit;					/* 0 if no limit */
+    char			*mlock_key;					/* NULL if no key */
+    char			*last_topic;					/* Last topic on the channel */
+    char			last_topic_setter[NICKMAX];	/* Who set the last topic */
+    time_t			last_topic_time;				/* When the last topic was set */
+    flags_t			flags;							/* CI_* */
+    char			*successor;					
+    char			*url;
+    char			*email;
+    char			*welcome;
+    char			*hold;       /*  }                                         */
+    char			*mark;       /*  }   --   Identities (what admin did it?)  */
+    char			*freeze;     /*  }   --                                    */
+    char			*forbid;     /*  }                                         */
+    int				topic_allow;					/* Who's allowed to change topic */
+    unsigned long	auth;
+    long			settings;
+    char			*real_founder;
+	time_t			last_drop_request;
+	NICK_LANG_ID	langID;
+    unsigned char	banType;					/* For future expansion -- decrease! */
+    unsigned char	reserved[2];					/* For future expansion -- decrease! */
+
+};
 
 typedef struct _ChannelInfo_V10		ChannelInfo_V10;
 struct _ChannelInfo_V10 {
@@ -199,7 +238,7 @@ struct _ChannelInfo_V10 {
 };
 
 // Current structs version
-typedef	ChannelInfo_V7	ChannelInfo;
+typedef	ChannelInfo_V8	ChannelInfo;
 
 
 

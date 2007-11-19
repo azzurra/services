@@ -347,7 +347,7 @@ void load_ns_dbase(void) {
 	TRACE();
 	switch (ver = get_file_version(f, NICKSERV_DB)) {
 
-		case 7:
+		case NICKSERV_DB_CURRENT_VERSION:
 
 			for (i = 65; i < 126; ++i) {
 
@@ -495,7 +495,7 @@ void save_ns_dbase(void) {
 
 	TRACE_FCLT(FACILITY_NICKSERV_SAVE_NS_DB);
 
-	if (IS_NULL(f = open_db_write(s_NickServ, NICKSERV_DB)))
+	if (IS_NULL(f = open_db_write(s_NickServ, NICKSERV_DB, NICKSERV_DB_CURRENT_VERSION)))
 		return;
 
 	TRACE();

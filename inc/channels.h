@@ -100,6 +100,9 @@ struct _ChannelMode {
 #define CMODE_U		0x00002000
 #define CMODE_M		0x00004000
 #define CMODE_u		0x00008000
+#define CMODE_S		0x00010000
+#define CMODE_d		0x00020000
+#define CMODE_j		0x00040000
 
 #define CMODE_CS	0x80000000
 

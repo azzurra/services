@@ -260,7 +260,7 @@ void load_ms_dbase(void) {
 	TRACE();
 	switch (ver = get_file_version(f, MEMOSERV_DB)) {
 
-		case 7:
+		case MEMOSERV_DB_CURRENT_VERSION:
 
 			for (idx = 65; idx < 126; ++idx) {
 
@@ -352,7 +352,7 @@ void save_ms_dbase(void) {
 	
 	TRACE_FCLT(FACILITY_MEMOSERV_SAVE_MS_DB);
 
-	if (IS_NULL(f = open_db_write(s_MemoServ, MEMOSERV_DB)))
+	if (IS_NULL(f = open_db_write(s_MemoServ, MEMOSERV_DB, MEMOSERV_DB_CURRENT_VERSION)))
 		return;
 
 	TRACE();

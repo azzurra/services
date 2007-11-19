@@ -394,13 +394,65 @@ void chanserv(CSTR source, User *callerUser, char *buf) {
 
 /*********************************************************/
 
+static void cs_translate_entry(void *chan, ChannelInfo *new_chan, int ver)
+{
+    switch (ver) {
+	case 7:
+	    {
+		ChannelInfo_V7 *ci;
+		ci = (ChannelInfo_V7 *)chan;
+
+		TRACE();
+		
+		str_copy_checked(ci->name, new_chan->name, CHANMAX);
+		str_copy_checked(ci->founder, new_chan->founder, NICKMAX);
+		str_copy_checked(ci->founderpass, new_chan->founderpass, PASSMAX);
+		new_chan->desc = ci->desc;
+		new_chan->time_registered = ci->time_registered;
+		new_chan->last_used = ci->last_used;
+		new_chan->accesscount = ci->accesscount;
+		new_chan->access = ci->access;
+		new_chan->akickcount = ci->akickcount;
+		new_chan->akick = ci->akick;
+		new_chan->mlock_on = ci->mlock_on;
+		new_chan->mlock_off = ci->mlock_off;
+		new_chan->mlock_key = ci->mlock_key;
+		new_chan->last_topic = ci->last_topic;
+		str_copy_checked (ci->last_topic_setter, new_chan->last_topic_setter, NICKMAX);
+		new_chan-> last_topic_time = ci->last_topic_time;
+		new_chan->flags = ci->flags;
+		new_chan->successor = ci->successor;
+		new_chan->url = ci->url;
+		new_chan->email = ci->email;
+		new_chan->welcome = ci->welcome;
+		new_chan->hold = ci->hold;
+		new_chan->mark = ci->mark;
+		new_chan->freeze = ci->freeze;
+		new_chan->forbid = ci->forbid;
+		new_chan->topic_allow = ci->topic_allow;
+		new_chan->auth = ci->auth;
+		new_chan->settings = ci->settings;
+		new_chan->real_founder = ci->real_founder;
+		new_chan->last_drop_request = ci->last_drop_request;
+		new_chan->langID = ci->langID;
+		new_chan->banType = ci->banType;
+		str_copy_checked(ci->reserved, new_chan->reserved, 2);
+	    }
+	    break;
+
+	default:
+	    break;
+    }
+}
+
 /* Load/save data files. */
 void load_cs_dbase(void) {
 
 	FILE *f;
 	int ver, i;
-	ChannelInfo *ci;
-	NickInfo	*ni;
+	ChannelInfo *ci = NULL;
+	ChannelInfo_V7 *ci_old = NULL;
+	NickInfo *ni;
 
 
 	TRACE_FCLT(FACILITY_CHANSERV_LOAD_CS_DB);
@@ -417,7 +469,306 @@ void load_cs_dbase(void) {
 
 	switch (ver = get_file_version(f, CHANSERV_DB)) {
 
+	/* Backward compatibility stuff, KEEP IT */
 	case 7:
+
+		/* No need to waste time with mem_malloc/mem_free for each channel we read in */
+		ci_old = mem_malloc(sizeof(ChannelInfo_V7));
+
+		for (i = 0; i < 256; ++i) {
+
+			while (fgetc(f) == 1) {
+
+				#ifdef FIX_PASSWORD_SPACE
+				char	*space;
+				#endif
+
+				TRACE();
+
+				#ifdef FIX_USE_MPOOL
+				ci = mempool_alloc(ChannelInfo *, chandb_mempool, FALSE);
+				#else
+				ci = mem_malloc(sizeof(ChannelInfo));
+				#endif
+
+				if (fread(ci_old, sizeof(ChannelInfo_V7), 1, f) != 1)
+					fatal_error(FACILITY_CHANSERV_LOAD_CS_DB, __LINE__, "Read error on %s", CHANSERV_DB);
+
+				RemoveFlag(ci_old->flags, CI_NOENTRY);
+				RemoveFlag(ci_old->flags, CI_TIMEOUT);
+
+				// Fix
+				RemoveFlag(ci_old->settings, CI_ACCCESS_CFOUNDER_LOCK);
+
+				// crashfix
+				if (ci_old->langID == LANG_DE)
+					ci_old->langID = LANG_ES;
+
+				#ifdef FIX_FLAGS
+				RemoveFlag(ci_old->flags, CI_NEVEROP);
+				#endif
+
+				TRACE();
+
+				/* Fix vari */
+
+				#ifdef FIX_BANTYPE
+				ci_old->banType = 2;
+				#endif
+
+				memset(ci_old->reserved, 0, sizeof(ci_old->reserved));
+
+				if (ci_old->accesscount == 0)
+					ci_old->access = NULL;
+
+				#ifdef FIX_PASSWORD_SPACE
+				space = ci_old->founderpass;
+
+				while (IS_NOT_NULL(space = strchr(space, ' '))) {
+
+					*space = '_';
+					++space;
+				}
+				#endif
+
+				TRACE();
+
+				ci_old->desc = read_string(f, CHANSERV_DB);
+
+				if (ci_old->successor)
+					ci_old->successor = read_string(f, CHANSERV_DB);
+
+				if (ci_old->url)
+					ci_old->url = read_string(f, CHANSERV_DB);
+
+				if (ci_old->email)
+					ci_old->email = read_string(f, CHANSERV_DB);
+
+				if (ci_old->mlock_key)
+					ci_old->mlock_key = read_string(f, CHANSERV_DB);
+
+				if (ci_old->last_topic)
+					ci_old->last_topic = read_string(f, CHANSERV_DB);
+
+				if (ci_old->welcome)
+					ci_old->welcome = read_string(f, CHANSERV_DB);
+
+				if (ci_old->hold)
+					ci_old->hold = read_string(f, CHANSERV_DB);
+
+				if (ci_old->mark)
+					ci_old->mark = read_string(f, CHANSERV_DB);
+
+				if (ci_old->freeze)
+					ci_old->freeze = read_string(f, CHANSERV_DB);
+
+				if (ci_old->forbid)
+					ci_old->forbid = read_string(f, CHANSERV_DB);
+
+				if (ci_old->real_founder)
+					ci_old->real_founder = read_string(f, CHANSERV_DB);
+
+				#ifdef FIX_RF
+				if (IS_NULL(ci_old->real_founder))
+					ci_old->real_founder = str_duplicate(ci_old->founder);
+				#endif
+
+				#ifdef FIX_NICKNAME_ACCESS_COUNT
+				if (IS_NOT_NULL(ni = findnick(ci_old->founder)))
+					++(ni->channelcount);
+				#endif
+
+				/* Update to current version */
+				cs_translate_entry(ci_old, ci, ver);
+
+				database_insert_chan(ci);
+				++cs_regCount;
+
+				TRACE();
+				if (ci->accesscount) {
+
+					ChanAccess	*anAccess;
+					int			unused_access, accessIdx;
+
+					TRACE();
+					anAccess = mem_malloc(sizeof(ChanAccess) * ci->accesscount);
+					ci->access = anAccess;
+
+					TRACE();
+					if ((signed)fread(anAccess, sizeof(ChanAccess), ci->accesscount, f) != ci->accesscount)
+						fatal_error(FACILITY_CHANSERV_LOAD_CS_DB, __LINE__, "Read error on %s", CHANSERV_DB);
+
+					for (accessIdx = 0; accessIdx < ci->accesscount; ++accessIdx, ++anAccess) {
+
+						anAccess->name = read_string(f, CHANSERV_DB);
+						anAccess->creator = read_string(f, CHANSERV_DB);
+
+						#ifdef FIX_CHANNEL_ACCESS_TYPE
+						if ((anAccess->status == ACCESS_ENTRY_NICK) && (strchr(anAccess->name, '!') || strchr(anAccess->name, '@')))
+							anAccess->status = ACCESS_ENTRY_MASK;
+						#endif
+					}
+
+					TRACE();
+					accessIdx = 0;
+					anAccess = ci->access;
+
+					unused_access = 0;
+
+					while (accessIdx < ci->accesscount) {
+
+						TRACE();
+
+						#ifdef FIX_NICKNAME_ACCESS_COUNT
+						ni = NULL;
+						#endif
+
+						switch (anAccess->status) {
+
+							case ACCESS_ENTRY_FREE:
+							case ACCESS_ENTRY_EXPIRED:
+
+								TRACE();
+								if (IS_NOT_NULL(anAccess->name)) {
+
+									mem_free(anAccess->name);
+									anAccess->name = NULL;
+								}
+
+								TRACE();
+								if (IS_NOT_NULL(anAccess->creator)) {
+
+									mem_free(anAccess->creator);
+									anAccess->creator = NULL;
+								}
+
+								anAccess->status = ACCESS_ENTRY_FREE;
+								anAccess->flags = 0;
+								++unused_access;
+								break;
+
+							case ACCESS_ENTRY_NICK:
+
+								TRACE();
+								if (IS_NOT_NULL(anAccess->name)) {
+
+									ni = findnick(anAccess->name);
+
+									TRACE();
+									if (IS_NULL(ni) || str_equals_nocase(ni->nick, ci->founder)) {
+
+										mem_free(anAccess->name);
+										anAccess->name = NULL;
+
+										TRACE();
+										if (IS_NOT_NULL(anAccess->creator)) {
+
+											mem_free(anAccess->creator);
+											anAccess->creator = NULL;
+										}
+
+										anAccess->status = ACCESS_ENTRY_FREE;
+										anAccess->flags = 0;
+										++unused_access;
+									}
+									#ifdef FIX_NICKNAME_ACCESS_COUNT
+									else
+										++(ni->channelcount);
+									#endif
+								}
+								break;
+						}
+
+						++accessIdx;
+						++anAccess;
+					}
+
+					if (unused_access > 0)
+						compact_chan_access_list(ci, unused_access);
+
+				} /* if (ci->accesscount) */
+
+				TRACE();
+				if (ci->akickcount) {
+
+					AutoKick *anAkick;
+					int akickIdx;
+
+					TRACE();
+					anAkick = mem_malloc(sizeof(AutoKick) * ci->akickcount);
+					ci->akick = anAkick;
+
+					if ((signed)fread(anAkick, sizeof(AutoKick), ci->akickcount, f) != ci->akickcount)
+						fatal_error(FACILITY_CHANSERV_LOAD_CS_DB, __LINE__, "Read error on %s", CHANSERV_DB);
+
+					TRACE();
+					for (akickIdx = 0; akickIdx < ci->akickcount; ++akickIdx, ++anAkick) {
+
+						anAkick->name = read_string(f, CHANSERV_DB);
+
+						if (anAkick->reason)
+							anAkick->reason = read_string(f, CHANSERV_DB);
+
+						if (anAkick->creator)
+							anAkick->creator = read_string(f, CHANSERV_DB);
+
+						#ifdef FIX_BANTYPE
+						if (anAkick->isNick > 0)
+							anAkick->banType = 2;
+						else
+							anAkick->banType = -1;
+						#endif
+					}
+
+					#ifdef SUX
+					akickIdx = 0;
+					anAkick = ci->akick;
+
+					TRACE();
+					while (akickIdx < ci->akickcount) {
+
+						if (anAkick->isNick < 0) {
+
+							TRACE();
+							--(ci->akickcount);
+
+							mem_free(anAkick->name);
+
+							if (anAkick->reason)
+								mem_free(anAkick->reason);
+
+							if (anAkick->creator)
+								mem_free(anAkick->creator);
+
+							if (akickIdx < ci->akickcount)
+								memmove(anAkick, (anAkick + 1), sizeof(AutoKick) * (ci->akickcount - akickIdx));
+						}
+						else {
+
+							TRACE();
+							++akickIdx;
+							++anAkick;
+						}
+					}
+
+					TRACE();
+					if (ci->akickcount)
+						ci->akick = mem_realloc(ci->akick, sizeof(AutoKick) * ci->akickcount);
+
+					else {
+
+						TRACE();
+						mem_free(ci->akick);
+						ci->akick = NULL;
+					}
+					#endif /* SUX */
+				}		/* if (ci->akickcount) */
+			}		/* while (fgetc(f) == 1) */
+		}			/* for (i) */
+		mem_free(ci_old);
+		break;		/* case 1, etc. */
+
+	case CHANSERV_DB_CURRENT_VERSION:
 
 		for (i = 0; i < 256; ++i) {
 
@@ -859,7 +1210,7 @@ void save_cs_dbase(void) {
 
 	TRACE_FCLT(FACILITY_CHANSERV_SAVE_CS_DB);
 
-	if (!(f = open_db_write(s_ChanServ, CHANSERV_DB))) {
+	if (!(f = open_db_write(s_ChanServ, CHANSERV_DB, CHANSERV_DB_CURRENT_VERSION))) {
 
 		LOG_SNOOP(s_OperServ, "Error creating database %s", CHANSERV_DB);
 		LOG_DEBUG("Error creating database %s", CHANSERV_DB);
@@ -893,7 +1244,7 @@ void load_suspend_db(void) {
 		return;
 	}
 
-	if ((i = get_file_version(f, SUSPEND_DB)) != FILE_VERSION)
+	if ((i = get_file_version(f, SUSPEND_DB)) > FILE_VERSION_MAX)
 		fatal_error(FACILITY_CHANSERV_LOAD_SUSPEND_DB, __LINE__, "Unsupported version number (%d) on %s", i, SUSPEND_DB);
 
 	i = 0;
@@ -921,10 +1272,22 @@ void save_suspend_db(void) {
 
 	FILE *f;
 	ChannelSuspendData *name;
+	int version;
 
 	TRACE_FCLT(FACILITY_CHANSERV_SAVE_SUSPEND_DB);
 
-	if (!(f = open_db_write(s_OperServ, SUSPEND_DB))) {
+	if (!(f = open_db_read(s_OperServ, SUSPEND_DB))) {
+
+		LOG_SNOOP(s_OperServ, "Error creating database %s", SUSPEND_DB);
+		LOG_DEBUG("Error creating database %s", SUSPEND_DB);
+		return;
+	}
+	
+	version = get_file_version(f, SUSPEND_DB);
+	
+	close_db(f, SUSPEND_DB);
+
+	if (!(f = open_db_write(s_OperServ, SUSPEND_DB, version))) {
 
 		LOG_SNOOP(s_OperServ, "Error creating database %s", SUSPEND_DB);
 		LOG_DEBUG("Error creating database %s", SUSPEND_DB);
@@ -4318,6 +4681,7 @@ static void do_set_mlock(User *callerUser, ChannelInfo *ci, char *param, CSTR ac
 					break;
 
 				case 'd':
+					MLOCK(CMODE_d)
 					break;
 
 				case 'h':
@@ -4327,6 +4691,10 @@ static void do_set_mlock(User *callerUser, ChannelInfo *ci, char *param, CSTR ac
 					
 				case 'i':
 					MLOCK(CMODE_i)
+					break;
+
+				case 'j':
+					MLOCK(CMODE_j)
 					break;
 
 				case 'k':
@@ -4489,6 +4857,10 @@ static void do_set_mlock(User *callerUser, ChannelInfo *ci, char *param, CSTR ac
 
 				case 's':
 					MLOCK(CMODE_s)
+					break;
+
+				case 'S':
+					MLOCK(CMODE_S)
 					break;
 
 				case 't':

@@ -59,7 +59,9 @@ ChannelMode known_cmodes[] = {
 
 	{ CMODE_c,	'c' },
 	{ CMODE_C,	'C' },
+	{ CMODE_d,	'd' },
 	{ CMODE_i,	'i' },
+	{ CMODE_j,	'j' },
 	{ CMODE_k,	'k' },
 	{ CMODE_l,	'l' },
 	{ CMODE_m,	'm' },
@@ -70,9 +72,10 @@ ChannelMode known_cmodes[] = {
 	{ CMODE_r,	'r' },
 	{ CMODE_R,	'R' },
 	{ CMODE_s,	's' },
+	{ CMODE_S,	'S' },
 	{ CMODE_t,	't' },
 	{ CMODE_u,	'u' },
-	{ CMODE_U,	'U'	}
+	{ CMODE_U,	'U' }
 };
 
 
@@ -484,10 +487,15 @@ void chan_handle_SJOIN(CSTR source, const int ac, char **av) {
 					break;
 
 				case 'd':
+					AddFlag(chan->mode, CMODE_d);
 					break;
 
 				case 'i':
 					AddFlag(chan->mode, CMODE_i);
+					break;
+
+				case 'j':
+					AddFlag(chan->mode, CMODE_j);
 					break;
 
 				case 'k':
@@ -555,6 +563,10 @@ void chan_handle_SJOIN(CSTR source, const int ac, char **av) {
 
 				case 's':
 					AddFlag(chan->mode, CMODE_s);
+					break;
+
+				case 'S':
+					AddFlag(chan->mode, CMODE_S);
 					break;
 
 				case 't':
@@ -1629,6 +1641,7 @@ void chan_handle_chanMODE(const char *source, const int ac, char **av) {
 				break;
 
 			case 'd':
+				MODE(CMODE_d);
 				break;
 				
 			case 'h':
@@ -1705,6 +1718,10 @@ void chan_handle_chanMODE(const char *source, const int ac, char **av) {
 				
 			case 'i':
 				MODE(CMODE_i);
+				break;
+
+			case 'j':
+				MODE(CMODE_j);
 				break;
 
 			case 'k': {
@@ -1976,6 +1993,10 @@ void chan_handle_chanMODE(const char *source, const int ac, char **av) {
 
 			case 's':
 				MODE(CMODE_s);
+				break;
+
+			case 'S':
+				MODE(CMODE_S);
 				break;
 
 			case 't':
@@ -2905,8 +2926,9 @@ void handle_list(const char *source, User *callerUser, ServiceCommandData *data)
 
 						case 'c': AddFlag(matchModes, CMODE_c); break;
 						case 'C': AddFlag(matchModes, CMODE_C); break;
-						case 'd': break;
+						case 'd': AddFlag(matchModes, CMODE_d); break;
 						case 'i': AddFlag(matchModes, CMODE_i); break;
+						case 'j': AddFlag(matchModes, CMODE_j); break;
 						case 'k': AddFlag(matchModes, CMODE_k); break;
 						case 'l': AddFlag(matchModes, CMODE_l); break;
 						case 'm': AddFlag(matchModes, CMODE_m); break;
@@ -2917,6 +2939,7 @@ void handle_list(const char *source, User *callerUser, ServiceCommandData *data)
 						case 'r': AddFlag(matchModes, CMODE_r); break;
 						case 'R': AddFlag(matchModes, CMODE_R); break;
 						case 's': AddFlag(matchModes, CMODE_s); break;
+						case 'S': AddFlag(matchModes, CMODE_S); break;
 						case 't': AddFlag(matchModes, CMODE_t); break;
 						case 'u': AddFlag(matchModes, CMODE_u); break;
 						case 'U': AddFlag(matchModes, CMODE_U); break;
@@ -3165,8 +3188,14 @@ char *get_channel_mode(const long int modeOn, const long int modeOff) {
 		if (FlagSet(modeOn, CMODE_C))
 			modebuf[modeIdx++] = 'C';
 
+		if (FlagSet(modeOn, CMODE_d))
+			modebuf[modeIdx++] = 'd';
+
 		if (FlagSet(modeOn, CMODE_i))
 			modebuf[modeIdx++] = 'i';
+
+		if (FlagSet(modeOn, CMODE_j))
+			modebuf[modeIdx++] = 'j';
 
 		if (FlagSet(modeOn, CMODE_k))
 			modebuf[modeIdx++] = 'k';
@@ -3198,6 +3227,9 @@ char *get_channel_mode(const long int modeOn, const long int modeOff) {
 		if (FlagSet(modeOn, CMODE_s))
 			modebuf[modeIdx++] = 's';
 
+		if (FlagSet(modeOn, CMODE_S))
+			modebuf[modeIdx++] = 'S';
+
 		if (FlagSet(modeOn, CMODE_t))
 			modebuf[modeIdx++] = 't';
 
@@ -3227,8 +3259,14 @@ char *get_channel_mode(const long int modeOn, const long int modeOff) {
 		if (FlagSet(modeOff, CMODE_C))
 			modebuf[modeIdx++] = 'C';
 
+		if (FlagSet(modeOff, CMODE_d))
+			modebuf[modeIdx++] = 'd';
+
 		if (FlagSet(modeOff, CMODE_i))
 			modebuf[modeIdx++] = 'i';
+
+		if (FlagSet(modeOff, CMODE_j))
+			modebuf[modeIdx++] = 'j';
 
 		if (FlagSet(modeOff, CMODE_k))
 			modebuf[modeIdx++] = 'k';
@@ -3259,6 +3297,9 @@ char *get_channel_mode(const long int modeOn, const long int modeOff) {
 
 		if (FlagSet(modeOff, CMODE_s))
 			modebuf[modeIdx++] = 's';
+
+		if (FlagSet(modeOff, CMODE_S))
+			modebuf[modeIdx++] = 'S';
 
 		if (FlagSet(modeOff, CMODE_t))
 			modebuf[modeIdx++] = 't';
@@ -4167,6 +4208,7 @@ void handle_mode(CSTR source, User *callerUser, ServiceCommandData *data) {
 						break;
 
 					case 'd':
+						CHANMODE(CMODE_d, 'd')
 						break;
 
 					case 'h': {
@@ -4233,6 +4275,10 @@ void handle_mode(CSTR source, User *callerUser, ServiceCommandData *data) {
 
 					case 'i':
 						CHANMODE(CMODE_i, 'i')
+						break;
+
+					case 'j':
+						CHANMODE(CMODE_j, 'j')
 						break;
 
 					case 'k':
@@ -4529,6 +4575,10 @@ void handle_mode(CSTR source, User *callerUser, ServiceCommandData *data) {
 
 					case 's':
 						CHANMODE(CMODE_s, 's')
+						break;
+
+					case 'S':
+						CHANMODE(CMODE_S, 'S')
 						break;
 
 					case 't':

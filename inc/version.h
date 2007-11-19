@@ -133,9 +133,9 @@
 // Main services build
 
 #define VERS_BUILDNAME	"Core Services"
-#define	VERS_MAJOR		"2"
-#define VERS_MINOR		"2"
-#define VERS_REVISION	"0"
+#define	VERS_MAJOR	"2"
+#define VERS_MINOR	"2"
+#define VERS_REVISION	"2"
 #define VERS_CODENAME	"Zero"
 
 #endif

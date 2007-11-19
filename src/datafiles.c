@@ -40,7 +40,7 @@ int get_file_version(FILE *f, const char *filename) {
 	if (ferror(f))
 		fatal_error(FACILITY_DATABASE, __LINE__, "Error reading version number on %s", filename);
 
-	else if (version > FILE_VERSION || version < 1)
+	else if (version > FILE_VERSION_MAX || version < 1)
 		fatal_error(FACILITY_DATABASE, __LINE__, "Invalid version number (%d) on %s", version, filename);
 
 	return version;
@@ -50,10 +50,15 @@ int get_file_version(FILE *f, const char *filename) {
 
 /* Write the current version number to the file. Return 0 on error, 1 on success. */
 
-int write_file_version(FILE *f, const char *filename) {
+int write_file_version(FILE *f, const char *filename, int version) {
 
-	if (fputc(FILE_VERSION>>24 & 0xFF, f) < 0 || fputc(FILE_VERSION>>16 & 0xFF, f) < 0 ||
-		fputc(FILE_VERSION>> 8 & 0xFF, f) < 0 || fputc(FILE_VERSION & 0xFF, f) < 0) {
+	if (version > FILE_VERSION_MAX || version < 1) {
+		log_stderr("Error writing version number on %s", filename);
+
+		return 0;
+	}
+	if (fputc(version>>24 & 0xFF, f) < 0 || fputc(version>>16 & 0xFF, f) < 0 ||
+		fputc(version>> 8 & 0xFF, f) < 0 || fputc(version & 0xFF, f) < 0) {
 
 		log_stderr("Error writing version number on %s", filename);
 		return 0;
@@ -81,7 +86,7 @@ FILE *open_db_read(const char *service, const char *filename) {
 
 /*********************************************************/
 
-FILE *open_db_write(const char *service, const char *filename) {
+FILE *open_db_write(const char *service, const char *filename, int version) {
 
 	char namebuf[MAX_PATH + 1];
 	FILE *f;
@@ -116,7 +121,7 @@ FILE *open_db_write(const char *service, const char *filename) {
 
 	f = fopen(filename, "w");
 
-	if (!f || !write_file_version(f, filename)) {
+	if (!f || !write_file_version(f, filename, version)) {
 
 		static unsigned int walloped = 0;
 

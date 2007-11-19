@@ -154,8 +154,10 @@ User_AltListItem	*list_onlineuser_ipv6 = NULL;
 		User_AltListItem	*item; \
 		\
 		LIST_SEARCH_ORDERED(list_onlineuser_ipv6, user->nick, user->nick, str_compare_nocase, item); \
-		if (item) \
+		if (item) { \
 			LIST_REMOVE(item, list_onlineuser_ipv6); \
+			mem_free(item); \
+		} \
 	}
 
 #endif /* USE_SERVICES */
@@ -333,9 +335,17 @@ static void user_change_nick(User *user, CSTR oldNick, CSTR newNick, BOOL equals
 		return;
 	}
 
+	#ifdef USE_SERVICES
+	LIST_DEL_IPv6_USER(user);
+	#endif
+
 	hash_onlineuser_remove(user);
 	str_copy_checked(newNick, user->nick, NICKMAX);
 	hash_onlineuser_add(user);
+
+	#ifdef USE_SERVICES
+	LIST_ADD_IPv6_USER(user);
+	#endif
 
 	TRACE();
 
