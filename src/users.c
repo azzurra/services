@@ -3004,15 +3004,6 @@ void introduce_services_agent(CSTR nick) {
 		user_add_services_agent(s_SeenServ, 0, "Seen Services");
 	}
 	#endif
-
-	#ifdef USE_BOTSERV
-	TRACE();
-	if (IS_NULL(nick) || IS_EMPTY_STR(nick) || str_equals_nocase(nick, s_BotServ)) {
-
-		send_NICK(s_BotServ, "+iz", CONF_SERVICES_USERNAME, CONF_SERVICES_HOST, "Bot Services");
-		user_add_services_agent(s_BotServ, UMODE_i | UMODE_z, "Bot Services");
-	}
-	#endif
 }
 
 
@@ -3086,9 +3077,6 @@ BOOL nick_is_service(CSTR name) {
 		#endif
 		#ifdef USE_SOCKSMONITOR
 		(str_equals_nocase(name, s_SocksMonitor)) ||
-		#endif
-		#ifdef USE_BOTSERV
-		(str_equals_nocase(name, s_BotServ)) ||
 		#endif
 		(str_equals_nocase(name, s_DebugServ)))
 

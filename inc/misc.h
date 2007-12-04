@@ -42,7 +42,7 @@ typedef enum _HOST_TYPE		HOST_TYPE;
 
 #ifdef USE_SERVICES
 extern void update_invalid_password_count(User *user, CSTR service, CSTR target);
-extern BOOL validate_email(CSTR email);
+extern BOOL validate_email(CSTR email, BOOL allowWild);
 #endif
 
 extern int randomseed();

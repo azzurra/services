@@ -1437,7 +1437,7 @@ static void do_register(CSTR source, User *callerUser, ServiceCommandData *data)
 	else if (str_len(email) > MAILMAX)
 		send_notice_lang_to_user(s_NickServ, callerUser, GetCallerLang(), CSNS_ERROR_MAIL_MAX_LENGTH, MAILMAX);
 
-	else if (string_has_ccodes(email) || !validate_email(email) || str_equals_nocase(email, "ident@home.com") || str_equals_nocase(email, "user@home.com")) // GDPChat sux
+	else if (string_has_ccodes(email) || !validate_email(email, FALSE) || str_equals_nocase(email, "ident@home.com") || str_equals_nocase(email, "user@home.com")) // GDPChat sux
 		send_notice_lang_to_user(s_NickServ, callerUser, GetCallerLang(), NS_ERROR_INVALID_EMAIL, email);
 
 	else if (blacklist_match(callerUser, email, 'r'))
@@ -2382,7 +2382,7 @@ static void do_set_email(const User *callerUser, CSTR param, BOOL hasmail) {
 		else if (ni->email && (str_equals_nocase(ni->email, param)))
 			send_notice_lang_to_user(s_NickServ, callerUser, GetCallerLang(), NS_SET_EMAIL_ERROR_SAME, ni->nick, ni->email);
 
-		else if (string_has_ccodes(param) || !validate_email(param))
+		else if (string_has_ccodes(param) || !validate_email(param, FALSE))
 			send_notice_lang_to_user(s_NickServ, callerUser, GetCallerLang(), NS_SET_EMAIL_ERROR_INVALID_EMAIL, param);
 
 		else if (blacklist_match(callerUser, param, 'c'))
@@ -4650,7 +4650,7 @@ static void do_authnick(CSTR source, User *callerUser, ServiceCommandData *data)
 	else if (IS_NOT_NULL(email) && (str_len(email) > MAILMAX))
 		send_notice_lang_to_user(s_NickServ, callerUser, GetCallerLang(), CSNS_ERROR_MAIL_MAX_LENGTH, MAILMAX);
 
-	else if (IS_NOT_NULL(email) && (string_has_ccodes(email) || !validate_email(email)))
+	else if (IS_NOT_NULL(email) && (string_has_ccodes(email) || !validate_email(email, FALSE)))
 		send_notice_lang_to_user(s_NickServ, callerUser, GetCallerLang(), NS_SET_EMAIL_ERROR_INVALID_EMAIL, email);
 
 	else {

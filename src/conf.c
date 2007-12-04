@@ -973,7 +973,7 @@ static void conf_break(int ac, char **av, BOOL rehash) {
 		}
 		else if (str_equals_nocase(av[0], "RETURN")) {
 
-			if (str_len(av[1]) > MAILMAX || !validate_email(av[1])) {
+			if (str_len(av[1]) > MAILMAX || !validate_email(av[1], FALSE)) {
 
 				if (rehash)
 					send_globops(NULL, "Value %s for RETURN is not valid", av[1]);

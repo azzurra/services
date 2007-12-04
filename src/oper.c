@@ -1059,7 +1059,7 @@ void handle_oper(CSTR source, User *callerUser, ServiceCommandData *data) {
 					LOG_SNOOP(data->agent->nick, "%s +%s %s -- by %s (%s@%s) through %s", data->agent->shortNick, get_access_name(accessLevel, TRUE), opernick, callerUser->nick, callerUser->username, callerUser->host, data->operName);
 					log_services(data->agent->logID, "+%s %s -- by %s (%s@%s) through %s", get_access_name(accessLevel, TRUE), opernick, callerUser->nick, callerUser->username, callerUser->host, data->operName);
 
-					send_globops(data->agent->nick, "\2%s\2 (through \2%s\2) %s \2%s\2 to %s", source, data->operName, (oper->level > accessLevel) ? "raised" : "demoted", opernick, get_access_name(accessLevel, FALSE));
+					send_globops(data->agent->nick, "\2%s\2 (through \2%s\2) %s \2%s\2 to %s", source, data->operName, (oper->level < accessLevel) ? "raised" : "demoted", opernick, get_access_name(accessLevel, FALSE));
 				}
 
 				oper->level = accessLevel;

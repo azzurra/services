@@ -361,8 +361,7 @@ void handle_blacklist(CSTR source, User *callerUser, ServiceCommandData *data) {
 			return;
 		}
 
-		if (!validate_email(address)) {
-
+		if (!validate_email(address, TRUE)) {
 			send_notice_to_user(s_OperServ, callerUser, "E-Mail address \2%s\2 is not valid.", address);
 			return;
 		}
@@ -587,7 +586,12 @@ BOOL blacklist_match(const User *user, CSTR address, const char type) {
 			}
 
 			anAddress->lastUsed = NOW;
-			return TRUE;
+
+			/* FIX: return true ONLY if we should block this mail address */
+			if (FlagSet(anAddress->flags, BLACKLIST_FLAG_DENY))
+				return TRUE;
+			else
+				return FALSE;
 		}
 
 		anAddress = anAddress->next;

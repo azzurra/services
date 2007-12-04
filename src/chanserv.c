@@ -2410,7 +2410,7 @@ BOOL chanserv_check_user_join(const User *user, Channel *chan) {
 	ChannelInfo			*ci;
 	int					idx, accessLevel;
 	char 				*mask, *reason;
-	BOOL				isAdmin;
+	BOOL				isAdmin, isExempt;
 
 	TRACE_FCLT(FACILITY_CHANSERV_CHECK_USER_JOIN);
 
@@ -2423,6 +2423,8 @@ BOOL chanserv_check_user_join(const User *user, Channel *chan) {
 	ci = chan->ci;
 
 	isAdmin = is_services_admin(user);
+	/* straight from nickserv.c */
+	isExempt = IS_NOT_NULL(user->oper) || user_is_ircop(user) || user_is_admin(user) || user_is_services_agent(user) || isAdmin;
 
 	/* Channel suspension check must come first because if the channel is
 	 * not registered, services will not be able to kick because !ci returns 0. */
@@ -2441,7 +2443,7 @@ BOOL chanserv_check_user_join(const User *user, Channel *chan) {
 		}
 	}
 
-	switch (reserved_match(chan->name + 1, RESERVED_CHAN, 0, s_ChanServ, user->nick, user->username, user->host, user->ip, (IS_NOT_NULL(user->oper) || user_is_ircop(user) || (isAdmin == TRUE)), user->current_lang)) {
+	switch (reserved_match(chan->name + 1, RESERVED_CHAN, 0, s_ChanServ, user->nick, user->username, user->host, user->ip, isExempt, user->current_lang)) {
 
 		case reservedKill:
 			send_KILL(s_ChanServ, user->nick, lang_msg(GetCallerLang(), RESERVED_NAME_KILL_REASON_USE), TRUE);
@@ -2451,9 +2453,12 @@ BOOL chanserv_check_user_join(const User *user, Channel *chan) {
 			return FALSE;
 
 		case reservedBlock:
-			mask = user_usermask_create(user, 2);
-			reason = lang_msg(GetCallerLang(), CS_RESERVED_KICK_REASON);
-			goto kick;
+			if (!isExempt) {
+				mask = user_usermask_create(user, 2);
+				reason = lang_msg(GetCallerLang(), CS_RESERVED_KICK_REASON);
+				goto kick;
+			}
+			/* Fall if exempt... */
 
 		case reservedValid:
 			/* Don't do anything. */
@@ -4499,7 +4504,7 @@ static void do_set_email(User *callerUser, ChannelInfo *ci, CSTR param, CSTR acc
 	else if (str_len(param) > MAILMAX)
 		send_notice_lang_to_user(s_ChanServ, callerUser, GetCallerLang(), CSNS_ERROR_MAIL_MAX_LENGTH, MAILMAX);
 
-	else if (string_has_ccodes(param) || !validate_email(param))
+	else if (string_has_ccodes(param) || !validate_email(param, FALSE))
 		send_notice_lang_to_user(s_ChanServ, callerUser, GetCallerLang(), CS_ERROR_INVALID_EMAIL, param);
 
 	else {

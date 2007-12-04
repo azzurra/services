@@ -396,11 +396,6 @@ static void m_privmsg(CSTR source, const int ac, char **av) {
 		return;
 
 	if (av[0][0] == '#') {
-
-		#ifdef USE_BOTSERV
-		botserv_parse_message(source, av[0], av[1]);
-		#endif
-
 		return;
 	}
 
@@ -477,11 +472,6 @@ static void m_privmsg(CSTR source, const int ac, char **av) {
 
 	else if (str_equals_nocase(nick, s_SeenServ))
 		seenserv(source, currentUser, av[1]);
-	#endif
-
-	#ifdef USE_BOTSERV
-	else if (str_equals_nocase(nick, s_BotServ))
-		botserv(source, currentUser, av[1]);
 	#endif
 
 	else if (is_services_coder(currentUser) && str_equals_nocase(nick, s_DebugServ))

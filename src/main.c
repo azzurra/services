@@ -65,10 +65,6 @@
 #include "../inc/statserv.h"
 #endif
 
-#ifdef USE_BOTSERV
-#include "../inc/botserv.h"
-#endif
-
 #ifdef HAVE_SYS_RESOURCE_H
 #include <sys/resource.h>
 #endif
@@ -256,10 +252,6 @@ static BOOL initialize() {
 	fprintf(stderr, "\nAzzurra IRC Statistical Services starting...");
 	#endif
 
-	#ifdef USE_BOTSERV
-	fprintf(stderr, "\nAzzurra IRC Bot Services starting...");
-	#endif
-
 	/* Load language files first. */
 	if (!lang_load_conf())
 		return FALSE;
@@ -310,10 +302,6 @@ static BOOL initialize() {
 		#ifdef USE_STATS
 		LOG_DEBUG("Statistic services starting up (options:%s%s)", CONF_SET_DEBUG ? " debug" : "", CONF_SET_READONLY ? " readonly" : "");
 		#endif
-
-		#ifdef USE_BOTSERV
-		LOG_DEBUG("Bot services starting up (options:%s%s)", CONF_SET_DEBUG ? " debug" : "", CONF_SET_READONLY ? " readonly" : "");
-		#endif
 	}
 	else {
 
@@ -328,10 +316,6 @@ static BOOL initialize() {
 		#ifdef USE_STATS
 		LOG_DEBUG("Statistic services starting up (options:%s%s)", CONF_SET_DEBUG ? " debug" : "", CONF_SET_READONLY ? " readonly" : "");
 		#endif
-
-		#ifdef USE_BOTSERV
-		LOG_DEBUG("Bot services starting up (options:%s%s)", CONF_SET_DEBUG ? " debug" : "", CONF_SET_READONLY ? " readonly" : "");
-		#endif
 	}
 
 	TRACE_MAIN();
@@ -341,7 +325,7 @@ static BOOL initialize() {
 	if (CONF_SET_READONLY)
 		log_done();
 
-	#if defined(USE_SERVICES) || defined(USE_STATS) || defined(USE_BOTSERV)
+	#if defined(USE_SERVICES) || defined(USE_STATS)
 	/* Allocating SJOIN memory */
 	chan_init();
 	#endif
@@ -432,14 +416,6 @@ static BOOL initialize() {
 	TRACE_MAIN();
 
 	seenserv_db_load();
-	TRACE_MAIN();
-	#endif
-
-	#ifdef USE_BOTSERV
-	botserv_init();
-	TRACE_MAIN();
-
-	botserv_db_load();
 	TRACE_MAIN();
 	#endif
 
@@ -683,10 +659,6 @@ void database_store() {
 	statserv_chanstats_db_save();
 	TRACE_MAIN();
 	seenserv_db_save();
-	#endif
-
-	#ifdef USE_BOTSERV
-	botserv_db_save();
 	#endif
 
 	TRACE_MAIN();

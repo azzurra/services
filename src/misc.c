@@ -189,7 +189,7 @@ int randomseed()
         return seed;
 }
 
-BOOL validate_email(CSTR email) {
+BOOL validate_email(CSTR email, BOOL allowWild) {
 
 	int			hostIdx, hostlen;
 	char		*host, *tld;
@@ -216,8 +216,10 @@ BOOL validate_email(CSTR email) {
 		return FALSE;
 
 	for (ptr = username; ptr < host; ++ptr) {
-
-		if ((*ptr != '-') && (*ptr != '.') && (*ptr != '_') && (!isalnum(*ptr)))
+		if ((*ptr != '-') && (*ptr != '.') && (*ptr != '_')
+		    && (allowWild ? (*ptr != '*') : 1)
+		    && (allowWild ? (*ptr != '?') : 1)
+		    && (!isalnum(*ptr)))
 			return FALSE;
 	}
 
@@ -230,7 +232,6 @@ BOOL validate_email(CSTR email) {
 		return FALSE;
 
 	for (hostIdx = 0; hostIdx < hostlen; ++hostIdx) {
-
 		if ((host[hostIdx] != '-') && (host[hostIdx] != '.') && !isalnum(host[hostIdx]))
 			return FALSE;
 	}
@@ -262,11 +263,13 @@ BOOL validate_tld(CSTR tld, BOOL allowFW) {
 	switch (tldlen) {
 
 		case 6:
-			return str_equals_nocase(tld, "museum");
+			return (str_equals_nocase(tld, "museum") || str_equals_nocase(tld, "travel"));
 
 		case 4:
 			return ( str_equals_nocase(tld, "info") || str_equals_nocase(tld, "aero") ||
-					 str_equals_nocase(tld, "coop") || str_equals_nocase(tld, "name") ) ;
+					 str_equals_nocase(tld, "coop") || str_equals_nocase(tld, "name") ||
+			      		 str_equals_nocase(tld, "mobi") || str_equals_nocase(tld, "jobs") ||
+			      		 str_equals_nocase(tld, "asia") ) ;
 
 		case 3:
 			return ( str_equals_nocase(tld, "com") || str_equals_nocase(tld, "org") ||
@@ -378,6 +381,7 @@ BOOL validate_tld(CSTR tld, BOOL allowFW) {
 						case 'r':
 						case 's':
 						case 't':
+						case 'u':
 							return TRUE;
 
 						default:
