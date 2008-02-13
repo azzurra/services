@@ -1277,15 +1277,11 @@ void save_suspend_db(void) {
 	TRACE_FCLT(FACILITY_CHANSERV_SAVE_SUSPEND_DB);
 
 	if (!(f = open_db_read(s_OperServ, SUSPEND_DB))) {
-
-		LOG_SNOOP(s_OperServ, "Error creating database %s", SUSPEND_DB);
-		LOG_DEBUG("Error creating database %s", SUSPEND_DB);
-		return;
+		version = FILE_VERSION_MAX;
+	} else {
+		version = get_file_version(f, SUSPEND_DB);
+		close_db(f, SUSPEND_DB);
 	}
-	
-	version = get_file_version(f, SUSPEND_DB);
-	
-	close_db(f, SUSPEND_DB);
 
 	if (!(f = open_db_write(s_OperServ, SUSPEND_DB, version))) {
 
