@@ -42,6 +42,7 @@
 #include "../inc/operserv.h"
 #include "../inc/list.h"
 #include "../inc/trigger.h"
+#include "../inc/spam.h"
 #include "../inc/ignore.h"
 #include "../inc/sxline.h"
 #include "../inc/reserved.h"
@@ -190,6 +191,7 @@ static ServiceCommand	operserv_commands_R[] = {
 static ServiceCommand	operserv_commands_S[] = {
 	{ "STATS",		ULEVEL_OPER,			0, do_stats },
 	{ "SETTINGS",	ULEVEL_SA,				0, do_settings },
+	{ "SPAM",		ULEVEL_SA,		0, handle_spam },
 	{ "SQLINE",		ULEVEL_SA,				0, handle_sxline },
 	{ "SGLINE",		ULEVEL_SA,				0, handle_sxline },
 	{ NULL,			0,						0, NULL }

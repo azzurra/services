@@ -33,10 +33,11 @@ These commands are available to Services Admins:
 RESERVED      Manipulates the RESERVED names list
 RESETMODES    Restores standard (mlocked) channel modes
 SGLINE        Has services (UN)SGLINE a realname field
+SPAM          Manages the Spam list
 SQLINE        Has services (UN)SQLINE a nick
 UPDATE        Flushes DataBases to disk
  
-These commands are available to Services Admins:
+These commands are available to Services Root Admins:
  
 COUNT         Shows OperServ commands usage
  

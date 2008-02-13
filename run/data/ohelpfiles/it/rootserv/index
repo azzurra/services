@@ -17,6 +17,5 @@ These commands are available to Services Roots:
 SEARCH        Search log files
 SET           Sets various global Services options
 SHUTDOWN      Saves databases and shuts down Services
-SPAM          Manages the Spam list
  
 *** End of OHelp ***

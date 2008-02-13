@@ -23,6 +23,7 @@
 #include "../inc/strings.h"
 #include "../inc/messages.h"
 #include "../inc/memory.h"
+#include "../inc/main.h"
 #include "../inc/logging.h"
 #include "../inc/storage.h"
 #include "../inc/conf.h"
@@ -425,19 +426,22 @@ void handle_spam(CSTR source, User *callerUser, ServiceCommandData *data) {
 
 					if (valid < 5) {
 
-						if (data->operMatch)
-							send_SPAMOPS(s_RootSnooper, "\2%s\2 tried to add \2%s\2 to the SPAM list!", source, spamtext);
-						else
-							send_SPAMOPS(s_RootSnooper, "\2%s\2 (through \2%s\2) tried to add \2%s\2 to the SPAM list!", source, data->operName, spamtext);
+						if (data->operMatch) {
+							LOG_SNOOP(data->agent->nick, "%s +SP* %s -- by %s (%s@%s) [Lamer]", data->agent->shortNick, spamtext, callerUser->nick, callerUser->username, callerUser->host);
+							send_SPAMOPS(data->agent->nick, "\2%s\2 tried to add \2%s\2 to the SPAM list!", source, spamtext);
+						} else {
+							LOG_SNOOP(data->agent->nick, "%s +SP* %s -- by %s (%s@%s) through %s [Lamer]", data->agent->shortNick, spamtext, callerUser->nick, callerUser->username, callerUser->host, data->operName);
+							send_SPAMOPS(data->agent->nick, "\2%s\2 (through \2%s\2) tried to add \2%s\2 to the SPAM list!", source, data->operName, spamtext);
+						}
 
-						send_notice_to_user(s_RootSnooper, callerUser, "\2ERROR:\2 SPAM text is too short.");
+						send_notice_to_user(data->agent->nick, callerUser, "\2ERROR:\2 SPAM text is too short.");
 						return;
 					}
 				}
 
 				if (str_len(reason) > SPAM_REASON_MAXLEN) {
 
-					send_notice_to_user(s_RootSnooper, callerUser, "\2ERROR:\2 SPAM reasons may not exceed \2%d\2 characters in length.", SPAM_REASON_MAXLEN);
+					send_notice_to_user(data->agent->nick, callerUser, "\2ERROR:\2 SPAM reasons may not exceed \2%d\2 characters in length.", SPAM_REASON_MAXLEN);
 					return;
 				}
 
@@ -451,21 +455,32 @@ void handle_spam(CSTR source, User *callerUser, ServiceCommandData *data) {
 
 					send_SPAM(spamtext, type, reason);
 
-					send_notice_to_user(s_RootSnooper, callerUser, "\2%s\2 added to SPAM list.", spamtext);
+					if (data->operMatch) {
+						LOG_SNOOP(data->agent->nick, "%s +SP %s -- by %s (%s@%s) [Type: %d - Reason: %s]", data->agent->shortNick, spamtext, callerUser->nick, callerUser->username, callerUser->host, type, reason);
+						log_services(data->agent->logID, "+SP %s -- by %s (%s@%s) [Type: %d - Reason: %s]", spamtext, callerUser->nick, callerUser->username, callerUser->host, type, reason);
+						send_SPAMOPS(data->agent->nick, "\2%s\2 added a new SPAM [Text: \2%s\2] [Type: %d] [Reason: %s]", source, spamtext, type, reason);
+					} else {
+						LOG_SNOOP(data->agent->nick, "%s +SP %s -- by %s (%s@%s) through %s [Type: %d - Reason: %s]", data->agent->shortNick, spamtext, callerUser->nick, callerUser->username, callerUser->host, data->operName, type, reason);
+						log_services(data->agent->logID, "+SP %s -- by %s (%s@%s) through %s [Type: %d - Reason: %s]", spamtext, callerUser->nick, callerUser->username, callerUser->host, data->operName, type, reason);
+						send_SPAMOPS(data->agent->nick, "\2%s\2 (through \2%s\2) added a new SPAM [Text: \2%s\2] [Type: %d] [Reason: %s]", source, data->operName, spamtext, type, reason);
+					}
 
-					if (data->operMatch)
-						send_SPAMOPS(s_RootSnooper, "\2%s\2 added a new SPAM [Text: \2%s\2] [Type: %d] [Reason: %s]", source, spamtext, type, reason);
-					else
-						send_SPAMOPS(s_RootSnooper, "\2%s\2 (through \2%s\2) added a new SPAM [Text: \2%s\2] [Type: %d] [Reason: %s]", source, data->operName, spamtext, type, reason);
+					send_notice_to_user(data->agent->nick, callerUser, "\2%s\2 added to SPAM list.", spamtext);
+
 				}
 				else
-					send_notice_to_user(s_RootSnooper, callerUser, "\2ERROR:\2 Invalid type supplied.");
+					send_notice_to_user(data->agent->nick, callerUser, "\2ERROR:\2 Invalid type supplied.");
 			}
-			else
-				send_notice_to_user(s_RootSnooper, callerUser, "String \2%s\2 is already on SPAM list.", spamtext);
+			else {
+				if (data->operMatch)
+					LOG_SNOOP(data->agent->nick, "%s +SP* %s -- by %s (%s@%s) [Already on list]", data->agent->shortNick, spamtext, callerUser->nick, callerUser->username, callerUser->host);
+				else
+					LOG_SNOOP(data->agent->nick, "%s +SP* %s -- by %s (%s@%s) through %s [Already on list]", data->agent->shortNick, spamtext, callerUser->nick, callerUser->username, callerUser->host, data->operName);
+				send_notice_to_user(data->agent->nick, callerUser, "String \2%s\2 is already on SPAM list.", spamtext);
+			}
 		}
 		else
-			send_notice_to_user(s_RootSnooper, callerUser, "Syntax: \2SPAM ADD\2 *text* type reason");
+			send_notice_to_user(data->agent->nick, callerUser, "Syntax: \2SPAM ADD\2 *text* type reason");
 
 		return;
 	}
@@ -481,24 +496,34 @@ void handle_spam(CSTR source, User *callerUser, ServiceCommandData *data) {
 
 			if (IS_NOT_NULL(spam)) {
 
-				send_notice_to_user(s_RootSnooper, callerUser, "SPAM on string \2%s\2 removed.", spam->text);
+				if (data->operMatch) {
+					LOG_SNOOP(data->agent->nick, "%s -SP %s -- by %s (%s@%s)", data->agent->shortNick, spamtext, callerUser->nick, callerUser->username, callerUser->host);
+					log_services(data->agent->logID, "-SP %s -- by %s (%s@%s)", spamtext, callerUser->nick, callerUser->username, callerUser->host);
+					send_SPAMOPS(data->agent->nick, "\2%s\2 removed SPAM on string \2%s\2", source, spam->text);
+				} else {
+					LOG_SNOOP(data->agent->nick, "%s -SP %s -- by %s (%s@%s) through %s", data->agent->shortNick, spamtext, callerUser->nick, callerUser->username, callerUser->host, data->operName);
+					log_services(data->agent->logID, "-SP %s -- by %s (%s@%s) through %s", spamtext, callerUser->nick, callerUser->username, callerUser->host, data->operName);
+					send_SPAMOPS(data->agent->nick, "\2%s\2 (through \2%s\2) removed SPAM on string \2%s\2", source, data->operName, spam->text);
+				}
 
-				if (data->operMatch)
-					send_SPAMOPS(s_RootSnooper, "\2%s\2 removed SPAM on string \2%s\2", source, spam->text);
-				else
-					send_SPAMOPS(s_RootSnooper, "\2%s\2 (through \2%s\2) removed SPAM on string \2%s\2", source, data->operName, spam->text);
+				send_notice_to_user(data->agent->nick, callerUser, "SPAM on string \2%s\2 removed.", spam->text);
 
 				spam_list_remove(spam);
 				spam_delete(spam);
 			}
-			else
-				send_notice_to_user(s_RootSnooper, callerUser, "String \2%s\2 not found on SPAM list.", spamtext);
+			else {
+				if (data->operMatch)
+					LOG_SNOOP(data->agent->nick, "%s -SP* %s -- by %s (%s@%s) [Not Found]", data->agent->shortNick, spamtext, callerUser->nick, callerUser->username, callerUser->host);
+				else
+					LOG_SNOOP(data->agent->nick, "%s -SP* %s -- by %s (%s@%s) through %s [Not Found]", data->agent->shortNick, spamtext, callerUser->nick, callerUser->username, callerUser->host, data->operName);
+				send_notice_to_user(data->agent->nick, callerUser, "String \2%s\2 not found on SPAM list.", spamtext);
+			}
 		}
 		else
 			needSyntax = TRUE;
 
 		if (needSyntax)
-			send_notice_to_user(s_RootSnooper, callerUser, "Syntax: \2SPAM DEL\2 text");
+			send_notice_to_user(data->agent->nick, callerUser, "Syntax: \2SPAM DEL\2 text");
 
 		return;
 	}
@@ -527,17 +552,24 @@ void handle_spam(CSTR source, User *callerUser, ServiceCommandData *data) {
 
 						if ((*err == '\0') && (type >= 0) && (type <= 5)) {
 
-							if (spam->type == type)
-								send_notice_to_user(s_RootSnooper, callerUser, "Type for SPAM string \2%s\2 is already set to \2%d\2.", spam->text, type);
-
-							else {
-
-								send_notice_to_user(s_RootSnooper, callerUser, "Type for SPAM string \2%s\2 is now set to \2%d\2.", spam->text, type);
-
+							if (spam->type == type) {
 								if (data->operMatch)
-									send_SPAMOPS(s_RootSnooper, "\2%s\2 changed type for SPAM string \2%s\2 from \2%d\2 to \2%d\2", source, spam->text, spam->type, type);
+									LOG_SNOOP(data->agent->nick, "%s *SPT %s -- by %s (%s@%s) [Already %d]", data->agent->shortNick, spam->text, callerUser->nick, callerUser->username, callerUser->host, spam->type);
 								else
-									send_SPAMOPS(s_RootSnooper, "\2%s\2 (through \2%s\2) changed type for SPAM string \2%s\2 from \2%d\2 to \2%d\2", source, data->operName, spam->text, spam->type, type);
+									LOG_SNOOP(data->agent->nick, "%s *SPT %s -- by %s (%s@%s) through %s [Already %d]", data->agent->shortNick, spam->text, callerUser->nick, callerUser->username, callerUser->host, data->operName, spam->type);
+								send_notice_to_user(data->agent->nick, callerUser, "Type for SPAM string \2%s\2 is already set to \2%d\2.", spam->text, type);
+							} else {
+								if (data->operMatch) {
+									LOG_SNOOP(data->agent->nick, "%s SPT %s -- by %s (%s@%s) [%d -> %d]", data->agent->shortNick, spam->text, callerUser->nick, callerUser->username, callerUser->host, spam->type, type);
+									log_services(data->agent->logID, "SPT %s -- by %s (%s@%s) [%d -> %d]", spam->text, callerUser->nick, callerUser->username, callerUser->host, spam->type, type);
+									send_SPAMOPS(data->agent->nick, "\2%s\2 changed type for SPAM string \2%s\2 from \2%d\2 to \2%d\2", source, spam->text, spam->type, type);
+								} else {
+									LOG_SNOOP(data->agent->nick, "%s SPT %s -- by %s (%s@%s) through %s [%d -> %d]", data->agent->shortNick, spam->text, callerUser->nick, callerUser->username, callerUser->host, data->operName, spam->type, type);
+									log_services(data->agent->logID, "SPT %s -- by %s (%s@%s) through [%d -> %d]", spam->text, callerUser->nick, callerUser->username, callerUser->host, data->operName, spam->type, type);
+									send_SPAMOPS(data->agent->nick, "\2%s\2 (through \2%s\2) changed type for SPAM string \2%s\2 from \2%d\2 to \2%d\2", source, data->operName, spam->text, spam->type, type);
+								}
+
+								send_notice_to_user(data->agent->nick, callerUser, "Type for SPAM string \2%s\2 is now set to \2%d\2.", spam->text, type);
 
 								spam->type = type;
 
@@ -557,40 +589,56 @@ void handle_spam(CSTR source, User *callerUser, ServiceCommandData *data) {
 
 						case STDVAL_ENABLED:
 
-							if (FlagSet(spam->flags, SPF_ENABLED))
-								send_notice_to_user(s_RootSnooper, callerUser, "SPAM entry for string \2%s\2 is already enabled.", spam->text);
-
-							else {
+							if (FlagSet(spam->flags, SPF_ENABLED)) {
+								if (data->operMatch)
+									LOG_SNOOP(data->agent->nick, "%s *SP! %s -- by %s (%s@%s) [Already enabled]", data->agent->shortNick, spam->text, callerUser->nick, callerUser->username, callerUser->host);
+								else
+									LOG_SNOOP(data->agent->nick, "%s *SP! %s -- by %s (%s@%s) through %s [Already enabled]", data->agent->shortNick, spam->text, callerUser->nick, callerUser->username, callerUser->host, data->operName);
+								send_notice_to_user(data->agent->nick, callerUser, "SPAM entry for string \2%s\2 is already enabled.", spam->text);
+							} else {
 
 								AddFlag(spam->flags, SPF_ENABLED);
 								send_SPAM(spam->text, spam->type, spam->reason);
 
-								send_notice_to_user(s_RootSnooper, callerUser, "SPAM entry for string \2%s\2 has been enabled.", spam->text);
+								if (data->operMatch) {
+									LOG_SNOOP(data->agent->nick, "%s SP! %s -- by %s (%s@%s) [Enabled]", data->agent->shortNick, spam->text, callerUser->nick, callerUser->username, callerUser->host);
+									log_services(data->agent->logID, "SP! %s -- by %s (%s@%s) [Enabled]", spam->text, callerUser->nick, callerUser->username, callerUser->host);
+									send_SPAMOPS(data->agent->nick, "\2%s\2 enabled SPAM entry for string \2%s\2", source, spam->text);
+								} else {
+									LOG_SNOOP(data->agent->nick, "%s SP! %s -- by %s (%s@%s) through %s [Enabled]", data->agent->shortNick, spam->text, callerUser->nick, callerUser->username, callerUser->host, data->operName);
+									log_services(data->agent->logID, "SP! %s -- by %s (%s@%s) through %s [Enabled]", spam->text, callerUser->nick, callerUser->username, callerUser->host, data->operName);
+									send_SPAMOPS(data->agent->nick, "\2%s\2 (through \2%s\2) enabled SPAM entry for string \2%s\2", source, data->operName, spam->text);
+								}
 
-								if (data->operMatch)
-									send_SPAMOPS(s_RootSnooper, "\2%s\2 enabled SPAM entry for string \2%s\2", source, spam->text);
-								else
-									send_SPAMOPS(s_RootSnooper, "\2%s\2 (through \2%s\2) enabled SPAM entry for string \2%s\2", source, data->operName, spam->text);
+								send_notice_to_user(data->agent->nick, callerUser, "SPAM entry for string \2%s\2 has been enabled.", spam->text);
 							}
 							break;
 
 
 						case STDVAL_DISABLED:
 
-							if (FlagUnset(spam->flags, SPF_ENABLED))
-								send_notice_to_user(s_RootSnooper, callerUser, "SPAM entry for string \2%s\2 is already disabled.", spam->text);
-
-							else {
+							if (FlagUnset(spam->flags, SPF_ENABLED)) {
+								if (data->operMatch)
+									LOG_SNOOP(data->agent->nick, "%s *SP! %s -- by %s (%s@%s) [Already disabled]", data->agent->shortNick, spam->text, callerUser->nick, callerUser->username, callerUser->host);
+								else
+									LOG_SNOOP(data->agent->nick, "%s *SP! %s -- by %s (%s@%s) through %s [Already disabled]", data->agent->shortNick, spam->text, callerUser->nick, callerUser->username, callerUser->host, data->operName);
+								send_notice_to_user(data->agent->nick, callerUser, "SPAM entry for string \2%s\2 is already disabled.", spam->text);
+							} else {
 
 								RemoveFlag(spam->flags, SPF_ENABLED);
 								send_UNSPAM(spam->text);
 
-								send_notice_to_user(s_RootSnooper, callerUser, "SPAM entry for string \2%s\2 has been disabled.", spam->text);
+								if (data->operMatch) {
+									LOG_SNOOP(data->agent->nick, "%s SP! %s -- by %s (%s@%s) [Disabled]", data->agent->shortNick, spam->text, callerUser->nick, callerUser->username, callerUser->host);
+									log_services(data->agent->logID, "SP! %s -- by %s (%s@%s) [Disabled]", spam->text, callerUser->nick, callerUser->username, callerUser->host);
+									send_SPAMOPS(data->agent->nick, "\2%s\2 disabled SPAM entry for string \2%s\2", source, spam->text);
+								} else {
+									LOG_SNOOP(data->agent->nick, "%s SP! %s -- by %s (%s@%s) through %s [Disabled]", data->agent->shortNick, spam->text, callerUser->nick, callerUser->username, callerUser->host, data->operName);
+									log_services(data->agent->logID, "SP! %s -- by %s (%s@%s) through %s [Disabled]", spam->text, callerUser->nick, callerUser->username, callerUser->host, data->operName);
+									send_SPAMOPS(data->agent->nick, "\2%s\2 (through \2%s\2) disabled SPAM entry for string \2%s\2", source, data->operName, spam->text);
+								}
 
-								if (data->operMatch)
-									send_SPAMOPS(s_RootSnooper, "\2%s\2 disabled SPAM entry for string \2%s\2", source, spam->text);
-								else
-									send_SPAMOPS(s_RootSnooper, "\2%s\2 (through \2%s\2) disabled SPAM entry for string \2%s\2", source, data->operName, spam->text);
+								send_notice_to_user(data->agent->nick, callerUser, "SPAM entry for string \2%s\2 has been disabled.", spam->text);
 							}
 							break;
 
@@ -601,13 +649,13 @@ void handle_spam(CSTR source, User *callerUser, ServiceCommandData *data) {
 				}
 			}
 			else
-				send_notice_to_user(s_RootSnooper, callerUser, "String \2%s\2 not found on SPAM list.", spamtext);
+				send_notice_to_user(data->agent->nick, callerUser, "String \2%s\2 not found on SPAM list.", spamtext);
 		}
 		else
 			needSyntax = TRUE;
 
 		if (needSyntax)
-			send_notice_to_user(s_RootSnooper, callerUser, "Syntax: \2SPAM SET\2 option value");
+			send_notice_to_user(data->agent->nick, callerUser, "Syntax: \2SPAM SET\2 option value");
 
 		return;
 	}
@@ -619,7 +667,7 @@ void handle_spam(CSTR source, User *callerUser, ServiceCommandData *data) {
 
 		if (IS_NULL(spam_list)) {
 
-			send_notice_to_user(s_RootSnooper, callerUser, "SPAM list is empty.");
+			send_notice_to_user(data->agent->nick, callerUser, "SPAM list is empty.");
 			return;
 		}
 
@@ -652,9 +700,9 @@ void handle_spam(CSTR source, User *callerUser, ServiceCommandData *data) {
 			endIdx = (startIdx + 30);
 
 		if (IS_NULL(pattern))
-			send_notice_to_user(s_RootSnooper, callerUser, "Current SPAM list (showing entries %d-%d):", startIdx, endIdx);
+			send_notice_to_user(data->agent->nick, callerUser, "Current SPAM list (showing entries %d-%d):", startIdx, endIdx);
 		else
-			send_notice_to_user(s_RootSnooper, callerUser, "Current SPAM list (showing entries %d-%d matching %s):", startIdx, endIdx, pattern);
+			send_notice_to_user(data->agent->nick, callerUser, "Current SPAM list (showing entries %d-%d matching %s):", startIdx, endIdx, pattern);
 
 		spam = spam_list;
 
@@ -678,10 +726,10 @@ void handle_spam(CSTR source, User *callerUser, ServiceCommandData *data) {
 
 			lang_format_localtime(timebuf, sizeof(timebuf), GetCallerLang(), TIME_FORMAT_DATETIME, spam->creator.time);
 
-			send_notice_to_user(s_RootSnooper, callerUser, "%d) \2%s\2 [Type: %d] [Reason: %s]",
+			send_notice_to_user(data->agent->nick, callerUser, "%d) \2%s\2 [Type: %d] [Reason: %s]",
 				spamIdx, spam->text, spam->type, spam->reason);
 
-			send_notice_to_user(s_RootSnooper, callerUser, "Set by \2%s\2 on %s.%s",
+			send_notice_to_user(data->agent->nick, callerUser, "Set by \2%s\2 on %s.%s",
 				spam->creator.name, timebuf, FlagUnset(spam->flags, SPF_ENABLED) ? " Currently disabled." : "");
 
 			if (sentIdx >= endIdx)
@@ -690,13 +738,13 @@ void handle_spam(CSTR source, User *callerUser, ServiceCommandData *data) {
 			spam = spam->next;
 		}
 
-		send_notice_to_user(s_RootSnooper, callerUser, "*** \2End of List\2 ***");
+		send_notice_to_user(data->agent->nick, callerUser, "*** \2End of List\2 ***");
 	}
 	else
 		needSyntax = TRUE;
 
 	if (needSyntax)
-		send_notice_to_user(s_RootSnooper, callerUser, "Syntax: \2SPAM\2 ADD|DEL|LIST|SET [text] [type] [reason]");
+		send_notice_to_user(data->agent->nick, callerUser, "Syntax: \2SPAM\2 ADD|DEL|LIST|SET [text] [type] [reason]");
 }
 
 #endif /* USE_SERVICES */

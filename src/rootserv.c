@@ -30,7 +30,6 @@
 #include "../inc/rootserv.h"
 #include "../inc/misc.h"
 #include "../inc/main.h"
-#include "../inc/spam.h"
 #include "../inc/crypt_userhost.h"
 #include "../inc/storage.h"
 
@@ -164,7 +163,6 @@ static ServiceCommand	rootserv_commands_S[] = {
 	{ "SEARCH",		ULEVEL_SRA,		0, handle_search },
 	{ "SET",		ULEVEL_SRA,		0, handle_set },
 	{ "SHUTDOWN",	ULEVEL_SRA,		0, handle_shutdown },
-	{ "SPAM",		ULEVEL_SRA,		0, handle_spam },
 	{ NULL,			0,				0, NULL }
 };
 // 'T' (84 / 19)

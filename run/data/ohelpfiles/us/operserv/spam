@@ -1,4 +1,4 @@
-*** RootServ Operator Help - Command: SPAM ***
+*** OperServ Operator Help - Command: SPAM ***
 Manages the list of strings blocked by the ircd for spam.
  
 Syntax: SPAM ADD text type reason

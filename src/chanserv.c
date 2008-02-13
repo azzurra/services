@@ -2124,24 +2124,24 @@ BOOL check_valid_op(const User *user, ChannelInfo *ci, int serverop) {
 	if (FlagSet(ci->flags, CI_FORBIDDEN) || FlagSet(ci->flags, CI_CLOSED) || FlagSet(ci->flags, CI_FROZEN))
 		return FALSE;
 
-	if (IS_NOT_NULL(user->ni) && FlagSet(user->ni->flags, NI_NEVEROP) && user_is_identified_to(user, user->nick)) {
+	accessLevel = get_access(user, ci, NULL, NULL, NULL);
 
+	if (IS_NOT_NULL(user->ni) && FlagSet(user->ni->flags, NI_NEVEROP) && user_is_identified_to(user, user->nick)) {
 		/* Update this, as the SJOIN will not since we return FALSE. */
-		ci->last_used = NOW;
+		if (accessLevel >= CS_ACCESS_VOP)
+		    ci->last_used = NOW;
 		return FALSE;
 	}
 
 	if (FlagSet(ci->flags, CI_AUTOOP) && FlagUnset(ci->flags, CI_OPGUARD))
 		return TRUE;
 
-	accessLevel = get_access(user, ci, NULL, NULL, NULL);
-
 	if ((accessLevel < CS_ACCESS_AOP) && FlagUnset(ci->flags, CI_OPGUARD) && !serverop)
 		return TRUE;
 
 	if (FlagSet(ci->flags, CI_OPGUARD)) {
 
-		if ((accessLevel >= CS_ACCESS_AOP) || is_services_admin(user))
+		if ((accessLevel >= CS_ACCESS_AOP) || (!serverop && is_services_admin(user)))
 			return TRUE;
 
 		return FALSE;
