@@ -663,13 +663,13 @@ void handle_sxline(CSTR source, User *callerUser, ServiceCommandData *data) {
 					return;
 				}
 
-				send_cmd("UNS%cLINE %s", data->commandName[1], aSXLine->name);
 			}
+			send_cmd("UNS%cLINE 0 :%s", data->commandName[1], aSXLine->name);
 		}
 		else {
 
 			/* Remove it first, in case it's an old one left on some server. */
-			send_cmd("UNS%cLINE %s", data->commandName[1], name);
+			send_cmd("UNS%cLINE 0 :%s", data->commandName[1], name);
 
 			aSXLine = *SXLineList;
 
