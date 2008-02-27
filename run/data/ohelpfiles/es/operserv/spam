@@ -17,4 +17,5 @@ can be one of the following:
  4: String is not blocked, and a notice is sent to #security.
  5: String is blocked, both a GLOBOPS and a notice to #security are sent, and the user is shunned.
  
+This command is limited to Services Administrators.
 *** End of OHelp ***

@@ -756,12 +756,12 @@ static void do_bot(CSTR source, User *callerUser, ServiceCommandData *data) {
 						if (data->operMatch) {
 
 							LOG_SNOOP(s_OperServ, "RS B %s -- by %s (%s@%s) [Host: %s]", bot->nick, callerUser->nick, callerUser->username, callerUser->host, val);
-							log_services(LOG_SERVICES_ROOTSERV, "B %s -- by %s (%s@%s) [User: %s]", bot->nick, callerUser->nick, callerUser->username, callerUser->host, val);
+							log_services(LOG_SERVICES_ROOTSERV, "B %s -- by %s (%s@%s) [Host: %s]", bot->nick, callerUser->nick, callerUser->username, callerUser->host, val);
 						}
 						else {
 
 							LOG_SNOOP(s_OperServ, "RS B %s -- by %s (%s@%s) through %s [Host: %s]", bot->nick, callerUser->nick, callerUser->username, callerUser->host, data->operName, val);
-							log_services(LOG_SERVICES_ROOTSERV, "B %s -- by %s (%s@%s) through %s [User: %s]", bot->nick, callerUser->nick, callerUser->username, callerUser->host, data->operName, val);
+							log_services(LOG_SERVICES_ROOTSERV, "B %s -- by %s (%s@%s) through %s [Host: %s]", bot->nick, callerUser->nick, callerUser->username, callerUser->host, data->operName, val);
 						}
 
 						send_notice_to_user(s_RootServ, callerUser, "\2HOST\2 field of Bot \2%s\2 has been set to \2%s\2.", bot->nick, val);
@@ -800,13 +800,13 @@ static void do_bot(CSTR source, User *callerUser, ServiceCommandData *data) {
 
 						if (data->operMatch) {
 
-							LOG_SNOOP(s_OperServ, "RS B %s -- by %s (%s@%s) [User: %s]", bot->nick, callerUser->nick, callerUser->username, callerUser->host, val);
-							log_services(LOG_SERVICES_ROOTSERV, "B %s -- by %s (%s@%s) [User: %s]", bot->nick, callerUser->nick, callerUser->username, callerUser->host, val);
+							LOG_SNOOP(s_OperServ, "RS B %s -- by %s (%s@%s) [Host2: %s]", bot->nick, callerUser->nick, callerUser->username, callerUser->host, val);
+							log_services(LOG_SERVICES_ROOTSERV, "B %s -- by %s (%s@%s) [Host2: %s]", bot->nick, callerUser->nick, callerUser->username, callerUser->host, val);
 						}
 						else {
 
-							LOG_SNOOP(s_OperServ, "RS B %s -- by %s (%s@%s) through %s [User: %s]", bot->nick, callerUser->nick, callerUser->username, callerUser->host, data->operName, val);
-							log_services(LOG_SERVICES_ROOTSERV, "B %s -- by %s (%s@%s) through %s [User: %s]", bot->nick, callerUser->nick, callerUser->username, callerUser->host, data->operName, val);
+							LOG_SNOOP(s_OperServ, "RS B %s -- by %s (%s@%s) through %s [Host2: %s]", bot->nick, callerUser->nick, callerUser->username, callerUser->host, data->operName, val);
+							log_services(LOG_SERVICES_ROOTSERV, "B %s -- by %s (%s@%s) through %s [Host2: %s]", bot->nick, callerUser->nick, callerUser->username, callerUser->host, data->operName, val);
 						}
 
 						send_notice_to_user(s_RootServ, callerUser, "\2HOST2\2 field of Bot \2%s\2 has been set to \2%s\2.", bot->nick, val);
@@ -830,12 +830,12 @@ static void do_bot(CSTR source, User *callerUser, ServiceCommandData *data) {
 						if (data->operMatch) {
 
 							LOG_SNOOP(s_OperServ, "RS B %s -- by %s (%s@%s) [Server: %s -> %s]", bot->nick, callerUser->nick, callerUser->username, callerUser->host, bot->server, val);
-							log_services(LOG_SERVICES_ROOTSERV, "B %s -- by %s (%s@%s) [User: %s -> %s]", bot->nick, callerUser->nick, callerUser->username, callerUser->host, bot->server, val);
+							log_services(LOG_SERVICES_ROOTSERV, "B %s -- by %s (%s@%s) [Server: %s -> %s]", bot->nick, callerUser->nick, callerUser->username, callerUser->host, bot->server, val);
 						}
 						else {
 
 							LOG_SNOOP(s_OperServ, "RS B %s -- by %s (%s@%s) through %s [Server: %s -> %s]", bot->nick, callerUser->nick, callerUser->username, callerUser->host, data->operName, bot->server, val);
-							log_services(LOG_SERVICES_ROOTSERV, "B %s -- by %s (%s@%s) through %s [User: %s -> %s]", bot->nick, callerUser->nick, callerUser->username, callerUser->host, data->operName, bot->server, val);
+							log_services(LOG_SERVICES_ROOTSERV, "B %s -- by %s (%s@%s) through %s [Server: %s -> %s]", bot->nick, callerUser->nick, callerUser->username, callerUser->host, data->operName, bot->server, val);
 
 						}
 
@@ -847,12 +847,12 @@ static void do_bot(CSTR source, User *callerUser, ServiceCommandData *data) {
 						if (data->operMatch) {
 
 							LOG_SNOOP(s_OperServ, "RS B %s -- by %s (%s@%s) [Server: %s]", bot->nick, callerUser->nick, callerUser->username, callerUser->host, val);
-							log_services(LOG_SERVICES_ROOTSERV, "B %s -- by %s (%s@%s) [User: %s]", bot->nick, callerUser->nick, callerUser->username, callerUser->host, val);
+							log_services(LOG_SERVICES_ROOTSERV, "B %s -- by %s (%s@%s) [Server: %s]", bot->nick, callerUser->nick, callerUser->username, callerUser->host, val);
 						}
 						else {
 
 							LOG_SNOOP(s_OperServ, "RS B %s -- by %s (%s@%s) through %s [Server: %s]", bot->nick, callerUser->nick, callerUser->username, callerUser->host, data->operName, val);
-							log_services(LOG_SERVICES_ROOTSERV, "B %s -- by %s (%s@%s) through %s [User: %s]", bot->nick, callerUser->nick, callerUser->username, callerUser->host, data->operName, val);
+							log_services(LOG_SERVICES_ROOTSERV, "B %s -- by %s (%s@%s) through %s [Server: %s]", bot->nick, callerUser->nick, callerUser->username, callerUser->host, data->operName, val);
 						}
 
 						send_notice_to_user(s_RootServ, callerUser, "\2SERVER\2 field of Bot \2%s\2 has been set to \2%s\2.", bot->nick, val);
@@ -876,12 +876,12 @@ static void do_bot(CSTR source, User *callerUser, ServiceCommandData *data) {
 						if (data->operMatch) {
 
 							LOG_SNOOP(s_OperServ, "RS B %s -- by %s (%s@%s) [Server2: %s -> %s]", bot->nick, callerUser->nick, callerUser->username, callerUser->host, bot->server2, val);
-							log_services(LOG_SERVICES_ROOTSERV, "B %s -- by %s (%s@%s) [User: %s -> %s]", bot->nick, callerUser->nick, callerUser->username, callerUser->host, bot->server2, val);
+							log_services(LOG_SERVICES_ROOTSERV, "B %s -- by %s (%s@%s) [Server2: %s -> %s]", bot->nick, callerUser->nick, callerUser->username, callerUser->host, bot->server2, val);
 						}
 						else {
 
 							LOG_SNOOP(s_OperServ, "RS B %s -- by %s (%s@%s) through %s [Server2: %s -> %s]", bot->nick, callerUser->nick, callerUser->username, callerUser->host, data->operName, bot->server2, val);
-							log_services(LOG_SERVICES_ROOTSERV, "B %s -- by %s (%s@%s) through %s [User: %s -> %s]", bot->nick, callerUser->nick, callerUser->username, callerUser->host, data->operName, bot->server2, val);
+							log_services(LOG_SERVICES_ROOTSERV, "B %s -- by %s (%s@%s) through %s [Server2: %s -> %s]", bot->nick, callerUser->nick, callerUser->username, callerUser->host, data->operName, bot->server2, val);
 						}
 
 						send_notice_to_user(s_RootServ, callerUser, "\2SERVER2\2 field of Bot \2%s\2 has been changed from \2%s\2 to \2%s\2.", bot->nick, bot->server2, val);

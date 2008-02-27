@@ -690,6 +690,7 @@ void nickserv_daily_expire() {
 
 				ni->last_drop_request = 0;
 				ni->auth = 0;
+				RemoveFlag(ni->flags, NI_DROP);
 			}
 
 			if (FlagSet(ni->flags, NI_NOMAIL))

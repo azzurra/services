@@ -337,16 +337,22 @@ int match_access(Access *anAccess, CSTR user, CSTR host, CSTR server) {
 
 /*********************************************************/
 
-int check_access(Access *accessList, CSTR nick, CSTR user, CSTR host, CSTR server, time_t tsinfo) {
+int check_access(Access *accessList, CSTR nick, CSTR user, CSTR host, CSTR server, time_t tsinfo, Access **userAccess) {
 
 	Access *anAccess = find_access(accessList, nick);
 
 	TRACE_FCLT(FACILITY_ACCESS_CHECK_ACCESS);
 
+	if (IS_NOT_NULL(userAccess))
+		*userAccess = NULL;
+
 	if (IS_NULL(anAccess))
 		return AC_RESULT_NOTFOUND;
 
 	if (match_access(anAccess, user, host, server)) {
+
+		if (IS_NOT_NULL(userAccess))
+			*userAccess = anAccess;
 
 		#ifdef USE_SERVICES
 		if ((anAccess->modes_on != 0) || (anAccess->modes_off != 0))

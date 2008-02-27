@@ -75,11 +75,11 @@ extern char s_OperServ[NICKSIZE];
 extern char s_RootServ[NICKSIZE];
 extern char s_GlobalNoticer[NICKSIZE];
 extern char s_NS[3];
-char s_CS[3];
-char s_MS[3];
-char s_HS[3];
-char s_OS[3];
-char s_RS[3];
+extern char s_CS[3];
+extern char s_MS[3];
+extern char s_HS[3];
+extern char s_OS[3];
+extern char s_RS[3];
 
 extern time_t CONF_TIMEOUT_CHECK;
 #ifndef NEW_SOCK

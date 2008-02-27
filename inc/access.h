@@ -88,7 +88,7 @@ extern BOOL send_access_info(Access *accessList, CSTR nick, CSTR sourceNick, con
 extern int access_remove(Access **accessList, CSTR nick, char *removed);
 extern Access *access_add(Access **accessList, CSTR nick, CSTR creator);
 extern int match_access(Access *anAccess, CSTR user, CSTR host, CSTR server);
-extern int check_access(Access *accessList, CSTR nick, CSTR user, CSTR host, CSTR server, time_t signon);
+extern int check_access(Access *accessList, CSTR nick, CSTR user, CSTR host, CSTR server, time_t signon, Access **userAccess);
 extern Access *find_access(Access *accessList, CSTR nick);
 extern void free_access_list(Access *accessList, int *ListLoadComplete);
 extern BOOL access_db_save(Access *accessList, CSTR database, int ListLoadComplete);

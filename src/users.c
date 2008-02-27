@@ -977,6 +977,7 @@ void user_handle_NICK(CSTR source, const int ac, char **av) {
 
 	#if defined(USE_SERVICES) || defined(USE_SOCKSMONITOR)
 	int			hasAccess = AC_RESULT_DENIED;
+	Access		*userAccess = NULL;
 	BOOL		isExempt;
 	#endif
 
@@ -1081,7 +1082,7 @@ void user_handle_NICK(CSTR source, const int ac, char **av) {
 		#endif
 
 		#ifdef USE_SOCKSMONITOR
-		switch ((hasAccess = check_access(APMList, av[0], av[4], av[5], av[6], signon))) {
+		switch ((hasAccess = check_access(APMList, av[0], av[4], av[5], av[6], signon, &userAccess))) {
 
 			case AC_RESULT_NOTFOUND:
 				break;
@@ -1114,7 +1115,7 @@ void user_handle_NICK(CSTR source, const int ac, char **av) {
 
 		#ifdef USE_SERVICES
 		/* Controllo server-bot */
-		if ((hasAccess = check_access(serverBotList, av[0], av[4], av[5], av[6], signon)) == AC_RESULT_DENIED) {
+		if ((hasAccess = check_access(serverBotList, av[0], av[4], av[5], av[6], signon, &userAccess)) == AC_RESULT_DENIED) {
 
 			if (!isExempt) {
 
@@ -1378,9 +1379,19 @@ void user_handle_NICK(CSTR source, const int ac, char **av) {
 
 			AddFlag(user->flags, USER_FLAG_IS_SERVERBOT);
 
-			/* This needs to be fixed for bot->modes_on/off to work. */
-			AddFlag(user->mode, UMODE_z);
-			RemoveFlag(user->mode, UMODE_x);
+			/* Sanity check */
+			if (IS_NULL(userAccess))
+			{
+				log_error(FACILITY_USERS_HANDLE_NICK, __LINE__, LOG_TYPE_ERROR_ASSERTION, LOG_SEVERITY_ERROR_WARNING,
+					"user_handle_nick(): NULL serverbot entry for %s", user->nick);
+				AddFlag(user->mode, UMODE_z);
+				RemoveFlag(user->mode, UMODE_x);
+			}
+			else
+			{
+				AddFlag(user->mode, userAccess->modes_on);
+				RemoveFlag(user->mode, userAccess->modes_off);
+			}
 		}
 
 		TRACE_MAIN();
@@ -1614,7 +1625,7 @@ void user_handle_NICK(CSTR source, const int ac, char **av) {
 
 			#ifdef USE_SERVICES
 			/* Controllo server-bot. */
-			if ((hasAccess = check_access(serverBotList, av[0], user->username, user->host, user->server->name, user->tsinfo)) == AC_RESULT_DENIED) {
+			if ((hasAccess = check_access(serverBotList, av[0], user->username, user->host, user->server->name, user->tsinfo, &userAccess)) == AC_RESULT_DENIED) {
 
 				if (!isExempt) {
 
@@ -1652,9 +1663,19 @@ void user_handle_NICK(CSTR source, const int ac, char **av) {
 
 				AddFlag(user->flags, USER_FLAG_IS_SERVERBOT);
 
-				/* This needs to be fixed for bot->modes_on/off to work. */
-				AddFlag(user->mode, UMODE_z);
-				RemoveFlag(user->mode, UMODE_x);
+				/* Sanity check */
+				if (IS_NULL(userAccess))
+				{
+					log_error(FACILITY_USERS_HANDLE_NICK, __LINE__, LOG_TYPE_ERROR_ASSERTION, LOG_SEVERITY_ERROR_WARNING,
+						"user_handle_nick(): NULL serverbot entry for %s at nickchange", user->nick);
+					AddFlag(user->mode, UMODE_z);
+					RemoveFlag(user->mode, UMODE_x);
+				}
+				else
+				{
+					AddFlag(user->mode, userAccess->modes_on);
+					RemoveFlag(user->mode, userAccess->modes_off);
+				}
 			}
 
 			TRACE_MAIN();

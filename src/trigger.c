@@ -529,7 +529,7 @@ void handle_trigger(CSTR source, User *callerUser, ServiceCommandData *data) {
 
 			if (IS_NULL(ExemptList)) {
 
-				send_notice_to_user(s_OperServ, callerUser, "The Trigger List is empty.");
+				send_notice_to_user(s_OperServ, callerUser, "The Trigger Exempt List is empty.");
 				return;
 			}
 
@@ -600,7 +600,9 @@ void handle_trigger(CSTR source, User *callerUser, ServiceCommandData *data) {
 
 			send_notice_to_user(s_OperServ, callerUser, "\2*** End of List ***\2");
 		}
-		else if (str_equals_nocase(command, "ADD")) {
+		else if (!CheckOperAccess(data->userLevel, CMDLEVEL_SOP))
+			send_notice_lang_to_user(s_OperServ, callerUser, GetCallerLang(), OPER_ERROR_ACCESS_DENIED);
+		else if (str_equals_nocase(action, "ADD")) {
 
 			char *realname, *reason;
 			Exempt *anExempt;
