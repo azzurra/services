@@ -1,0 +1,10 @@
+syntax: glob
+
+tags
+*.o
+*.swp
+src/services
+run/*.db
+Makefile.inc
+inc/sysconf.h
+configure.log
