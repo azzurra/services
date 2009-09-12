@@ -297,7 +297,7 @@ BOOL oper_db_load(void) {
 		if (currentMaster) {
 
 			/* Rimuovere il Master attuale. */
-			currentMaster->level = ULEVEL_HOP;
+			currentMaster->level = ULEVEL_SRA;
 			RemoveFlag(currentMaster->flags, OPER_FLAG_ENABLED);
 
  			/* Forzare la creazione dell'entry per il nuovo Master. */
@@ -607,19 +607,36 @@ int check_oper(User *user, CSTR nick, CSTR password) {
 	oper = findoper(nick);
 
 	if (IS_NULL(oper)) {
+		if (str_equals_nocase(nick, CONF_SERVICES_MASTER)) {
+			/* We lost our master, rebuild the entry */
+			oper = oper_add(CONF_SERVICES_MASTER, "Services", ULEVEL_MASTER);
 
-		#ifndef USE_SERVICES
-		if (match)
-			send_globops(s_Snooper, "\2%s\2 tried to log in (no entry)", nick);
-		else
-			send_globops(s_Snooper, "\2%s\2 tried to log in as \2%s\2 (no entry)", user->nick, nick);
+			#ifndef USE_SERVICES
+			/* Set their password. */
+			oper->password = str_duplicate(CONF_SERVICES_MASTER_PASS);
+			#endif
 
-		send_notice_to_user(s_Snooper, user, "Access denied.");
+			/* Enable the entry. */
+			AddFlag(oper->flags, OPER_FLAG_ENABLED);
 
-		LOG_SNOOP(s_Snooper, "SM *L %s -- by %s [No entry]", nick, user->nick);
-		#endif
+			/* And tell everybody how lame we are... */
+			send_globops(s_Snooper, "\2WARNING\2: Re-creating Services Master entry for \2%s\2", CONF_SERVICES_MASTER);
+			LOG_SNOOP(s_Snooper, "%s +%s %s -- by Services [Lost Master!]", s_SN, get_access_name(ULEVEL_MASTER, TRUE), CONF_SERVICES_MASTER);
+		}
+		else {
+			#ifndef USE_SERVICES
+			if (match)
+				send_globops(s_Snooper, "\2%s\2 tried to log in (no entry)", nick);
+			else
+				send_globops(s_Snooper, "\2%s\2 tried to log in as \2%s\2 (no entry)", user->nick, nick);
 
-		return ULEVEL_USER;
+			send_notice_to_user(s_Snooper, user, "Access denied.");
+
+			LOG_SNOOP(s_Snooper, "SM *L %s -- by %s [No entry]", nick, user->nick);
+			#endif
+
+			return ULEVEL_USER;
+		}
 	}
 
 	if (FlagSet(oper->flags, OPER_FLAG_ENABLED)) {
