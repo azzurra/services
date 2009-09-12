@@ -1476,7 +1476,6 @@ void expire_chans() {
 				&& (expire_limit >= ci->last_used - (ONE_DAY * CONF_SEND_REMINDER)) && FlagUnset(ci->flags, CI_CLOSED)
 				&& FlagUnset(ci->flags, CI_HELDCHAN) && FlagUnset(ci->flags, CI_FROZEN)) {
 
-				char timebuf[64];
 				FILE *mailfile;
 
 				AddFlag(ci->flags, CI_REMIND);
@@ -1487,9 +1486,6 @@ void expire_chans() {
 
 				if (IS_NOT_NULL(mailfile = fopen("csremind.txt", "w"))) {
 
-					lang_format_localtime(timebuf, sizeof(timebuf), GetCallerLang(), TIME_FORMAT_MAILTIME, NOW);
-
-					fprintf(mailfile, "Date: %s\n", timebuf);
 					fprintf(mailfile, "From: %s <%s>\n", CONF_NETWORK_NAME, CONF_RETURN_EMAIL);
 					fprintf(mailfile, "To: %s\n", ni->email);
 
@@ -3395,11 +3391,6 @@ static void do_sendcode(CSTR source, User *callerUser, ServiceCommandData *data)
 	
 	if (IS_NOT_NULL(mailfile = fopen("senddrop.txt", "w"))) {
 
-		char timebuf[64];
-
-		lang_format_localtime(timebuf, sizeof(timebuf), GetCallerLang(), TIME_FORMAT_MAILTIME, NOW);
-
-		fprintf(mailfile, "Date: %s\n", timebuf);
 		fprintf(mailfile, "From: %s <%s>\n", CONF_NETWORK_NAME, CONF_RETURN_EMAIL);
 		fprintf(mailfile, "To: %s\n", ni->email);
 
@@ -3530,11 +3521,6 @@ static void do_drop(CSTR source, User *callerUser, ServiceCommandData *data) {
 
 				if (IS_NOT_NULL(mailfile = fopen("chandrop.txt", "w"))) {
 
-					char timebuf[64];
-
-					lang_format_localtime(timebuf, sizeof(timebuf), GetCallerLang(), TIME_FORMAT_MAILTIME, NOW);
-
-					fprintf(mailfile, "Date: %s\n", timebuf);
 					fprintf(mailfile, "From: %s <%s>\n", CONF_NETWORK_NAME, CONF_RETURN_EMAIL);
 					fprintf(mailfile, "To: %s\n", ni->email);
 
@@ -9427,9 +9413,6 @@ static void do_sendpass(CSTR source, User *callerUser, ServiceCommandData *data)
 
 			char timebuf[64];
 
-			lang_format_localtime(timebuf, sizeof(timebuf), GetCallerLang(), TIME_FORMAT_MAILTIME, NOW);
-
-			fprintf(mailfile, "Date: %s\n", timebuf);
 			fprintf(mailfile, "From: %s <%s>\n", CONF_NETWORK_NAME, CONF_RETURN_EMAIL);
 			fprintf(mailfile, "To: %s\n", ni->email);
 

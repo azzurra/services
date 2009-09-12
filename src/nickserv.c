@@ -607,11 +607,6 @@ void expire_nicks() {
 
 				if (IS_NOT_NULL(mailfile = fopen("nsremind.txt", "w"))) {
 
-					char timebuf[64];
-
-					lang_format_localtime(timebuf, sizeof(timebuf), GetCallerLang(), TIME_FORMAT_MAILTIME, NOW);
-
-					fprintf(mailfile, "Date: %s\n", timebuf);
 					fprintf(mailfile, "From: %s <%s>\n", CONF_NETWORK_NAME, CONF_RETURN_EMAIL);
 					fprintf(mailfile, "To: %s\n", ni->email);
 
@@ -1506,11 +1501,6 @@ static void do_register(CSTR source, User *callerUser, ServiceCommandData *data)
 
 			if (IS_NOT_NULL(mailfile = fopen("authnick.txt", "w"))) {
 
-				char timebuf[64];
-
-				lang_format_localtime(timebuf, sizeof(timebuf), GetCallerLang(), TIME_FORMAT_MAILTIME, NOW);
-
-				fprintf(mailfile, "Date: %s\n", timebuf);
 				fprintf(mailfile, "From: %s <%s>\n", CONF_NETWORK_NAME, CONF_RETURN_EMAIL);
 				fprintf(mailfile, "To: %s\n", callerUser->ni->email);
 
@@ -1953,11 +1943,6 @@ static void do_drop(CSTR source, User *callerUser, ServiceCommandData *data) {
 
 				if (IS_NOT_NULL(mailfile = fopen("nickdrop.txt", "w"))) {
 
-					char timebuf[64];
-
-					lang_format_localtime(timebuf, sizeof(timebuf), GetCallerLang(), TIME_FORMAT_MAILTIME, NOW);
-
-					fprintf(mailfile, "Date: %s\n", timebuf);
 					fprintf(mailfile, "From: %s <%s>\n", CONF_NETWORK_NAME, CONF_RETURN_EMAIL);
 					fprintf(mailfile, "To: %s\n", ni->email);
 
@@ -2430,9 +2415,6 @@ static void do_set_email(const User *callerUser, CSTR param, BOOL hasmail) {
 
 				char timebuf[64];
 
-				lang_format_localtime(timebuf, sizeof(timebuf), GetCallerLang(), TIME_FORMAT_MAILTIME, NOW);
-
-				fprintf(mailfile, "Date: %s\n", timebuf);
 				fprintf(mailfile, "From: %s <%s>\n", CONF_NETWORK_NAME, CONF_RETURN_EMAIL);
 				fprintf(mailfile, "To: %s\n", ni->email);
 
@@ -3639,9 +3621,6 @@ static void do_sendcode(CSTR source, User *callerUser, ServiceCommandData *data)
 
 			char timebuf[64];
 
-			lang_format_localtime(timebuf, sizeof(timebuf), GetCallerLang(), TIME_FORMAT_MAILTIME, NOW);
-
-			fprintf(mailfile, "Date: %s\n", timebuf);
 			fprintf(mailfile, "From: %s <%s>\n", CONF_NETWORK_NAME, CONF_RETURN_EMAIL);
 			fprintf(mailfile, "To: %s\n", ni->email);
 
@@ -3752,9 +3731,6 @@ static void do_sendpass(CSTR source, User *callerUser, ServiceCommandData *data)
 
 			char timebuf[64];
 
-			lang_format_localtime(timebuf, sizeof(timebuf), GetCallerLang(), TIME_FORMAT_MAILTIME, NOW);
-
-			fprintf(mailfile, "Date: %s\n", timebuf);
 			fprintf(mailfile, "From: %s <%s>\n", CONF_NETWORK_NAME, CONF_RETURN_EMAIL);
 			fprintf(mailfile, "To: %s\n", ni->email);
 

@@ -856,9 +856,6 @@ static void email_memo(NickInfo *ni, Memo *memo) {
 		char timebuf[64];
 
 		TRACE_MAIN();
-		lang_format_localtime(timebuf, sizeof(timebuf), GetNickLang(ni), TIME_FORMAT_MAILTIME, memo->time);
-
-		fprintf(memofile, "Date: %s\n", timebuf);
 		fprintf(memofile, "From: %s <%s>\n", CONF_NETWORK_NAME, CONF_RETURN_EMAIL);
 		fprintf(memofile, "To: %s\n", ni->email);
 
