@@ -332,7 +332,7 @@ void chan_handle_SJOIN(CSTR source, const int ac, char **av) {
 
 		#ifdef USE_SERVICES
 		memset(checklist, 0, sizeof(checklist));
-		memset(deoplist, 0, sizeof(checklist));
+		memset(deoplist, 0, sizeof(deoplist));
 		#endif
 
 		/* Variable initializations, sanity checks. */
