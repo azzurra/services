@@ -315,6 +315,7 @@ SOCKET_RESULT socket_read(char *buffer, long int len) {
 	char			*ptr;
 
 
+	FD_ZERO(&fds);
 	FD_SET(SERVER_SOCKET, &fds);
 
 	tv.tv_sec = ReadTimeout;
