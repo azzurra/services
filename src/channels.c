@@ -3472,7 +3472,7 @@ void handle_masscmds(CSTR source, User *callerUser, ServiceCommandData *data) {
 
 		chan_clear_bans(chan);
 
-		send_notice_lang_to_user(data->agent->nick, callerUser, GetCallerLang(), CS_UNBAN_ALL_BANS_LIFTED, ci->name);
+		send_notice_lang_to_user(data->agent->nick, callerUser, GetCallerLang(), CS_UNBAN_ALL_BANS_LIFTED, chan_name);
 
 		if (isChanServ) {
 
@@ -3566,7 +3566,7 @@ void handle_masscmds(CSTR source, User *callerUser, ServiceCommandData *data) {
 		}
 
 		TRACE_MAIN();
-		send_notice_lang_to_user(data->agent->nick, callerUser, GetCallerLang(), CS_CLEAR_MODES_CLEARED, ci->name);
+		send_notice_lang_to_user(data->agent->nick, callerUser, GetCallerLang(), CS_CLEAR_MODES_CLEARED, chan_name);
 
 		if (isChanServ) {
 
