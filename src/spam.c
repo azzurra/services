@@ -205,11 +205,12 @@ void spam_init(void) {
 
 
 void spam_terminate(void) {
+	SpamItem *spam;
 
 	while (IS_NOT_NULL(spam_list)) {
-
+		spam = spam_list;
 		spam_list_remove(spam_list);
-		spam_delete(spam_list);
+		spam_delete(spam);
 	}
 }
 
