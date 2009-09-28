@@ -4,7 +4,14 @@ tags
 *.o
 *.swp
 src/services
-run/*.db
+run/services
+run/*.conf
+run/crypt.key
+run/services.motd
+run/data/logs/*
+run/data/*.db
+run/data/services.core-*
+run/data/services-*
 Makefile.inc
 inc/sysconf.h
 configure.log

@@ -436,7 +436,7 @@ static void cs_translate_entry(void *chan, ChannelInfo *new_chan, int ver)
 		new_chan->last_drop_request = ci->last_drop_request;
 		new_chan->langID = ci->langID;
 		new_chan->banType = ci->banType;
-		str_copy_checked(ci->reserved, new_chan->reserved, 2);
+		memset(new_chan->reserved, 0, sizeof(new_chan->reserved));
 	    }
 	    break;
 
@@ -11828,7 +11828,7 @@ void chanserv_ds_dump(CSTR sourceNick, const User *callerUser, STR request) {
 					send_notice_to_user(sourceNick, callerUser, "Settings: %d",										ci->settings);
 					send_notice_to_user(sourceNick, callerUser, "Real founder: 0x%08X \2[\2%s\2]\2",				(unsigned long)ci->real_founder, str_get_valid_display_value(ci->real_founder));
 					send_notice_to_user(sourceNick, callerUser, "Ban Type: %d",										(int)ci->banType);
-					send_notice_to_user(sourceNick, callerUser, "reserved[2]: %d %d",								ci->reserved[1], ci->reserved[2]);
+					send_notice_to_user(sourceNick, callerUser, "reserved[2]: %d %d",								ci->reserved[0], ci->reserved[1]);
 					send_notice_to_user(sourceNick, callerUser, "Next / previous record: 0x%08X / 0x%08X",			(unsigned long)ci->next, (unsigned long)ci->prev);
 
 					LOG_DEBUG_SNOOP("Command: DUMP CHANSERV CHAN %s -- by %s (%s@%s)", value, callerUser->nick, callerUser->username, callerUser->host);

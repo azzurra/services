@@ -105,7 +105,7 @@ BOOL synched = FALSE;
  *********************************************************/
 
 /* When should we backup our databases? */
-static int global_force_backup_count = 0;
+int global_force_backup_count = 0;
 
 /* Contains a message as to why services is terminating */
 static char QUIT_MESSAGE[BUFSIZE];
