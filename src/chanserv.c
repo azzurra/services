@@ -2109,7 +2109,7 @@ BOOL check_valid_op(const User *user, ChannelInfo *ci, int serverop) {
 	if (IS_NULL(user))
 		return FALSE;
 
-	if (IS_NULL(ci) || user_is_services_agent(user) || is_services_root(user))
+	if (IS_NULL(ci) || user_is_services_agent(user))
 		return TRUE;
 
 	/* Shouldn't happen because of chanserv_check_user_join(), but you never know. */

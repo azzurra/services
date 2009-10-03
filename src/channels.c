@@ -1474,8 +1474,9 @@ static __inline__ BOOL enforce_opguard(Channel *chan, const User *callerUser, co
 	if (!check_valid_op(targetUser, chan->ci, FALSE))
 		return TRUE;
 
-	/* ...or if who gave the ops is not an op and didn't use /samode (race condition on join). */
-	if (FlagUnset(callerUser->mode, UMODE_a) && !user_is_chanop(callerUser->nick, chan->name, chan))
+	/* ...or if who gave the ops is not an op and didn't use /samode and isn't a services agent (race condition on join). */
+	if (FlagUnset(callerUser->mode, UMODE_a) && FlagUnset(callerUser->mode, UMODE_z)
+	&& !user_is_chanop(callerUser->nick, chan->name, chan))
 		return TRUE;
 
 	return FALSE;
