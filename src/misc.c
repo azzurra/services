@@ -273,10 +273,12 @@ BOOL validate_tld(CSTR tld, BOOL allowFW) {
 
 		case 3:
 			return ( str_equals_nocase(tld, "com") || str_equals_nocase(tld, "org") ||
-					 str_equals_nocase(tld, "net") || str_equals_nocase(tld, "biz") ||
-					 str_equals_nocase(tld, "edu") || str_equals_nocase(tld, "int") ||
-					 str_equals_nocase(tld, "mil") || str_equals_nocase(tld, "gov") ||
-					 str_equals_nocase(tld, "thc") );
+					 str_equals_nocase(tld, "cat") || str_equals_nocase(tld, "net") ||
+					 str_equals_nocase(tld, "biz") || str_equals_nocase(tld, "edu") ||
+					 str_equals_nocase(tld, "int") || str_equals_nocase(tld, "mil") ||
+					 str_equals_nocase(tld, "gov") || str_equals_nocase(tld, "thc") ||
+			      		 str_equals_nocase(tld, "lan") || str_equals_nocase(tld, "pro") ||
+					 str_equals_nocase(tld, "tel"));
 
 		case 2: {
 			switch (str_char_tolower(tld[0])) {
@@ -298,6 +300,7 @@ BOOL validate_tld(CSTR tld, BOOL allowFW) {
 						case 't':
 						case 'u':
 						case 'w':
+						case 'x':
 						case 'z':
 							return TRUE;
 
@@ -316,6 +319,7 @@ BOOL validate_tld(CSTR tld, BOOL allowFW) {
 						case 'h':
 						case 'i':
 						case 'j':
+						case 'l':
 						case 'm':
 						case 'n':
 						case 'o':
@@ -410,6 +414,7 @@ BOOL validate_tld(CSTR tld, BOOL allowFW) {
 				case 'g':
 					switch (str_char_tolower(tld[1])) {
 						case 'a':
+						case 'b':
 						case 'd':
 						case 'e':
 						case 'f':
@@ -520,6 +525,8 @@ BOOL validate_tld(CSTR tld, BOOL allowFW) {
 						case 'a':
 						case 'c':
 						case 'd':
+						case 'e':
+						case 'f':
 						case 'g':
 						case 'h':
 						case 'k':
@@ -595,10 +602,19 @@ BOOL validate_tld(CSTR tld, BOOL allowFW) {
 							return FALSE;
 					}
 
+				case 'q':
+					switch (str_char_tolower(tld[1])) {
+						case 'a':
+							return TRUE;
+						default:
+							return FALSE;
+					}
+
 				case 'r':
 					switch (str_char_tolower(tld[1])) {
 						case 'e':
 						case 'o':
+						case 's':
 						case 'u':
 						case 'w':
 							return TRUE;
@@ -625,6 +641,7 @@ BOOL validate_tld(CSTR tld, BOOL allowFW) {
 						case 'o':
 						case 'r':
 						case 't':
+						case 'u':
 						case 'v':
 						case 'y':
 						case 'z':
@@ -643,6 +660,7 @@ BOOL validate_tld(CSTR tld, BOOL allowFW) {
 						case 'h':
 						case 'j':
 						case 'k':
+						case 'l':
 						case 'm':
 						case 'n':
 						case 'o':
@@ -702,7 +720,6 @@ BOOL validate_tld(CSTR tld, BOOL allowFW) {
 					switch (str_char_tolower(tld[1])) {
 						case 'e':
 						case 't':
-						case 'u':
 							return TRUE;
 
 						default:
