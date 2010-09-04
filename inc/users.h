@@ -29,7 +29,7 @@
 #include "chanserv.h"
 #include "nickserv.h"
 #include "servers.h"
-
+#include <arpa/inet.h>
 
 /*********************************************************
  * Data types                                            *
@@ -65,7 +65,8 @@ struct _User {
 	Server					*server;	/* Pointer to the server struct the user is on. */
 
 	#ifdef ENABLE_CAPAB_NICKIP
-	unsigned long int		ip;
+	unsigned long int			ip;
+	unsigned char				ipv6[sizeof(struct in6_addr)];
 	#endif
 
 	time_t					tsinfo;			/* User's tsinfo, used for SVSMODE etc. */
@@ -136,14 +137,15 @@ struct _user_alt_list_item {
 #define USER_FLAG_AGENT			0x00000002
 #define USER_FLAG_HAS_IPV6		0x00000004
 #define USER_FLAG_IS_APM		0x00000008
-#define USER_FLAG_IS_SERVERBOT	0x00000010
+#define USER_FLAG_IS_SERVERBOT		0x00000010
 #define USER_FLAG_BOTTLER		0x00000020		/* User has been scanned for Bottler. */
 #define USER_FLAG_ISBOTTLER		0x00000040		/* User is a Bottler and will be autokilled. */
-#define USER_FLAG_EMPTYFINGER	0x00000080
-#define USER_FLAG_EMPTYUSERINFO	0x00000100
+#define USER_FLAG_EMPTYFINGER		0x00000080
+#define USER_FLAG_EMPTYUSERINFO		0x00000100
 #define USER_FLAG_FLOODER		0x00000200
 #define USER_FLAG_PASSHACK		0x00000400
-
+#define USER_FLAG_6TO4			0x00000800
+#define USER_FLAG_TEREDO		0x00001000
 
 // Users lists index validation
 #define FIRST_VALID_NICK_CHAR	65

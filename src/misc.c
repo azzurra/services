@@ -1950,6 +1950,35 @@ char *get_ip_r(char *buffer, size_t len, unsigned long int ip) {
 
 
 /*********************************************************
+ * get_ip6()                                             *
+ *                                                       *
+ * Take an ip6 in net byte order and return a readable   *
+ * output in standard internet format.                   *
+ *********************************************************/
+
+char *get_ip6(const unsigned char *ip6) {
+
+        static char buffer[INET6_ADDRSTRLEN];
+
+        inet_ntop(AF_INET6, ip6, buffer, INET6_ADDRSTRLEN);
+        return buffer;
+}
+
+
+/*********************************************************
+ * get_ip6_r()                                           *
+ *                                                       *
+ * Same as above, but reentrant.                         *
+  *********************************************************/
+
+char *get_ip6_r(char *buffer, size_t len, const unsigned char *ip6) {
+
+        inet_ntop(AF_INET6, ip6, buffer, len);
+        return buffer;
+}
+
+
+/*********************************************************
  * aton()                                                *
  *                                                       *
  * Convert an ASCII IP to notation format.               *

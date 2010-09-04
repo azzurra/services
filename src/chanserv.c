@@ -2572,7 +2572,21 @@ BOOL chanserv_check_user_join(const User *user, Channel *chan) {
 				if (CSMatchVerbose(ci->settings, CI_NOTICE_VERBOSE_CLEAR))
 					send_cmd(lang_msg(EXTRACT_LANG_ID(ci->langID), CS_VERBOSE_OPNOTICE_USER_AKICKED), s_ChanServ, ci->name, user->nick, anAkick->name);
 
-				mask = (anAkick->banType == -1) ? str_duplicate(anAkick->name) : user_usermask_create(user, anAkick->banType);
+				//mask = (anAkick->banType == -1) ? str_duplicate(anAkick->name) : user_usermask_create(user, anAkick->banType);
+				if (anAkick->banType == -1) {
+					char	*host;
+					host = strchr(anAkick->name, '@');
+					if (host != NULL)
+						host++;
+
+					if (FlagUnset(user->flags, USER_FLAG_TEREDO | USER_FLAG_6TO4) || (host != NULL && (str_match_wild_nocase(host, user->host) || str_match_wild_nocase(host, user->maskedHost) || str_match_wild_nocase(host, get_ip6(user->ipv6))))) {
+						mask = str_duplicate(anAkick->name);
+					} else {
+						mask = user_usermask_create(user, 2);
+					}
+				} else {
+					mask = user_usermask_create(user, anAkick->banType);
+				}
 				reason = anAkick->reason ? anAkick->reason : lang_msg(GetCallerLang(), CS_AKICK_KICK_REASON);
 				goto kick;
 			}

@@ -1000,8 +1000,9 @@ void user_handle_NICK(CSTR source, const int ac, char **av) {
 
 		HOST_TYPE			htype;
 		short int			dotsCount;
-		unsigned long int	ip = 0;
-
+		unsigned long int		ip = 0;
+		char				ip6[sizeof(struct in6_addr)];
+		BOOL				is6 = FALSE;
 
 		TRACE_MAIN();
 
@@ -1052,10 +1053,21 @@ void user_handle_NICK(CSTR source, const int ac, char **av) {
 		#endif		
 
 		#ifdef ENABLE_CAPAB_NICKIP
-		if (FlagSet(uplink_capab, CAPAB_NICKIP) && (ac == 10) && !index(av[8], ':')) {
-
-			ip = strtoul(av[8], NULL, 10);
-			ip = ntohl(ip);
+		if (FlagSet(uplink_capab, CAPAB_NICKIP) && (ac == 10)) {
+			if (!index(av[8], ':')) {
+				ip = strtoul(av[8], NULL, 10);
+				ip = ntohl(ip);
+			} else {
+				/*This is an IPv6*/
+				is6 = TRUE;
+				if (!inet_pton(AF_INET6, av[8], ip6)) {
+					log_error(FACILITY_USERS_HANDLE_NICK, __LINE__, LOG_TYPE_ERROR_SANITY, LOG_SEVERITY_ERROR_PROPAGATED,
+				"user_handle_NICK(): Invalid IPv6 supplied by %s (%s@%s)", av[0], av[4], av[8]);
+					TRACE_MAIN();
+					is6 = FALSE;
+					ip = 0;
+				}
+			}
 		}
 		#endif
 
@@ -1195,13 +1207,16 @@ void user_handle_NICK(CSTR source, const int ac, char **av) {
 				}
 			}
 			else {
+				if (!is6)
+					user->ip = ip;
+				else
+					memcpy(user->ipv6, ip6, sizeof(struct in6_addr));
 
-				user->ip = ip;
 				user->realname = str_duplicate(av[9]);
 
 				TRACE_MAIN();
 
-				if (htype == htIPv6)
+				if (is6 || htype == htIPv6)
 					user->current_lang = LANG_DEFAULT;
 
 				else {
@@ -1234,17 +1249,31 @@ void user_handle_NICK(CSTR source, const int ac, char **av) {
 		TRACE_MAIN();
 
 		#ifdef USE_SERVICES
-		if (htype == htIPv6) {
+		if (is6 || htype == htIPv6) {
 
 			/* IPv6 host. */
 			AddFlag(user->flags, USER_FLAG_HAS_IPV6);
-			user->maskedHost = expand_ipv6(user->host);
+			if (is6) {
+				user->maskedHost = expand_ipv6(av[8]);
+				//is 6to4?
+				if (user->ipv6[0] == 0x20 && user->ipv6[1] == 0x02) {
+					memcpy(&user->ip, &user->ipv6[2], sizeof(uint32_t));
+					AddFlag(user->flags, USER_FLAG_6TO4);
+				} else if (user->ipv6[0] == 0x20 && user->ipv6[1] == 0x01 && user->ipv6[2] == 0x00 && user->ipv6[3] == 0x00) {
+					//Teredo Client
+					memcpy(&user->ip, &user->ipv6[12], sizeof(uint32_t));
+					user->ip ^= 0xFFFFFFFF;
+					AddFlag(user->flags, USER_FLAG_TEREDO);
+				}
+			}
+			else
+				user->maskedHost = expand_ipv6(user->host);
 		}
 		else
 			user->maskedHost = crypt_userhost(user->host, htype, dotsCount);
 
 		#else
-		user->maskedHost = ((htype == htIPv4) || (htype == htHostname)) ? crypt_userhost(user->host, htype, dotsCount) : str_duplicate(user->host);
+		user->maskedHost = (((htype == htIPv4) || (htype == htHostname)) && !is6) ? crypt_userhost(user->host, htype, dotsCount) : str_duplicate(user->host);
 		#endif
 
 		TRACE_MAIN();
@@ -1399,7 +1428,8 @@ void user_handle_NICK(CSTR source, const int ac, char **av) {
 		/* Check to see if it looks like clones. */
 		if ((CONF_SET_CLONE == TRUE) && (synched == TRUE)) {
 
-			if (FlagSet(user->flags, USER_FLAG_HAS_IPV6)) {
+			/*Teredo and 6to4 users will trigger the IPv4 clone scanner*/
+			if (FlagSet(user->flags, USER_FLAG_HAS_IPV6) && FlagUnset(user->flags, USER_FLAG_6TO4 | USER_FLAG_TEREDO)) {
 
 				if (CONF_CLONE_SCAN_V6 > 0)
 					check_clones_v6(user);
@@ -3348,6 +3378,10 @@ BOOL user_usermask_match(CSTR mask, const User *user, BOOL matchMaskedHost, BOOL
 		return TRUE;
 
 	if (matchCIDR) {
+		if (FlagSet(user->flags, USER_FLAG_HAS_IPV6)) {
+			if (str_match_wild_nocase(host, get_ip6(user->ipv6)))
+				return TRUE;
+		}
 
 		char *ip = get_ip(user->ip);
 
@@ -3359,6 +3393,7 @@ BOOL user_usermask_match(CSTR mask, const User *user, BOOL matchMaskedHost, BOOL
 
 		if (cidr_match(&cidr, user->ip))
 			return TRUE;
+
 	}
 
 	return FALSE;
@@ -3824,6 +3859,8 @@ char *get_user_flags(long int flags) {
 	APPEND_FLAG(flags, USER_FLAG_ISBOTTLER, "USER_FLAG_ISBOTTLER")
 	APPEND_FLAG(flags, USER_FLAG_EMPTYFINGER, "USER_FLAG_EMPTYFINGER")
 	APPEND_FLAG(flags, USER_FLAG_EMPTYUSERINFO, "USER_FLAG_EMPTYUSERINFO")
+	APPEND_FLAG(flags, USER_FLAG_6TO4, "USER_FLAG_6TO4")
+	APPEND_FLAG(flags, USER_FLAG_TEREDO, "USER_FLAG_TEREDO")
 
 	if (len == 0)
 		return "None";
@@ -3867,10 +3904,15 @@ void handle_uinfo(CSTR source, User *callerUser, ServiceCommandData *data) {
 
 		send_notice_to_user(data->agent->nick, callerUser, "User Info for nick \2%s\2:", user->nick);
 
-		send_notice_to_user(data->agent->nick, callerUser, "\2Online as\2: %s@%s [ %s ]", user->username, user->maskedHost, user->host);
+		send_notice_to_user(data->agent->nick, callerUser, "\2Online as\2: %s@%s [ %s ]", user->username, (FlagSet(user->flags, USER_FLAG_HAS_IPV6)) ? user->host : user->maskedHost, user->host);
 
 		#ifdef ENABLE_CAPAB_NICKIP
-		send_notice_to_user(data->agent->nick, callerUser, "\2IP\2: %lu [ %s ]", user->ip, get_ip(user->ip));
+		if (FlagUnset(user->flags, USER_FLAG_HAS_IPV6) || FlagSet(user->flags, USER_FLAG_6TO4 | USER_FLAG_TEREDO)) 
+			send_notice_to_user(data->agent->nick, callerUser, "\2IP\2: %lu [ %s ]", user->ip, get_ip(user->ip));
+
+		if (FlagSet(user->flags, USER_FLAG_HAS_IPV6))
+			send_notice_to_user(data->agent->nick, callerUser, "\2IPv6\2: %s", get_ip6(user->ipv6));
+
 		#endif
 
 		#if defined(USE_SERVICES) || defined(USE_STATS)
@@ -3972,10 +4014,10 @@ void handle_uinfo(CSTR source, User *callerUser, ServiceCommandData *data) {
 			send_notice_to_user(data->agent->nick, callerUser, "\2Last Memo Send\2: %s ago", convert_time(buffer, sizeof(buffer), (NOW - user->lastmemosend), LANG_DEFAULT));
 
 		if (user->lastnickreg)
-			send_notice_to_user(data->agent->nick, callerUser, "\2Last nick reg:\2: %s ago", convert_time(buffer, sizeof(buffer), (NOW - user->lastnickreg), LANG_DEFAULT));
+			send_notice_to_user(data->agent->nick, callerUser, "\2Last nick reg\2: %s ago", convert_time(buffer, sizeof(buffer), (NOW - user->lastnickreg), LANG_DEFAULT));
 
 		if (user->lastchanreg)
-			send_notice_to_user(data->agent->nick, callerUser, "\2Last chan reg:\2: %s ago", convert_time(buffer, sizeof(buffer), (NOW - user->lastchanreg), LANG_DEFAULT));
+			send_notice_to_user(data->agent->nick, callerUser, "\2Last chan reg\2: %s ago", convert_time(buffer, sizeof(buffer), (NOW - user->lastchanreg), LANG_DEFAULT));
 
 		if (IS_NOT_NULL(user->ni)) {
 
@@ -4080,7 +4122,7 @@ unsigned long user_mem_report(CSTR sourceNick, const User *callerUser) {
 static void user_ds_dump_display(CSTR sourceNick, const User *callerUser, const User *user) {
 
 	#ifdef USE_SERVICES
-	ChanInfoListItem	*infoItem;
+	ChanInfoListItem		*infoItem;
 	char 				**idnicks;
 	#endif
 
@@ -4105,7 +4147,10 @@ static void user_ds_dump_display(CSTR sourceNick, const User *callerUser, const 
 	send_notice_to_user(sourceNick, callerUser, "Host: 0x%08X \2[\2%s\2]\2",				(unsigned long)user->host, str_get_valid_display_value(user->host));
 
 	#ifdef ENABLE_CAPAB_NICKIP
-	send_notice_to_user(sourceNick, callerUser, "IP from NICKIP: 0x%08X \2[\2%lu\2]\2",		user->ip, user->ip);
+	if (FlagUnset(user->flags, USER_FLAG_HAS_IPV6) || FlagSet(user->flags, USER_FLAG_6TO4 | USER_FLAG_TEREDO))
+		send_notice_to_user(sourceNick, callerUser, "IP from NICKIP: 0x%08X \2[\2%lu\2]\2",		user->ip, user->ip);
+	if (FlagSet(user->flags, USER_FLAG_HAS_IPV6))
+		send_notice_to_user(sourceNick, callerUser, "IPv6 from NICKIP: \002[\002%s\002]\002", get_ip6(user->ipv6));
 	#endif
 
 	send_notice_to_user(sourceNick, callerUser, "Masked host: 0x%08X \2[\2%s\2]\2",			(unsigned long)user->maskedHost, str_get_valid_display_value(user->maskedHost));

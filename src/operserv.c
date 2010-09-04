@@ -284,10 +284,13 @@ void check_clones(const User *newUser) {
 	char				clone_nicks[IRCBUFSIZE];
 	BOOL				too_many_clone_nicks = FALSE, more_nicks = FALSE, nick_oper = FALSE, nick_exempt = FALSE;
 	BOOL				triggered = FALSE, sameHost = TRUE, isExempt = FALSE;
-	int					cloneCount = 0, clone_nicks_freespace = 220, position = 0;
+	BOOL				has_6to4 = FALSE, has_Teredo = FALSE;
+	char				six_to_four[INET6_ADDRSTRLEN];
+
+	int				cloneCount = 0, clone_nicks_freespace = 220, position = 0;
 	User				*user = NULL;
 	char				*ptr = clone_nicks, *reason;
-	User_AltListItem	*host_item;
+	User_AltListItem		*host_item;
 
 
 	TRACE_FCLT(FACILITY_OPERSERV_CHECK_CLONES);
@@ -300,6 +303,11 @@ void check_clones(const User *newUser) {
 
 		TRACE();
 		if ((newUser->ip != 0) ? (newUser->ip == user->ip) : str_equals_nocase(newUser->host, user->host)) {
+			
+			if (FlagSet(user->flags, USER_FLAG_TEREDO))
+				has_Teredo = TRUE;
+			if (FlagSet(user->flags, USER_FLAG_6TO4))
+				has_6to4 = TRUE;
 
 			++cloneCount;
 			TRACE();
@@ -328,11 +336,17 @@ void check_clones(const User *newUser) {
 
 					clone_nicks_freespace -= 2;
 				}
-
+				
 				/* Bold if it's an oper, underline it if it's exempt. */
 				if ((nick_oper == TRUE) || (nick_exempt == TRUE)) {
 
 					*ptr++ = (nick_oper ? ((char) 2) : ((char) 31));
+					--clone_nicks_freespace;
+				}
+
+				//Add * if it's IPv6
+				if (FlagSet(user->flags, USER_FLAG_HAS_IPV6)) {
+					*ptr++ = '*';
 					--clone_nicks_freespace;
 				}
 
@@ -429,6 +443,25 @@ void check_clones(const User *newUser) {
 
 				/* Pass the IP as host to avoid desynch if someone connects and the IP is not resolved. */
 				akill_add(s_OperServ, "*", akillHost, NULL, FALSE, haveCIDR, &cidr, AKILL_TYPE_CLONES, CONF_DEFAULT_CLONEKILL_EXPIRY, 0, newUser->current_lang);
+				if (has_Teredo) {
+					snprintf(six_to_four, INET6_ADDRSTRLEN, "2001:0:*:%2x%2x:%2x%2x", 	(uint8_t) ((user->ip) & 0xFF) ^ 0xFF, 
+														(uint8_t) ((user->ip >> 8) & 0xFF) ^ 0xFF,
+														(uint8_t) ((user->ip >> 16) & 0xFF) ^ 0xFF,
+														(uint8_t) ((user->ip >> 24) & 0xFF) ^ 0xFF);
+
+					akill_add(s_OperServ, "*", six_to_four, NULL, FALSE, FALSE, NULL, AKILL_TYPE_CLONES, CONF_DEFAULT_CLONEKILL_EXPIRY, 0, newUser->current_lang);
+				}
+			
+				if (has_6to4) {
+					snprintf(six_to_four, INET6_ADDRSTRLEN, "2002:%2x%2x:%2x%2x:*", (uint8_t) (user->ip) & 0xFF, 
+													(uint8_t) (user->ip >> 8) & 0xFF,
+													(uint8_t) (user->ip >> 16) & 0xFF,
+													(uint8_t) (user->ip >> 24) & 0xFF);
+
+					akill_add(s_OperServ, "*", six_to_four, NULL, FALSE, FALSE, NULL, AKILL_TYPE_CLONES, CONF_DEFAULT_CLONEKILL_EXPIRY, 0, newUser->current_lang);
+
+
+				}
 			}
 
 			return;
@@ -539,9 +572,10 @@ void check_clones_v6(const User *newUser) {
 
 	/* define the buffer for the nick and a final buffer including space for "..." wheter they are necessary or not */
 	
-	char	clone_nicks[220], ipbuf[42], tmp_clones[220 - 4];
-	BOOL    more_clones = FALSE;
-	int		idx, warningIdx, cloneCount = 0;
+	char			clone_nicks[220], ipbuf[42], ip_clonebuf[42], tmp_clones[220 - 4];
+	char			*reason;
+	BOOL    		more_clones = FALSE, sameHost = TRUE, nick_oper = FALSE, nick_exempt = FALSE, isExempt = FALSE, triggered = FALSE;
+	int			idx, warningIdx, cloneCount = 0, len = 0, position;
 	User_AltListItem	*userIPv6_item = NULL;
 
 
@@ -550,39 +584,68 @@ void check_clones_v6(const User *newUser) {
 	memset(clone_nicks, 0, sizeof(clone_nicks));
 	memset(tmp_clones, 0, sizeof(tmp_clones));
 	
-	for (idx = 0; idx < (CONF_CLONE_SCAN_V6 * 5); ++idx) 
-		ipbuf[idx] = newUser->maskedHost[idx];
+	strncpy(ipbuf, expand_ipv6(get_ip6(newUser->ipv6)), 42);
+	idx = CONF_CLONE_SCAN_V6 * 5;
 	
 	ipbuf[idx++] = '*';
 	ipbuf[idx] = '\0';
-	
-		
+
 	
 	LIST_FOREACH(userIPv6_item, list_onlineuser_ipv6) {
 
-			TRACE();
+		TRACE();
 
 		if (FlagUnset(userIPv6_item->user->flags, USER_FLAG_HAS_IPV6))
 			continue;
 
-		if (str_match_wild_nocase(ipbuf, userIPv6_item->user->maskedHost)) {
+		strncpy(ip_clonebuf, expand_ipv6(get_ip6(userIPv6_item->user->ipv6)), 42);
+		ip_clonebuf[41] = '\0';
+
+		if (str_match_wild_nocase(ipbuf, ip_clonebuf)) {
+
+			if (sameHost == TRUE && str_not_equals_nocase(newUser->host, userIPv6_item->user->host))
+				sameHost = FALSE;
+			
+			/* Don't akill our staff or agents */
+			if (user_is_ircop(userIPv6_item->user) || is_services_valid_oper(userIPv6_item->user) ||
+				user_is_services_agent(userIPv6_item->user) || user_is_services_client(userIPv6_item->user))
+				nick_oper = TRUE;
 
 			++cloneCount;
 		
 			if (IS_NOT_EMPTY_STR(tmp_clones)) {
-				/*Check if there is enought space to store the nick + ", " */
-				if(sizeof(tmp_clones) < strlen(userIPv6_item->user->nick) + strlen(tmp_clones) + 3) 
+				/* Check if there is enough space to store the nick + ", " */
+				if(sizeof(tmp_clones) < strlen(userIPv6_item->user->nick) + strlen(tmp_clones) + 3 + (nick_oper) ? 2 : 0) 
 					more_clones = TRUE;
 				else {
 					/* Concatenate the last nick to the list */
+					if (nick_oper)
+						strcat(tmp_clones, "\2");
+
 					strcat(tmp_clones,  userIPv6_item->user->nick);
+
+					if (nick_oper)
+						strcat(tmp_clones, "\2");
+
 					strcat(tmp_clones, ", ");
 				}
 			}	
 			else {
-				strncpy(tmp_clones, userIPv6_item->user->nick, strlen( userIPv6_item->user->nick));
+				if (nick_oper) {
+					strcpy(tmp_clones, "\2");
+					strcat(tmp_clones, userIPv6_item->user->nick);
+					strcat(tmp_clones, "\2");
+				} else {
+					strcpy(tmp_clones, userIPv6_item->user->nick);
+				}
 				strcat(tmp_clones, ", ");
 			}			
+		}
+		
+		if (nick_oper == TRUE || nick_exempt == TRUE) {
+			nick_oper = FALSE;
+			nick_exempt = FALSE;
+			isExempt = TRUE;
 		}	
 	}
 		
@@ -595,25 +658,34 @@ void check_clones_v6(const User *newUser) {
 		strcpy(clone_nicks, tmp_clones);
 	
 	/* if the buffer is not terminated by "..." delete ", " from the last nick */
-	if(!strstr(clone_nicks, "...")) {
-		
-		char buffer[220];
-		
-		memset(buffer, 0, sizeof(buffer));
-		
-		strncpy(buffer, clone_nicks, strlen(clone_nicks) - 2);
-		memset(clone_nicks, 0, sizeof(clone_nicks));
-		
-		strcpy(clone_nicks, buffer);
-		memset(buffer, 0, sizeof(buffer));
+
+	len = strlen(clone_nicks);
+	if (clone_nicks[len-1] != c_DOT)
+		clone_nicks[len-2] = c_NULL;
+
+	/* Perform exceptions match (mainly needed to avoid akill in case sameHost is TRUE) */
+	switch (trigger_match(newUser->username, newUser->host, 0, cloneCount, &reason, &position)) {
+
+		case triggerExempt:
+			/* This host is triggered but we're below the limit. Don't do anything. */
+			return;
+
+		case triggerFound:
+			/* This host is triggered. */
+			triggered = TRUE;
+			break;
+
+		default:
+		case triggerNotFound:
+			/* This host is not triggered. Continue normally. */
+			break;
 	}
-	
-	
-	if (cloneCount >= CONF_CLONE_MIN_USERS) {
+
+	if (triggered == TRUE || cloneCount >= CONF_CLONE_MIN_USERS) {
 
 		/* Okay, we have clones. Check first to see if we already know about them. */
 
-		const char *host = newUser->host;
+		const char *host = get_ip6(newUser->ipv6);
 		int fields = 0;
 
 
@@ -651,6 +723,24 @@ void check_clones_v6(const User *newUser) {
 		str_tolower(ipbuf);
 
 		TRACE();
+
+		if ((CONF_AKILL_CLONES) && (cloneCount >= CONF_AKILL_CLONES) && (isExempt == FALSE) && (sameHost == TRUE) && (triggered == FALSE)) {
+			/* AKILL only if the host is the same, like we have always done for v6 clones */
+			char *akillHost;
+
+			akillHost = newUser->host;
+
+			if (!is_already_akilled("*", akillHost, 0, NULL, NULL)) {
+
+				send_globops(s_OperServ, "\2WARNING: %d\2 clones \2%c03autokilled%c\2 from \2%s\2 [ %s ]", cloneCount, 3, 3, newUser->host, clone_nicks);
+			
+				/* Pass the IP as host to avoid desynch if someone connects and the IP is not resolved. */
+				akill_add(s_OperServ, "*", akillHost, NULL, FALSE, FALSE, NULL, AKILL_TYPE_CLONES, CONF_DEFAULT_CLONEKILL_EXPIRY, 0, newUser->current_lang);
+			}
+
+			return;
+		}
+
 		for (warningIdx = CLONE_DETECT_SIZE; warningIdx >= 0; --warningIdx) {
 
 			/* Make sure this is a valid entry and not an empty one. */
@@ -702,7 +792,14 @@ void check_clones_v6(const User *newUser) {
 		/* Now actually notify opers. */
 
 		TRACE();
-		send_globops(s_OperServ, "\2WARNING: %d\2 clones detected from \2%s\2 [ %s ]", cloneCount, ipbuf, clone_nicks);
+		if (cloneCount < CONF_CLONE_MIN_USERS)
+			send_globops(s_OperServ, "\2Clones:%c04 %d%c\2 from \2%s\2 [ %s ] [Triggered: %s]", 3, cloneCount, 3, (sameHost) ? newUser->host : ipbuf, clone_nicks, reason);
+		else if (triggered)
+			send_globops(s_OperServ, "\2Clones: %d\2 %ctriggered%c [%d] from \2%s\2 [ %s ]", cloneCount, 31, 31, position, (sameHost) ? newUser->host : ipbuf, clone_nicks);
+		else if (isExempt)
+			send_globops(s_OperServ, "\2Clones: %d\2 %cexempt%c [%d] from \2%s\2 [ %s ]", cloneCount, 31, 31, position, (sameHost) ? newUser->host : ipbuf, clone_nicks);
+		else 
+			send_globops(s_OperServ, "\2WARNING: %d\2 clones detected from \2%s\2 [ %s ]", cloneCount, (sameHost) ? newUser->host : ipbuf, clone_nicks);
 	}
 }
 
@@ -1073,10 +1170,13 @@ static void do_find(CSTR source, User *callerUser, ServiceCommandData *data) {
 				TRACE_MAIN();
 
 				if ((nick ? str_match_wild(nick, user_nick) : 1 ) && str_match_wild(username, user_username) &&
-					(str_match_wild(host, user_host) || str_match_wild(host, user_xhost)) ) {
+					(str_match_wild(host, user_host) || str_match_wild(host, user_xhost) || str_match_wild(host, str_tolower(get_ip(user->ip)))) ) {
 
 					++count;
-					send_notice_to_user(s_OperServ, callerUser, "\2%d\2) \2%s\2 (%s@%s) [%s]", count, user->nick, user->username, user->host, user->server->name);
+					send_notice_to_user(s_OperServ, callerUser, "\2%d\2) \2%s\2 (%s@%s) [%s]%s", count, user->nick, user->username, user->host, user->server->name, 
+							FlagSet(user->flags, USER_FLAG_TEREDO) ? " [Teredo IPv6 User]"
+						       	: FlagSet(user->flags, USER_FLAG_6TO4) ? " [6to4 IPv6 User]"
+						       	: "");
 				}
 
 				user = user->next;

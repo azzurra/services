@@ -74,6 +74,9 @@ extern char *merge_args(const int ac, char * const av[]);
 
 extern char *get_ip(unsigned long ip);
 extern char *get_ip_r(char *buffer, size_t len, unsigned long int ip);
+extern char *get_ip6(const unsigned char *ip6);
+extern char *get_ip6_r(char *buffer, size_t len, const unsigned char *ip6);
+
 extern unsigned long int aton(CSTR ipaddr);
 
 
