@@ -284,8 +284,6 @@ void check_clones(const User *newUser) {
 	char				clone_nicks[IRCBUFSIZE];
 	BOOL				too_many_clone_nicks = FALSE, more_nicks = FALSE, nick_oper = FALSE, nick_exempt = FALSE;
 	BOOL				triggered = FALSE, sameHost = TRUE, isExempt = FALSE;
-	BOOL				has_6to4 = FALSE, has_Teredo = FALSE;
-	char				six_to_four[INET6_ADDRSTRLEN];
 
 	int				cloneCount = 0, clone_nicks_freespace = 220, position = 0;
 	User				*user = NULL;
@@ -304,11 +302,6 @@ void check_clones(const User *newUser) {
 		TRACE();
 		if ((newUser->ip != 0) ? (newUser->ip == user->ip) : str_equals_nocase(newUser->host, user->host)) {
 			
-			if (FlagSet(user->flags, USER_FLAG_TEREDO))
-				has_Teredo = TRUE;
-			if (FlagSet(user->flags, USER_FLAG_6TO4))
-				has_6to4 = TRUE;
-
 			++cloneCount;
 			TRACE();
 
@@ -443,25 +436,6 @@ void check_clones(const User *newUser) {
 
 				/* Pass the IP as host to avoid desynch if someone connects and the IP is not resolved. */
 				akill_add(s_OperServ, "*", akillHost, NULL, FALSE, haveCIDR, &cidr, AKILL_TYPE_CLONES, CONF_DEFAULT_CLONEKILL_EXPIRY, 0, newUser->current_lang);
-				if (has_Teredo) {
-					snprintf(six_to_four, INET6_ADDRSTRLEN, "2001:0:*:%2x%2x:%2x%2x", 	(uint8_t) ((user->ip) & 0xFF) ^ 0xFF, 
-														(uint8_t) ((user->ip >> 8) & 0xFF) ^ 0xFF,
-														(uint8_t) ((user->ip >> 16) & 0xFF) ^ 0xFF,
-														(uint8_t) ((user->ip >> 24) & 0xFF) ^ 0xFF);
-
-					akill_add(s_OperServ, "*", six_to_four, NULL, FALSE, FALSE, NULL, AKILL_TYPE_CLONES, CONF_DEFAULT_CLONEKILL_EXPIRY, 0, newUser->current_lang);
-				}
-			
-				if (has_6to4) {
-					snprintf(six_to_four, INET6_ADDRSTRLEN, "2002:%2x%2x:%2x%2x:*", (uint8_t) (user->ip) & 0xFF, 
-													(uint8_t) (user->ip >> 8) & 0xFF,
-													(uint8_t) (user->ip >> 16) & 0xFF,
-													(uint8_t) (user->ip >> 24) & 0xFF);
-
-					akill_add(s_OperServ, "*", six_to_four, NULL, FALSE, FALSE, NULL, AKILL_TYPE_CLONES, CONF_DEFAULT_CLONEKILL_EXPIRY, 0, newUser->current_lang);
-
-
-				}
 			}
 
 			return;
@@ -1168,9 +1142,14 @@ static void do_find(CSTR source, User *callerUser, ServiceCommandData *data) {
 				str_tolower(user_xhost);
 
 				TRACE_MAIN();
-
+			#ifdef ENABLE_CAPAB_NICKIP
 				if ((nick ? str_match_wild(nick, user_nick) : 1 ) && str_match_wild(username, user_username) &&
-					(str_match_wild(host, user_host) || str_match_wild(host, user_xhost) || str_match_wild(host, str_tolower(get_ip(user->ip)))) ) {
+					(str_match_wild(host, user_host) || str_match_wild(host, user_xhost) || str_match_wild(host, str_tolower(get_ip(user->ip)))) )
+			#else
+				if ((nick ? str_match_wild(nick, user_nick) : 1 ) && str_match_wild(username, user_username) &&
+					(str_match_wild(host, user_host) || str_match_wild(host, user_xhost)))
+			#endif
+				 {
 
 					++count;
 					send_notice_to_user(s_OperServ, callerUser, "\2%d\2) \2%s\2 (%s@%s) [%s]%s", count, user->nick, user->username, user->host, user->server->name, 
