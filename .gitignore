@@ -1,5 +1,3 @@
-syntax: glob
-
 tags
 *.o
 *.swp
@@ -15,3 +13,6 @@ run/data/services-*
 Makefile.inc
 inc/sysconf.h
 configure.log
+*~
+.DS_Store
+._*
