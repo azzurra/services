@@ -25,15 +25,8 @@
 #include "../inc/conf.h"
 #include "../inc/main.h"
 #include "../inc/list.h"
-
-#ifdef USE_SERVICES
 #include "../inc/cidr.h"
 #include "../inc/jupe.h"
-#endif
-
-#ifdef USE_STATS
-#include "../inc/statserv.h"
-#endif
 
 
 /*********************************************************
@@ -150,16 +143,6 @@ static void unlink_server(Server *removed) {
 				LOG_SNOOP(s_Snooper, "Lost server: \2%s\2 [Reason: Hub went down]", server->name);
 				#endif
 
-				#ifdef USE_STATS
-				if (IS_NOT_NULL(server->stats)) {
-
-					RemoveFlag(server->stats->flags, STATS_SERVER_ONLINE);
-
-					server->stats->squit = NOW;
-					--nservers;
-				}
-				#endif
-
 				server->uplink = NULL;
 				unlink_server(server);
 			}
@@ -173,21 +156,15 @@ void server_handle_SERVER(CSTR source, const int ac, char **av) {
 
 	Server *server;
 
-	#ifdef USE_STATS
-	ServerStats *ss;
-	#endif
-
 
 	TRACE_FCLT(FACILITY_SERVERS_HANDLE_SERVER);
 
 	if (ac < 3)
 		return;
 
-	#ifdef USE_SERVICES
 	/* If it's juped, squit it and reconnect ours. */
 	if (jupe_match(av[0], NULL, TRUE))
 		return;
-	#endif
 
 	if (IS_NOT_NULL(server = findserver(av[0]))) {
 
@@ -209,29 +186,6 @@ void server_handle_SERVER(CSTR source, const int ac, char **av) {
 	if (synched == TRUE)
 		LOG_SNOOP(s_Snooper, "New server: \2%s\2 [Hub: %s]", server->name, server->uplink ? server->uplink->name : "None");
 
-#ifdef USE_STATS
-	if (IS_NOT_NULL(ss = findserverstats(av[0]))) {
-
-		/* Don't update connect if it's us who split */
-		if (synched == TRUE)
-			ss->connect = NOW;
-	}
-	else
-		ss = make_server_stats(av[0]);
-
-	server->stats = ss;
-
-	AddFlag(ss->flags, STATS_SERVER_ONLINE);
-
-	++nservers;
-
-	if (nservers > records.maxservers) {
-
-		records.maxservers = nservers;
-		records.maxservers_time = NOW;
-	}
-#endif
-
 	/* To prevent clients' scan */
 	AddFlag(server->flags, SERVER_FLAG_BURSTING);
 }
@@ -245,7 +199,6 @@ void server_handle_SQUIT(CSTR source, const int ac, char **av) {
 
 	TRACE_FCLT(FACILITY_SERVERS_HANDLE_SQUIT);
 
-	#ifdef USE_SERVICES
 	if (IS_NOT_NULL(source) && IS_NOT_EMPTY_STR(source)) {
 
 		User *user;
@@ -261,7 +214,6 @@ void server_handle_SQUIT(CSTR source, const int ac, char **av) {
 				return;
 		}
 	}
-	#endif
 
 	if (IS_NULL(server = findserver(av[0]))) {
 
@@ -275,24 +227,6 @@ void server_handle_SQUIT(CSTR source, const int ac, char **av) {
 		RemoveFlag(server->flags, SERVER_FLAG_LINKED);
 		RemoveFlag(server->flags, SERVER_FLAG_UPLINK);
 	}
-
-	#ifdef USE_STATS
-	if (IS_NOT_NULL(server->stats)) {
-
-		RemoveFlag(server->stats->flags, STATS_SERVER_ONLINE);
-
-		server->stats->squit = NOW;
-		--nservers;
-
-		++(server->stats->dailysplits);
-		++(server->stats->weeklysplits);
-		++(server->stats->monthlysplits);
-		++(server->stats->totalsplits);
-	}
-	else
-		log_error(FACILITY_SERVERS_HANDLE_SQUIT, __LINE__, LOG_TYPE_ERROR_ASSERTION, LOG_SEVERITY_ERROR_HALTED,
-			"servers_handle_SQUIT(): Couldn't find stats for server %s", av[0]);
-	#endif
 
 	#ifdef ENABLE_CAPAB_NOQUIT
 	/* Remove users from this server. */
@@ -363,11 +297,6 @@ void servers_user_add(User *user) {
 
 	Server *server;
 
-	#ifdef USE_STATS
-	ServerStats *stats;
-	#endif
-
-
 	TRACE_FCLT(FACILITY_SERVERS_USER_ADD);
 
 	if (IS_NULL(user)) {
@@ -389,75 +318,6 @@ void servers_user_add(User *user) {
 	server = user->server;
 
 	++(server->userCount);
-
-	#ifdef USE_STATS
-	/*
-	if (NOW >= server->floodResetTime) {
-
-		server->floodHits = 0;
-		server->lastFloodHits = 0;
-		server->floodTime = 0;
-	}
-
-	// Increase number of connections received.
-	++(server->floodHits);
-
-	// Update the reset time.
-	server->floodResetTime = (NOW + CONF_SERVER_FLOOD_RESET);
-
-	if (server->floodHits >= CONF_SERVER_FLOOD_COUNT) {
-
-		time_t floodDuration;
-
-		if (server->floodTime == 0)
-			server->floodTime = NOW;
-
-		floodDuration = (NOW - server->floodTime);
-
-		switch (floodDuration) {
-
-			case 0:
-				send_globops(s_StatServ, "Possible connect flood on server \2%s\2 [\2%d\2 new clients in \2less than %d\2 second]",
-					server->name, (server->floodConnects + server->lastFloodHits), 1);
-				break;
-
-			case 1:
-				send_globops(s_StatServ, "Possible connect flood on server \2%s\2 [\2%d\2 new clients in \2%d\2 second]",
-					server->name, (server->floodConnects + server->lastFloodHits), 1);
-				break;
-
-			default:
-				send_globops(s_StatServ, "Possible connect flood on server \2%s\2 [\2%d\2 new clients in \2%d\2 seconds]",
-					server->name, (server->floodConnects + server->lastFloodHits), floodDuration);
-
-				break;
-		}
-
-		// Keep track of all connections until the timer resets.
-		server->lastFloodHits += server->floodHits;
-
-		server->floodHits = 0;
-	}
-*/
-
-	if (IS_NULL(stats = server->stats)) {
-
-		log_error(FACILITY_SERVERS_USER_ADD, __LINE__, LOG_TYPE_ERROR_ASSERTION, LOG_SEVERITY_ERROR_HALTED,
-			"servers_user_add(): Server %s has an empty stats record", server->name);
-
-		return;
-	}
-
-	++(stats->clients);
-	++(stats->hits);
-	++(stats->msgs);		/* NICK line */
-
-	if (stats->clients > stats->maxclients) {
-
-		stats->maxclients = stats->clients;
-		stats->maxclients_time = NOW;
-	}
-	#endif
 }
 
 /*********************************************************/
@@ -465,11 +325,6 @@ void servers_user_add(User *user) {
 void servers_user_remove(User *user) {
 
 	Server *server;
-
-	#ifdef USE_STATS
-	ServerStats *stats;
-	#endif
-
 
 	TRACE_FCLT(FACILITY_SERVERS_USER_REMOVE);
 
@@ -491,190 +346,8 @@ void servers_user_remove(User *user) {
 
 	/* Decrease this server's user count. */
 	--(server->userCount);
-
-	#ifdef USE_STATS
-	if (IS_NULL(stats = server->stats)) {
-
-		log_error(FACILITY_SERVERS_USER_REMOVE, __LINE__, LOG_TYPE_ERROR_ASSERTION, LOG_SEVERITY_ERROR_HALTED,
-			"servers_user_remove(): Server %s has an empty stats record", server->name);
-
-		return;
-	}
-
-	--(stats->clients);
-
-	if (user_is_ircop(user))
-		--(stats->opers);
-	#endif
 }
 
-/*********************************************************/
-
-#ifdef USE_STATS
-void servers_oper_add(User *user) {
-
-	ServerStats *stats;
-
-
-	TRACE_FCLT(FACILITY_SERVERS_OPER_ADD);
-
-	if (IS_NULL(user)) {
-
-		log_error(FACILITY_SERVERS_OPER_ADD, __LINE__, LOG_TYPE_ERROR_ASSERTION, LOG_SEVERITY_ERROR_HALTED,
-			s_LOG_ERR_PARAMETER, "servers_oper_add()", s_LOG_NULL, "user");
-
-		return;
-	}
-
-	if (IS_NULL(user->server)) {
-
-		log_error(FACILITY_SERVERS_OPER_ADD, __LINE__, LOG_TYPE_ERROR_ASSERTION, LOG_SEVERITY_ERROR_HALTED,
-			"servers_oper_add(): User %s has an empty server record", user->nick);
-
-		return;
-	}
-
-	if (IS_NULL(stats = user->server->stats)) {
-
-		log_error(FACILITY_SERVERS_OPER_ADD, __LINE__, LOG_TYPE_ERROR_ASSERTION, LOG_SEVERITY_ERROR_HALTED,
-			"servers_oper_add(): Server %s has an empty stats record", user->server->name);
-
-		return;
-	}
-
-	++(stats->opers);
-
-	if (stats->opers > stats->maxopers) {
-
-		stats->maxopers = stats->opers;
-		stats->maxopers_time = NOW;
-	}
-}
-
-/*********************************************************/
-
-void servers_oper_remove(User *user) {
-
-	TRACE_FCLT(FACILITY_SERVERS_OPER_REMOVE);
-
-	if (IS_NULL(user)) {
-
-		log_error(FACILITY_SERVERS_OPER_REMOVE, __LINE__, LOG_TYPE_ERROR_ASSERTION, LOG_SEVERITY_ERROR_HALTED,
-			s_LOG_ERR_PARAMETER, "servers_oper_remove()", s_LOG_NULL, "user");
-
-		return;
-	}
-
-	if (IS_NULL(user->server)) {
-
-		log_error(FACILITY_SERVERS_OPER_REMOVE, __LINE__, LOG_TYPE_ERROR_ASSERTION, LOG_SEVERITY_ERROR_HALTED,
-			"servers_oper_remove(): User %s has an empty server record", user->nick);
-
-		return;
-	}
-
-	if (IS_NULL(user->server->stats)) {
-
-		log_error(FACILITY_SERVERS_OPER_REMOVE, __LINE__, LOG_TYPE_ERROR_ASSERTION, LOG_SEVERITY_ERROR_HALTED,
-			"servers_oper_remove(): Server %s has an empty stats record", user->server->name);
-
-		return;
-	}
-
-	--(user->server->stats->opers);
-}
-
-/*********************************************************/
-
-void servers_update_killcount(User *user, User *killer) {
-
-	TRACE_FCLT(FACILITY_SERVERS_UPDATE_KILLCOUNT);
-
-	if (IS_NULL(user)) {
-
-		log_error(FACILITY_SERVERS_UPDATE_KILLCOUNT, __LINE__, LOG_TYPE_ERROR_ASSERTION, LOG_SEVERITY_ERROR_HALTED,
-			s_LOG_ERR_PARAMETER, "servers_update_killcount()", s_LOG_NULL, "user");
-
-		return;
-	}
-
-	if (IS_NULL(user->server)) {
-
-		log_error(FACILITY_SERVERS_UPDATE_KILLCOUNT, __LINE__, LOG_TYPE_ERROR_ASSERTION, LOG_SEVERITY_ERROR_HALTED,
-			"servers_update_killcount(): Killed user %s has an empty server record", user->nick);
-
-		return;
-	}
-
-	if (IS_NULL(user->server->stats)) {
-
-		log_error(FACILITY_SERVERS_UPDATE_KILLCOUNT, __LINE__, LOG_TYPE_ERROR_ASSERTION, LOG_SEVERITY_ERROR_HALTED,
-			"servers_update_killcount(): Server %s has an empty stats record", user->server->name);
-
-		return;
-	}
-
-	++(user->server->stats->servkills);
-
-	if (IS_NOT_NULL(killer)) {
-
-		if (IS_NULL(killer->server)) {
-
-			log_error(FACILITY_SERVERS_UPDATE_KILLCOUNT, __LINE__, LOG_TYPE_ERROR_ASSERTION, LOG_SEVERITY_ERROR_HALTED,
-				"servers_update_killcount(): Killer user %s has an empty server record", killer->nick);
-
-			return;
-		}
-
-		if (IS_NULL(killer->server->stats)) {
-
-			log_error(FACILITY_SERVERS_UPDATE_KILLCOUNT, __LINE__, LOG_TYPE_ERROR_ASSERTION, LOG_SEVERITY_ERROR_HALTED,
-				"servers_update_killcount(): Server %s has an empty stats record", killer->server->name);
-
-			return;
-		}
-
-		++(killer->server->stats->operkills);
-	}
-}
-
-/*********************************************************/
-
-void servers_increase_messages(User *user) {
-
-	TRACE_FCLT(FACILITY_SERVERS_INCREASE_MESSAGES);
-
-	if (IS_NULL(user)) {
-
-		log_error(FACILITY_SERVERS_INCREASE_MESSAGES, __LINE__, LOG_TYPE_ERROR_ASSERTION, LOG_SEVERITY_ERROR_HALTED,
-			s_LOG_ERR_PARAMETER, "servers_increase_messages()", s_LOG_NULL, "user");
-
-		return;
-	}
-
-	if (IS_NULL(user->server)) {
-
-		log_error(FACILITY_SERVERS_INCREASE_MESSAGES, __LINE__, LOG_TYPE_ERROR_ASSERTION, LOG_SEVERITY_ERROR_HALTED,
-			"servers_increase_messages(): User %s has an empty server record", user->nick);
-
-		return;
-	}
-
-	if (user_is_services_client(user))
-		return;
-
-	if (IS_NULL(user->server->stats)) {
-
-		log_error(FACILITY_SERVERS_INCREASE_MESSAGES, __LINE__, LOG_TYPE_ERROR_ASSERTION, LOG_SEVERITY_ERROR_HALTED,
-			"servers_increase_messages(): Server %s has an empty stats record", user->server->name);
-
-		return;
-	}
-
-	++(user->server->stats->msgs);
-}
-
-#endif
 /*********************************************************/
 
 void send_servers_list(CSTR sourceNick, const User *callerUser) {
@@ -838,9 +511,6 @@ void server_ds_dump(CSTR sourceNick, const User *callerUser, STR request) {
 				send_notice_to_user(sourceNick, callerUser, "Users: %u",										server->userCount);
 				send_notice_to_user(sourceNick, callerUser, "Connected C-time: %ld",							server->connected);
 				send_notice_to_user(sourceNick, callerUser, "Flags: %ld",										server->flags);
-				#ifdef USE_STATS
-				send_notice_to_user(sourceNick, callerUser, "Stats: 0x%08X",									(unsigned long)server->stats);
-				#endif
 				send_notice_to_user(sourceNick, callerUser, "Next / previous record: 0x%08X / 0x%08X",			(unsigned long)server->next, (unsigned long)server->prev);
 
 				LOG_DEBUG_SNOOP("Command: DUMP SERVER %s -- by %s (%s@%s)", value, callerUser->nick, callerUser->username, callerUser->host);

@@ -34,17 +34,6 @@
 #include "../inc/users.h"
 #include "../inc/channels.h"
 #include "../inc/debugserv.h"
-
-#ifdef USE_SOCKSMONITOR
-#include "../inc/cybcop.h"
-#endif
-
-#ifdef USE_STATS
-#include "../inc/seenserv.h"
-#include "../inc/statserv.h"
-#endif
-
-#ifdef USE_SERVICES
 #include "../inc/nickserv.h"
 #include "../inc/chanserv.h"
 #include "../inc/memoserv.h"
@@ -52,7 +41,6 @@
 #include "../inc/rootserv.h"
 #include "../inc/helpserv.h"
 #include "../inc/ignore.h"
-#endif
 
 
 /*********************************************************
@@ -67,10 +55,6 @@ unsigned int	uplink_capab = CAPAB_UNKNOWN;
  *********************************************************/
 
 unsigned long int npings = 0;
-
-#ifdef USE_STATS
-int nservers = 0;
-#endif
 
 
 /*********************************************************
@@ -138,11 +122,7 @@ static BOOL msg_update_flood_levels(User *user, CSTR command, CSTR target, CSTR 
 
 					send_globops(NULL, "Services are being \2SEVERELY\2 flooded by \2%s\2 (%s@%s)", user->nick, user->username, user->host);
 
-					#ifdef USE_SERVICES
 					LOG_SNOOP(s_OperServ, "%s (%s@%s) is SEVERELY flooding services. Last command sent: %s %s %s", user->nick, user->username, user->host, command, IS_NOT_NULL(target) ? target : s_NULL, IS_NOT_NULL(text) ? text : s_NULL);
-					#else
-					send_globops(NULL, "Last command sent: %s %s %s", command, IS_NOT_NULL(target) ? target : s_NULL, IS_NOT_NULL(text) ? text : s_NULL);
-					#endif
 				}
 
 				break;
@@ -158,11 +138,7 @@ static BOOL msg_update_flood_levels(User *user, CSTR command, CSTR target, CSTR 
 
 					send_globops(NULL, "Services are being flooded by \2%s\2 (%s@%s)", user->nick, user->username, user->host);
 
-					#ifdef USE_SERVICES
 					LOG_SNOOP(s_OperServ, "%s (%s@%s) is flooding services. Last command sent: %s %s %s", user->nick, user->username, user->host, command, IS_NOT_NULL(target) ? target : s_NULL, IS_NOT_NULL(text) ? text : s_NULL);
-					#else
-					send_globops(NULL, "Last command sent: %s %s %s", command, IS_NOT_NULL(target) ? target : s_NULL, IS_NOT_NULL(text) ? text : s_NULL);
-					#endif
 				}
 
 				break;
@@ -199,25 +175,14 @@ static void m_mode(CSTR source, const int ac, char **av) {
 
 	if (av[0][0] != '#')
 		user_handle_userMODE(source, ac, av);
-
-	#if defined(USE_SERVICES) || defined(USE_STATS)
 	else
 		chan_handle_chanMODE(source, ac, av);
-	#endif
 }
 
 /*********************************************************/
 
 static void m_sjoin(CSTR source, const int ac, char **av) {
-
-	#if defined(USE_SERVICES) || defined(USE_STATS)
 	chan_handle_SJOIN(source, ac, av);		/* Normal SJOIN. */
-	#endif
-
-	#ifdef USE_SOCKSMONITOR
-	if (CONF_BOTTLER_DETECT || CONF_TENERONE_DETECT)
-		monitor_handle_SJOIN(source, ac, av);	/* Bottler and other checks. */
-	#endif
 }
 
 /*********************************************************/
@@ -263,15 +228,9 @@ static void m_version(CSTR source, const int ac, char **av) {
 	if ((CONF_SET_FLOOD == TRUE) && (msg_update_flood_levels(user, "VERSION", NULL, NULL) == TRUE))
 		return;
 
-	#ifdef USE_SERVICES
 	/* Check if we should ignore. Operators always get through. */
 	if (!user_is_ircop(user) && ignore_match(user))
 		return;
-	#endif
-
-	#ifdef USE_STATS
-	servers_increase_messages(user);
-	#endif
 
 	LOG_SNOOP(s_Snooper, "VERSION requested by \2%s\2", source);
 
@@ -288,19 +247,14 @@ static void m_ping(CSTR source, const int ac, char **av) {
 
 	if (FlagUnset(uplink_capab, CAPAB_BURST) && (++npings == 2)) {
 
-		#ifdef USE_SERVICES
 		synch_topics();
-		#endif
 
 		synch_servers();
 
 		synched = TRUE;
 		LOG_SNOOP(s_Snooper, "Synched to network data.");
 		send_SJOIN(s_DebugServ, CONF_DEBUG_CHAN);
-
-		#ifdef USE_SERVICES
 		send_SJOIN(s_GlobalNoticer, CONF_SNOOP_CHAN);
-		#endif
 	}
 
 	send_cmd("PONG %s %s", ac > 1 ? av[1] : CONF_SERVICES_NAME, av[0]);
@@ -316,19 +270,14 @@ static void m_burst(CSTR source, const int ac, char **av) {
 		/* Let our uplink know we're synched. */
 		send_cmd("BURST 0");
 
-		#ifdef USE_SERVICES
 		synch_topics();
-		#endif
 
 		synch_servers();
 
 		synched = TRUE;
 		LOG_SNOOP(s_Snooper, "Synched to network data.");
 		send_SJOIN(s_DebugServ, CONF_DEBUG_CHAN);
-
-		#ifdef USE_SERVICES
 		send_SJOIN(s_GlobalNoticer, CONF_SNOOP_CHAN);
-		#endif
 	}
 #endif
 }
@@ -355,15 +304,9 @@ static void m_motd(CSTR source, const int ac, char **av) {
 	if ((CONF_SET_FLOOD == TRUE) && (msg_update_flood_levels(user, "MOTD", NULL, NULL) == TRUE))
 		return;
 
-	#ifdef USE_SERVICES
 	/* Check if we should ignore. Operators always get through. */
 	if (!user_is_ircop(user) && ignore_match(user))
 		return;
-	#endif
-
-	#ifdef USE_STATS
-	servers_increase_messages(user);
-	#endif
 
 	LOG_SNOOP(s_Snooper, "MOTD requested by \2%s\2", source);
 
@@ -420,15 +363,9 @@ static void m_privmsg(CSTR source, const int ac, char **av) {
 	if ((CONF_SET_FLOOD == TRUE) && (msg_update_flood_levels(currentUser, "PRIVMSG", av[0], av[1]) == TRUE))
 		return;
 
-	#ifdef USE_SERVICES
 	/* Check if we should ignore. Operators always get through. */
 	if (!isOper && ignore_match(currentUser))
 		return;
-	#endif
-
-	#ifdef USE_STATS
-	servers_increase_messages(currentUser);
-	#endif
 
 	if (strchr(av[0], '@')) {
 
@@ -441,7 +378,6 @@ static void m_privmsg(CSTR source, const int ac, char **av) {
 	if (IS_NULL(av[1]))
 		return;
 
-	#ifdef USE_SERVICES
 	else if (str_equals_nocase(nick, s_ChanServ))
 		chanserv(source, currentUser, av[1]);
 
@@ -459,20 +395,6 @@ static void m_privmsg(CSTR source, const int ac, char **av) {
 
 	else if (str_equals_nocase(nick, s_HelpServ))
 		helpserv(source, currentUser, av[1]);
-	#endif
-
-	#ifdef USE_SOCKSMONITOR
-	else if (str_equals_nocase(nick, s_SocksMonitor))
-		monitor(source, currentUser, av[1]);
-	#endif
-
-	#ifdef USE_STATS
-	else if (str_equals_nocase(nick, s_StatServ))
-		statserv(source, currentUser, av[1]);
-
-	else if (str_equals_nocase(nick, s_SeenServ))
-		seenserv(source, currentUser, av[1]);
-	#endif
 
 	else if (is_services_coder(currentUser) && str_equals_nocase(nick, s_DebugServ))
 		debugserv(source, currentUser, av[1]);
@@ -501,27 +423,14 @@ static void m_stats(CSTR source, const int ac, char **av) {
 	if ((CONF_SET_FLOOD == TRUE) && (msg_update_flood_levels(user, "STATS", av[0], NULL) == TRUE))
 		return;
 
-	#ifdef USE_SERVICES
 	/* Check if we should ignore. Operators always get through. */
 	if (!user_is_ircop(user) && ignore_match(user))
 		return;
-	#endif
-
-	#ifdef USE_STATS
-	servers_increase_messages(user);
-	#endif
 
 	switch (*av[0]) {
 
 	case 'u':
-		#if !defined(USE_SERVICES) && defined(USE_STATS) && !defined(USE_SOCKSMONITOR)
-		send_cmd("242 %s :Stats up %s", source, convert_time(misc_buffer, MISC_BUFFER_SIZE, (NOW - start_time), LANG_DEFAULT));
-		#elif !defined(USE_SERVICES) && !defined(USE_STATS) && defined(USE_SOCKSMONITOR)
-		send_cmd("242 %s :Socks Monitor up %s", source, convert_time(misc_buffer, MISC_BUFFER_SIZE, (NOW - start_time), LANG_DEFAULT));
-		#else
 		send_cmd("242 %s :Services up %s", source, convert_time(misc_buffer, MISC_BUFFER_SIZE, (NOW - start_time), LANG_DEFAULT));
-		#endif
-
 		send_cmd("219 %s u :End of /STATS report.", source);
 		return;
 
@@ -621,15 +530,9 @@ static void m_whois(CSTR source, const int ac, char **av) {
 	if ((CONF_SET_FLOOD == TRUE) && (msg_update_flood_levels(user, "WHOIS", av[0], av[1]) == TRUE))
 		return;
 
-	#ifdef USE_SERVICES
 	/* Check if we should ignore. Operators always get through. */
 	if (!user_is_ircop(user) && ignore_match(user))
 		return;
-	#endif
-
-	#ifdef USE_STATS
-	servers_increase_messages(user);
-	#endif
 
 	if (IS_NULL(localUser = hash_onlineuser_find(av[1])))
 		send_cmd("401 %s %s :No such service.", source, av[1]);
@@ -664,32 +567,14 @@ static void m_admin(CSTR source, const int ac, char **av) {
 	if ((CONF_SET_FLOOD == TRUE) && (msg_update_flood_levels(user, "ADMIN", NULL, NULL) == TRUE))
 		return;
 
-	#ifdef USE_SERVICES
 	/* Check if we should ignore. Operators always get through. */
 	if (!user_is_ircop(user) && ignore_match(user))
 		return;
-	#endif
-
-	#ifdef USE_STATS
-	servers_increase_messages(user);
-	#endif
 
 	send_cmd("256 %s :Administrative info about %s", source, CONF_SERVICES_NAME);
-
-	#if !defined(USE_SERVICES) && defined(USE_STATS) && !defined(USE_SOCKSMONITOR)
-	send_cmd("257 %s :Azzurra IRC Network Statistical Services", source);
-	send_cmd("258 %s :Admin: Gastaman", source);
-
-	#elif !defined(USE_SERVICES) && !defined(USE_STATS) && defined(USE_SOCKSMONITOR)
-	send_cmd("257 %s :Azzurra IRC Network Socks Monitor Services", source);
-	send_cmd("258 %s :Admin: Gastaman", source);
-
-	#else
 	send_cmd("257 %s :Azzurra IRC Network IRC Services", source);
-	send_cmd("258 %s :Admin: Shaka", source);
-	#endif
-
-	send_cmd("259 %s :E-Mail Address: services@azzurra.org", source);
+	send_cmd("258 %s :Admin: Azzurra Network Roots", source);
+	send_cmd("259 %s :E-Mail Address: irc@azzurra.org", source);
 }
 
 /*********************************************************/
@@ -713,15 +598,9 @@ static void m_time(CSTR source, const int ac, char **av) {
 	if ((CONF_SET_FLOOD == TRUE) && (msg_update_flood_levels(user, "TIME", NULL, NULL) == TRUE))
 		return;
 
-	#ifdef USE_SERVICES
 	/* Check if we should ignore. Operators always get through. */
 	if (!user_is_ircop(user) && ignore_match(user))
 		return;
-	#endif
-
-	#ifdef USE_STATS
-	servers_increase_messages(user);
-	#endif
 
 	lang_format_localtime(timebuf, sizeof(timebuf), LANG_US, TIME_FORMAT_FULLDATE, NOW);
 
@@ -750,15 +629,9 @@ static void m_info(CSTR source, const int ac, char **av) {
 	if ((CONF_SET_FLOOD == TRUE) && (msg_update_flood_levels(user, "INFO", NULL, NULL) == TRUE))
 		return;
 
-	#ifdef USE_SERVICES
 	/* Check if we should ignore. Operators always get through. */
 	if (!user_is_ircop(user) && ignore_match(user))
 		return;
-	#endif
-
-	#ifdef USE_STATS
-	servers_increase_messages(user);
-	#endif
 
 	if (IS_NOT_NULL(f = fopen(MOTD_FILENAME, "r"))) {
 
@@ -826,7 +699,7 @@ static void m_capab(CSTR source, const int ac, char **av) {
 		{ "NOQUIT",		CAPAB_NOQUIT },
 		{ "SSJOIN",		CAPAB_SSJOIN },
 		{ "BURST",		CAPAB_BURST },
-		{ "UNCONNECT",	CAPAB_UNCONNECT },
+		{ "UNCONNECT",		CAPAB_UNCONNECT },
 		{ "ZIP",		CAPAB_ZIP },
 		{ "NICKIP",		CAPAB_NICKIP },
 		{ "TSMODE",		CAPAB_TSMODE },
@@ -865,23 +738,16 @@ Message messages[] = {
 
 	{ "SJOIN",		0,	m_sjoin },
 	{ "NICK",		0,	user_handle_NICK },
-	{ "PRIVMSG",	0,	m_privmsg },
+	{ "PRIVMSG",		0,	m_privmsg },
 	{ "QUIT",		0,	user_handle_QUIT },
 	{ "MODE",		0,	m_mode },
 
 	// High priority
 
-	#if defined(USE_SERVICES) || defined(USE_STATS)
 	{ "PART",		0,	user_handle_PART },
 	{ "KICK",		0,	user_handle_KICK },
 	{ "TOPIC",		0,	chan_handle_TOPIC },
 	{ "JOIN",		0,	user_handle_JOIN },
-	#else
-	{ "PART",		0,	NULL },
-	{ "KICK",		0,	NULL },
-	{ "TOPIC",		0,	NULL },
-	{ "JOIN",		0,	NULL },
-	#endif
 
 	// Normal priority
 
@@ -893,11 +759,7 @@ Message messages[] = {
 	{ "SERVER",		0,	server_handle_SERVER },
 	{ "AWAY",		0,	NULL },
 
-	#ifdef USE_SOCKSMONITOR
-	{ "NOTICE",		0,	m_privmsg },	/* To catch bottlers' ctcp reply. */
-	#else
 	{ "NOTICE",		0,	NULL },
-	#endif
 
 	{ "401",		0,	NULL },		/* 401 NickServ nick :No such nick/channel */
 	{ "402",		0,	NULL },		/* 402 services.azzurra.org nick :No such server */
@@ -908,22 +770,22 @@ Message messages[] = {
 
 	// Low priority
 
-	{ "SVSMODE",	0,	m_svsmode },
-	{ "VERSION",	0,	m_version },
+	{ "SVSMODE",		0,	m_svsmode },
+	{ "VERSION",		0,	m_version },
 	{ "SHUN",		0,	NULL },
 	{ "UNSHUN",		0,	NULL },
-	{ "WALLOPS",	0,	NULL },
+	{ "WALLOPS",		0,	NULL },
 	{ "RAKILL",		0,	NULL },
-	{ "CHATOPS",	0,	NULL },
-	{ "GLOBOPS",	0,	NULL },
-	{ "GNOTICE",	0,	m_gnotice },
+	{ "CHATOPS",		0,	NULL },
+	{ "GLOBOPS",		0,	NULL },
+	{ "GNOTICE",		0,	m_gnotice },
 	{ "AKILL",		0,	NULL },
 	{ "SGLINE",		0,	NULL },
-	{ "SILENCE",	0,	NULL },
-	{ "SNOTICE",	0,	NULL },
+	{ "SILENCE",		0,	NULL },
+	{ "SNOTICE",		0,	NULL },
 	{ "SQLINE",		0,	NULL },
-	{ "UNSGLINE",	0,	NULL },
-	{ "UNSQLINE",	0,	NULL },
+	{ "UNSGLINE",		0,	NULL },
+	{ "UNSQLINE",		0,	NULL },
 
 	// Very Low priority
 

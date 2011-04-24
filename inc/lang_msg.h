@@ -21,13 +21,7 @@
 
 #include "common.h"
 
-#if defined USE_SERVICES
-	#include "lang_msg_svc.h"
-#elif defined USE_STATS
-	#include "lang_msg_sts.h"
-#elif defined USE_SOCKSMONITOR
-	#include "lang_msg_cyb.h"
-#endif
+#include "lang_msg_svc.h"
 
 
 #endif /* SRV_LANG_MSG_MAIN_H */

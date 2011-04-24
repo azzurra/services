@@ -34,8 +34,6 @@
 #include "../inc/storage.h"
 
 
-#ifdef USE_SERVICES
-
 /*********************************************************
  * Local and global variables                            *
  *********************************************************/
@@ -1424,5 +1422,3 @@ unsigned long int rootserv_mem_report(CSTR sourceNick, const User *callerUser) {
 
 	return mem;
 }
-
-#endif /* USE_SERVICES */

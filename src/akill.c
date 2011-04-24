@@ -25,13 +25,6 @@
 #include "../inc/storage.h"
 #include "../inc/list.h"
 
-#ifdef USE_SOCKSMONITOR
-#include "../inc/cybcop.h"
-#endif
-
-
-#if defined(USE_SERVICES) || defined(USE_SOCKSMONITOR)
-
 static AutoKill *AutoKillList;
 BOOL AutoKillListLoadComplete;
 
@@ -463,119 +456,25 @@ void akill_add(CSTR source, CSTR username, CSTR host, CSTR reason, const BOOL ma
 		AddFlag(akill->type, AKILL_TYPE_TEMPORARY);
 	}
 
-	#ifdef USE_SOCKSMONITOR
-	if (akillID == 0) {
-	#endif
+	srand(randomseed());
+	akill->id = (unsigned long)getrandom(1934374832UL, 3974848322UL);
 
-		srand(randomseed());
-		akill->id = (unsigned long)getrandom(1934374832UL, 3974848322UL);
+	switch (type) {
+		case AKILL_TYPE_RESERVED:
+			AddFlag(akill->type, AKILL_TYPE_RESERVED);
+			akill->reason = str_duplicate(lang_msg(lang, RESERVED_AKILL_REASON));
+			break;
 
-		switch (type) {
-
-			#ifdef USE_SOCKSMONITOR
-			case AKILL_TYPE_PROXY:
-				AddFlag(akill->type, AKILL_TYPE_PROXY);
-
-				if (IS_NOT_NULL(reason)) {
-
-					snprintf(misc_buffer, MISC_BUFFER_SIZE, lang_msg(lang, PROXY_AKILL_REASON_SPECIFIC), atoi(reason));
-					akill->reason = str_duplicate(misc_buffer);
-				}
-				else
-					akill->reason = str_duplicate(lang_msg(lang, PROXY_AKILL_REASON_GENERAL));
-
-				break;
-
-			case AKILL_TYPE_SOCKS4:
-				AddFlag(akill->type, AKILL_TYPE_SOCKS4);
-
-				snprintf(misc_buffer, MISC_BUFFER_SIZE, lang_msg(lang, SOCKS_AKILL_REASON), 4);
-				akill->reason = str_duplicate(misc_buffer);
-				break;
-
-			case AKILL_TYPE_SOCKS5:
-				AddFlag(akill->type, AKILL_TYPE_SOCKS5);
-
-				snprintf(misc_buffer, MISC_BUFFER_SIZE, lang_msg(lang, SOCKS_AKILL_REASON), 5);
-				akill->reason = str_duplicate(misc_buffer);
-				break;
-
-			case AKILL_TYPE_WINGATE:
-				AddFlag(akill->type, AKILL_TYPE_WINGATE);
-				akill->reason = str_duplicate(lang_msg(lang, WINGATE_AKILL_REASON));
-				break;
-
-			case AKILL_TYPE_FLOODER:
-				AddFlag(akill->type, AKILL_TYPE_FLOODER);
-				akill->reason = str_duplicate(lang_msg(lang, FLOODER_AKILL_REASON));
-				break;
-
-			case AKILL_TYPE_BOTTLER:
-				AddFlag(akill->type, AKILL_TYPE_BOTTLER);
-				akill->reason = str_duplicate(lang_msg(lang, BOTTLER_AKILL_REASON));
-				break;
-
-			case AKILL_TYPE_TROJAN:
-				AddFlag(akill->type, AKILL_TYPE_TROJAN);
-				akill->reason = str_duplicate(lang_msg(lang, TROJAN_AKILL_REASON));
-				break;
-
-			case AKILL_TYPE_MIRCWORM:
-				AddFlag(akill->type, AKILL_TYPE_MIRCWORM);
-				akill->reason = str_duplicate(lang_msg(lang, MIRCWORM_AKILL_REASON));
-				break;
-
-			case AKILL_TYPE_IDENT:
-				AddFlag(akill->type, AKILL_TYPE_IDENT);
-				akill->reason = str_duplicate(lang_msg(lang, IDENT_AKILL_REASON));
-				break;
-			#endif
-
-			#ifdef USE_SERVICES
-			case AKILL_TYPE_RESERVED:
-				AddFlag(akill->type, AKILL_TYPE_RESERVED);
-				akill->reason = str_duplicate(lang_msg(lang, RESERVED_AKILL_REASON));
-				break;
-
-			case AKILL_TYPE_CLONES:
-				AddFlag(akill->type, AKILL_TYPE_CLONES);
-
-				snprintf(misc_buffer, MISC_BUFFER_SIZE, lang_msg(lang, CLONES_AKILL_REASON), (CONF_DEFAULT_CLONEKILL_EXPIRY / 60));
-				akill->reason = str_duplicate(misc_buffer);
-				break;
-			#endif
-
-			default:
-				#ifdef USE_SOCKSMONITOR
-				akill->reason = str_duplicate(lang_msg(lang, PROXY_AKILL_REASON_GENERAL));
-				#else
-				akill->reason = str_duplicate(reason);
-				#endif
-
-				break;
-		}
-	#ifdef USE_SOCKSMONITOR
-	}
-	else {
-
-		akill->id = akillID;
-
-		AddFlag(akill->type, AKILL_TYPE_BY_APM);
-		AddFlag(akill->type, type);
-
-		/* 'reason' holds the port number here. */
-		if (IS_NOT_NULL(reason)) {
-
-			snprintf(misc_buffer, MISC_BUFFER_SIZE, lang_msg(lang, PROXY_AKILL_REASON_SPECIFIC), atoi(reason));
+		case AKILL_TYPE_CLONES:
+			AddFlag(akill->type, AKILL_TYPE_CLONES);
+			snprintf(misc_buffer, MISC_BUFFER_SIZE, lang_msg(lang, CLONES_AKILL_REASON), (CONF_DEFAULT_CLONEKILL_EXPIRY / 60));
 			akill->reason = str_duplicate(misc_buffer);
-		}
-		else {
+			break;
 
-			AddFlag(akill->type, AKILL_TYPE_BY_DNSBL);
-			akill->reason = str_duplicate(lang_msg(lang, PROXY_AKILL_REASON_GENERAL));
-		}
+		default:
+			akill->reason = str_duplicate(reason);
+			break;
 	}
-	#endif
 
 	/* Send it. */
 	send_AKILL(username, host, source, akill->reason, akill->id, get_akill_type_short(akill->type));
@@ -660,42 +559,11 @@ void handle_akill(CSTR source, User *callerUser, ServiceCommandData *data) {
 				else if (str_equals_nocase(pattern, "TEMP"))
 					type = AKILL_TYPE_TEMPORARY;
 
-#ifdef USE_SERVICES
 				else if (str_equals_nocase(pattern, "RESERVED"))
 					type = AKILL_TYPE_RESERVED;
 
 				else if (str_equals_nocase(pattern, "CLONES"))
 					type = AKILL_TYPE_CLONES;
-#endif
-
-#ifdef USE_SOCKSMONITOR
-				else if (str_equals_nocase(pattern, "TROJAN"))
-					type = AKILL_TYPE_TROJAN;
-
-				else if (str_equals_nocase(pattern, "MIRCWORM"))
-					type = AKILL_TYPE_MIRCWORM;
-
-				else if (str_equals_nocase(pattern, "IDENT"))
-					type = AKILL_TYPE_IDENT;
-
-				else if (str_equals_nocase(pattern, "BOTTLER"))
-					type = AKILL_TYPE_BOTTLER;
-
-				else if (str_equals_nocase(pattern, "SOCKS4"))
-					type = AKILL_TYPE_SOCKS4;
-
-				else if (str_equals_nocase(pattern, "SOCKS5"))
-					type = AKILL_TYPE_SOCKS5;
-
-				else if (str_equals_nocase(pattern, "SOCKS"))
-					type = (AKILL_TYPE_SOCKS4 | AKILL_TYPE_SOCKS5);
-
-				else if (str_equals_nocase(pattern, "FLOODER"))
-					type = AKILL_TYPE_FLOODER;
-
-				else if (str_equals_nocase(pattern, "PROXY"))
-					type = AKILL_TYPE_PROXY;
-#endif
 
 				else {
 
@@ -851,9 +719,7 @@ void handle_akill(CSTR source, User *callerUser, ServiceCommandData *data) {
 		float			percent;
 		CIDR_IP			cidr;
 
-		#ifndef USE_SOCKSMONITOR
 		size_t			len;
-		#endif
 
 
 		switch (command[0]) {
@@ -868,12 +734,7 @@ void handle_akill(CSTR source, User *callerUser, ServiceCommandData *data) {
 				expiry = strtok(NULL, " ");
 				username = strtok(NULL, "@");
 				host = strtok(NULL, " ");
-
-				#ifdef USE_SOCKSMONITOR
-				reason = "Proxy";
-				#else
 				reason = strtok(NULL, "");
-				#endif
 
 				if (IS_NULL(expiry) || IS_NULL(username) || IS_NULL(host) || IS_NULL(reason)) {
 
@@ -901,12 +762,7 @@ void handle_akill(CSTR source, User *callerUser, ServiceCommandData *data) {
 			default:
 				username = strtok(NULL, "@");
 				host = strtok(NULL, " ");
-
-				#ifdef USE_SOCKSMONITOR
-				reason = "Proxy";
-				#else
 				reason = strtok(NULL, "");
-				#endif
 
 				if (IS_NULL(username) || IS_NULL(host) || IS_NULL(reason)) {
 
@@ -918,7 +774,6 @@ void handle_akill(CSTR source, User *callerUser, ServiceCommandData *data) {
 				break;
 		}
 
-		#ifndef USE_SOCKSMONITOR
 		if ((len = str_len(reason)) > 220) {
 
 			send_notice_to_user(data->agent->nick, callerUser, "Reason cannot be longer than 220 characters (yours has: %d).", len);
@@ -930,7 +785,6 @@ void handle_akill(CSTR source, User *callerUser, ServiceCommandData *data) {
 			send_notice_to_user(data->agent->nick, callerUser, "Invalid reason supplied.");
 			return;
 		}
-		#endif
 
 		if ((user_len = str_len(username)) > USERMAX) {
 
@@ -1100,10 +954,8 @@ void handle_akill(CSTR source, User *callerUser, ServiceCommandData *data) {
 			*ptr = c_NULL;
 		}
 
-		#ifndef USE_SOCKSMONITOR
 		/* Terminate all control codes to avoid crap in globops. */
 		terminate_string_ccodes(reason);
-		#endif
 
 		if (expireTime == 0) {
 
@@ -1246,10 +1098,6 @@ void handle_akill(CSTR source, User *callerUser, ServiceCommandData *data) {
 
 		if (CONF_SET_READONLY)
 			send_notice_to_user(data->agent->nick, callerUser, "\2Notice:\2 Services is in read-only mode. Changes will not be saved!");
-
-		#ifdef USE_SOCKSMONITOR
-		clear_from_cache(akill->host);
-		#endif
 
 		akill_delete(akill);
 	}
@@ -1611,5 +1459,3 @@ unsigned long akill_mem_report(CSTR sourceNick, const User *callerUser) {
 
 	return mem;
 }
-
-#endif /* #if defined(USE_SERVICES) || defined(USE_SOCKSMONITOR) */

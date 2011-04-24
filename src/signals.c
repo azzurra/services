@@ -25,10 +25,6 @@
 #include "../inc/conf.h"
 #include "../inc/process.h"		/* For to_dispatched */
 
-#ifdef USE_SOCKSMONITOR
-#include <pthread.h>
-#endif
-
 
 /*********************************************************
  * Private code                                          *
@@ -231,12 +227,6 @@ static void signals_handler(int signum) {
 		}
 	}
 
-#if defined(USE_SOCKSMONITOR) && (defined(LINUX20) || defined(LINUX22))
-	LOG_DEBUG("Killing all threads");
-	pthread_kill_other_threads_np();
-	LOG_DEBUG("Done killing threads");
-#endif
-
 	// re-raise the signal
 	raise(signum);
 
@@ -250,25 +240,9 @@ void signals_save_last_core(void) {
 	CSTR	ts = log_get_compact_timestamp(0);
 	BOOL	core_found = TRUE;
 
-	#if defined USE_SERVICES
-
-		#define EXE_NAME	"services"
-		#define CORE_NAME	"./services.core"
-		#define CORE_FMT	"./services.core-%s"
-
-	#elif defined USE_SOCKSMONITOR
-
-		#define EXE_NAME	"cybcop"
-		#define CORE_NAME	"./cybcop.core"
-		#define CORE_FMT	"./cybcop.core-%s"
-
-	#elif defined USE_STATS
-
-		#define EXE_NAME	"stats"
-		#define CORE_NAME	"./stats.core"
-		#define CORE_FMT	"./stats.core-%s"
-
-	#endif
+	#define EXE_NAME	"services"
+	#define CORE_NAME	"./services.core"
+	#define CORE_FMT	"./services.core-%s"
 
 	// "./core"
 	snprintf(misc_buffer, sizeof(misc_buffer), CORE_FMT, ts);

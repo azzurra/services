@@ -16,8 +16,6 @@
 #ifndef SRV_NICKSERV_H
 #define SRV_NICKSERV_H
 
-#ifdef USE_SERVICES
-
 /*********************************************************
  * Version stuff                                         *
  *********************************************************/
@@ -183,7 +181,5 @@ extern void nickserv_guest_free(unsigned int guestNumber);
 
 extern void nickserv_ds_dump(CSTR sourceNick, const User *callerUser, STR request);
 extern unsigned long int nickserv_mem_report(CSTR sourceNick, const User *callerUser);
-
-#endif /* USE_SERVICES */
 
 #endif /* SRV_NICKSERV_H */

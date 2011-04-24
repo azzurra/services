@@ -113,13 +113,8 @@ fi
 
 # Variable initialization.
 
-PROGRAM=services
 BINDEST=.
 DATDEST=./data
-
-SOCKSMONITOR=
-SERVICES="USE_SERVICES"
-STATS=
 
 CC=
 CC_LIBS=
@@ -175,8 +170,6 @@ while [ $# -gt 0 ] ; do
 	elif [ "$1" = "-libs" ] ; then
 		shift
 		USER_CC_LIBS=$1
-	elif [ "$1" = "-os2" ] ; then
-		PROGRAM=services.exe
 	else
 		if [ "$1" != "-help" -a "$1" != "-h" -a "$1" != "--help" ]; then
 			echo >&2 Unknown option/parameter: "$1"
@@ -186,7 +179,6 @@ while [ $# -gt 0 ] ; do
 		fi
 		cat >&2 <<EOT
 Available options:
-	-os2		Indicate that this is an OS/2 system.
 	-cc			Specify C compiler to use (overrides check)
 	-cflags		Specify compilation flags (defaults: -O2 for gcc,
 			    -O for other compilers; overrides check)
@@ -197,55 +189,6 @@ EOT
 	fi
 	shift
 done
-
-###########################################################################
-
-echo ""
-echo "Beginning Services configuration."
-echo ""
-
-ok=0
-echo "What do you want to compile?"
-echo "     1) Standard IRC Services (NickServ, ChanServ, etc)"
-echo "     2) Proxy Scanner (requires threading support)"
-echo "     3) Statistical Services (StatServ, SeenServ)"
-while [ $ok -eq 0 ] ; do
-	echo2 "[1] "
-	if read INPUT ; then : ; else echo "" ; exit 1 ; fi
-	if [ ! "$INPUT" ] ; then
-		INPUT=1
-	fi
-	case $INPUT in
-		no\ default)
-			echo "You must specify your choice."
-			;;
-
-		1)
-					SERVICES="USE_SERVICES"
-					SOCKSMONITOR=
-					STATS=
-			ok=1
-			;;
-		2)
-					SERVICES=
-					SOCKSMONITOR="USE_SOCKSMONITOR"
-					STATS=
-			ok=1
-			;;
-
-		3)
-					SERVICES=
-					SOCKSMONITOR=
-					STATS="USE_STATS"
-			ok=1
-			;;
-
-		*)
-			echo "Please enter a valid option number."
-			;;
-	esac
-done
-echo ""
 
 ###########################################################################
 
@@ -368,23 +311,6 @@ if run $CC $CC_FLAGS tmp/test.c -lbsd -o tmp/test ; then
 	echo2 "-lbsd "
 fi
 
-if [ "$SOCKSMONITOR" = "USE_SOCKSMONITOR" ] ; then
-	if run $CC $CC_FLAGS -D_REENTRANT tmp/test.c -pthread -o tmp/test ; then
-		CC_FLAGS="$CC_FLAGS -D_REENTRANT"
-		CC_LIBS="$CC_LIBS -pthread"
-		echo2 "-pthread "
-	elif run $CC $CC_FLAGS -D_REENTRANT tmp/test.c -lpthread -o tmp/test ; then
-		CC_FLAGS="$CC_FLAGS -D_REENTRANT"
-		CC_LIBS="$CC_LIBS -lpthread"
-		echo2 "-lpthread "
-	else
-	   	SOCKSMONITOR=""
-		echo ""
-		echo "Configure was not able to determine how to compile"
-		echo "services with threading support; disabled it." 
-	fi
-fi
-
 echo ""
 CC_LIBS="`echo $CC_LIBS | sed 's/^ +//'`"
 
@@ -392,31 +318,6 @@ if [ "$USER_CC_LIBS" ] ; then
 	CC_LIBS="$CC_LIBS $USER_CC_LIBS"
 	echo "Additional user-supplied libraries: $USER_CC_LIBS"
 	log user added \`"$USER_CC_LIBS'"
-fi
-
-###########################################################################
-
-# OS specific behaviour
-
-if [ "$SOCKSMONITOR" = "USE_SOCKSMONITOR" ] ; then
-
-	echo2 "Looking for OS specific needs... "
-
-	if [ `uname -s` = "Linux" ] ; then
-		VER=`uname -r`
-		case $VER in
-			2.0*|2.1*)
-				OSTYPE="LINUX20"
-				echo2 "Linux 2.0 or 2.1 thread handling; "
-				;;
-			*)
-				OSTYPE="LINUX22"
-				echo2 "Linux 2.2+ thread handling; "
-				;;
-		esac
-	fi
-
-	echo ""
 fi
 
 ###########################################################################
@@ -522,27 +423,6 @@ fi
 
 ###########################################################################
 
-MODE="check_binary"
-echo2 "Checking how to name the binary... "
-
-if [ "$STATS" = "USE_STATS" -a ! "$SOCKSMONITOR" -a ! "$SERVICES" ] ; then
-	PROGRAM="stats"
-	echo "$PROGRAM"
-	log "binary: stats"
-
-elif [ "$SOCKSMONITOR" = "USE_SOCKSMONITOR" -a ! "$STATS" -a ! "$SERVICES" ] ; then
-	PROGRAM="cybcop"
-	echo "$PROGRAM"
-	log "binary: cybcop"
-
-else
-	PROGRAM="services"
-	echo "$PROGRAM"
-	log "binary: services"
-fi
-
-###########################################################################
-
 # Create files.
 
 echo2 "Creating sysconf.h... "
@@ -552,21 +432,9 @@ cat >inc/sysconf.h <<EOT
  * to it will be erased next time "configure" is run.
  */
 
-#define SERVICES_BIN		"$BINDEST/$PROGRAM"
+#define SERVICES_BIN		"$BINDEST/services"
 #define SERVICES_DIR		"$DATDEST"
 
-EOT
-
-if [ "$SERVICES" ] ; then cat >>inc/sysconf.h <<EOT ; fi
-#define $SERVICES
-EOT
-
-if [ "$SOCKSMONITOR" ] ; then cat >>inc/sysconf.h <<EOT ; fi
-#define $SOCKSMONITOR
-EOT
-
-if [ "$STATS" ] ; then cat >>inc/sysconf.h <<EOT ; fi
-#define $STATS
 EOT
 
 if [ "$OSTYPE" != "bonkle" ] ; then cat >>inc/sysconf.h <<EOT ; fi
@@ -591,10 +459,6 @@ cat >>inc/sysconf.h <<EOT
 EOT
 fi
 
-if [ "$SOCKSMONITOR" ] ; then cat >>inc/sysconf.h <<EOT ; fi
-#define HAVE_GETHOSTBYNAME	$HAVE_GETHOSTBYNAME
-EOT
-
 echo "done."
 
 echo2 "Creating Makefile.inc... "
@@ -607,7 +471,7 @@ BASE_CFLAGS=$CC_FLAGS
 LFLAGS=$CC_LFLAGS
 LIBS=$CC_LIBS
 
-PROGRAM=$PROGRAM
+PROGRAM=services
 BINDEST=$BINDEST
 DATDEST=$DATDEST
 

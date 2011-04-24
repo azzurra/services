@@ -20,9 +20,7 @@
 
 extern void handle_help(CSTR source, User *callerUser, ServiceCommandData *data);
 
-#ifdef USE_SERVICES
 extern void helpserv_init(void);
 extern void helpserv(CSTR source, User *callerUser, char *buf);
-#endif
 
 #endif /* SRV_HELPSERV_H */

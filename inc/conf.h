@@ -16,10 +16,6 @@
 #ifndef SRV_CONF_H
 #define SRV_CONF_H
 
-#ifdef USE_SOCKSMONITOR
-#include <arpa/inet.h>
-#endif
-
 
 /*********************************************************
  * Global variables                                      *
@@ -60,12 +56,6 @@ extern int CONF_FLOOD_MAX_MESSAGES;
 extern time_t CONF_FLOOD_MESSAGE_RESET;
 extern time_t CONF_FLOOD_LEVEL_RESET;
 extern char *CONF_SERVICES_MASTER;
-
-#ifndef USE_SERVICES
-extern char *CONF_SERVICES_MASTER_PASS;
-#endif
-
-#ifdef USE_SERVICES
 
 extern char s_NickServ[NICKSIZE];
 extern char s_ChanServ[NICKSIZE];
@@ -117,95 +107,15 @@ extern long int CONF_DEF_MLOCKOFF;
 extern BOOL CONF_FORCE_AUTH;
 extern int CONF_AUTHDEL_DAYS;
 extern BOOL CONF_SHOW_TAGLINES;
-#endif
 
-#ifdef USE_SOCKSMONITOR
-
-extern char s_SocksMonitor[NICKSIZE];
-extern char s_SM[3];
-
-extern char *CONF_MONITOR_TEST_IP;
-extern unsigned short int CONF_MONITOR_TEST_PORT;
-extern char *CONF_MONITOR_LOCAL_HOST;
-extern unsigned short int CONF_MONITOR_LOCAL_PORT;
-extern struct sockaddr_in MONITOR_LOCAL_ADDRESS;
-
-extern char SOCKS4_BUFFER[9];
-extern char SOCKS5_BUFFER[10];
-extern char PROXY_BUFFER[IRCBUFSIZE];
-extern ssize_t PROXY_BUFFER_LEN;
-
-extern char *CONF_PROXY_CHAN;
-
-extern int CONF_MONITOR_MAXTHREADS;
-
-extern time_t CONF_SOCKET_TIMEOUT;
-extern time_t CONF_PROXY_EXPIRE;
-extern time_t CONF_HOST_CACHE_EXPIRE;
-extern time_t CONF_FLOOD_CACHE_EXPIRE;
-extern int CONF_MAX_FLOOD_HITS;
-
-extern BOOL CONF_SCAN_SOCKS4;
-extern BOOL CONF_SCAN_SOCKS5;
-extern BOOL CONF_SCAN_WINGATE;
-extern BOOL CONF_SCAN_80;
-extern BOOL CONF_SCAN_3128;
-extern BOOL CONF_SCAN_6588;
-extern BOOL CONF_SCAN_8080;
-
-extern BOOL CONF_WARMACHINE_DETECT;
-extern BOOL CONF_PROMIRC_DETECT;
-extern BOOL CONF_VENOM_DETECT;
-extern BOOL CONF_UNKNOWN_CLONER_DETECT;
-extern BOOL CONF_UNUTNET_WORM_DETECT;
-extern BOOL CONF_WARSATAN_DETECT;
-extern BOOL CONF_CLONESX_DETECT;
-extern BOOL CONF_SABAN_DETECT;
-extern BOOL CONF_PROXER_DETECT;
-extern BOOL CONF_MUHSTIK_DETECT;
-extern BOOL CONF_DTHN_DETECT;
-extern BOOL CONF_GUEST_DETECT;
-extern BOOL CONF_FIZZER_DETECT;
-extern BOOL CONF_MAIL_DETECT;
-extern BOOL CONF_OPTIXPRO_DETECT;
-extern BOOL CONF_BOTTLER_DETECT;
-extern BOOL CONF_TENERONE_DETECT;
-extern BOOL CONF_NGILAMER_DETECT;
-#endif
-
-#ifdef USE_STATS
-extern char s_StatServ[NICKSIZE];
-extern char s_SeenServ[NICKSIZE];
-extern char s_ST[3];
-extern char s_SS[3];
-
-extern int CONF_STATS_EXPIRE;
-extern int CONF_SEEN_EXPIRE;
-extern int CONF_MAX_WILD_SEEN;
-#endif
-
-#if defined(USE_SERVICES) || defined(USE_SOCKSMONITOR)
 extern float CONF_AKILL_PERCENT;
 extern time_t CONF_DEFAULT_AKILL_EXPIRY;
-#endif
 
 
-#ifdef USE_SERVICES
-	#define s_Snooper		s_OperServ
-	#define s_SN			s_OS
-	#define s_RootSnooper	s_RootServ
-	#define s_RSN			s_RS
-#elif defined(USE_STATS)
-	#define s_Snooper		s_StatServ
-	#define s_SN			s_ST
-	#define s_RootSnooper	s_StatServ
-	#define s_RSN			s_ST
-#else
-	#define s_Snooper		s_SocksMonitor
-	#define s_SN			s_SM
-	#define s_RootSnooper	s_SocksMonitor
-	#define s_RSN			s_SM
-#endif
+#define s_Snooper	s_OperServ
+#define s_SN		s_OS
+#define s_RootSnooper	s_RootServ
+#define s_RSN		s_RS
 
 
 /*********************************************************

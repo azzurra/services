@@ -42,14 +42,7 @@ LANG_ID		current_caller_lang;
 * Local variables                                       *
 *********************************************************/
 
-#if defined USE_SERVICES
-	#define CLNG_FILE_FORMAT	"lang/svc%d.clng"
-#elif defined USE_STATS
-	#define CLNG_FILE_FORMAT	"lang/sts%d.clng"
-#elif defined USE_SOCKSMONITOR
-	#define CLNG_FILE_FORMAT	"lang/cyb%d.clng"
-#endif
-
+#define CLNG_FILE_FORMAT	"lang/svc%d.clng"
 
 // Tabella lingue
 
@@ -1039,7 +1032,6 @@ void lang_set_flags(LANG_ID lang_id, int add, unsigned int flags) {
 	}
 }
 
-#ifdef USE_SERVICES
 LANG_ID FindNickLang(CSTR nickname, const User *user) {
 	
 	if (IS_NOT_NULL(nickname) && IS_NOT_NULL(user)) {
@@ -1117,7 +1109,6 @@ BOOL lang_send_news(const User *callerUser) {
 
 	return FALSE;
 }
-#endif
 
 void lang_send_list(CSTR source, const User *dest) {
 

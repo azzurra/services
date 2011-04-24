@@ -25,7 +25,6 @@
  * Data types                                            *
  *********************************************************/
 
-#ifdef USE_SERVICES
 typedef struct _timeout	Timeout;
 
 typedef enum _timeoutType { toInvalid, toNickServ, toChanServ } TimeoutType;
@@ -48,14 +47,12 @@ struct _timeout {
 
 	Timeout			*next, *prev;
 };
-#endif
 
 
 /*********************************************************
  * Constants                                             *
  *********************************************************/
 
-#ifdef USE_SERVICES
 #define	TO_HASH_NOHASH		0
 
 // TO user types:
@@ -69,15 +66,12 @@ struct _timeout {
 // ChanServ
 #define TOTYPE_CHANSERV_UNBAN				3
 #define TOTYPE_CHANSERV_LEAVE				4
-#endif
 
 /*********************************************************
  * Global variables                                      *
  *********************************************************/
 
-#ifdef USE_SERVICES
 extern unsigned long timeout_count;
-#endif
 
 extern time_t	time_next_midnight;
 extern int		time_today_day, time_today_month, time_today_year, time_today_wday;
@@ -87,14 +81,12 @@ extern int		time_today_day, time_today_month, time_today_year, time_today_wday;
  * Public code                                           *
  *********************************************************/
 
-#ifdef USE_SERVICES
 extern BOOL timeout_add(TimeoutType type, int user_type, unsigned long int hash, int interval, BOOL repeat, TIMEOUT_HANDLER handler, void *data);
 extern BOOL timeout_remove(TimeoutType type, int user_type, unsigned long int hash);
 extern void *timeout_get_data(TimeoutType type, int user_type, unsigned long int hash);
 extern void timeout_check(const time_t now);
 
 extern void timeout_ds_dump(CSTR sourceNick, const User *callerUser, STR request);
-#endif
 
 extern void time_init();
 extern void time_check(const time_t now);

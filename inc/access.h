@@ -51,10 +51,8 @@ struct _access_V10 {
 
 	long		flags;		/* AC_* defined below. */
 
-	#ifdef USE_SERVICES
 	long		modes_on;	/* Modes added on connect. */
 	long		modes_off;	/* Modes removed on connect. */
-	#endif
 
 	Creator		creator;
 

@@ -16,9 +16,6 @@
  *********************************************************/
 
 #include "../inc/common.h"
-
-#ifdef USE_SERVICES
-
 #include "../inc/strings.h"
 #include "../inc/messages.h"
 #include "../inc/logging.h"
@@ -619,5 +616,3 @@ unsigned long int jupe_mem_report(CSTR sourceNick, const User *callerUser) {
 	send_notice_to_user(sourceNick, callerUser, "Jupe List: \2%d\2 -> \2%d\2 KB (\2%d\2 B)", count, mem / 1024, mem);
 	return mem;
 }
-
-#endif

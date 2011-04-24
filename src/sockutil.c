@@ -24,10 +24,6 @@
 #include "../inc/memory.h"
 #include "../inc/sockutil.h"
 
-#ifdef USE_SOCKSMONITOR
-#include "../inc/conf.h"
-#endif
-
 
 /* Socket used when connecting to our uplink. */
 static int SERVER_SOCKET = -1;
@@ -722,23 +718,6 @@ BOOL socket_connect(CSTR host, const unsigned short port) {
 	}
 
 	setbuf(files[sock], NULL);
-#endif
-
-#ifdef USE_SOCKSMONITOR
-	if ((CONF_MONITOR_LOCAL_HOST) && bind(sock, (struct sockaddr *)&MONITOR_LOCAL_ADDRESS, sizeof(MONITOR_LOCAL_ADDRESS)) < 0) {
-
-		int errno_save = errno;
-
-		shutdown(sock, SHUT_RDWR);
-
-		#ifndef NEW_SOCK
-		fclose(files[sock]);
-		#endif
-
-		close(sock);
-		errno = errno_save;
-		return -1;
-	}
 #endif
 
 	if (connect(sock, (struct sockaddr *)&sa, sizeof(sa)) < 0) {

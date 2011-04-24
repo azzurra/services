@@ -24,28 +24,16 @@
 #include "../inc/channels.h"
 #include "../inc/timeout.h"
 
-#ifdef USE_STATS
-#include "../inc/statserv.h"
-#endif
-
-
-#if defined(USE_SERVICES) || defined(USE_STATS)
-
-
 /*********************************************************
  * Prototipi                                             *
  *********************************************************/
 
 static void chan_sjoin_add_user(User *user, Channel *chan);
-
-#ifdef USE_SERVICES
 static void chan_sjoin_ops_check(Channel *chan, User **checklist, int count);
 
 /* From chanserv.c, because extern.h doesn't like Timeout */
 extern __inline__ void timeout_leave(Timeout *to);
 extern __inline__ void timeout_unban(Timeout *to);
-#endif
-
 
 /*********************************************************
  * Variabili globali                                     *
@@ -199,10 +187,7 @@ void chan_handle_SJOIN(CSTR source, const int ac, char **av) {
 	if (FlagSet(uplink_capab, CAPAB_SSJOIN)) {
 
 		if (!strchr(source, '.')) {
-
-			#ifdef USE_SERVICES
 			User *checklist[1];
-			#endif
 
 			/* This is a single client joining a (hopefully) existent channel. */
 
@@ -242,46 +227,25 @@ void chan_handle_SJOIN(CSTR source, const int ac, char **av) {
 
 				++stats_open_channels_count;
 
-				#ifdef USE_SERVICES
 				chan->ci = cs_findchan(chan_name);
-				#endif
-
-				#ifdef USE_STATS
-				if (!hash_chanstats_find(chan_name))
-					add_channel_stats(chan_name);
-
-				if (stats_open_channels_count > records.maxchannels) {
-
-					records.maxchannels = stats_open_channels_count;
-					records.maxchannels_time = NOW;
-				}
-
-				if (stats_open_channels_count > stats_daily_maxchans)
-					stats_daily_maxchans = stats_open_channels_count;
-				#endif
 			}
 
 			/* Most likely it'll be the same, but might be different, so just update it. */
 			chan->creation_time = (time_t) atol(av[0]);
 
-			#ifdef USE_SERVICES
 			SetCallerLang(user->current_lang);
 
 			if (chanserv_check_user_join(user, chan) == TRUE) {
-			#endif
 
 				TRACE_MAIN();
 				chan_sjoin_add_user(user, chan);	/* aggiunta dell'utente alla lista degli utenti del canale */
 
-			#ifdef USE_SERVICES
 			}
 			else
 				return;
-			#endif
 
 			TRACE_MAIN();
 
-			#ifdef USE_SERVICES
 			checklist[0] = user;
 
 			if (IS_NOT_NULL(chan->ci)) {
@@ -292,7 +256,6 @@ void chan_handle_SJOIN(CSTR source, const int ac, char **av) {
 				chan_sjoin_ops_check(chan, checklist, 1);
 				check_modelock(chan, NULL);
 			}
-			#endif
 
 			return;
 		}
@@ -311,7 +274,6 @@ void chan_handle_SJOIN(CSTR source, const int ac, char **av) {
 		char	*nick, *nick_token_ptr, nick_token[NICKSIZE + 3]; /* "%@+" */
 		time_t	timestamp;
 
-		#ifdef USE_SERVICES
 		/* Note: maximum users in a SJOIN is well below 160. We know because bahamut cuts the SJOIN
 		   after (buf + str_len(nicks) + 80 > 512) where buf is (SSJOIN enabled):
 		   :server_name SJOIN TS #channel modes :
@@ -325,15 +287,11 @@ void chan_handle_SJOIN(CSTR source, const int ac, char **av) {
 		   Max nicks is 60 + 236/4 = 119. -- Gastaman */
 
 		User	*checklist[160], *deoplist[120];
-		int		check = 0, deop = 0, failed = 0;
+		int	check = 0, deop = 0, failed = 0;
 		BOOL	resetTS = FALSE;
-		#endif
 
-
-		#ifdef USE_SERVICES
 		memset(checklist, 0, sizeof(checklist));
 		memset(deoplist, 0, sizeof(deoplist));
-		#endif
 
 		/* Variable initializations, sanity checks. */
 		chan_name = av[2 - param];
@@ -377,27 +335,8 @@ void chan_handle_SJOIN(CSTR source, const int ac, char **av) {
 			TRACE_MAIN();
 
 			chan->creation_time = timestamp;
-
 			++stats_open_channels_count;
-
-			#ifdef USE_SERVICES
 			chan->ci = cs_findchan(chan_name);
-			#endif
-
-			#ifdef USE_STATS
-			if (!hash_chanstats_find(chan_name))
-				add_channel_stats(chan_name);
-
-			if (stats_open_channels_count > records.maxchannels) {
-
-				records.maxchannels = stats_open_channels_count;
-				records.maxchannels_time = NOW;
-			}
-
-			if (stats_open_channels_count > stats_daily_maxchans)
-				stats_daily_maxchans = stats_open_channels_count;
-			#endif
-
 			newChannel = TRUE;
 		}
 		else if (timestamp < chan->creation_time) {
@@ -460,10 +399,7 @@ void chan_handle_SJOIN(CSTR source, const int ac, char **av) {
 
 			/* Reset the channel TS. */
 			chan->creation_time = timestamp;
-
-			#ifdef USE_SERVICES
 			resetTS = TRUE;
-			#endif
 		}
 
 		TRACE_MAIN();
@@ -628,12 +564,9 @@ void chan_handle_SJOIN(CSTR source, const int ac, char **av) {
 			
 			TRACE_MAIN();
 
-			#ifdef USE_SERVICES
 			SetCallerLang(user->current_lang);
 
 			if (chanserv_check_user_join(user, chan) == TRUE) {
-			#endif
-			
 				chan_sjoin_add_user(user, chan);
 				TRACE_MAIN();
 				
@@ -645,15 +578,11 @@ void chan_handle_SJOIN(CSTR source, const int ac, char **av) {
 				TRACE_MAIN();
 	
 				if (isOp) {
-					#ifdef USE_SERVICES
 					if (check_valid_op(user, chan->ci, 1)) {
-					#endif
-		
 						TRACE_MAIN();
 		
 						chan_add_op(chan, user);
 	
-				#ifdef USE_SERVICES
 						if (IS_NOT_NULL(chan->ci))
 							chan->ci->last_used = NOW;
 					}
@@ -668,9 +597,7 @@ void chan_handle_SJOIN(CSTR source, const int ac, char **av) {
 	
 						TRACE_MAIN();
 					}
-				#endif
 				}
-				#ifdef USE_SERVICES
 			}
 			else {
 
@@ -678,15 +605,12 @@ void chan_handle_SJOIN(CSTR source, const int ac, char **av) {
 				nick_token_ptr = str_tokenize(nick_token_ptr, nick_token, sizeof(nick_token), c_SPACE);
 				continue;
 			}
-			#endif
 
 			TRACE_MAIN();
-			#ifdef USE_SERVICES
 			checklist[check++] = user;
 
 			if (IS_NOT_NULL(chan->ci) && (synched == TRUE))
 				check_welcome(user, chan->ci);
-			#endif
 
 			nick_token_ptr = str_tokenize(nick_token_ptr, nick_token, sizeof(nick_token), c_SPACE);
 		} /* while */
@@ -710,7 +634,6 @@ void chan_handle_SJOIN(CSTR source, const int ac, char **av) {
 			return;
 		}
 
-		#ifdef USE_SERVICES
 		if (IS_NOT_NULL(deoplist[0])) {
 
 			int		idx, modeIdx = 0;
@@ -768,7 +691,6 @@ void chan_handle_SJOIN(CSTR source, const int ac, char **av) {
 			if (synched && (newChannel || resetTS || (FlagSet(chan->mode, CMODE_CS) && (chan->userCount == 1))))
 				restore_topic(chan);
 		}
-		#endif
 	}
 }
 
@@ -785,10 +707,6 @@ void chan_handle_SJOIN(CSTR source, const int ac, char **av) {
 void chan_handle_internal_SJOIN(const char *nick, const char *chan_name) {
 
 	Channel		*chan;
-
-	#ifdef USE_STATS
-	ChannelStats *cs;
-	#endif
 
 	BOOL	newchan = FALSE;
 	User	*user;
@@ -833,26 +751,7 @@ void chan_handle_internal_SJOIN(const char *nick, const char *chan_name) {
 
 		++stats_open_channels_count;
 
-		#ifdef USE_SERVICES
 		chan->ci = cs_findchan(chan_name);
-		#endif
-
-		#ifdef USE_STATS
-		cs = hash_chanstats_find(chan_name);
-
-		if (!cs)
-			add_channel_stats(chan_name);
-
-		if (stats_open_channels_count > records.maxchannels) {
-			
-			records.maxchannels = stats_open_channels_count;
-			records.maxchannels_time = NOW;
-		}
-
-		if (stats_open_channels_count > stats_daily_maxchans)
-			stats_daily_maxchans = stats_open_channels_count;
-		#endif
-
 		newchan = TRUE;
 	}
 
@@ -882,7 +781,6 @@ void chan_handle_internal_SJOIN(const char *nick, const char *chan_name) {
 
 	TRACE_MAIN();
 
-	#ifdef USE_SERVICES
 	if (IS_NOT_NULL(chan) && IS_NOT_NULL(chan->ci) && newchan) {
 
 		check_modelock(chan, NULL);
@@ -890,7 +788,6 @@ void chan_handle_internal_SJOIN(const char *nick, const char *chan_name) {
 		if (synched == TRUE)
 			restore_topic(chan);
 	}
-	#endif
 }
 
 
@@ -905,11 +802,6 @@ static void chan_sjoin_add_user(User *user, Channel *chan) {
 
 	UserListItem	*userItem;
 	ChanListItem	*chanItem;
-
-	#ifdef USE_STATS
-	ChannelStats *cs;
-	#endif
-
 
 	TRACE_FCLT(FACILITY_CHANNELS_SJOIN_ADD_USER);
 
@@ -945,48 +837,6 @@ static void chan_sjoin_add_user(User *user, Channel *chan) {
 
 	++(chan->userCount);
 
-	#ifdef USE_STATS
-	cs = hash_chanstats_find(chan->name);
-
-	if (IS_NOT_NULL(cs)) {
-
-		TRACE();
-		cs->last_change = NOW;
-
-		if (chan->userCount > cs->dailypeak)
-			cs->dailypeak = chan->userCount;
-
-		if (cs->dailypeak > cs->weeklypeak)
-			cs->weeklypeak = cs->dailypeak;
-
-		if (cs->weeklypeak > cs->monthlypeak)
-			cs->monthlypeak = cs->weeklypeak;
-
-		if (cs->monthlypeak > cs->totalpeak)
-			cs->totalpeak = cs->monthlypeak;
-	}
-	else
-		LOG_DEBUG_SNOOP("No channel stats record for channel %s", chan->name);
-
-	if (synched) {
-
-		++total.joins;
-		++monthly.joins;
-		++weekly.joins;
-		++daily.joins;
-
-		if (IS_NOT_NULL(cs)) {
-
-			++cs->dailyjoins;
-			++cs->weeklyjoins;
-			++cs->monthlyjoins;
-			++cs->totaljoins;
-		}
-	}
-
-	servers_increase_messages(user);
-	#endif
-
 	/* Inserimento del canale nella lista dei canali dell'utente. */
 
 	TRACE();
@@ -1016,8 +866,6 @@ static void chan_sjoin_add_user(User *user, Channel *chan) {
  * specificati (checklist) al canale.                    *
  * Inserisce op e voice nelle liste opportune.           *
  *********************************************************/
-
-#ifdef USE_SERVICES
 
 static void chan_sjoin_ops_check(Channel *chan, User **checklist, int count) {
 
@@ -1234,8 +1082,6 @@ static void chan_sjoin_ops_check(Channel *chan, User **checklist, int count) {
 	}
 }
 
-#endif
-
 /*********************************************************
  * Utilities                                             *
  *********************************************************/
@@ -1270,10 +1116,8 @@ void chan_user_remove(const User *user, Channel *chan) {
 		return;
 	}
 
-	#ifdef USE_SERVICES
 	if (str_equals_nocase(user->nick, s_ChanServ))
 		RemoveFlag(chan->mode, CMODE_CS);
-	#endif
 
 	/* Eliminazione dalla lista generica degli utenti del canale. */
 
@@ -1435,7 +1279,6 @@ void chan_user_remove(const User *user, Channel *chan) {
  * Handle a channel MODE command.                        *
  *********************************************************/
 
-#ifdef USE_SERVICES
 /* An inline function we'll need later. */
 static __inline__ BOOL grant_protection(Channel *chan, const User *callerUser, const User *targetUser) {
 
@@ -1482,19 +1325,7 @@ static __inline__ BOOL enforce_opguard(Channel *chan, const User *callerUser, co
 	return FALSE;
 }
 
-#endif /* USE_SERVICES */
-
 /* Handy macro. */
-#ifdef USE_STATS
-#define MODE(flag) \
-	if (add) { \
-		AddFlag(chan->mode, (flag)); \
-		++addmodes; \
-	} else { \
-		RemoveFlag(chan->mode, (flag)); \
-		++delmodes; \
-	}
-#else
 #define MODE(flag) \
 	if (add) \
 		AddFlag(chan->mode, (flag)); \
@@ -1502,7 +1333,6 @@ static __inline__ BOOL enforce_opguard(Channel *chan, const User *callerUser, co
 		RemoveFlag(chan->mode, (flag)); \
 	 \
 	checkModelock = TRUE;
-#endif
 
 
 void chan_handle_chanMODE(const char *source, const int ac, char **av) {
@@ -1511,18 +1341,11 @@ void chan_handle_chanMODE(const char *source, const int ac, char **av) {
 	User				*callerUser = NULL, *targetUser;
 	char				*modes, *nick, *chan_name;
 	BOOL				add = TRUE;
-	int					argc;
+	int				argc;
 
-	#ifdef USE_SERVICES
-	int					idx, deopIdx = 0, reopIdx = 0, deopCount = 0, reopCount = 0;
+	int				idx, deopIdx = 0, reopIdx = 0, deopCount = 0, reopCount = 0;
 	static User			*toDeop[16], *toReop[16];
 	BOOL				checkModelock = FALSE;
-	#endif
-
-	#ifdef USE_STATS
-	ChannelStats		*cs;
-	int					addmodes = 0, delmodes = 0;
-	#endif
 
 	TRACE_MAIN_FCLT(FACILITY_CHANNELS_HANDLE_CHANMODE);
 
@@ -1559,25 +1382,12 @@ void chan_handle_chanMODE(const char *source, const int ac, char **av) {
 		return;
 	}
 
-	#ifdef USE_STATS
-	cs = hash_chanstats_find(chan_name);
-
-	if (IS_NULL(cs))
-		log_error(FACILITY_CHANNELS_HANDLE_CHANMODE, __LINE__, LOG_TYPE_ERROR_ASSERTION, LOG_SEVERITY_ERROR_SKIPPED, 
-			"MODE %s %s: no channel stats found", chan_name, av[1]);
-
-	if (callerUser)
-		servers_increase_messages(callerUser);
-	#endif
-
-	#ifdef USE_SERVICES
 	/* Initialize the static User arrays. */
 	for (idx = 0; idx < 16; ++idx) {
 
 		toDeop[idx] = NULL;
 		toReop[idx] = NULL;
 	}
-	#endif
 
 	modes = av[1];
 
@@ -1607,26 +1417,8 @@ void chan_handle_chanMODE(const char *source, const int ac, char **av) {
 					break;
 				}
 
-				if (add) {
-
+				if (add)
 					chan_add_ban(chan, *av);
-
-					#ifdef USE_STATS
-					++total.bans;
-					++monthly.bans;
-					++weekly.bans;
-					++daily.bans;
-
-					if (cs) {
-
-						++cs->totalbans;
-						++cs->monthlybans;	
-						++cs->weeklybans;
-						++cs->dailybans;
-						cs->last_change = NOW;
-					}
-					#endif
-				}
 				else
 					chan_remove_ban(chan, *av);
 
@@ -1674,46 +1466,10 @@ void chan_handle_chanMODE(const char *source, const int ac, char **av) {
 					break;
 				}
 
-				if (add) {
-
+				if (add)
 					chan_add_halfop(chan, targetUser);
-
-					#ifdef USE_STATS
-					++total.halfoppings;
-					++monthly.halfoppings;
-					++weekly.halfoppings;
-					++daily.halfoppings;
-
-					if (cs) {
-
-						++cs->totalhalfoppings;
-						++cs->monthlyhalfoppings;
-						++cs->weeklyhalfoppings;
-						++cs->dailyhalfoppings;
-						cs->last_change = NOW;
-					}
-					#endif
-				}
-				else {
-
+				else
 					chan_remove_halfop(chan, targetUser);
-
-					#ifdef USE_STATS
-					++total.dehalfoppings;
-					++monthly.dehalfoppings;
-					++weekly.dehalfoppings;
-					++daily.dehalfoppings;
-
-					if (cs) {
-
-						++cs->totaldehalfoppings;
-						++cs->monthlydehalfoppings;
-						++cs->weeklydehalfoppings;
-						++cs->dailydehalfoppings;
-						cs->last_change = NOW;
-					}
-					#endif
-				}
 
 				break;
 				
@@ -1752,10 +1508,6 @@ void chan_handle_chanMODE(const char *source, const int ac, char **av) {
 						chan->key = str_duplicate(key);
 						AddFlag(chan->mode, CMODE_k);
 					}
-
-					#ifdef USE_STATS
-					++addmodes;
-					#endif
 				}
 				else {
 
@@ -1769,16 +1521,8 @@ void chan_handle_chanMODE(const char *source, const int ac, char **av) {
 					++av;
 
 					RemoveFlag(chan->mode, CMODE_k);
-
-					#ifdef USE_STATS
-					++delmodes;
-					#endif
 				}
-
-				#ifdef USE_SERVICES
 				checkModelock = TRUE;
-				#endif
-
 				break;
 			}
 
@@ -1803,24 +1547,14 @@ void chan_handle_chanMODE(const char *source, const int ac, char **av) {
 						chan->limit = atoi(limit);
 						AddFlag(chan->mode, CMODE_l);
 					}
-
-					#ifdef USE_STATS
-					++addmodes;
-					#endif
 				}
 				else {
 
 					RemoveFlag(chan->mode, CMODE_l);
 					chan->limit = 0;
-
-					#ifdef USE_STATS
-					++delmodes;
-					#endif
 				}
 
-				#ifdef USE_SERVICES
 				checkModelock = TRUE;
-				#endif
 
 				break;
 
@@ -1837,8 +1571,6 @@ void chan_handle_chanMODE(const char *source, const int ac, char **av) {
 				break;
 
 			case 'o':
-
-				#ifdef USE_SERVICES
 				if (IS_NULL(callerUser)) {
 
 					log_error(FACILITY_CHANNELS_HANDLE_CHANMODE, __LINE__, LOG_TYPE_ERROR_ASSERTION, LOG_SEVERITY_ERROR_SKIPPED, 
@@ -1846,7 +1578,6 @@ void chan_handle_chanMODE(const char *source, const int ac, char **av) {
 
 					break;
 				}
-				#endif
 
 				if (--argc < 0) {
 
@@ -1876,10 +1607,7 @@ void chan_handle_chanMODE(const char *source, const int ac, char **av) {
 				}
 
 				if (add) {
-
-					#ifdef USE_SERVICES
 					if (enforce_opguard(chan, callerUser, targetUser)) {
-
 						toDeop[deopIdx++] = targetUser;
 						++deopCount;
 					}
@@ -1901,35 +1629,12 @@ void chan_handle_chanMODE(const char *source, const int ac, char **av) {
 						}
 
 						if (wasOpped == FALSE)
-					#endif
 							chan_add_op(chan, targetUser);
-
-					#ifdef USE_SERVICES
 					}
-					#endif
-
-					#ifdef USE_STATS
-					++total.oppings;
-					++monthly.oppings;
-					++weekly.oppings;
-					++daily.oppings;
-
-					if (cs) {
-
-						++cs->totaloppings;
-						++cs->monthlyoppings;
-						++cs->weeklyoppings;
-						++cs->dailyoppings;
-						cs->last_change = NOW;
-					}
-					#endif
 				}
 				else {
-
-					#ifdef USE_SERVICES
 					/* Check if we need to reop this user due to ChanServ's Protected option. */
 					if (grant_protection(chan, callerUser, targetUser)) {
-
 						toReop[reopIdx++] = targetUser;
 						++reopCount;
 					}
@@ -1951,28 +1656,8 @@ void chan_handle_chanMODE(const char *source, const int ac, char **av) {
 						}
 
 						if (wasDeopped == FALSE)
-					#endif
 							chan_remove_op(chan, targetUser);
-
-					#ifdef USE_SERVICES
 					}
-					#endif
-
-					#ifdef USE_STATS
-					++total.deoppings;
-					++monthly.deoppings;
-					++weekly.deoppings;
-					++daily.deoppings;
-
-					if (cs) {
-
-						++cs->totaldeoppings;
-						++cs->monthlydeoppings;
-						++cs->weeklydeoppings;
-						++cs->dailydeoppings;
-						cs->last_change = NOW;
-					}
-					#endif
 				}
 				break;
 
@@ -2041,94 +1726,17 @@ void chan_handle_chanMODE(const char *source, const int ac, char **av) {
 					break;
 				}
 
-				if (add) {
-
+				if (add)
 					chan_add_voice(chan, targetUser);
-
-					#ifdef USE_STATS
-					++total.voicings;
-					++monthly.voicings;
-					++weekly.voicings;
-					++daily.voicings;
-
-					if (cs) {
-
-						++cs->totalvoicings;
-						++cs->monthlyvoicings;
-						++cs->weeklyvoicings;
-						++cs->dailyvoicings;
-						cs->last_change = NOW;
-					}
-					#endif
-				}
-				else {
-
+				else
 					chan_remove_voice(chan, targetUser);
-
-					#ifdef USE_STATS
-					++total.devoicings;
-					++monthly.devoicings;
-					++weekly.devoicings;
-					++daily.devoicings;
-
-					if (cs) {
-
-						++cs->totaldevoicings;
-						++cs->monthlydevoicings;
-						++cs->weeklydevoicings;
-						++cs->dailydevoicings;
-						cs->last_change = NOW;
-					}
-					#endif
-				}
 
 				break;
 		}
 	}
 
-	#ifdef USE_STATS
-	if (addmodes > 0) {
-
-		total.addcmodes += addmodes;
-		monthly.addcmodes += addmodes;
-		weekly.addcmodes += addmodes;
-		daily.addcmodes += addmodes;
-
-		TRACE_MAIN();
-
-		if (cs) {
-
-			cs->totaladdcmodes += addmodes;
-			cs->monthlyaddcmodes += addmodes;
-			cs->weeklyaddcmodes += addmodes;
-			cs->dailyaddcmodes += addmodes;
-			cs->last_change = NOW;
-		}
-	}
-
-	if (delmodes > 0) {
-
-		total.delcmodes += delmodes;
-		monthly.delcmodes += delmodes;
-		weekly.delcmodes += delmodes;
-		daily.delcmodes += delmodes;
-
-		TRACE_MAIN();
-
-		if (cs) {
-
-			cs->totaldelcmodes += delmodes;
-			cs->monthlydelcmodes += delmodes;
-			cs->weeklydelcmodes += delmodes;
-			cs->dailydelcmodes += delmodes;
-			cs->last_change = NOW;
-		}
-	}
-	#endif
-
 	TRACE_MAIN();
 
-	#ifdef USE_SERVICES
 	if ((deopCount > 0) || (reopCount > 0)) {
 
 		int paramCount = 0;
@@ -2211,7 +1819,6 @@ void chan_handle_chanMODE(const char *source, const int ac, char **av) {
 	/* Check modes against ChanServ mode lock */
 	if (IS_NOT_NULL(chan->ci) && (checkModelock == TRUE))
 		check_modelock(chan, callerUser);
-	#endif
 }
 
 
@@ -2640,13 +2247,7 @@ void chan_clear_bans(Channel *chan) {
  *********************************************************/
 
 void chan_handle_TOPIC(const char *source, const int ac, char **av) {
-
 	Channel *chan;
-
-	#ifdef USE_STATS
-	ChannelStats *cs;
-	#endif
-
 
 	TRACE_MAIN_FCLT(FACILITY_CHANNELS_HANDLE_TOPIC);
 
@@ -2670,11 +2271,6 @@ void chan_handle_TOPIC(const char *source, const int ac, char **av) {
 			return;
 		}
 
-		#ifdef USE_STATS
-		servers_increase_messages(user);
-		#endif
-
-		#ifdef USE_SERVICES
 		if (check_topiclock(user, chan))
 			return;
 
@@ -2683,10 +2279,7 @@ void chan_handle_TOPIC(const char *source, const int ac, char **av) {
 			restore_topic(chan);
 			return;
 		}
-		#endif
 	}
-
-	#ifdef USE_SERVICES
 	else {
 
 		/* This is a server topic. We are going to treat server topics just like normal topics
@@ -2718,7 +2311,6 @@ void chan_handle_TOPIC(const char *source, const int ac, char **av) {
 			}
 		}
 	}
-	#endif
 
 	TRACE_MAIN();
 	str_copy_checked(av[1], chan->topic_setter, sizeof(chan->topic_setter));
@@ -2735,41 +2327,16 @@ void chan_handle_TOPIC(const char *source, const int ac, char **av) {
 	if ((ac > 3) && *av[3])
 		chan->topic = str_duplicate(av[3]);
 
-	#ifdef USE_STATS
-	++total.topics;
-	++monthly.topics;
-	++weekly.topics;
-	++daily.topics;
-	
-	cs = hash_chanstats_find(av[0]);
-
-	if (cs) {
-
-		TRACE_MAIN();
-		++cs->totaltopics;
-		++cs->monthlytopics;
-		++cs->weeklytopics;
-		++cs->dailytopics;
-		cs->last_change = NOW;
-	}
-	else
-		LOG_DEBUG("[topic] No channel stats record for channel %s", av[0]);
-	#endif
-
 	TRACE_MAIN();
 
-	#ifdef USE_SERVICES
 	/* If we aren't synched this is a server topic, we save it in the channel struct but wait
 	   for synch_topics() to record it if it is the case. */
 
 	if ((synched == TRUE) && IS_NOT_NULL(chan->ci))
 		record_topic(chan);
-	#endif
 }
 
 /*********************************************************/
-
-#ifdef USE_SERVICES
 
 /* Restore the topic in a channel when it's created, if we should. */
 void synch_topics() {
@@ -2817,357 +2384,6 @@ void synch_topics() {
 		}
 	}
 }
-#endif
-
-/*********************************************************/
-
-#ifdef USE_STATS
-void handle_list(const char *source, User *callerUser, ServiceCommandData *data) {
-
-	Channel *chan;
-	int add = -1, idx, userCount = 0, opCount = 0, halfopCount = 0, voiceCount = 0, wantLimit = 0, matchModes = 0;
-	long int matchLimit = 0;
-	char g;
-	char *token, *what;
-	char *matchName = NULL, *matchTopic = NULL, *matchTopicSetter = NULL, *matchKey = NULL;
-	BOOL wantUsers = FALSE, wantOps = FALSE, wantHalfops = FALSE, wantVoices = FALSE, wantCreationTime = FALSE, wantTopicTime = FALSE;
-	BOOL wantModes = FALSE;
-	time_t creationTime = 0, topicTime = 0;
-
-
-	if (IS_NULL(what = strtok(NULL, " ")) || ((what[0] != '+') && (what[0] != '-'))) {
-
-		send_notice_to_user(s_StatServ, callerUser, "Syntax Error.");
-		return;
-	}
-
-	while (*what) {
-
-		switch (g = *what++) {
-
-			case '+':
-				add = 1;
-				break;
-
-			case '-':
-				add = 0;
-				break;
-
-			case 'c': {
-
-				char *err;
-				time_t ts;
-
-				if (!(token = strtok(NULL, " ")) || ((ts = strtol(token, &err, 10)) <= 0) || *err != 0) {
-
-					send_notice_to_user(s_StatServ, callerUser, "Syntax Error.");
-					goto done;
-				}
-
-				creationTime = ts;
-				wantCreationTime = add;
-				break;
-			}
-
-			case 'h': {
-
-				char *err;
-
-				/* Users count */
-				if (IS_NULL(token = strtok(NULL, " ")) || ((halfopCount = strtol(token, &err, 10)) <= 0) || *err != 0) {
-
-					send_notice_to_user(s_StatServ, callerUser, "Syntax Error.");
-					goto done;
-				}
-
-				wantHalfops = add;
-				break;
-			}
-
-			case 'k':
-
-				/* Key */
-				if (IS_NULL(token = strtok(NULL, " "))) {
-
-					send_notice_to_user(s_StatServ, callerUser, "Syntax Error.");
-					goto done;
-				}
-
-				matchKey = str_duplicate(token);
-				break;
-
-
-			case 'l': {
-
-				char *err;
-
-				if (!(token = strtok(NULL, " ")) || ((matchLimit = strtol(token, &err, 10)) <= 0) || *err != 0) {
-
-					send_notice_to_user(s_StatServ, callerUser, "Syntax Error.");
-					goto done;
-				}
-
-				wantLimit = add;
-				break;
-			}
-
-
-			case 'm':
-
-				/* Channel Modes */
-				if (IS_NULL(token = strtok(NULL, " "))) {
-
-					send_notice_to_user(s_StatServ, callerUser, "Syntax Error.");
-					goto done;
-				}
-
-				while (*token) {
-
-					switch (*token++) {
-
-						case 'c': AddFlag(matchModes, CMODE_c); break;
-						case 'C': AddFlag(matchModes, CMODE_C); break;
-						case 'd': AddFlag(matchModes, CMODE_d); break;
-						case 'i': AddFlag(matchModes, CMODE_i); break;
-						case 'j': AddFlag(matchModes, CMODE_j); break;
-						case 'k': AddFlag(matchModes, CMODE_k); break;
-						case 'l': AddFlag(matchModes, CMODE_l); break;
-						case 'm': AddFlag(matchModes, CMODE_m); break;
-						case 'M': AddFlag(matchModes, CMODE_M); break;
-						case 'n': AddFlag(matchModes, CMODE_n); break;
-						case 'O': AddFlag(matchModes, CMODE_O); break;
-						case 'p': AddFlag(matchModes, CMODE_p); break;
-						case 'r': AddFlag(matchModes, CMODE_r); break;
-						case 'R': AddFlag(matchModes, CMODE_R); break;
-						case 's': AddFlag(matchModes, CMODE_s); break;
-						case 'S': AddFlag(matchModes, CMODE_S); break;
-						case 't': AddFlag(matchModes, CMODE_t); break;
-						case 'u': AddFlag(matchModes, CMODE_u); break;
-						case 'U': AddFlag(matchModes, CMODE_U); break;
-					}
-				}
-
-				if (matchModes == 0) {
-
-					send_notice_to_user(s_StatServ, callerUser, "Syntax Error.");
-					goto done;
-				}
-
-				wantModes = add;
-				break;
-
-
-			case 'n':
-
-				/* Channel name */
-				if (IS_NULL(token = strtok(NULL, " "))) {
-
-					send_notice_to_user(s_StatServ, callerUser, "Syntax Error.");
-					goto done;
-				}
-
-				matchName = str_duplicate(token);
-				break;
-
-
-			case 'o': {
-
-				char *err;
-
-				/* Users count */
-				if (IS_NULL(token = strtok(NULL, " ")) || ((opCount = strtol(token, &err, 10)) <= 0) || *err != 0) {
-
-					send_notice_to_user(s_StatServ, callerUser, "Syntax Error.");
-					goto done;
-				}
-
-				wantOps = add;
-				break;
-			}
-
-
-			case 's':
-
-				/* Topic setter */
-				if (IS_NULL(token = strtok(NULL, " "))) {
-
-					send_notice_to_user(s_StatServ, callerUser, "Syntax Error.");
-					goto done;
-				}
-
-				matchTopicSetter = str_duplicate(token);
-				break;
-
-
-			case 't':
-
-				/* Topic */
-				if (IS_NULL(token = strtok(NULL, " "))) {
-
-					send_notice_to_user(s_StatServ, callerUser, "Syntax Error.");
-					goto done;
-				}
-
-				matchTopic = str_duplicate(token);
-				break;
-
-
-			case 'T': {
-
-				char *err;
-				time_t ts;
-
-				/* Topic time */
-				if (!(token = strtok(NULL, " ")) || ((ts = strtol(token, &err, 10)) <= 0) || *err != 0) {
-
-					send_notice_to_user(s_StatServ, callerUser, "Syntax Error.");
-					goto done;
-				}
-
-				topicTime = ts;
-				wantTopicTime = add;
-				break;
-			}
-
-
-			case 'u': {
-
-				char *err;
-
-				/* Users count */
-				if (IS_NULL(token = strtok(NULL, " ")) || ((userCount = strtol(token, &err, 10)) <= 0) || *err != 0) {
-
-					send_notice_to_user(s_StatServ, callerUser, "Syntax Error.");
-					goto done;
-				}
-
-				wantUsers = add;
-				break;
-			}
-
-
-			case 'v': {
-
-				char *err;
-
-				/* Users count */
-				if (IS_NULL(token = strtok(NULL, " ")) || ((voiceCount = strtol(token, &err, 10)) <= 0) || *err != 0) {
-
-					send_notice_to_user(s_StatServ, callerUser, "Syntax Error.");
-					goto done;
-				}
-
-				wantVoices = add;
-				break;
-			}
-			
-		}
-	}
-
-	send_cmd("321 %s Channel :Users Name", source);
-
-	HASH_FOREACH_BRANCH(idx, CHANNEL_HASHSIZE) {
-
-		HASH_FOREACH_BRANCH_ITEM(channel, idx, chan) {
-
-			if (IS_NOT_NULL(matchName) && !str_match_wild_nocase(matchName, chan->name))
-				continue;
-
-			if (IS_NOT_NULL(matchKey) && (IS_NULL(chan->key) || !str_match_wild_nocase(matchKey, chan->key)))
-				continue;
-
-			if (IS_NOT_NULL(matchTopic) && (IS_NULL(chan->topic) || !str_match_wild_nocase(matchTopic, chan->topic)))
-				continue;
-
-			if (IS_NOT_NULL(matchTopicSetter) && (IS_EMPTY_STR(chan->topic_setter) ||
-				!str_match_wild_nocase(matchTopicSetter, chan->topic_setter)))
-				continue;
-
-			if ((matchLimit > 0) && ((chan->limit <= 0) || (wantLimit ? (chan->limit < matchLimit) : (chan->limit > matchLimit))))
-				continue;
-
-			if ((topicTime > 0) && ((chan->topic_time <= 0) ||
-				(wantTopicTime ? (NOW - chan->topic_time < topicTime) : (NOW - chan->topic_time > topicTime))))
-				continue;
-
-			if ((creationTime > 0) && ((chan->creation_time <= 0) ||
-				(wantCreationTime ? (NOW - chan->creation_time < creationTime) : (NOW - chan->creation_time < creationTime))))
-				continue;
-
-			if (opCount > 0) {
-
-				int ops = 0;
-				UserListItem *item;
-
-
-				for (item = chan->chanops; IS_NOT_NULL(item); item = item->next)
-					++ops;
-
-				if (wantOps ? (ops <= opCount) : (ops >= opCount))
-					continue;
-			}
-			
-			if (halfopCount > 0) {
-
-				int halfops = 0;
-				UserListItem *item;
-
-
-				for (item = chan->halfops; IS_NOT_NULL(item); item = item->next)
-					++halfops;
-
-				if (wantHalfops ? (halfops <= halfopCount) : (halfops >= halfopCount))
-					continue;
-			}
-			
-			if (voiceCount > 0) {
-
-				int voices = 0;
-				UserListItem *item;
-
-
-				for (item = chan->voices; IS_NOT_NULL(item); item = item->next)
-					++voices;
-
-				if (wantVoices ? (voices <= voiceCount) : (voices >= voiceCount))
-					continue;
-			}
-
-
-			if (matchModes != 0) {
-
-				if ((wantModes && !((chan->mode & matchModes) == matchModes)) ||
-					(!wantModes && ((chan->mode & matchModes) == matchModes)))
-					continue;
-			}
-
-			if ((userCount > 0) && (wantUsers ? (chan->userCount <= userCount) : (chan->userCount >= userCount)))
-				continue;
-
-			if (chan->mode != 0)
-				send_cmd("322 %s %s %u :[%s] %s", source, chan->name, chan->userCount, get_channel_mode(chan->mode, 0), chan->topic ? chan->topic : "");
-			else
-				send_cmd("322 %s %s %u :%s", source, chan->name, chan->userCount, chan->topic ? chan->topic : "");
-		}
-	}
-
-	send_cmd("323 %s :End of /LIST", source);
-
-done:
-
-	if (matchTopic)
-		mem_free(matchTopic);
-
-	if (matchTopicSetter)
-		mem_free(matchTopicSetter);
-
-	if (matchKey)
-		mem_free(matchKey);
-
-	if (matchName)
-		mem_free(matchName);
-}
-#endif
 
 /*********************************************************/
 
@@ -3324,7 +2540,7 @@ char *get_channel_mode(const long int modeOn, const long int modeOff) {
 }
 
 /*********************************************************/
-#ifdef USE_SERVICES
+
 void handle_masscmds(CSTR source, User *callerUser, ServiceCommandData *data) {
 
 	char *chan_name;
@@ -5059,8 +4275,6 @@ void handle_mode(CSTR source, User *callerUser, ServiceCommandData *data) {
 #undef ADD_USERMODE
 #undef DEL_USERMODE
 
-#endif /* USE_SERVICES */
-
 /*********************************************************
  * chan_ds_dump()                                        *
  *                                                       *
@@ -5109,9 +4323,7 @@ static void chan_ds_dump_display(CSTR sourceNick, const User *callerUser, const 
 		send_notice_to_user(sourceNick, callerUser, "Users [%d/%d] / ops [%d] / halfops [%d] / voices [%d]",	chan->userCount, users, ops, halfops, voices);
 		send_notice_to_user(sourceNick, callerUser, "List heads: 0x%08X / 0x%08X / 0x%08X / 0x%08X",		(unsigned long)chan->users, (unsigned long)chan->chanops, (unsigned long)chan->halfops, (unsigned long)chan->voices);
 
-		#ifdef USE_SERVICES
 		send_notice_to_user(sourceNick, callerUser, "ChanInfo record: 0x%08X \2[\2%s\2]\2",		(unsigned long)chan->ci, chan->ci ? str_get_valid_display_value(chan->ci->name) : "NULL");
-		#endif
 
 		send_notice_to_user(sourceNick, callerUser, "Next / previous record: 0x%08X / 0x%08X",	(unsigned long)chan->next, (unsigned long)chan->prev);
 	}
@@ -5327,5 +4539,3 @@ unsigned long chan_mem_report(CSTR sourceNick, const User *callerUser) {
 
 	return mem;
 }
-
-#endif /* defined(USE_SERVICES) || defined(USE_STATS) */

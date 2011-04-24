@@ -26,10 +26,8 @@
 #include "../inc/main.h"
 
 
-#ifdef USE_SERVICES
 /* Stuff to pass to the command handler. */
 static Agent a_HelpServ;
-#endif
 
 /*********************************************************/
 
@@ -40,23 +38,18 @@ void handle_help(CSTR source, User *callerUser, ServiceCommandData *data) {
 	char		path[MAX_PATH];
 	char		*topic, *ptr = path;
 
-#if defined(USE_SERVICES) || defined(USE_STATS)
 	if (data->commandName[0] == 'O') {
 
 		/* OHELP */
 		ptr += str_copy_checked(HELPSERV_OPER_DIR, path, sizeof(path));
 		topic = strtok(NULL, s_NULL);
 	}
-
-	#ifdef USE_SERVICES
 	else if (data->commandName[1] == 'H') {
 
 		/* HHELP */
 		ptr += str_copy_checked(HELPSERV_OPER_DIR, path, sizeof(path));
 		topic = data->commandName;
 	}
-	#endif
-
 	else if (data->commandName[0] == 'H') {
 
 		/* HELP */
@@ -69,11 +62,6 @@ void handle_help(CSTR source, User *callerUser, ServiceCommandData *data) {
 		ptr += str_copy_checked(HELPSERV_DIR, path, sizeof(path));
 		topic = data->commandName;
 	}
-#else
-
-	ptr += str_copy_checked(HELPSERV_OPER_DIR, path, sizeof(path));
-	topic = strtok(NULL, s_NULL);
-#endif
 
 	*ptr++ = c_SPACE;							/* Verra' poi sostituito da un '/' */
 
@@ -152,7 +140,6 @@ void handle_help(CSTR source, User *callerUser, ServiceCommandData *data) {
 
 	fclose(f);
 
-#ifdef USE_SERVICES
 	if (data->agent->agentID == AGENTID_CHANSERV) {
 
 		if (IS_NULL(topic) || str_equals_nocase(topic, "REGISTER"))
@@ -163,12 +150,9 @@ void handle_help(CSTR source, User *callerUser, ServiceCommandData *data) {
 		if (IS_NULL(topic) || str_equals_nocase(topic, "REGISTER"))
 			send_notice_lang_to_user(data->agent->nick, callerUser, GetCallerLang(), NS_NICK_EXPIRE, CONF_NICK_EXPIRE);
 	}
-#endif
 }
 
 /*********************************************************/
-
-#ifdef USE_SERVICES
 
 void helpserv_init(void) {
 
@@ -220,5 +204,3 @@ void helpserv(const char *source, User *callerUser, char *buf) {
 		handle_help(source, callerUser, &data);
 	}
 }
-
-#endif /* USE_SERVICES */

@@ -71,10 +71,6 @@ struct _Oper_V10 {
 
 	flags_t			flags;					/* OPER_* defined below. */
 	int				level;					/* Oper's access level to services (ULEVEL_*) */
-
-	#ifndef USE_SERVICES
-	char			password[PASSSIZE];
-	#endif
 };
 
 
@@ -84,10 +80,6 @@ struct _Oper_V11 {
 	Oper_V11		*prev, *next;
 
 	char			*nick;
-
-	#ifndef USE_SERVICES
-	char			*password;
-	#endif
 
 	Creator			creator;
 	time_t			lastUpdate;
@@ -140,23 +132,12 @@ struct _Oper_V11 {
  * Global variables                                      *
  *********************************************************/
 
-#ifdef USE_SERVICES
 extern ServiceCommand	*nickserv_commands[26];
 extern ServiceCommand	*chanserv_commands[26];
 extern ServiceCommand	*memoserv_commands[26];
 extern ServiceCommand	*operserv_commands[26];
 extern ServiceCommand	*rootserv_commands[26];
 extern ServiceCommand	*helpserv_commands[26];
-#endif
-
-#ifdef USE_STATS
-extern ServiceCommand	*statserv_commands[26];
-extern ServiceCommand	*seenserv_commands[26];
-#endif
-
-#ifdef USE_SOCKSMONITOR
-extern ServiceCommand	*socksmonitor_commands[26];
-#endif
 
 extern ServiceCommand	*debugserv_commands[26];
 

@@ -96,10 +96,6 @@ extern Message messages[];
 /* my uplink CAPAB */
 extern unsigned int		uplink_capab;
 
-#ifdef USE_STATS
-extern int nservers;
-#endif
-
 
 /*********************************************************
  * Public code                                           *

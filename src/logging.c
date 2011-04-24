@@ -55,34 +55,21 @@ typedef struct _log_file {
 
 LOG_FILE	log_files[] = {
 
-	/*	 index								filename			log name		file handle	*/
+	/* index					filename		log name		file handle	*/
 
-	/* LOG_GENERAL_PANIC				*/	{"panic",			"Panic",			NULL},
-	/* LOG_GENERAL_ERRORS				*/	{"errors",			"Errors",			NULL},
-	/* LOG_GENERAL_DEBUG				*/	{"debug",			"Debug",			NULL},
+	/* LOG_GENERAL_PANIC			*/	{"panic",		"Panic",		NULL},
+	/* LOG_GENERAL_ERRORS			*/	{"errors",		"Errors",		NULL},
+	/* LOG_GENERAL_DEBUG			*/	{"debug",		"Debug",		NULL},
 
-	#if defined(USE_SERVICES) 
-	/* LOG_SERVICES_NICKSERV_GENERAL	*/	{"nickserv",		"NickServ",			NULL},
-	/* LOG_SERVICES_NICKSERV_ID			*/	{"nickserv_id",		"NickServ (ID)",	NULL},
+	/* LOG_SERVICES_NICKSERV_GENERAL	*/	{"nickserv",		"NickServ",		NULL},
+	/* LOG_SERVICES_NICKSERV_ID		*/	{"nickserv_id",		"NickServ (ID)",	NULL},
 	/* LOG_SERVICES_NICKSERV_ACCESS		*/	{"nickserv_access",	"NickServ (ACC)",	NULL},
-	/* LOG_SERVICES_CHANSERV_GENERAL	*/	{"chanserv",		"ChanServ",			NULL},
-	/* LOG_SERVICES_CHANSERV_ID			*/	{"chanserv_id",		"ChanServ (ID)",	NULL},
+	/* LOG_SERVICES_CHANSERV_GENERAL	*/	{"chanserv",		"ChanServ",		NULL},
+	/* LOG_SERVICES_CHANSERV_ID		*/	{"chanserv_id",		"ChanServ (ID)",	NULL},
 	/* LOG_SERVICES_CHANSERV_ACCESS		*/	{"chanserv_access",	"ChanServ (ACC)",	NULL},
-	/* LOG_SERVICES_MEMOSERV			*/	{"memoserv",		"MemoServ",			NULL},
-	/* LOG_SERVICES_OPERSERV			*/	{"operserv",		"OperServ",			NULL},
-	/* LOG_SERVICES_ROOTSERV			*/	{"rootserv",		"RootServ",			NULL}
-	#endif
-
-	#if defined(USE_STATS)
-	/* LOG_SERVICES_SEENSERV			*/	{"seenserv",		"SeenServ",			NULL},
-	/* LOG_SERVICES_STATSERV			*/	{"statserv",		"StatServ",			NULL}
-	#endif
-	
-	#if defined(USE_SOCKSMONITOR)
-	/* LOG_SERVICES_SOCKSMONITOR		*/	{"cybcop",			"CybCop",			NULL},
-	/* LOG_PROXY_GENERAL				*/	{"proxies",			"Proxy",			NULL},
-	/* LOG_PROXY_SCAN					*/	{"scanner",			"Scanner",			NULL}
-	#endif
+	/* LOG_SERVICES_MEMOSERV		*/	{"memoserv",		"MemoServ",		NULL},
+	/* LOG_SERVICES_OPERSERV		*/	{"operserv",		"OperServ",		NULL},
+	/* LOG_SERVICES_ROOTSERV		*/	{"rootserv",		"RootServ",		NULL}
 };
 #define log_files_count	(sizeof(log_files) / sizeof(LOG_FILE))
 
@@ -131,34 +118,23 @@ static FILE *log_open_file(unsigned int type, BOOL readonly, int day, int month,
 
 	char	path[64];
 	FILE	*file;
+	CSTR	folder;
 
 
 	if (type < 0 || type >= log_files_count)
 		return NULL;
 
-	#if defined(USE_SOCKSMONITOR)
-	if (type == LOG_PROXY_GENERAL)
-		snprintf(path, sizeof(path), "./logs/%s.log", log_files[LOG_PROXY_GENERAL].filename);
+	folder = log_get_day_timestamp(day, month, year);
 
-	else {
-	#else
-	{
-	#endif
+	if (!readonly) {
 
-		CSTR	folder;
+		snprintf(path, sizeof(path), "./logs/%s", folder);
 
-		folder = log_get_day_timestamp(day, month, year);
-
-		if (!readonly) {
-
-			snprintf(path, sizeof(path), "./logs/%s", folder);
-
-			if ((mkdir(path, S_IRWXU) == -1) && (errno != EEXIST))
-				return NULL;
-		}
-
-		snprintf(path, sizeof(path), "./logs/%s/%s.log", folder, log_files[type].filename);
+		if ((mkdir(path, S_IRWXU) == -1) && (errno != EEXIST))
+			return NULL;
 	}
+
+	snprintf(path, sizeof(path), "./logs/%s/%s.log", folder, log_files[type].filename);
 	
 	file = fopen(path, readonly ? s_OPENMODE_READONLY : s_OPENMODE_APPEND);
 
@@ -510,8 +486,6 @@ void log_debug_direct(CSTR string) {
 int logid_from_agentid(agentid_t agentID) {
 	
 	switch (agentID) {
-
-		#ifdef USE_SERVICES
 		case AGENTID_NICKSERV:
 			return LOG_SERVICES_NICKSERV_GENERAL;
 
@@ -526,25 +500,9 @@ int logid_from_agentid(agentid_t agentID) {
 
 		case AGENTID_ROOTSERV:
 			return LOG_SERVICES_ROOTSERV;
-		#endif
 
-		#ifdef USE_STATS
-		case AGENTID_STATSERV:
-			return LOG_SERVICES_STATSERV;
-
-		case AGENTID_SEENSERV:
-			return LOG_SERVICES_SEENSERV;
-		#endif
-
-		#ifdef USE_SOCKSMONITOR
-		case AGENTID_CYBCOP:
-			return LOG_SERVICES_SOCKSMONITOR;
-		#endif
-
-		#ifdef USE_SERVICES
 		case AGENTID_GNOTICER:
 		case AGENTID_HELPSERV:
-		#endif
 		case AGENTID_DEBUGSERV:
 		default:
 			return LOG_GENERAL_ERRORS;
@@ -554,13 +512,7 @@ int logid_from_agentid(agentid_t agentID) {
 void log_services(int services, CSTR fmt, ...) {
 
 	if (IS_NOT_NULL(fmt) &&
-		#if defined (USE_SERVICES)
 		(services >= LOG_SERVICES_NICKSERV_GENERAL && services <= LOG_SERVICES_ROOTSERV)
-		#elif defined USE_SOCKSMONITOR
-		(services >= LOG_SERVICES_SOCKSMONITOR && services <= LOG_PROXY_SCAN)
-		#else
-		(services >= LOG_SERVICES_SEENSERV && services <= LOG_SERVICES_STATSERV)
-		#endif
 		&& !log_rotation_started
 		) {
 
@@ -646,21 +598,6 @@ void log_stderr(CSTR fmt, ...) {
 		fprintf(stderr, s_LOG_STDERR_LOGMSG, log_buffer, errno, strerror(errno));
 	}
 }
-
-#ifdef USE_SOCKSMONITOR
-void log_proxy(CSTR source, CSTR fmt, ...) {
-
-	/* Note: do *NOT* call this directly. Use the LOG_PROXY() macro instead. */
-
-	va_list		args;
-
-	log_buffer[0] = c_NULL;
-	va_start(args, fmt);
-	vsnprintf(log_buffer, sizeof(log_buffer), fmt, args);
-
-	send_cmd(":%s PRIVMSG %s :%s", source, CONF_PROXY_CHAN, log_buffer);
-}
-#endif
 
 void fatal_error(FACILITY facility, FACILITY_LINE line, CSTR fmt, ...) {
 
@@ -954,23 +891,10 @@ static BOOL log_search_file(CSTR agentNickname, const User *callerUser, int logT
 
 static void log_handle_search_syntax(const User *callerUser, CSTR agentNickname, BOOL full) {
 
-	if (full) {
-		#if defined(USE_SOCKSMONITOR)
-		send_notice_to_user(agentNickname, callerUser, "Syntax: \2LOG\2 SEARCH [TODAY|AAAA-MM-GG[>TODAY|AAAA-MM-GG] [ACTIVITY|PROXY|SCAN|ERR|\2DEB\2|PANIC [start [[+]end]]]]] *text*");
-		#elif defined(USE_STATS)
-		send_notice_to_user(agentNickname, callerUser, "Syntax: \2LOG\2 SEARCH [TODAY|AAAA-MM-GG[>TODAY|AAAA-MM-GG] [ST|SS|ERR|\2DEB\2|PANIC [start [[+]end]]]]] *text*");
-		#else
+	if (full)
 		send_notice_to_user(agentNickname, callerUser, "Syntax: \2LOG\2 SEARCH [TODAY|AAAA-MM-GG[>TODAY|AAAA-MM-GG] [NS|NSI|NSA|CS|CSI|CSA|MS|OS|RS|ERR|\2DEB\2|PANIC [start [[+]end]]]]] *text*");
-		#endif
-	} else {
-		#if defined(USE_SOCKSMONITOR)
-		send_notice_to_user(agentNickname, callerUser, "Syntax: \2LOG\2 SEARCH [TODAY|AAAA-MM-GG[>TODAY|AAAA-MM-GG] [\2ACTIVITY\2|PROXY|SCAN [start [[+]end]]]]] *text*");
-		#elif defined(USE_STATS)
-		send_notice_to_user(agentNickname, callerUser, "Syntax: \2LOG\2 SEARCH [TODAY|AAAA-MM-GG[>TODAY|AAAA-MM-GG] [\2SS\2|ST [start [[+]end]]]]] *text*");
-		#else
+	else
 		send_notice_to_user(agentNickname, callerUser, "Syntax: \2LOG\2 SEARCH [TODAY|AAAA-MM-GG[>TODAY|AAAA-MM-GG] [\2NS\2|NSI|NSA|CS|CSI|CSA|MS|OS|RS [start [[+]end]]]]] *text*");
-		#endif
-	}
 }
 
 void handle_search(CSTR source, User *callerUser, ServiceCommandData *data) {
@@ -1045,13 +969,7 @@ void handle_search(CSTR source, User *callerUser, ServiceCommandData *data) {
 		if (full)
 			type = str_duplicate("DEB");
 		else
-			#if defined(USE_SOCKSMONITOR)
-			type = str_duplicate("ACTIVITY");
-			#elif defined(USE_STATS)
-			type = str_duplicate("SS");
-			#else
 			type = str_duplicate("NS");
-			#endif
 	}
 
 	if (IS_NULL(start)) // default start-line
@@ -1077,8 +995,6 @@ void handle_search(CSTR source, User *callerUser, ServiceCommandData *data) {
 		else if (str_equals_nocase(type, "PANIC"))
 			log_type = LOG_GENERAL_PANIC;
 	}
-
-	#if defined(USE_SERVICES)
 
 	if (log_type == -1) {
 
@@ -1112,35 +1028,6 @@ void handle_search(CSTR source, User *callerUser, ServiceCommandData *data) {
 			log_type = LOG_SERVICES_ROOTSERV;
 	}
 	
-	#endif
-	#if defined(USE_STATS)
-	
-	if (log_type == -1) {
-
-		if (str_equals_nocase(type, "SS"))
-			log_type = LOG_SERVICES_SEENSERV;
-
-		else if (str_equals_nocase(type, "ST"))
-			log_type = LOG_SERVICES_STATSERV;
-	}
-
-	#endif
-	#ifdef USE_SOCKSMONITOR
-
-	if (log_type == -1) {
-
-		if (str_equals_nocase(type, "PROXY"))
-			log_type = LOG_PROXY_GENERAL;
-
-		else if (str_equals_nocase(type, "SCAN"))
-			log_type = LOG_PROXY_SCAN;
-
-		else
-			log_type = LOG_SERVICES_SOCKSMONITOR;
-	}
-
-	#endif
-
 	if (log_type == -1) {
 
 		log_handle_search_syntax(callerUser, data->agent->nick, full);

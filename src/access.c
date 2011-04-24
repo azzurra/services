@@ -28,8 +28,6 @@
 #include "../inc/users.h"
 #include "../inc/access.h"
 
-#if defined(USE_SERVICES) || defined(USE_SOCKSMONITOR)
-
 /*********************************************************/
 
 BOOL access_db_load(Access **accessList, CSTR database, BOOL *ListLoadComplete) {
@@ -354,10 +352,8 @@ int check_access(Access *accessList, CSTR nick, CSTR user, CSTR host, CSTR serve
 		if (IS_NOT_NULL(userAccess))
 			*userAccess = anAccess;
 
-		#ifdef USE_SERVICES
 		if ((anAccess->modes_on != 0) || (anAccess->modes_off != 0))
 			send_user_SVSMODE(s_RootServ, nick, get_user_modes(anAccess->modes_on, anAccess->modes_off), tsinfo);
-		#endif
 
 		return AC_RESULT_GRANTED;
 	}
@@ -398,17 +394,13 @@ int access_remove(Access **accessList, CSTR nick, char *removed) {
 	while (IS_NOT_NULL(anAccess)) {
 
 		if (str_equals_nocase(nick, anAccess->nick)) {
-
-			#ifdef USE_SERVICES
 			User *user;
-			#endif
 
 			if (IS_NOT_NULL(accessPrev))
 				accessPrev->next = anAccess->next;
 			else
 				*accessList = anAccess->next;
 
-			#ifdef USE_SERVICES
 			TRACE_MAIN();
 
 			if (IS_NOT_NULL(user = hash_onlineuser_find(nick)) && FlagSet(user->flags, UMODE_z)) {
@@ -416,7 +408,6 @@ int access_remove(Access **accessList, CSTR nick, char *removed) {
 				send_user_SVSMODE(s_RootServ, nick, "-z", user->tsinfo);
 				RemoveFlag(user->flags, UMODE_z);
 			}
-			#endif
 
 			if (IS_NOT_NULL(removed))
 				str_copy_checked(anAccess->nick, removed, NICKSIZE);
@@ -517,9 +508,7 @@ BOOL send_access_info(Access *accessList, CSTR nick, CSTR sourceNick, const User
 		if (anAccess->server3)
 			send_notice_to_user(sourceNick, target, "Server 3: %s", anAccess->server3);
 
-		#ifdef USE_SERVICES
 		send_notice_to_user(sourceNick, target, "Modes On/Off: %s", get_user_modes(anAccess->modes_on, anAccess->modes_off));
-		#endif
 
 		send_notice_to_user(sourceNick, target, "Enabled: %s", FlagSet(anAccess->flags, AC_FLAG_ENABLED) ? "Yes" : "No");
 
@@ -556,10 +545,8 @@ void access_send_dump(Access *anAccess, CSTR sourceNick, const User *callerUser)
 	send_notice_to_user(sourceNick, callerUser, "Server3: 0x%08X \2[\2%s\2]\2",		(unsigned long)anAccess->server3, str_get_valid_display_value(anAccess->server3));
 	send_notice_to_user(sourceNick, callerUser, "Flags: %ld",						anAccess->flags);
 
-	#ifdef USE_SERVICES
 	send_notice_to_user(sourceNick, callerUser, "Modes ON: %ld \2[\2%s\2]\2",		anAccess->modes_on, get_user_modes(anAccess->modes_on, 0));
 	send_notice_to_user(sourceNick, callerUser, "Modes OFF: %ld \2[\2%s\2]\2",		anAccess->modes_off, get_user_modes(0, anAccess->modes_off));
-	#endif
 
 	send_notice_to_user(sourceNick, callerUser, "Created by: 0x%08X \2[\2%s\2]\2",	(unsigned long)anAccess->creator.name, str_get_valid_display_value(anAccess->creator.name));
 	send_notice_to_user(sourceNick, callerUser, "Time Added C-time: %ld",			anAccess->creator.time);
@@ -639,5 +626,3 @@ unsigned long access_mem_report(Access *accessList, int *count) {
 
 	return mem;
 }
-
-#endif /* defined(USE_SERVICES) || defined(USE_SOCKSMONITOR) */

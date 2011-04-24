@@ -16,8 +16,6 @@
 #ifndef SRV_MEMOSERV_H
 #define SRV_MEMOSERV_H
 
-#ifdef USE_SERVICES
-
 /*********************************************************
  * Version stuff                                         *
  *********************************************************/
@@ -158,7 +156,5 @@ extern void send_memo_internal(NickInfo *ni, CSTR message);
 
 extern void memoserv_ds_dump(CSTR sourceNick, const User *callerUser, STR request);
 extern unsigned long memoserv_mem_report(CSTR sourceNick, const User *callerUser);
-
-#endif /* USE_SERVICES */
 
 #endif /* SRV_MEMOSERV_H */

@@ -13,8 +13,6 @@
 
 #include "../inc/common.h"
 
-#ifdef USE_SERVICES
-
 #include "../inc/strings.h"
 #include "../inc/messages.h"
 #include "../inc/logging.h"
@@ -12069,5 +12067,3 @@ static void do_chan_access_explist(const int listLevel, CSTR source, const User 
 		send_notice_lang_to_user(s_ChanServ, callerUser, GetCallerLang(), END_OF_LIST);
 	}
 }
-
-#endif /* USE_SERVICES */

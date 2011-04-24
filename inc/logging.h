@@ -23,16 +23,16 @@
 #include "options.h"
 
 
-typedef	unsigned short int	FACILITY;		/* F00000 */
+typedef unsigned short int	FACILITY;	/* F00000 */
 typedef unsigned int		FACILITY_LINE;	/* L00000 */
-typedef unsigned char		LOG_TYPE;		/* T000   */
-typedef	unsigned char		SEVERITY;		/* S000   */
+typedef unsigned char		LOG_TYPE;	/* T000   */
+typedef unsigned char		SEVERITY;	/* S000   */
 
 
 #define LOG_TYPE_ERROR_ASSERTION		(LOG_TYPE) 1
 #define LOG_TYPE_ERROR_SANITY			(LOG_TYPE) 2
 #define LOG_TYPE_ERROR_EXCEPTION		(LOG_TYPE) 3
-#define LOG_TYPE_ERROR_RTL				(LOG_TYPE) 4
+#define LOG_TYPE_ERROR_RTL			(LOG_TYPE) 4
 #define LOG_TYPE_ERROR_FATAL			(LOG_TYPE) 5
 
 
@@ -41,53 +41,30 @@ typedef	unsigned char		SEVERITY;		/* S000   */
 #define LOG_SEVERITY_ERROR_HALTED		(SEVERITY) 3
 #define LOG_SEVERITY_ERROR_WARNING		(SEVERITY) 4
 #define LOG_SEVERITY_ERROR_QUIT			(SEVERITY) 5
-#define LOG_SEVERITY_ERROR_PROPAGATED	(SEVERITY) 6
+#define LOG_SEVERITY_ERROR_PROPAGATED		(SEVERITY) 6
 
 
 /* Log types */
 
-#define	LOG_GENERAL_PANIC				0
-#define LOG_GENERAL_ERRORS				1
-#define	LOG_GENERAL_DEBUG				2
-
-#if defined(USE_SERVICES)
-#define LOG_SERVICES_NICKSERV_GENERAL	3
+#define LOG_GENERAL_PANIC			0
+#define LOG_GENERAL_ERRORS			1
+#define LOG_GENERAL_DEBUG			2
+#define LOG_SERVICES_NICKSERV_GENERAL		3
 #define LOG_SERVICES_NICKSERV_ID		4
-#define LOG_SERVICES_NICKSERV_ACCESS	5
-#define LOG_SERVICES_CHANSERV_GENERAL	6
+#define LOG_SERVICES_NICKSERV_ACCESS		5
+#define LOG_SERVICES_CHANSERV_GENERAL		6
 #define LOG_SERVICES_CHANSERV_ID		7
-#define LOG_SERVICES_CHANSERV_ACCESS	8
+#define LOG_SERVICES_CHANSERV_ACCESS		8
 #define LOG_SERVICES_MEMOSERV			9
 #define LOG_SERVICES_OPERSERV			10
 #define LOG_SERVICES_ROOTSERV			11
-#endif
-
-#if defined(USE_STATS)
-#define LOG_SERVICES_SEENSERV			3
-#define LOG_SERVICES_STATSERV			4
-#endif
-
-#if defined(USE_SOCKSMONITOR)
-#define LOG_SERVICES_SOCKSMONITOR		3
-#define	LOG_PROXY_GENERAL				4
-#define	LOG_PROXY_SCAN					5
-#endif
-
-
-#if defined(USE_SERVICES)
-	#define LOG_SERVICES_GENERAL		LOG_SERVICES_OPERSERV
-#elif defined(USE_STATS)
-	#define LOG_SERVICES_GENERAL		LOG_SERVICES_STATSERV
-#else
-	#define LOG_SERVICES_GENERAL		LOG_SERVICES_SOCKSMONITOR
-#endif
-
+#define LOG_SERVICES_GENERAL			LOG_SERVICES_OPERSERV
 
 
 /* TRACEing */
 
-extern FACILITY				trace_main_facility;
-extern FACILITY				trace_current_facility;
+extern FACILITY			trace_main_facility;
+extern FACILITY			trace_current_facility;
 extern FACILITY_LINE		trace_main_line;
 extern FACILITY_LINE		trace_current_line;
 
@@ -141,11 +118,6 @@ extern void log_snoop(CSTR source, CSTR fmt, ...);
 
 /* Send message to the debug snoop channel (default is #bugs) */
 extern void log_debug_snoop(CSTR fmt, ...);
-
-#ifdef USE_SOCKSMONITOR
-/* Send message to the proxy snoop channel (default is #APM) */
-extern void log_proxy(CSTR source, CSTR fmt, ...);
-#endif
 
 /* Send the libc error message on the debug snoop channel and on the stderr stream */
 extern void log_stderr(CSTR fmt, ...);

@@ -38,8 +38,6 @@
 #include "../inc/version.h"
 #include "../inc/list.h"
 #include "../inc/storage.h"
-
-#ifdef USE_SERVICES
 #include "../inc/nickserv.h"
 #include "../inc/chanserv.h"
 #include "../inc/memoserv.h"
@@ -52,16 +50,6 @@
 #include "../inc/blacklist.h"
 #include "../inc/tagline.h"
 #include "../inc/jupe.h"
-#endif
-
-#ifdef USE_STATS
-#include "../inc/seenserv.h"
-#include "../inc/statserv.h"
-#endif
-
-#ifdef USE_SOCKSMONITOR
-#include "../inc/cybcop.h"
-#endif
 
 
 /*********************************************************
@@ -91,14 +79,8 @@ static void do_clones(const char *source, User *callerUser, ServiceCommandData *
 static void do_svsnick(const char *source, User *callerUser, ServiceCommandData *data);
 static void do_sraw(const char *source, User *callerUser, ServiceCommandData *data);
 static void do_sysinfo(const char *source, User *callerUser, ServiceCommandData *data);
-#ifdef USE_SERVICES
 static void do_killuser(const char *source, User *callerUser, ServiceCommandData *data);
-#endif
 static void do_command(const char *source, User *callerUser, ServiceCommandData *data);
-
-#ifdef USE_STATS_SUX
-static void do_dtest(const char *source, User *callerUser, ServiceCommandData *data);
-#endif
 
 
 /*********************************************************
@@ -135,9 +117,7 @@ static ServiceCommand	debugserv_commands_I[] = {
 // 'J' (74 / 9)
 // 'K' (75 / 10)
 static ServiceCommand	debugserv_commands_K[] = {
-	#ifdef USE_SERVICES
 	{ "KILLUSER",	CMDLEVEL_CODER,			0, do_killuser },
-	#endif
 	{ NULL,			0,						0, NULL }
 };
 // 'L' (76 / 11)
@@ -266,11 +246,8 @@ static void do_mem(const char *source, User *callerUser, ServiceCommandData *dat
 		total_memory += server_mem_report(s_DebugServ, callerUser);
 		total_memory += oper_mem_report(s_DebugServ, callerUser);
 
-		#if defined(USE_SERVICES) || defined(USE_STATS)
 		total_memory += chan_mem_report(s_DebugServ, callerUser);
-		#endif
 
-		#ifdef USE_SERVICES
 		total_memory += chanserv_mem_report(s_DebugServ, callerUser);
 		total_memory += memoserv_mem_report(s_DebugServ, callerUser);
 		total_memory += nickserv_mem_report(s_DebugServ, callerUser);
@@ -284,20 +261,7 @@ static void do_mem(const char *source, User *callerUser, ServiceCommandData *dat
 		total_memory += blacklist_mem_report(s_DebugServ, callerUser);
 		total_memory += tagline_mem_report(s_DebugServ, callerUser);
 		total_memory += jupe_mem_report(s_DebugServ, callerUser);
-		#endif
-
-		#ifdef USE_STATS
-		total_memory += seenserv_mem_report(s_DebugServ, callerUser);
-		total_memory += statserv_mem_report(s_DebugServ, callerUser);
-		#endif
-
-		#ifdef USE_SOCKSMONITOR
-		total_memory += monitor_mem_report(s_DebugServ, callerUser);
-		#endif
-
-		#if defined(USE_SERVICES) || defined(USE_SOCKSMONITOR)
 		total_memory += akill_mem_report(s_DebugServ, callerUser);
-		#endif
 	}
 	else if (str_equals_nocase(param, "USERS"))
 		total_memory = user_mem_report(s_DebugServ, callerUser);
@@ -308,17 +272,12 @@ static void do_mem(const char *source, User *callerUser, ServiceCommandData *dat
 	else if (str_equals_nocase(param, "SERVERS"))
 		total_memory = server_mem_report(s_DebugServ, callerUser);
 
-	#if defined(USE_SERVICES) || defined(USE_STATS)
 	else if (str_equals_nocase(param, "CHANNELS"))
 		total_memory = chan_mem_report(s_DebugServ, callerUser);
-	#endif
 
-	#if defined(USE_SERVICES) || defined(USE_SOCKSMONITOR)
 	else if (str_equals_nocase(param, "AKILL"))
 		total_memory = akill_mem_report(s_DebugServ, callerUser);
-	#endif
 
-	#ifdef USE_SERVICES
 	else if (str_equals_nocase(param, "CHANSERV"))
 		total_memory = chanserv_mem_report(s_DebugServ, callerUser);
 
@@ -357,49 +316,9 @@ static void do_mem(const char *source, User *callerUser, ServiceCommandData *dat
 
 	else if (str_equals_nocase(param, "JUPE"))
 		total_memory = jupe_mem_report(s_DebugServ, callerUser);
-	#endif
-
-	#if defined(USE_STATS)
-	else if (str_equals_nocase(param, "STATSERV"))
-		total_memory = statserv_mem_report(s_DebugServ, callerUser);
-
-	else if (str_equals_nocase(param, "SEENSERV"))
-		total_memory = seenserv_mem_report(s_DebugServ, callerUser);
-	#endif
-
-	#if defined(USE_SOCKSMONITOR)
-	else if (str_equals_nocase(param, "CYBCOP"))
-		total_memory = monitor_mem_report(s_DebugServ, callerUser);
-	#endif
 
 	else {
-
-#ifdef USE_SERVICES
-	#ifdef USE_STATS
-		#ifdef USE_SOCKSMONITOR
-		send_notice_to_user(s_DebugServ, callerUser, "Syntax: MEM [CHANNELS|CHANSERV|CYBCOP|LANG|MEMOSERV|NICKSERV|OPERSERV|ROOTSERV|SEENSERV|STATSERV|USERS]");
-		#else
-		send_notice_to_user(s_DebugServ, callerUser, "Syntax: MEM [CHANNELS|CHANSERV|LANG|MEMOSERV|NICKSERV|OPERSERV|ROOTSERV|SEENSERV|STATSERV|USERS]");
-		#endif
-	#else
-		#ifdef USE_SOCKSMONITOR
-		send_notice_to_user(s_DebugServ, callerUser, "Syntax: MEM [CHANNELS|CHANSERV|CYBCOP|LANG|MEMOSERV|NICKSERV|OPERSERV|ROOTSERV|USERS]");
-		#else
 		send_notice_to_user(s_DebugServ, callerUser, "Syntax: MEM [CHANNELS|CHANSERV|LANG|MEMOSERV|NICKSERV|OPERSERV|ROOTSERV|USERS]");
-		#endif
-	#endif
-#else
-	#ifdef USE_STATS
-		#ifdef USE_SOCKSMONITOR
-		send_notice_to_user(s_DebugServ, callerUser, "Syntax: MEM [CHANNELS|CYBCOP|SEENSERV|STATSERV|USERS]");
-		#else
-		send_notice_to_user(s_DebugServ, callerUser, "Syntax: MEM [CHANNELS|SEENSERV|STATSERV|USERS]");
-		#endif
-	#else
-		send_notice_to_user(s_DebugServ, callerUser, "Syntax: MEM [CYBCOP]");
-	#endif
-#endif
-
 		return;
 	}
 
@@ -423,11 +342,7 @@ static void do_log(const char *source, User *callerUser, ServiceCommandData *dat
 	TRACE_MAIN_FCLT(FACILITY_DEBUGSERV_HANDLE_LOG);
 
 	if (IS_NULL(cmd)) {
-		#ifdef USE_SOCKSMONITOR
-		send_notice_to_user(s_DebugServ, callerUser, "Syntax: \2LOG\2 SEARCH [TODAY|AAAA-MM-GG[>TODAY|AAAA-MM-GG] [ERR|DEB|PANIC|ACTIVITY|PROXY|PREPLAY [start [[+]end]]]]] *text*");
-		#else
 		send_notice_to_user(s_DebugServ, callerUser, "Syntax: \2LOG\2 SEARCH [TODAY|AAAA-MM-GG[>TODAY|AAAA-MM-GG] [SERV|ERR|DEB|PANIC [start [[+]end]]]]] *text*");
-		#endif
 		send_notice_to_user(s_DebugServ, callerUser, "Syntax: \2LOG\2 RESTART|ROTATE");
 	}
 	else if (str_equals_nocase(cmd, "SEARCH"))
@@ -610,9 +525,6 @@ static void do_set(const char *source, User *callerUser, ServiceCommandData *dat
  *********************************************************/
 
 static void do_crypt(const char *source, User *callerUser, ServiceCommandData *data) {
-
-	#if defined(USE_SERVICES) || defined(USE_STATS)
-	
 	STR		type = strtok(NULL, s_SPACE);
 	STR		what = strtok(NULL, s_SPACE);
 	STR		crypted;
@@ -650,8 +562,6 @@ static void do_crypt(const char *source, User *callerUser, ServiceCommandData *d
 		send_notice_to_user(s_DebugServ, callerUser, "FNV hash for %s is \2%X\2", what, crypt_hash_FNV(what, str_len(what)));
 		LOG_DEBUG_SNOOP("Command: CRYPT FNV %s -- by %s", what, source);
 	}
-
-	#endif
 }
 
 
@@ -678,11 +588,8 @@ static DS_DUMP_ITEM dump_handler_table[] = {
 	{ "SERVER", server_ds_dump },
 	{ "OPER", oper_ds_dump },
 
-	#if defined(USE_SERVICES) || defined(USE_STATS)
 	{ "CHAN", chan_ds_dump },
-	#endif
 
-	#if defined(USE_SERVICES)
 	{ "LANG", NULL },
 	{ "TIMEOUT", timeout_ds_dump },
 	{ "NICKSERV", nickserv_ds_dump },
@@ -695,20 +602,7 @@ static DS_DUMP_ITEM dump_handler_table[] = {
 	{ "SGLINES", sxline_ds_dump },
 	{ "SQLINES", sxline_ds_dump },
 	{ "RESERVED", reserved_ds_dump },
-	#endif
-
-	#if defined(USE_STATS)
-	{ "STATSERV", statserv_ds_dump },
-	{ "SEENSERV", seenserv_ds_dump },
-	#endif
-
-	#if defined(USE_SOCKSMONITOR)
-	{ "CYBCOP", monitor_ds_dump },
-	#endif
-
-	#if defined(USE_SERVICES) || defined(USE_SOCKSMONITOR)
 	{ "AKILL", akill_ds_dump },
-	#endif
 
 	{ NULL, NULL }
 };
@@ -733,17 +627,7 @@ static void do_dump(const char *source, User *callerUser, ServiceCommandData *da
 
 		send_notice_to_user(s_DebugServ, callerUser, "DUMP - facility is one of:");
 
-		#if defined(USE_SERVICES)
 		send_notice_to_user(s_DebugServ, callerUser, "CONF USER CHAN LANG NICKSERV CHANSERV MEMOSERV OPERSERV ROOTSERV TRIGGERS IGNORES SGLINES SQLINES RESERVED"); // altri?
-		#endif
-		
-		#if defined(USE_STATS)
-		send_notice_to_user(s_DebugServ, callerUser, "CONF USER CHAN SERVER STATSERV SEENSERV"); // altri?
-		#endif
-		
-		#if defined(USE_SOCKSMONITOR)
-		send_notice_to_user(s_DebugServ, callerUser, "CONF USER CYBCOP"); // altri?
-		#endif
 
 	} else {
 
@@ -827,7 +711,7 @@ static void do_inject(const char *source, User *callerUser, ServiceCommandData *
  *********************************************************/
 
 static void do_clones(const char *source, User *callerUser, ServiceCommandData *data) {
-#if !defined(USE_SERVICES) && defined(ENABLE_DEBUG_COMMANDS)
+#ifdef ENABLE_DEBUG_COMMANDS
 	/*
 	CLONES action number baseNick baseChan NickPerChan
 	*/
@@ -962,7 +846,6 @@ static void do_sraw(const char *source, User *callerUser, ServiceCommandData *da
  * /msg DebugServ KILLUSER                               *
  *********************************************************/
 
-#ifdef USE_SERVICES
 static void do_killuser(const char *source, User *callerUser, ServiceCommandData *data) {
 
 	char *nick = strtok(NULL, " ");
@@ -995,7 +878,6 @@ static void do_killuser(const char *source, User *callerUser, ServiceCommandData
 		}
 	}
 }
-#endif
 
 
 /*********************************************************
@@ -1239,17 +1121,6 @@ static void do_sysinfo(const char *source, User *callerUser, ServiceCommandData 
 
 	stg_report_sysinfo(s_DebugServ, callerUser->nick);
 
-	#if defined(USE_SERVICES)
-
-	#elif defined(USE_STATS)
-
-	send_notice_to_user(s_DebugServ, callerUser, " * StatServ: write \2%d\2 / read \2%s\2", STATSERV_DB_CURRENT_VERSION, STATSERV_DB_SUPPORTED_VERSION);
-	send_notice_to_user(s_DebugServ, callerUser, " * SeenServ: write \2%d\2 / read \2%s\2", SEENSERV_DB_CURRENT_VERSION, SEENSERV_DB_SUPPORTED_VERSION);
-
-	#elif defined(USE_SOCKSMONITOR)
-
-	#endif
-
 	// logging options
 	send_notice_to_user(s_DebugServ, callerUser, "Logging options: Snoop \2%s\2 - Extra snoop \2%s\2 - Snoop chan: \2%s\2",
 		CONF_SET_SNOOP ? s_ENABLED : s_DISABLED, CONF_SET_EXTRASNOOP ? s_ENABLED : s_DISABLED, CONF_SNOOP_CHAN);
@@ -1259,8 +1130,6 @@ static void do_sysinfo(const char *source, User *callerUser, ServiceCommandData 
 		CONF_SET_DEBUG ? s_ENABLED : s_DISABLED, CONF_DEBUG_CHAN, conf_monitor_inputbuffer ? s_ENABLED : s_DISABLED, conf_monitor_inputbuffer ? debug_monitor_inputbuffer_filter : s_NULL, debug_inject ? s_ON : s_OFF);
 
 	// misc options
-
-	#ifdef USE_SERVICES
 	send_notice_to_user(s_DebugServ, callerUser, "Misc options: Timeout-check frequency \2%d\2 secs", CONF_TIMEOUT_CHECK);
 
 	#ifndef NEW_SOCK
@@ -1268,7 +1137,6 @@ static void do_sysinfo(const char *source, User *callerUser, ServiceCommandData 
 	#endif
 
 	send_notice_to_user(s_DebugServ, callerUser, "Misc options: Return mail address \2%s\2 - MTA path \2%s\2", CONF_RETURN_EMAIL, CONF_SENDMAIL_PATH);
-	#endif
 
 	send_notice_to_user(s_DebugServ, callerUser, "Misc options: Services master default nick: \2%s\2", CONF_SERVICES_MASTER);
 

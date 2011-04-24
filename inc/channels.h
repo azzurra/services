@@ -16,9 +16,6 @@
 #ifndef SRV_CHANNELS_H
 #define SRV_CHANNELS_H
 
-#if defined(USE_SERVICES) || defined(USE_STATS)
-
-
 /*********************************************************
  * Headers                                               *
  *********************************************************/
@@ -65,9 +62,7 @@ struct _Channel {
 
 	unsigned short	userCount;
 
-	#ifdef USE_SERVICES
 	ChannelInfo		*ci;
-	#endif
 };
 
 
@@ -143,23 +138,14 @@ extern int chan_has_ban(Channel *chan, CSTR ban, char *buffer);
 extern BOOL chan_add_ban(Channel *chan, CSTR ban);
 extern BOOL chan_remove_ban(Channel *chan, CSTR ban);
 
-
-#ifdef USE_SERVICES
 extern void synch_topics();
 extern void handle_masscmds(CSTR source, User *callerUser, ServiceCommandData *data);
 extern void handle_mode(CSTR source, User *callerUser, ServiceCommandData *data);
-#endif
-
-#ifdef USE_STATS
-extern void handle_list(CSTR source, User *callerUser, ServiceCommandData *data);
-#endif
 
 extern char *get_channel_mode(const long int modeOn, const long int modeOff);
 extern unsigned int stats_open_channels_count;
 
 extern void chan_ds_dump(CSTR sourceNick, const User *callerUser, STR request);
 extern unsigned long int chan_mem_report(CSTR sourceNick, const User *callerUser);
-
-#endif /* defined(USE_SERVICES) || defined(USE_STATS) */
 
 #endif /* SRV_CHANNELS_H */

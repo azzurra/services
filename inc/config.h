@@ -47,21 +47,9 @@ typedef	int	agentid_t;
 
 /******* General configuration *******/
 
-#if !defined(USE_SERVICES) && defined(USE_STATS) && !defined(USE_SOCKSMONITOR)
-#define CONFIG_FILE 	"../stats.conf"
-#define MOTD_FILENAME   "../stats.motd"
-#define PID_FILE		"../stats.pid"
-
-#elif !defined(USE_SERVICES) && !defined(USE_STATS) && defined(USE_SOCKSMONITOR)
-#define CONFIG_FILE 	"../cybcop.conf"
-#define MOTD_FILENAME   "../cybcop.motd"
-#define PID_FILE		"../cybcop.pid"
-
-#else
 #define CONFIG_FILE 	"../services.conf"
 #define MOTD_FILENAME   "../services.motd"
-#define PID_FILE		"../services.pid"
-#endif
+#define PID_FILE	"../services.pid"
 
 /******* End of runtime-configurable options. *******/
 
@@ -71,43 +59,25 @@ typedef	int	agentid_t;
 /* Database filenames */
 
 #define OPERACCESS_DB		"operacc.db"
-#define OPER_DB				"oper.db"
+#define OPER_DB			"oper.db"
 
-#ifdef USE_SERVICES
 #define NICKSERV_DB		"nick.db"
 #define CHANSERV_DB		"chan.db"
 #define MEMOSERV_DB		"memo.db"
-#define IGNORE_DB       "ignore.db"
-#define QLINE_DB        "qline.db"
-#define GLINE_DB        "gline.db"
+#define IGNORE_DB		"ignore.db"
+#define QLINE_DB		"qline.db"
+#define GLINE_DB		"gline.db"
 #define TAGLINE_DB		"tagline.db"
 #define TRIGGER_DB		"trigger.db"
-#define BLACKLIST_DB	"blacklist.db"
-#define SERVERBOT_DB	"serverbot.db"
+#define BLACKLIST_DB		"blacklist.db"
+#define SERVERBOT_DB		"serverbot.db"
 #define RESERVED_DB		"reserved.db"
 #define DYNCONF_DB		"dynconf.db"
-#define LANGMATCH_DB	"langmatch.db"
+#define LANGMATCH_DB		"langmatch.db"
 #define SUSPEND_DB		"suspend.db"
 #define EXEMPT_DB		"exempt.db"
-#endif
 
-#if defined(USE_SERVICES) || defined(USE_SOCKSMONITOR)
 #define AKILL_DB		"akill.db"
-#endif
-
-#ifdef USE_SOCKSMONITOR
-#define MONITOR_DB		"monitor.db"
-#define HOSTCACHE_DB	"hostcache.db"
-#define EXCEPTION_DB	"exception.db"
-#define APM_DB			"apm.db"
-#define BOTTLERS_DB		"bottlers.db"
-#endif
-
-#ifdef USE_STATS
-#define STATSERV_DB		"statserv.db"
-#define SERVSTATS_DB	"servstats.db"
-#define SEENSERV_DB		"seenserv.db"
-#endif
 
 /******* OperServ configuration *******/
 

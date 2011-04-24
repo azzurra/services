@@ -106,39 +106,11 @@
 #define VERS_CP_DKEY		""
 #endif
 
-
-#if defined(USE_SOCKSMONITOR)
-
-// Cybcop build
-
-#define VERS_BUILDNAME	"Security Services"
-#define	VERS_MAJOR		"2"
-#define VERS_MINOR		"4"
-#define VERS_REVISION	"2"
-#define VERS_CODENAME	"Kekkai"
-
-
-#elif defined(USE_STATS)
-
-// Stats build
-
-#define VERS_BUILDNAME	"Statistical Services"
-#define	VERS_MAJOR		"1"
-#define VERS_MINOR		"8"
-#define VERS_REVISION	"0"
-#define VERS_CODENAME	"Murasaki"
-
-#else
-
-// Main services build
-
 #define VERS_BUILDNAME	"Core Services"
-#define	VERS_MAJOR	"2"
+#define VERS_MAJOR	"2"
 #define VERS_MINOR	"2"
 #define VERS_REVISION	"2"
 #define VERS_CODENAME	"Zero"
-
-#endif
 
 extern STDSTR	s_vers_name;
 extern STDSTR	s_vers_build_name;

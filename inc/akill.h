@@ -14,9 +14,6 @@
 #ifndef SRV_AKILL_H
 #define SRV_AKILL_H
 
-#if defined(USE_SERVICES) || defined(USE_SOCKSMONITOR)
-
-
 /*********************************************************
  * Version stuff                                         *
  *********************************************************/
@@ -61,8 +58,8 @@ typedef	AutoKill_V10		AutoKill;
 
 // AutoKill.flags
 #define AKILL_TYPE_NONE			0x00000000
-#define AKILL_TYPE_TEMPORARY	0x00000001
-#define AKILL_TYPE_PERMANENT	0x00000002
+#define AKILL_TYPE_TEMPORARY		0x00000001
+#define AKILL_TYPE_PERMANENT		0x00000002
 #define AKILL_TYPE_BY_APM		0x00000004
 #define AKILL_TYPE_MANUAL		0x00000008
 #define AKILL_TYPE_FLOODER		0x00000010
@@ -75,9 +72,9 @@ typedef	AutoKill_V10		AutoKill;
 #define AKILL_TYPE_TROJAN		0x00000800
 #define AKILL_TYPE_MIRCWORM		0x00001000
 #define AKILL_TYPE_PROXY80		0x00002000
-#define AKILL_TYPE_PROXY8080	0x00004000
-#define AKILL_TYPE_PROXY3128	0x00008000
-#define AKILL_TYPE_PROXY6588	0x00010000
+#define AKILL_TYPE_PROXY8080		0x00004000
+#define AKILL_TYPE_PROXY3128		0x00008000
+#define AKILL_TYPE_PROXY6588		0x00010000
 #define AKILL_TYPE_SOCKS4		0x00020000
 #define AKILL_TYPE_SOCKS5		0x00040000
 #define AKILL_TYPE_RESERVED		0x00080000
@@ -108,7 +105,5 @@ extern void akill_add(CSTR source, CSTR username, CSTR host, CSTR reason, const 
 extern void akill_remove(CSTR username, CSTR host);
 extern void akill_ds_dump(CSTR sourceNick, const User *callerUser, STR request);
 extern unsigned long int akill_mem_report(CSTR sourceNick, const User *callerUser);
-
-#endif /* defined(USE_SERVICES) || defined(USE_SOCKSMONITOR) */
 
 #endif /* SRV_AKILL_H */

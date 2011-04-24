@@ -180,7 +180,6 @@ extern unsigned long int	lang_mem_report(CSTR sourceNick, const User *callerUser
 /* recupera il LANG_ID utilizzato dal nick indicato */
 #define			GetNickLang(nick)		(nick ? EXTRACT_LANG_ID(nick->langID) : LANG_DEFAULT)
 
-#ifdef USE_SERVICES
 /*  recupera il LANG_ID utilizzato dall'eventuale nick registrato avente il nome indicato (o LANG_DEFAULT) */
 extern LANG_ID	FindNickLang(CSTR nickname, const User *user);
 
@@ -190,7 +189,6 @@ extern LANG_ID	FindNickLang(CSTR nickname, const User *user);
 extern void		rehash_news(void);
 extern BOOL		lang_get_news(const LANG_ID lang_id);
 extern BOOL		lang_send_news(const User *callerUser);
-#endif
 
 /* Ricerca del LANG_ID utilizzato dal chiamente. Usare GetCallerLang() per utilizzarlo. */
 #define			GetCallerLang()						(current_caller_lang)

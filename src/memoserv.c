@@ -34,9 +34,6 @@
 #include "../inc/memoserv.h"
 
 
-#ifdef USE_SERVICES
-
-
 #ifdef	FIX_USE_MPOOL
 
 MemoryPool			*memodb_mempool;
@@ -3228,5 +3225,3 @@ unsigned long memoserv_mem_report(CSTR sourceNick, const User *callerUser) {
 	send_notice_to_user(sourceNick, callerUser, "Record / Memos: \2%d\2 / \2%d\2 -> \2%d\2 KB (\2%d\2 B)", recordCount, memoCount, mem / 1024, mem);
 	return mem;
 }
-
-#endif /* USE_SERVICES */

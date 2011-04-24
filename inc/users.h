@@ -35,23 +35,19 @@
  * Data types                                            *
  *********************************************************/
 
-#if defined(USE_SERVICES) || defined(USE_STATS)
 typedef struct user_chanlist_item ChanListItem;
 struct user_chanlist_item {
 
 	ChanListItem	*next, *prev;
 	Channel			*chan;
 };
-#endif
 
-#ifdef USE_SERVICES
 typedef struct user_chaninfolist_item ChanInfoListItem;
 struct user_chaninfolist_item {
 
 	ChanInfoListItem	*next, *prev;
 	ChannelInfo			*ci;
 };
-#endif
 
 // an user
 struct _User {
@@ -75,11 +71,8 @@ struct _User {
 	long int				mode;			/* UMODE_* */
 	long int				flags;			/* U_* */
 
-	#if defined(USE_SERVICES) || defined(USE_STATS)
 	ChanListItem			*chans;			/* Channels user has joined. */
-	#endif
 
-	#ifdef USE_SERVICES
 	ChanInfoListItem		*founder_chans;		/* Channels user has identified for. */
 
 	short int				idcount;
@@ -89,7 +82,6 @@ struct _User {
 	time_t					lastchanreg;
 
 	NickInfo				*ni;
-	#endif /* USE_SERVICES */
 
 	// Flood control
 	time_t					flood_reset_time;
@@ -198,9 +190,7 @@ extern User *user_add_services_client(CSTR nick, CSTR mode, CSTR username, CSTR 
 extern User *user_add_services_agent(CSTR nick, long int mode, CSTR realname);
 extern void user_delete_services_client(CSTR nick);
 
-#ifdef USE_SERVICES
 extern User *user_add_enforcer(NickInfo *ni);
-#endif
 
 #define IS_INVALID_NICK_CHAR(c)	( ((c) < FIRST_VALID_NICK_CHAR) || ((c) > LAST_VALID_NICK_CHAR) )
 #define IS_INVALID_HOST_CHAR(c)	( ((c) < FIRST_VALID_HOST_CHAR) || ((c) > LAST_VALID_HOST_CHAR) )
@@ -221,16 +211,12 @@ extern void	user_handle_KILL(CSTR source, const int ac, char **av);
 extern int user_handle_server_SQUIT(const Server *server);
 #endif
 
-#ifdef USE_SERVICES
 extern void user_handle_services_kick(CSTR chan, User *user);
-#endif
 
 extern BOOL	user_is_identified_to(const User *callerUser, CSTR nickname);
 
-#ifdef USE_SERVICES
 extern void user_remove_id(CSTR nickname, BOOL deleted);
 extern void user_remove_chanid(ChannelInfo *ci);
-#endif
 
 extern BOOL user_is_ircop(const User *user);
 extern BOOL nick_is_ircop(CSTR nick);
@@ -243,12 +229,10 @@ extern BOOL nick_is_service(CSTR name);
 
 extern void introduce_services_agent(CSTR nick);
 
-#if defined(USE_SERVICES) || defined(USE_STATS)
-extern BOOL user_isin_chan(const User *user, CSTR chan);
+extern BOOL	user_isin_chan(const User *user, CSTR chan);
 extern BOOL	user_is_chanop(CSTR nick, CSTR chan, Channel *c);
 extern BOOL	user_is_chanhalfop(CSTR nick, CSTR chan, Channel *c);
 extern BOOL	user_is_chanvoice(CSTR nick, CSTR chan, Channel *c);
-#endif
 
 extern BOOL	user_usermask_match(CSTR mask, const User *user, BOOL matchMaskedHost, BOOL matchCIDR);
 extern void	user_usermask_split(CSTR mask, char **nick, char **user, char **host);

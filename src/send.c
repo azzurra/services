@@ -341,37 +341,19 @@ void send_RAKILL(const char *username, const char *host) {
 /* Send a SJOIN for a services client. */
 void send_SJOIN(CSTR nickname, CSTR channel) {
 
-#if !defined(USE_SERVICES) && !defined(USE_STATS)
-	time_t now = time(NULL);
-#endif
-
 	if (IS_NULL(nickname) || IS_NULL(channel)) {
 
 		LOG_DEBUG_SNOOP("send_sjoin() called with NULL parameter(s)");
 		return;
 	}
 
-#if defined(USE_SERVICES) || defined(USE_STATS)
 	chan_handle_internal_SJOIN(nickname, channel);
-#else
-
-#ifdef ENABLE_CAPAB_SSJOIN
-	if (FlagSet(uplink_capab, CAPAB_SSJOIN))
-		send_cmd(":%s SJOIN %ld %s", nickname, now, channel);
-
-	else
-#endif
-		send_cmd("SJOIN %ld %ld %s 0 :%s", now, now, channel, nickname);
-
-#endif
 }
 
 /* Send a PART from a services client, and fake the client part. */
 void send_PART(CSTR nickname, CSTR channel) {
 
-#if defined(USE_SERVICES) || defined(USE_STATS)
 	char *av[1];
-#endif
 
 	if (IS_NULL(nickname) || IS_NULL(channel)) {
 
@@ -380,12 +362,10 @@ void send_PART(CSTR nickname, CSTR channel) {
 	}
 	send_cmd(":%s PART %s", nickname, channel);
 
-#if defined(USE_SERVICES) || defined(USE_STATS)
 	/* We don't care for the reason when processing a PART internally. */
 
 	av[0] = (char *)channel;
 	user_handle_PART(nickname, 1, av);
-#endif
 }
 
 /* Send a QUIT from a services client, and fake the client quit. */
@@ -440,18 +420,3 @@ void send_SHUN(CSTR source, CSTR target, CSTR reason) {
 
 	send_cmd(":%s SHUN %s :%s", source, target, reason);
 }
-
-#ifdef USE_SOCKSMONITOR
-/* Send a CTCP to a client. */
-void send_CTCP(CSTR target, CSTR type) {
-
-	if (IS_NULL(target) || IS_NULL(type)) {
-
-		log_error(FACILITY_SEND, __LINE__, LOG_TYPE_ERROR_ASSERTION, LOG_SEVERITY_ERROR_HALTED, 
-			"send_CTCP() called with NULL parameter(s): %s %s", target, type);
-		return;
-	}
-
-	send_cmd(":%s PRIVMSG %s :%c%s%c", s_SocksMonitor, target, 1, type, 1);
-}
-#endif

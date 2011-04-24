@@ -53,10 +53,6 @@ extern void send_SVSNOOP(CSTR server, char action);
 extern void send_SVSNICK(CSTR nick, CSTR newnick);
 extern void send_SHUN(CSTR source, CSTR target, CSTR reason);
 
-#ifdef USE_SOCKSMONITOR
-extern void send_CTCP(CSTR target, CSTR type);
-#endif
-
 extern void send_notice_to_nick(CSTR source, CSTR dest, CSTR fmt, ...);
 extern void send_notice_to_user(CSTR source, const User *dest, CSTR fmt, ...);
 

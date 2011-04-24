@@ -26,15 +26,10 @@
 #include "../inc/main.h"
 #include "../inc/misc.h"
 #include "../inc/timeout.h"
-
-#ifdef USE_SERVICES
 #include "../inc/ignore.h"
 #include "../inc/trigger.h"
-#endif
 
 /*********************************************************/
-
-#ifdef USE_SERVICES
 
 void update_invalid_password_count(User *user, CSTR service, CSTR target) {
 
@@ -244,8 +239,6 @@ BOOL validate_email(CSTR email, BOOL allowWild) {
 
 	return validate_tld(tld + 1, FALSE);
 }
-
-#endif /* USE_SERVICES */
 
 
 BOOL validate_tld(CSTR tld, BOOL allowFW) {

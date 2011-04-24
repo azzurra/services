@@ -112,11 +112,6 @@ BOOL oper_db_load(void) {
 										if (read_done)
 											read_done &= (result = stg_read_string(stg, &(anOper->creator.name), NULL)) == stgSuccess;
 
-										#ifndef USE_SERVICES
-										if (read_done && IS_NOT_NULL(anOper->password))
-											read_done &= (result = stg_read_string(stg, &(anOper->password), NULL)) == stgSuccess;
-										#endif
-
 										if (!read_done)
 											fatal_error(FACILITY_OPER_DB_LOAD, __LINE__, "Read error on %s (2) - %s", OPER_DB, stg_result_to_string(result));
 
@@ -187,10 +182,6 @@ BOOL oper_db_load(void) {
 
 										if (!read_done)
 											fatal_error(FACILITY_OPER_DB_LOAD, __LINE__, "Read error on %s (2) - %s", OPER_DB, stg_result_to_string(result));
-
-										#ifndef USE_SERVICES
-										anOper_V11->password = IS_EMPTY_STR(anOper_V10.password) ? NULL : str_duplicate(anOper_V10.password);
-										#endif
 
 										anOper_V11->creator.time = anOper_V10.creator.time;
 										anOper_V11->lastUpdate = anOper_V10.lastUpdate;
@@ -322,10 +313,6 @@ BOOL oper_db_load(void) {
 			/* Create an entry for the new Master. */
 			anOper = oper_add(CONF_SERVICES_MASTER, "Services", ULEVEL_MASTER);
 
-			#ifndef USE_SERVICES
-			/* Set their password. */
-			anOper->password = str_duplicate(CONF_SERVICES_MASTER_PASS);
-			#endif
 		}
 		else
 			anOper->level = ULEVEL_MASTER;
@@ -378,12 +365,7 @@ BOOL oper_db_save(void) {
 
 			strings[0] = anOper->nick;
 			strings[1] = anOper->creator.name;
-
-			#ifdef USE_SERVICES
 			strings[2] = NULL;
-			#else
-			strings[2] = anOper->password;
-			#endif
 
 			error_index = -1;
 
@@ -512,16 +494,11 @@ static void oper_remove(Oper *oper) {
 	mem_free(oper->nick);
 	str_creator_free(&(oper->creator));
 
-	#ifndef USE_SERVICES
-	mem_free(oper->password);
-	#endif
-
 	mem_free(oper);
 }
 
 /*********************************************************/
 
-#ifdef USE_SERVICES
 void oper_remove_nick(CSTR nick) {
 
 	Oper *oper;
@@ -579,30 +556,12 @@ void oper_remove_nick(CSTR nick) {
 		oper_remove(oper);
 	}
 }
-#endif
 
 /*********************************************************/
 
 int check_oper(User *user, CSTR nick, CSTR password) {
 
 	Oper *oper;
-
-	#ifndef USE_SERVICES
-	BOOL match = (str_equals_nocase(user->nick, nick));
-
-	if (IS_NOT_NULL(user->oper)) {
-
-		if (match)
-			send_globops(s_Snooper, "\2%s\2 tried to log in (already logged in as \2%s\2)", nick, user->oper->nick);
-		else
-			send_globops(s_Snooper, "\2%s\2 tried to log in as \2%s\2 (already logged in as \2%s\2)", user->nick, nick, user->oper->nick);
-
-		send_notice_to_user(s_Snooper, user, "You are already logged in as \2%s\2.", user->oper->nick);
-
-		LOG_SNOOP(s_Snooper, "SM *L %s -- by %s [Already logged as %s]", nick, user->nick, user->oper->nick);
-		return ULEVEL_USER;
-	}
-	#endif
 
 	oper = findoper(nick);
 
@@ -611,11 +570,6 @@ int check_oper(User *user, CSTR nick, CSTR password) {
 			/* We lost our master, rebuild the entry */
 			oper = oper_add(CONF_SERVICES_MASTER, "Services", ULEVEL_MASTER);
 
-			#ifndef USE_SERVICES
-			/* Set their password. */
-			oper->password = str_duplicate(CONF_SERVICES_MASTER_PASS);
-			#endif
-
 			/* Enable the entry. */
 			AddFlag(oper->flags, OPER_FLAG_ENABLED);
 
@@ -623,115 +577,20 @@ int check_oper(User *user, CSTR nick, CSTR password) {
 			send_globops(s_Snooper, "\2WARNING\2: Re-creating Services Master entry for \2%s\2", CONF_SERVICES_MASTER);
 			LOG_SNOOP(s_Snooper, "%s +%s %s -- by Services [Lost Master!]", s_SN, get_access_name(ULEVEL_MASTER, TRUE), CONF_SERVICES_MASTER);
 		}
-		else {
-			#ifndef USE_SERVICES
-			if (match)
-				send_globops(s_Snooper, "\2%s\2 tried to log in (no entry)", nick);
-			else
-				send_globops(s_Snooper, "\2%s\2 tried to log in as \2%s\2 (no entry)", user->nick, nick);
-
-			send_notice_to_user(s_Snooper, user, "Access denied.");
-
-			LOG_SNOOP(s_Snooper, "SM *L %s -- by %s [No entry]", nick, user->nick);
-			#endif
-
+		else
 			return ULEVEL_USER;
-		}
 	}
 
 	if (FlagSet(oper->flags, OPER_FLAG_ENABLED)) {
 
 		if ((oper->level <= ULEVEL_HOP) || user_is_ircop(user)) {
 
-			#ifndef USE_SERVICES
-			char accessLevel[64];
-
-			if (str_not_equals(password, oper->password)) {
-
-				if (match)
-					send_globops(s_Snooper, "\2%s\2 tried to log in (password mismatch)", nick);
-				else
-					send_globops(s_Snooper, "\2%s\2 tried to log in as \2%s\2 (password mismatch)", user->nick, nick);
-
-				send_notice_to_user(s_Snooper, user, "Password supplied for \2%s\2 is incorrect.", nick);
-
-				LOG_SNOOP(s_Snooper, "SM *L %s -- by %s [Wrong Pass]", nick, user->nick);
-				return ULEVEL_USER;
-			}
-
-			switch (oper->level) {
-
-				case ULEVEL_HOP:
-					str_copy_checked("You are now logged in as Services HelpOp.", accessLevel, sizeof(accessLevel));
-					break;
-
-				case ULEVEL_SOP:
-					str_copy_checked("You are now logged in as Services Operator.", accessLevel, sizeof(accessLevel));
-					break;
-
-				case ULEVEL_SA:
-					str_copy_checked("You are now logged in as Services Admin.", accessLevel, sizeof(accessLevel));
-					break;
-
-				case ULEVEL_SRA:
-					str_copy_checked("You are now logged in as Services Root.", accessLevel, sizeof(accessLevel));
-					break;
-
-				case ULEVEL_CODER:
-					str_copy_checked("You are now logged in as Services Coder.", accessLevel, sizeof(accessLevel));
-					break;
-
-				case ULEVEL_MASTER:
-					str_copy_checked("You are now logged in as Services Master.", accessLevel, sizeof(accessLevel));
-					break;
-
-				default:
-					LOG_DEBUG_SNOOP("Unknown access return (%d) for user %s", oper->level, user->nick);
-					return ULEVEL_USER;
-			}
-
-			if (match)
-				send_globops(s_Snooper, "\2%s\2 logged in", oper->nick);
-			else
-				send_globops(s_Snooper, "\2%s\2 logged in as \2%s\2", user->nick, oper->nick);
-
-			send_notice_to_user(s_Snooper, user, accessLevel);
-
-			LOG_SNOOP(s_Snooper, "SM L %s -- by %s (%s@%s) [%s]", oper->nick, user->nick, user->username, user->host, get_access_name(oper->level, FALSE));
-			#endif
-
 			if (IS_NULL(user->oper) || (user->oper->level < oper->level))
 				user->oper = oper;
 
 			return (user->oper->level);
 		}
-		#ifndef USE_SERVICES
-		else {
-
-			if (match)
-				send_globops(s_Snooper, "\2%s\2 tried to log in (no access)", nick);
-			else
-				send_globops(s_Snooper, "\2%s\2 tried to log in as \2%s\2 (no access)", user->nick, nick);
-
-			send_notice_to_user(s_Snooper, user, "Access denied.");
-
-			LOG_SNOOP(s_Snooper, "SM *L %s -- by %s [No Access]", nick, user->nick);
-		}
-		#endif
 	}
-	#ifndef USE_SERVICES
-	else {
-
-		if (match)
-			send_globops(s_Snooper, "\2%s\2 tried to log in (entry disabled)", nick);
-		else
-			send_globops(s_Snooper, "\2%s\2 tried to log in as \2%s\2 (entry disabled)", user->nick, nick);
-
-		send_notice_to_user(s_Snooper, user, "Access denied.", nick);
-
-		LOG_SNOOP(s_Snooper, "SM *L %s -- by %s [Entry Disabled]", nick, user->nick);
-	}
-	#endif
 
 	return ULEVEL_USER;
 }
@@ -947,7 +806,6 @@ void handle_oper(CSTR source, User *callerUser, ServiceCommandData *data) {
 
 			int accessLevel;
 
-			#ifdef USE_SERVICES
 			NickInfo *ni;
 
 			TRACE_MAIN();
@@ -963,7 +821,6 @@ void handle_oper(CSTR source, User *callerUser, ServiceCommandData *data) {
 			}
 
 			opernick = ni->nick;
-			#endif
 
 			accessLevel = get_access_level(accessName);
 
@@ -973,7 +830,6 @@ void handle_oper(CSTR source, User *callerUser, ServiceCommandData *data) {
 				return;
 			}
 
-			#ifdef USE_SERVICES
 			if (FlagSet(ni->flags, NI_FORBIDDEN)) {
 
 				send_globops(data->agent->nick, "\2%s\2 tried adding forbidden nick \2%s\2 to the %s list", source, ni->nick, get_access_name(accessLevel, FALSE));
@@ -994,7 +850,6 @@ void handle_oper(CSTR source, User *callerUser, ServiceCommandData *data) {
 				send_notice_to_user(data->agent->nick, callerUser, "Nickname \2%s\2 has not authorized.", ni->nick);
 				return;
 			}
-			#endif
 
 			switch (accessLevel) {
 
@@ -1217,66 +1072,6 @@ void handle_oper(CSTR source, User *callerUser, ServiceCommandData *data) {
 					send_notice_to_user(data->agent->nick, callerUser, "Access denied.");
 					return;
 				}
-
-				#ifndef USE_SERVICES
-				else if (str_equals_nocase(option, "PASS") || str_equals_nocase(option, "PASSWD")
-					|| str_equals_nocase(option, "PASSWORD")) {
-
-					size_t len = str_len(value);
-
-					if ((len < 5) || (len > PASSMAX) || string_has_ccodes(value)) {
-
-						if (data->operMatch) {
-
-							LOG_SNOOP(data->agent->nick, "%s %s %s -- by %s (%s@%s) [Invalid Pass]", data->agent->shortNick, get_access_name(oper->level, TRUE), oper->nick, callerUser->nick, callerUser->username, callerUser->host);
-							log_services(data->agent->logID, "%s %s -- by %s (%s@%s) [Invalid Pass: %s]", get_access_name(oper->level, TRUE), oper->nick, callerUser->nick, callerUser->username, callerUser->host, value);
-						}
-						else {
-
-							LOG_SNOOP(data->agent->nick, "%s %s %s -- by %s (%s@%s) through %s [Invalid Pass]", data->agent->shortNick, get_access_name(oper->level, TRUE), oper->nick, callerUser->nick, callerUser->username, callerUser->host, data->operName);
-							log_services(data->agent->logID, "%s %s -- by %s (%s@%s) through %s [Invalid Pass: %s]", get_access_name(oper->level, TRUE), oper->nick, callerUser->nick, callerUser->username, callerUser->host, data->operName, value);
-						}
-
-						send_notice_to_user(data->agent->nick, callerUser, "Invalid password.");
-						return;
-					}
-
-					if (IS_NOT_NULL(oper->password)) {
-
-						TRACE_MAIN();
-						if (data->operMatch) {
-
-							LOG_SNOOP(data->agent->nick, "%s %s %s -- by %s (%s@%s) [Pass: Changed]", data->agent->shortNick, get_access_name(oper->level, TRUE), oper->nick, callerUser->nick, callerUser->username, callerUser->host);
-							log_services(data->agent->logID, "%s %s -- by %s (%s@%s) [Pass: %s -> %s]", get_access_name(oper->level, TRUE), oper->nick, callerUser->nick, callerUser->username, callerUser->host, oper->password, value);
-						}
-						else {
-
-							LOG_SNOOP(data->agent->nick, "%s %s %s -- by %s (%s@%s) through %s [Pass: Changed]", data->agent->shortNick, get_access_name(oper->level, TRUE), oper->nick, callerUser->nick, callerUser->username, callerUser->host, data->operName);
-							log_services(data->agent->logID, "%s %s -- by %s (%s@%s) through %s [Pass: %s -> %s]", get_access_name(oper->level, TRUE), oper->nick, callerUser->nick, callerUser->username, callerUser->host, data->operName, oper->password, value);
-						}
-					}
-					else {
-
-						if (data->operMatch) {
-
-							LOG_SNOOP(data->agent->nick, "%s %s %s -- by %s (%s@%s) [Pass: Set]", data->agent->shortNick, get_access_name(oper->level, TRUE), oper->nick, callerUser->nick, callerUser->username, callerUser->host);
-							log_services(data->agent->logID, "%s %s -- by %s (%s@%s) [Pass: %s]", get_access_name(oper->level, TRUE), oper->nick, callerUser->nick, callerUser->username, callerUser->host, value);
-						}
-						else {
-
-							LOG_SNOOP(data->agent->nick, "%s %s %s -- by %s (%s@%s) through %s [Pass: Set]", data->agent->shortNick, get_access_name(oper->level, TRUE), oper->nick, callerUser->nick, callerUser->username, callerUser->host, data->operName);
-							log_services(data->agent->logID, "%s %s -- by %s (%s@%s) through %s [Pass: %s]", get_access_name(oper->level, TRUE), oper->nick, callerUser->nick, callerUser->username, callerUser->host, data->operName, value);
-						}
-					}
-
-					TRACE_MAIN();
-					send_notice_to_user(data->agent->nick, callerUser, "\2PASS\2 field of %s \2%s\2 has been set to \2%s\2.", get_access_name(oper->level, FALSE), oper->nick, value);
-
-					oper->password = str_duplicate(value);
-					oper->lastUpdate = NOW;
-				}
-				#endif
-
 				else if (str_equals_nocase(option, "ENABLED")) {
 
 					int enable;
@@ -1288,23 +1083,8 @@ void handle_oper(CSTR source, User *callerUser, ServiceCommandData *data) {
 					}
 
 					TRACE_MAIN();
-					if (str_equals_nocase(value, "YES")) {
-
-						#ifndef USE_SERVICES
-						if (IS_NULL(oper->password)) {
-
-							if (data->operMatch)
-								LOG_SNOOP(data->agent->nick, "%s *%s %s -- by %s (%s@%s) [Not Configured]", data->agent->shortNick, get_access_name(oper->level, TRUE), oper->nick, callerUser->nick, callerUser->username, callerUser->host);
-							else
-								LOG_SNOOP(data->agent->nick, "%s *%s %s -- by %s (%s@%s) through %s [Not Configured]", data->agent->shortNick, get_access_name(oper->level, TRUE), oper->nick, callerUser->nick, callerUser->username, callerUser->host, data->operName);
-
-							send_notice_to_user(data->agent->nick, callerUser, "This entry is not properly configured and cannot be enabled.");
-							return;
-						}
-						#endif
-
+					if (str_equals_nocase(value, "YES"))
 						enable = TRUE;
-					}
 					else if (str_equals_nocase(value, "NO"))
 						enable = FALSE;
 
@@ -1645,12 +1425,6 @@ void handle_count(const char *source, User *callerUser, ServiceCommandData *data
 	else if (str_equals_nocase(service, data->agent->nick) || str_equals_nocase(service, data->agent->shortNick))
 		type = data->agent->agentID;
 
-	#ifdef USE_STATS
-	else if (str_equals_nocase(service, s_SeenServ) || str_equals_nocase(service, s_SS))
-		type = AGENTID_SEENSERV;
-	#endif
-
-	#ifdef USE_SERVICES
 	else if (str_equals_nocase(service, s_ChanServ) || str_equals_nocase(service, s_CS))
 		type = AGENTID_CHANSERV;
 
@@ -1662,7 +1436,6 @@ void handle_count(const char *source, User *callerUser, ServiceCommandData *data
 
 	else if (str_equals_nocase(service, s_RootServ) || str_equals_nocase(service, s_RS))
 		type = AGENTID_ROOTSERV;
-	#endif
 
 	else {
 
@@ -1723,48 +1496,23 @@ CSTR oper_get_agent_name(agentid_t id) {
 
 	const CSTR	_oper_agent_id_map[] = {
 
-		/* AGENTID_UNKNOWN	*/	NULL,
-		#ifdef USE_SERVICES
+		/* AGENTID_UNKNOWN */	NULL,
 		/* AGENTID_NICKSERV */	s_NickServ,
 		/* AGENTID_CHANSERV */	s_ChanServ,
 		/* AGENTID_MEMOSERV */	s_MemoServ,
 		/* AGENTID_HELPSERV */	s_HelpServ,
-		#else
-		/* AGENTID_NICKSERV */	"",
-		/* AGENTID_CHANSERV */	"",
-		/* AGENTID_MEMOSERV */	"",
-		/* AGENTID_HELPSERV */	"",
-		#endif
 
 		/* AGENTID_DEBUGSERV */	s_DebugServ,
 
-		#ifdef USE_SERVICES
 		/* AGENTID_OPERSERV */	s_OperServ,
 		/* AGENTID_ROOTSERV */	s_RootServ,
-		#else
-		/* AGENTID_OPERSERV */	"",
-		/* AGENTID_ROOTSERV */	"",
-		#endif
 
-		#ifdef USE_STATS
-		/* AGENTID_STATSERV */	s_StatServ,
-		/* AGENTID_SEENSERV */	s_SeenServ,
-		#else
 		/* AGENTID_STATSERV */	"",
 		/* AGENTID_SEENSERV */	"",
-		#endif
 
-		#ifdef USE_SOCKSMONITOR
-		/* AGENTID_CYBCOP */	s_SocksMonitor,
-		#else
 		/* AGENTID_CYBCOP */	"",
-		#endif
 		
-		#ifdef USE_SERVICES
 		/* AGENTID_GNOTICER */	s_GlobalNoticer
-		#else
-		/* AGENTID_GNOTICER */	""
-		#endif
 	};
 	
 	return ((id >= AGENTID_FIRST) && (id <= AGENTID_LAST)) ? _oper_agent_id_map[id] : s_NULL;
@@ -1775,48 +1523,23 @@ agentid_t oper_get_agentid(CSTR agentNickname, BOOL performMatch) {
 
 	const CSTR	_oper_agent_id_map[] = {
 
-		/* AGENTID_UNKNOWN	*/	NULL,
-		#ifdef USE_SERVICES
+		/* AGENTID_UNKNOWN */	NULL,
 		/* AGENTID_NICKSERV */	s_NickServ,
 		/* AGENTID_CHANSERV */	s_ChanServ,
 		/* AGENTID_MEMOSERV */	s_MemoServ,
 		/* AGENTID_HELPSERV */	s_HelpServ,
-		#else
-		/* AGENTID_NICKSERV */	"",
-		/* AGENTID_CHANSERV */	"",
-		/* AGENTID_MEMOSERV */	"",
-		/* AGENTID_HELPSERV */	"",
-		#endif
 
 		/* AGENTID_DEBUGSERV */	s_DebugServ,
 
-		#ifdef USE_SERVICES
 		/* AGENTID_OPERSERV */	s_OperServ,
 		/* AGENTID_ROOTSERV */	s_RootServ,
-		#else
-		/* AGENTID_OPERSERV */	"",
-		/* AGENTID_ROOTSERV */	"",
-		#endif
 
-		#ifdef USE_STATS
-		/* AGENTID_STATSERV */	s_StatServ,
-		/* AGENTID_SEENSERV */	s_SeenServ,
-		#else
 		/* AGENTID_STATSERV */	"",
 		/* AGENTID_SEENSERV */	"",
-		#endif
 
-		#ifdef USE_SOCKSMONITOR
-		/* AGENTID_CYBCOP */	s_SocksMonitor,
-		#else
 		/* AGENTID_CYBCOP */	"",
-		#endif
 		
-		#ifdef USE_SERVICES
 		/* AGENTID_GNOTICER */	s_GlobalNoticer
-		#else
-		/* AGENTID_GNOTICER */	""
-		#endif
 	};
 
 	agentid_t	agentID;
@@ -1856,7 +1579,6 @@ ServiceCommand **oper_get_agent_command_map(agentid_t agentID) {
 
 	switch (agentID) {
 
-		#ifdef USE_SERVICES
 		case AGENTID_NICKSERV: return nickserv_commands;
 		case AGENTID_CHANSERV: return chanserv_commands;
 		case AGENTID_MEMOSERV: return memoserv_commands;
@@ -1864,31 +1586,13 @@ ServiceCommand **oper_get_agent_command_map(agentid_t agentID) {
 		case AGENTID_OPERSERV: return operserv_commands;
 		case AGENTID_ROOTSERV: return rootserv_commands;
 		case AGENTID_GNOTICER: return NULL;
-		#else
-		case AGENTID_NICKSERV: return NULL;
-		case AGENTID_CHANSERV: return NULL;
-		case AGENTID_MEMOSERV: return NULL;
-		case AGENTID_HELPSERV: return NULL;
-		case AGENTID_OPERSERV: return NULL;
-		case AGENTID_ROOTSERV: return NULL;
-		case AGENTID_GNOTICER: return NULL;
-		#endif
 		
 		case AGENTID_DEBUGSERV: return debugserv_commands;
 
-		#ifdef USE_STATS
-		case AGENTID_STATSERV: return statserv_commands;
-		case AGENTID_SEENSERV: return seenserv_commands;
-		#else		
 		case AGENTID_STATSERV: return NULL;
 		case AGENTID_SEENSERV: return NULL;
-		#endif
 		
-		#ifdef USE_SOCKSMONITOR
-		case AGENTID_CYBCOP: return socksmonitor_commands;
-		#else
 		case AGENTID_CYBCOP: return NULL;
-		#endif		
 		
 		default: return NULL;
 	}
@@ -1989,9 +1693,6 @@ void oper_ds_dump(CSTR sourceNick, const User *callerUser, STR request) {
 					send_notice_to_user(sourceNick, callerUser, "Last Update C-time: %ld",							oper->lastUpdate);
 					send_notice_to_user(sourceNick, callerUser, "Level: %d \2[\2%s\2]\2",							oper->level, get_access_name(oper->level, FALSE));
 					send_notice_to_user(sourceNick, callerUser, "Flags: %ld",										oper->flags);
-					#ifndef USE_SERVICES
-					send_notice_to_user(sourceNick, callerUser, "Pass: %s",											oper->password);
-					#endif
 					send_notice_to_user(sourceNick, callerUser, "Next/Previous record: 0x%08X / 0x%08X",			(unsigned long)oper->next, (unsigned long)oper->prev);
 
 					LOG_DEBUG_SNOOP("Command: DUMP OPER NICK %s -- by %s (%s@%s)", nick, callerUser->nick, callerUser->username, callerUser->host);
@@ -2051,10 +1752,6 @@ unsigned long oper_mem_report(CSTR sourceNick, const User *callerUser) {
 
 			mem += str_len(oper->nick) + 1;
 			mem += str_len(oper->creator.name) + 1;
-
-			#ifndef USE_SERVICES
-			mem += str_len(oper->password) + 1;
-			#endif
 		}
 	}
 

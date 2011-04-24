@@ -31,8 +31,6 @@
 #include "../inc/spam.h"
 
 
-#ifdef USE_SERVICES
-
 /*********************************************************
  * Data types                                            *
  *********************************************************/
@@ -747,5 +745,3 @@ void handle_spam(CSTR source, User *callerUser, ServiceCommandData *data) {
 	if (needSyntax)
 		send_notice_to_user(data->agent->nick, callerUser, "Syntax: \2SPAM\2 ADD|DEL|LIST|SET [text] [type] [reason]");
 }
-
-#endif /* USE_SERVICES */

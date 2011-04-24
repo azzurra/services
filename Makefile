@@ -45,16 +45,13 @@ build:
 	@echo "All done!"
 
 clean:
-	@${RM} -f cybcop stats services
-	@cd src; ${RM} -f *.o cybcop stats services; cd ..
+	@${RM} -f services
+	@cd src; ${RM} -f *.o services; cd ..
 	-@if [ -f inc/sysconf.h ] ; then \
 	echo "To really restart installation, make distclean" ; \
 	fi
 
 distclean:
-	@${RM} -f Makefile.inc configure.log cybcop stats services
+	@${RM} -f Makefile.inc configure.log services
 	@cd inc; ${RM} -f sysconf.h; cd ..
-	@cd src; ${RM} -f *.o cybcop stats services; cd ..
-
-install: all
-	@./tools/install_ircd
+	@cd src; ${RM} -f *.o services; cd ..

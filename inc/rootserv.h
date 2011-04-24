@@ -16,8 +16,6 @@
 #ifndef SRV_ROOTSERV_H
 #define SRV_ROOTSERV_H
 
-#ifdef USE_SERVICES
-
 #include "../inc/access.h"
 
 /*********************************************************
@@ -73,7 +71,5 @@ extern void rootserv_ds_dump(CSTR sourceNick, const User *callerUser, STR reques
 
 // DebugServ mem support
 extern unsigned long int rootserv_mem_report(CSTR sourceNick, const User *callerUser);
-
-#endif /* USE_SERVICES */
 
 #endif /* SRV_ROOTSERV_H */

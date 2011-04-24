@@ -25,17 +25,10 @@
 #include "../inc/conf.h"
 #include "../inc/main.h"
 
-#ifdef USE_STATS
-#include "../inc/statserv.h"
-#include "../inc/seenserv.h"
-#endif
-
 
 /*********************************************************
  * Timeouts                                              *
  *********************************************************/
-
-#ifdef USE_SERVICES
 
 static Timeout *timeout_list_head = NULL;
 static Timeout *timeout_list_tail = NULL;
@@ -109,8 +102,6 @@ static void timeout_delete_item(Timeout *to) {
 		// eliminare dati aggiuntivi...
 		switch (to->type) {
 
-			#ifdef USE_SERVICES
-
 			case toNickServ:
 				nickserv_dispose_timeout_data(to->data);
 				break;
@@ -118,9 +109,6 @@ static void timeout_delete_item(Timeout *to) {
 			case toChanServ:
 				chanserv_dispose_timeout_data(to->data);
 				break;
-
-			#endif
-
 
 			default:
 				// nulla da fare ...
@@ -260,8 +248,6 @@ void timeout_check(const time_t now) {
 	}
 }
 
-#endif /* USE_SERVICES */
-
 /*********************************************************
  * Time-related check                                    *
  *********************************************************/
@@ -278,10 +264,8 @@ int					time_today_day, time_today_month, time_today_year, time_today_wday;
  * Local Variables                                       *
  *********************************************************/
 
-#if defined(USE_SERVICES) || defined(USE_STATS)
 /* How many daily database expirations did we go through? */
 static unsigned long daily_dbcnt = 1;
-#endif
 
 void time_init() {
 
@@ -338,27 +322,16 @@ void time_check(const time_t now) {
 
 		// midnight checks
 
-		#if defined(USE_SERVICES) || defined(USE_STATS)
 		send_globops(NULL, "Running Daily Database Expire %d", daily_dbcnt);
-		#ifdef USE_SERVICES
 		nickserv_daily_expire();
 		chanserv_daily_expire();
-		#endif
-		#ifdef USE_STATS
-		statserv_daily_expire();
-		#endif
 		++daily_dbcnt;
-		#endif
 
 		// week checks
 		if ((new_wday != time_today_wday) && (new_wday == 1 /* domenica */)) {
 
 			// la settimana e' cambiata
 			time_today_wday = new_wday;
-			#ifdef USE_STATS
-			statserv_weekly_expire();
-			seenserv_weekly_expire();
-			#endif
 		}
 
 		// month checks
@@ -366,9 +339,6 @@ void time_check(const time_t now) {
 			
 			// il mese e' cambiato
 			time_today_month = new_month;
-			#ifdef USE_STATS
-			statserv_monthly_expire();
-			#endif
 		}
 
 		// year checks
@@ -391,7 +361,6 @@ void time_check(const time_t now) {
  * DebugServ DUMP support                                *
  *********************************************************/
 
-#if defined(USE_SERVICES) || defined(USE_STATS)
 void timeout_ds_dump(CSTR sourceNick, const User *callerUser, STR request) {
 
 	STR		cmd = strtok(request, s_SPACE);
@@ -403,7 +372,6 @@ void timeout_ds_dump(CSTR sourceNick, const User *callerUser, STR request) {
 
 			// HELP !
 
-		#ifdef USE_SERVICES
 		} else if (str_equals_nocase(cmd, "LIST")) {
 
 			Timeout	*to = timeout_list_head;
@@ -479,7 +447,6 @@ void timeout_ds_dump(CSTR sourceNick, const User *callerUser, STR request) {
 			}
 
 			LOG_DEBUG_SNOOP("Command: DUMP TIMEOUT LIST -- by %s (%s@%s)", callerUser->nick, callerUser->username, callerUser->host);
-		#endif
 		} else if (str_equals_nocase(cmd, "TIME")) {
 
 			char	timebuf[64];
@@ -501,13 +468,6 @@ void timeout_ds_dump(CSTR sourceNick, const User *callerUser, STR request) {
 		needSyntax = TRUE;
 
 	if (needSyntax) {
-
-		#ifdef USE_SERVICES
 		send_notice_to_user(sourceNick, callerUser, "Syntax: \2DUMP\2 TIMEOUT <LIST|TIME>");
-		#else
-		send_notice_to_user(sourceNick, callerUser, "Syntax: \2DUMP\2 TIMEOUT TIME");
-		#endif
 	}
 }
-
-#endif

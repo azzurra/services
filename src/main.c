@@ -39,8 +39,6 @@
 #include "../inc/akill.h"
 #include "../inc/debugserv.h"
 #include "../inc/timeout.h"
-
-#ifdef USE_SERVICES
 #include "../inc/nickserv.h"
 #include "../inc/helpserv.h"
 #include "../inc/chanserv.h"
@@ -54,16 +52,6 @@
 #include "../inc/reserved.h"
 #include "../inc/blacklist.h"
 #include "../inc/tagline.h"
-#endif
-
-#ifdef USE_SOCKSMONITOR
-#include "../inc/cybcop.h"
-#endif
-
-#ifdef USE_STATS
-#include "../inc/seenserv.h"
-#include "../inc/statserv.h"
-#endif
 
 #ifdef HAVE_SYS_RESOURCE_H
 #include <sys/resource.h>
@@ -118,15 +106,7 @@ static time_t next_database_update;
 
 /* Next routine check. */
 static time_t next_expire_check;
-
-#if defined(USE_SERVICES)
 static time_t next_timeout_check;
-#endif
-
-#if defined(USE_STATS)
-static time_t next_hour_check;
-#endif
-
 
 /*********************************************************
  * Initialization/cleanup routines:                      *
@@ -240,17 +220,7 @@ static BOOL initialize() {
 	crypt_init();
 	user_init();
 
-	#ifdef USE_SERVICES	
 	fprintf(stderr, "\nAzzurra IRC Services starting...");
-	#endif
-
-	#ifdef USE_SOCKSMONITOR
-	fprintf(stderr, "\nAzzurra IRC Socks Monitor Services starting...");	
-	#endif
-
-	#ifdef USE_STATS
-	fprintf(stderr, "\nAzzurra IRC Statistical Services starting...");
-	#endif
 
 	/* Load language files first. */
 	if (!lang_load_conf())
@@ -289,34 +259,10 @@ static BOOL initialize() {
 
 	TRACE_MAIN();
 	/* Announce ourselves to the logfile. */
-	if (CONF_SET_DEBUG || CONF_SET_READONLY) {
-
-		#ifdef USE_SERVICES
+	if (CONF_SET_DEBUG || CONF_SET_READONLY)
 		LOG_DEBUG("Services starting up (options:%s%s)", CONF_SET_DEBUG ? " debug" : "", CONF_SET_READONLY ? " readonly" : "");
-		#endif
-
-		#ifdef USE_SOCKSMONITOR
-		LOG_DEBUG("Socks Monitor services starting up (options:%s%s)", CONF_SET_DEBUG ? " debug" : "", CONF_SET_READONLY ? " readonly" : "");
-		#endif
-
-		#ifdef USE_STATS
-		LOG_DEBUG("Statistic services starting up (options:%s%s)", CONF_SET_DEBUG ? " debug" : "", CONF_SET_READONLY ? " readonly" : "");
-		#endif
-	}
-	else {
-
-		#ifdef USE_SERVICES
+	else
 		LOG_DEBUG("Services starting up (normal mode)");
-		#endif
-
-		#ifdef USE_SOCKSMONITOR
-		LOG_DEBUG("Socks Monitor services starting up (options:%s%s)", CONF_SET_DEBUG ? " debug" : "", CONF_SET_READONLY ? " readonly" : "");
-		#endif
-
-		#ifdef USE_STATS
-		LOG_DEBUG("Statistic services starting up (options:%s%s)", CONF_SET_DEBUG ? " debug" : "", CONF_SET_READONLY ? " readonly" : "");
-		#endif
-	}
 
 	TRACE_MAIN();
 	start_time = NOW;
@@ -325,10 +271,8 @@ static BOOL initialize() {
 	if (CONF_SET_READONLY)
 		log_done();
 
-	#if defined(USE_SERVICES) || defined(USE_STATS)
 	/* Allocating SJOIN memory */
 	chan_init();
-	#endif
 
 	TRACE_MAIN();
 	/* Set signal handlers. */
@@ -341,8 +285,6 @@ static BOOL initialize() {
 	LOG_DEBUG("Successfully loaded services configuration");
 
 	debugserv_init();
-
-	#ifdef USE_SERVICES
 
 	TRACE_MAIN();
 	helpserv_init();
@@ -380,44 +322,9 @@ static BOOL initialize() {
 	blacklist_db_load(); 
 	TRACE_MAIN();
 	tagline_db_load();
-	#endif
 
-
-	#ifdef USE_SOCKSMONITOR
-
-	/* Initialize Socks Monitor */
-	monitor_init();
-	TRACE_MAIN();
-
-	/* Load up databases */
-	load_monitor_db();
-	TRACE_MAIN();
-
-	load_apm_dbase();
-	TRACE_MAIN();
-	#endif
-
-
-	#if defined(USE_SERVICES) || defined(USE_SOCKSMONITOR)
 	akill_db_load();
 	TRACE_MAIN();
-	#endif
-
-
-	#ifdef USE_STATS
-	statserv_init(start_time);
-	seenserv_init(start_time);
-	TRACE_MAIN();
-
-	statserv_chanstats_db_load();
-	TRACE_MAIN();
-
-	statserv_servstats_db_load();
-	TRACE_MAIN();
-
-	seenserv_db_load();
-	TRACE_MAIN();
-	#endif
 
 	regions_db_load();
 	TRACE_MAIN();
@@ -470,7 +377,6 @@ static BOOL initialize() {
 			break;
 	}
 
-	#ifdef USE_SERVICES	
 	/* Send SQLines and SGLines. */
 	sxline_burst_send();
 	TRACE_MAIN();
@@ -478,7 +384,6 @@ static BOOL initialize() {
 	/* Send SPAM Lines. */
 	spam_burst_send();
 	TRACE_MAIN();
-	#endif
 
 	/* Success! - wee! */
 	memset(QUIT_MESSAGE, 0, sizeof(QUIT_MESSAGE));
@@ -493,33 +398,16 @@ void services_cleanup() {
 
 	TRACE_MAIN();
 
-	#ifdef USE_SERVICES
 	memoserv_terminate();
 	chanserv_terminate();
 	nickserv_terminate();
 	rootserv_terminate();
 	spam_terminate();
 	reserved_terminate();
-	#endif
 
 	TRACE_MAIN();
 
-	#ifdef USE_STATS
-	seenserv_terminate();
-	statserv_terminate();
-	#endif
-
-	TRACE_MAIN();
-
-	#if defined(USE_SERVICES) || defined(USE_STATS)
 	chan_terminate();
-	#endif
-
-	TRACE_MAIN();
-
-	#ifdef USE_SOCKSMONITOR
-	free_apm_list();
-	#endif
 
 	TRACE_MAIN();
 	lang_unload_all();
@@ -538,7 +426,7 @@ void services_cleanup() {
 
 /* Main routine. */
 
-#if defined(USE_SERVICES) && !defined(NEW_SOCK)
+#ifndef NEW_SOCK
 
 void *old_alarm_handler = NULL;
 
@@ -571,7 +459,6 @@ void database_expire(const time_t now) {
 
 	++expire_count;
 
-	#ifdef USE_SERVICES			
 	TRACE_MAIN();
 	expire_nicks();
 	TRACE_MAIN();
@@ -580,24 +467,8 @@ void database_expire(const time_t now) {
 	ignore_expire();
 	TRACE_MAIN();
 	expire_memos();
-	#endif
-
-	#ifdef USE_SOCKSMONITOR
-	TRACE_MAIN();
-	proxy_expire(now);
-	#endif
-
-	#ifdef USE_STATS
-	TRACE_MAIN();
-	expire_stats();
-	TRACE_MAIN();
-	seenserv_expire_records();
-	#endif
-
-	#if defined(USE_SERVICES) || defined(USE_SOCKSMONITOR)
 	TRACE_MAIN();
 	akill_expire();
-	#endif
 }
 
 /*********************************************************/
@@ -606,8 +477,6 @@ void database_store() {
 
 	TRACE_MAIN();
 	regions_db_save();
-
-	#ifdef USE_SERVICES			
 	TRACE_MAIN();
 	save_ns_dbase();
 	TRACE_MAIN();
@@ -638,29 +507,8 @@ void database_store() {
 	blacklist_db_save();
 	TRACE_MAIN();
 	tagline_db_save();
-	#endif
-
-	#if defined(USE_SERVICES) || defined(USE_SOCKSMONITOR)
 	TRACE_MAIN();
 	akill_db_save();
-	#endif
-
-	#ifdef USE_SOCKSMONITOR
-	TRACE_MAIN();
-	save_monitor_db();
-	TRACE_MAIN();
-	save_apm_dbase();
-	#endif
-
-	#ifdef USE_STATS
-	TRACE_MAIN();
-	statserv_servstats_db_save();
-	TRACE_MAIN();
-	statserv_chanstats_db_save();
-	TRACE_MAIN();
-	seenserv_db_save();
-	#endif
-
 	TRACE_MAIN();
 	oper_db_save();
 
@@ -721,16 +569,12 @@ int main(int ac, char **av, char **envp) {
 	next_database_update = NOW + CONF_DATABASE_UPDATE_FREQUENCY;
 	next_expire_check = NOW + ONE_MINUTE;
 
-	#ifdef USE_STATS
-	next_hour_check = NOW + ONE_HOUR;
-	#endif
-
 	TRACE_MAIN();
 
 	/* Inizializzazione conclusa */
 	global_running = TRUE;
 
-	#if !defined(NEW_SOCK) && defined(USE_SERVICES)
+	#ifndef NEW_SOCK
 	if ((old_alarm_handler = signal(SIGALRM, timeout_check_handler)) == SIG_ERR)
 		fprintf(stderr, "main() signal(SIGALRM, timeout_check_handler) == SIG_ERR !!!\n");
 
@@ -771,11 +615,7 @@ int main(int ac, char **av, char **envp) {
 
 			next_database_update = NOW + CONF_DATABASE_UPDATE_FREQUENCY;
 
-			#ifdef USE_SERVICES
 			tagline_show(NOW);
-			#else
-			send_globops(NULL, "Completed Database Write (%d secs)", (time(NULL) - NOW));
-			#endif
 		}
 
 		TRACE_MAIN();
@@ -785,17 +625,7 @@ int main(int ac, char **av, char **envp) {
 
 		TRACE_MAIN();
 
-		#ifdef USE_STATS
-		if (NOW >= next_hour_check) {
-
-			TRACE_MAIN();
-
-			update_hour();
-			next_hour_check = NOW + ONE_HOUR;
-		}
-		#endif
-
-		#if defined(NEW_SOCK) && defined(USE_SERVICES)
+		#ifdef NEW_SOCK
 		if (NOW >= next_timeout_check) {
 
 			to_dispatched = TRUE;
@@ -808,22 +638,8 @@ int main(int ac, char **av, char **envp) {
 
 		if (NOW >= next_expire_check) {
 
-			#if defined(USE_SERVICES) || defined(USE_SOCKSMONITOR)
 			akill_expire();
-			#endif
-
-			#ifdef USE_SOCKSMONITOR
-			proxy_expire(NOW);
-			#endif
-
-			#ifdef USE_SERVICES
 			ignore_expire();
-			#endif
-
-			#ifdef USE_STATS
-			update_server_averages();
-			update_averages();
-			#endif
 
 			next_expire_check = NOW + ONE_MINUTE;
 		}
@@ -870,7 +686,7 @@ int main(int ac, char **av, char **envp) {
 
 	TRACE_MAIN();
 
-	#if !defined(NEW_SOCK) && defined(USE_SERVICES)
+	#ifndef NEW_SOCK
 	/* Disattivazione timeout-checker */
 	alarm(0);
 

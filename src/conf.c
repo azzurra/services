@@ -28,16 +28,7 @@
 #include "../inc/misc.h"
 #include "../inc/users.h"
 #include "../inc/crypt_userhost.h"
-
-#ifdef USE_SERVICES
 #include "../inc/nickserv.h"
-#endif
-
-#ifdef USE_SOCKSMONITOR
-#include "../inc/servers.h"
-#include "../inc/cybcop.h"
-#endif
-
 #include "../inc/conf.h"
 
 
@@ -113,13 +104,6 @@ time_t CONF_FLOOD_LEVEL_RESET = ONE_HOUR;
 
 /* Nick of our services master. */
 char *CONF_SERVICES_MASTER = NULL;
-
-#ifndef USE_SERVICES
-/* Password of our services master. */
-char *CONF_SERVICES_MASTER_PASS = NULL;
-#endif
-
-#ifdef USE_SERVICES
 
 char s_NickServ[NICKSIZE] = "";
 char s_ChanServ[NICKSIZE] = "";
@@ -227,99 +211,11 @@ int CONF_AUTHDEL_DAYS = 1;
 /* Show taglines when saving databases? */
 BOOL CONF_SHOW_TAGLINES = FALSE;
 
-#endif
-
-#ifdef USE_SOCKSMONITOR
-
-char s_SocksMonitor[NICKSIZE] = "";
-char s_SM[3] = "SM";
-
-/* Local data, used when scanning hosts. */
-char *CONF_MONITOR_TEST_IP = NULL;
-unsigned short CONF_MONITOR_TEST_PORT = 0;
-char *CONF_MONITOR_LOCAL_HOST = NULL;
-unsigned short CONF_MONITOR_LOCAL_PORT = 0;
-struct sockaddr_in MONITOR_LOCAL_ADDRESS;
-
-/* Buffers used to scan for socks/proxy. */
-char SOCKS4_BUFFER[9];
-char SOCKS5_BUFFER[10];
-char PROXY_BUFFER[IRCBUFSIZE];
-ssize_t PROXY_BUFFER_LEN = 0;
-
-/* Channel to send open proxy notices to. */
-char *CONF_PROXY_CHAN = NULL;
-
-/* Maximum number of threads opened. */
-int CONF_MONITOR_MAXTHREADS = 10;
-
-BOOL CONF_SCAN_SOCKS4 = TRUE;
-BOOL CONF_SCAN_SOCKS5 = TRUE;
-BOOL CONF_SCAN_WINGATE = TRUE;
-BOOL CONF_SCAN_80 = TRUE;
-BOOL CONF_SCAN_3128 = TRUE;
-BOOL CONF_SCAN_6588 = TRUE;
-BOOL CONF_SCAN_8080 = TRUE;
-
-/* Time to wait for a reply before closing connection, in seconds. */
-time_t CONF_SOCKET_TIMEOUT = 15;
-
-/* Time before expiring a proxy, in seconds. */
-time_t CONF_PROXY_EXPIRE = ONE_DAY;
-
-/* Time before expiring an entry in the cache, in seconds. */
-time_t CONF_HOST_CACHE_EXPIRE = ONE_HOUR;
-
-/* Time before expiring an entry in the flood cache, in seconds. */
-time_t CONF_FLOOD_CACHE_EXPIRE = 1800;		/* Defaults to 30 minutes. */
-
-/* Number of flood hits allowed before AutoKilling. */
-int CONF_MAX_FLOOD_HITS = 10;
-
-/* Flood detections. */
-BOOL CONF_WARMACHINE_DETECT = TRUE;
-BOOL CONF_PROMIRC_DETECT = TRUE;
-BOOL CONF_VENOM_DETECT = TRUE;
-BOOL CONF_UNKNOWN_CLONER_DETECT = TRUE;
-BOOL CONF_UNUTNET_WORM_DETECT = TRUE;		/* Worms by irc.unut.net */
-BOOL CONF_WARSATAN_DETECT = TRUE;			/* http://satanist.tsx.org */
-BOOL CONF_CLONESX_DETECT = TRUE;				/* http://clonesx.cjb.net/ */
-BOOL CONF_SABAN_DETECT = TRUE;
-BOOL CONF_PROXER_DETECT = TRUE;
-BOOL CONF_MUHSTIK_DETECT = TRUE;				/* http://muhstik.sf.net/ */
-BOOL CONF_DTHN_DETECT = TRUE;				/* http://www.dthn.net */
-BOOL CONF_GUEST_DETECT = TRUE;
-BOOL CONF_FIZZER_DETECT = TRUE;				/* W32.HLLW.Fizzer@mm trojan */
-BOOL CONF_MAIL_DETECT = TRUE;
-BOOL CONF_OPTIXPRO_DETECT = TRUE;			/* Optix Pro trojan. */
-BOOL CONF_BOTTLER_DETECT = FALSE;				/* http://www.memelog.com/bottler/ */
-BOOL CONF_TENERONE_DETECT = FALSE;
-BOOL CONF_NGILAMER_DETECT = TRUE;
-#endif
-
-#ifdef USE_STATS
-char s_StatServ[NICKSIZE] = "";
-char s_SeenServ[NICKSIZE] = "";
-char s_ST[3] = "ST";
-char s_SS[3] = "SS";
-
-/* Channel stats expiration time, in days. */
-int CONF_STATS_EXPIRE = 30;
-
-/* Seen expiration time, in days. */
-int CONF_SEEN_EXPIRE = 30;
-
-/* Number of matches to report when doing a wild seen. */
-int CONF_MAX_WILD_SEEN = 10;
-#endif
-
-#if defined(USE_SERVICES) || defined(USE_SOCKSMONITOR)
 /* Maximum percentage of users allowed to be AutoKilled. */
 float CONF_AKILL_PERCENT = 50.0;
 
 /* Default AutoKill duration, in seconds. */
 time_t CONF_DEFAULT_AKILL_EXPIRY = 3 * ONE_HOUR;
-#endif
 
 
 static void conf_break(int ac, char **av, BOOL rehash) {
@@ -499,7 +395,6 @@ static void conf_break(int ac, char **av, BOOL rehash) {
 				str_copy_checked(av[1], s_DebugServ, sizeof(s_DebugServ));
 		}
 
-#ifdef USE_SERVICES
 		else if (str_equals_nocase(av[0], "TIMEOUT")) {
 
 			value = strtol(av[1], &err, 10);
@@ -1063,78 +958,6 @@ static void conf_break(int ac, char **av, BOOL rehash) {
 			else
 				CONF_CLONE_SCAN_V6 = value;
 		}
-#endif
-
-#ifdef USE_STATS
-		else if (str_equals_nocase(av[0], "STATSERV") || str_equals_nocase(av[0], "ST")) {
-
-			if (str_len(av[1]) > NICKMAX || !validate_nick(av[1], FALSE)) {
-
-				if (rehash)
-					send_globops(NULL, "Value %s for STATSERV is not valid", av[1]);
-				else
-					fatal_error(FACILITY_CONF, __LINE__, "Value %s for STATSERV is not valid", av[1]);
-			}
-			else
-				str_copy_checked(av[1], s_StatServ, sizeof(s_StatServ));
-		}
-		else if (str_equals_nocase(av[0], "STATS_EXPIRE")) {
-
-			value = strtol(av[1], &err, 10);
-
-			if ((*err != '\0') || (value <= 0) || (value > 120)) {
-
-				if (rehash)
-					send_globops(NULL, "Value %s for STATS_EXPIRE is not valid", av[1]);
-				else
-					fatal_error(FACILITY_CONF, __LINE__, "Value %s for STATS_EXPIRE is not valid", av[1]);
-			}
-			else
-				CONF_STATS_EXPIRE = value;
-		}
-		else if (str_equals_nocase(av[0], "SEENSERV") || str_equals_nocase(av[0], "SS")) {
-
-			if (str_len(av[1]) > NICKMAX || !validate_nick(av[1], FALSE)) {
-
-				if (rehash)
-					send_globops(NULL, "Value %s for SEENSERV is not valid", av[1]);
-				else
-					fatal_error(FACILITY_CONF, __LINE__, "Value %s for SEENSERV is not valid", av[1]);
-			}
-			else
-				str_copy_checked(av[1], s_SeenServ, sizeof(s_SeenServ));
-		}
-		else if (str_equals_nocase(av[0], "SEEN_EXPIRE")) {
-
-			value = strtol(av[1], &err, 10);
-
-			if ((*err != '\0') || (value <= 0) || (value > 120)) {
-
-				if (rehash)
-					send_globops(NULL, "Value %s for SEEN_EXPIRE is not valid", av[1]);
-				else
-					fatal_error(FACILITY_CONF, __LINE__, "Value %s for SEEN_EXPIRE is not valid", av[1]);
-			}
-			else
-				CONF_SEEN_EXPIRE = value;
-		}
-		else if (str_equals_nocase(av[0], "MAXWILDSEEN")) {
-
-			value = strtol(av[1], &err, 10);
-
-			if ((*err != '\0') || (value <= 0) || (value > 30)) {
-
-				if (rehash)
-					send_globops(NULL, "Value %s for MAXWILDSEEN is not valid", av[1]);
-				else
-					fatal_error(FACILITY_CONF, __LINE__, "Value %s for MAXWILDSEEN is not valid", av[1]);
-			}
-			else
-				CONF_MAX_WILD_SEEN = value;
-		}
-#endif
-
-#if defined(USE_SERVICES) || defined(USE_SOCKSMONITOR)
 		else if (str_equals_nocase(av[0], "PERCENT")) {
 
 			value = strtol(av[1], &err, 10);
@@ -1166,458 +989,6 @@ static void conf_break(int ac, char **av, BOOL rehash) {
 			else
 				CONF_DEFAULT_AKILL_EXPIRY = value;
 		}
-#endif
-
-#ifdef USE_SOCKSMONITOR
-		else if (str_equals_nocase(av[0], "SOCKSMONITOR") || str_equals_nocase(av[0], "SM")) {
-
-			if (str_len(av[1]) > NICKMAX || !validate_nick(av[1], FALSE)) {
-
-				if (rehash)
-					send_globops(NULL, "Value %s for SOCKSMONITOR is not valid", av[1]);
-				else
-					fatal_error(FACILITY_CONF, __LINE__, "Value %s for SOCKSMONITOR is not valid", av[1]);
-			}
-			else
-				str_copy_checked(av[1], s_SocksMonitor, sizeof(s_SocksMonitor));
-		}
-		else if (str_equals_nocase(av[0], "PROXYCHAN")) {
-
-			if ((av[1][0] != '#') || (str_len(av[1]) > CHANMAX) || !validate_channel(av[1])) {
-
-				if (rehash)
-					send_globops(NULL, "Value %s for PROXYCHAN is not valid", av[1]);
-				else
-					fatal_error(FACILITY_CONF, __LINE__, "Value %s for PROXYCHAN is not valid", av[1]);
-			}
-			else {
-
-				if (CONF_PROXY_CHAN)
-					mem_free(CONF_PROXY_CHAN);
-				CONF_PROXY_CHAN = str_duplicate(av[1]);
-			}
-		}
-		else if (str_equals_nocase(av[0], "MAX_THREADS")) {
-
-			value = strtol(av[1], &err, 10);
-
-			if ((*err != '\0') || (value < 1) || (value > 250)) {
-
-				if (rehash)
-					send_globops(NULL, "Value %s for MAX_THREADS is not valid", av[1]);
-				else
-					fatal_error(FACILITY_CONF, __LINE__, "Value %s for MAX_THREADS is not valid", av[1]);
-			}
-			else
-				CONF_MONITOR_MAXTHREADS = value;
-		}
-		else if (str_equals_nocase(av[0], "CHECK_SOCKS4")) {
-
-			value = strtol(av[1], &err, 10);
-
-			if ((*err != '\0') || ((value != FALSE) && (value != TRUE))) {
-
-				if (rehash)
-					send_globops(NULL, "Value %s for CHECK_SOCKS4 is not valid", av[1]);
-				else
-					fatal_error(FACILITY_CONF, __LINE__, "Value %s for CHECK_SOCKS4 is not valid", av[1]);
-			}
-			else
-				CONF_SCAN_SOCKS4 = value;
-		}
-		else if (str_equals_nocase(av[0], "CHECK_SOCKS5")) {
-
-			value = strtol(av[1], &err, 10);
-
-			if ((*err != '\0') || ((value != FALSE) && (value != TRUE))) {
-
-				if (rehash)
-					send_globops(NULL, "Value %s for CHECK_SOCKS5 is not valid", av[1]);
-				else
-					fatal_error(FACILITY_CONF, __LINE__, "Value %s for CHECK_SOCKS5 is not valid", av[1]);
-			}
-			else
-				CONF_SCAN_SOCKS5 = value;
-		}
-		else if (str_equals_nocase(av[0], "CHECK_WINGATE")) {
-
-			value = strtol(av[1], &err, 10);
-
-			if ((*err != '\0') || ((value != FALSE) && (value != TRUE))) {
-
-				if (rehash)
-					send_globops(NULL, "Value %s for CHECK_WINGATE is not valid", av[1]);
-				else
-					fatal_error(FACILITY_CONF, __LINE__, "Value %s for CHECK_WINGATE is not valid", av[1]);
-			}
-			else
-				CONF_SCAN_WINGATE = value;
-		}
-		else if (str_equals_nocase(av[0], "CHECK_PROXY_3128")) {
-
-			value = strtol(av[1], &err, 10);
-
-			if ((*err != '\0') || ((value != FALSE) && (value != TRUE))) {
-
-				if (rehash)
-					send_globops(NULL, "Value %s for CHECK_PROXY_3128 is not valid", av[1]);
-				else
-					fatal_error(FACILITY_CONF, __LINE__, "Value %s for CHECK_PROXY_3128 is not valid", av[1]);
-			}
-			else
-				CONF_SCAN_3128 = value;
-		}
-		else if (str_equals_nocase(av[0], "CHECK_PROXY_8080")) {
-
-			value = strtol(av[1], &err, 10);
-
-			if ((*err != '\0') || ((value != FALSE) && (value != TRUE))) {
-
-				if (rehash)
-					send_globops(NULL, "Value %s for CHECK_PROXY_8080 is not valid", av[1]);
-				else
-					fatal_error(FACILITY_CONF, __LINE__, "Value %s for CHECK_PROXY_8080 is not valid", av[1]);
-			}
-			else
-				CONF_SCAN_8080 = value;
-		}
-		else if (str_equals_nocase(av[0], "CHECK_PROXY_80")) {
-
-			value = strtol(av[1], &err, 10);
-
-			if ((*err != '\0') || ((value != FALSE) && (value != TRUE))) {
-
-				if (rehash)
-					send_globops(NULL, "Value %s for CHECK_PROXY_80 is not valid", av[1]);
-				else
-					fatal_error(FACILITY_CONF, __LINE__, "Value %s for CHECK_PROXY_80 is not valid", av[1]);
-			}
-			else
-				CONF_SCAN_80 = value;
-		}
-		else if (str_equals_nocase(av[0], "CHECK_PROXY_6588")) {
-
-			value = strtol(av[1], &err, 10);
-
-			if ((*err != '\0') || ((value != FALSE) && (value != TRUE))) {
-
-				if (rehash)
-					send_globops(NULL, "Value %s for CHECK_PROXY_6588 is not valid", av[1]);
-				else
-					fatal_error(FACILITY_CONF, __LINE__, "Value %s for CHECK_PROXY_6588 is not valid", av[1]);
-			}
-			else
-				CONF_SCAN_6588 = value;
-		}
-		else if (str_equals_nocase(av[0], "SOCKET_TIMEOUT")) {
-
-			value = strtol(av[1], &err, 10);
-
-			if ((*err != '\0') || (value < 5) || (value > ONE_MINUTE)) {
-
-				if (rehash)
-					send_globops(NULL, "Value %s for SOCKET_TIMEOUT is not valid", av[1]);
-				else
-					fatal_error(FACILITY_CONF, __LINE__, "Value %s for SOCKET_TIMEOUT is not valid", av[1]);
-			}
-			else
-				CONF_SOCKET_TIMEOUT = value;
-		}
-		else if (str_equals_nocase(av[0], "PROXY_EXPIRE")) {
-
-			value = strtol(av[1], &err, 10);
-
-			if ((*err != '\0') || (value < 0) || (value > ONE_DAY)) {
-
-				if (rehash)
-					send_globops(NULL, "Value %s for PROXY_EXPIRE is not valid", av[1]);
-				else
-					fatal_error(FACILITY_CONF, __LINE__, "Value %s for PROXY_EXPIRE is not valid", av[1]);
-			}
-			else
-				CONF_PROXY_EXPIRE = value;
-		}
-		else if (str_equals_nocase(av[0], "HOST_CACHE_EXPIRE")) {
-
-			value = strtol(av[1], &err, 10);
-
-			if ((*err != '\0') || (value < 0) || (value > ONE_DAY)) {
-
-				if (rehash)
-					send_globops(NULL, "Value %s for HOST_CACHE_EXPIRE is not valid", av[1]);
-				else
-					fatal_error(FACILITY_CONF, __LINE__, "Value %s for HOST_CACHE_EXPIRE is not valid", av[1]);
-			}
-			else
-				CONF_HOST_CACHE_EXPIRE = value;
-		}
-		else if (str_equals_nocase(av[0], "DETECT_WARMACHINE_CLONES")) {
-
-			value = strtol(av[1], &err, 10);
-
-			if ((*err != '\0') || ((value != FALSE) && (value != TRUE))) {
-
-				if (rehash)
-					send_globops(NULL, "Value %s for DETECT_WARMACHINE_CLONES is not valid", av[1]);
-				else
-					fatal_error(FACILITY_CONF, __LINE__, "Value %s for DETECT_WARMACHINE_CLONES is not valid", av[1]);
-			}
-			else
-				CONF_WARMACHINE_DETECT = value;
-		}
-		else if (str_equals_nocase(av[0], "DETECT_PROMIRC_CLONES")) {
-
-			value = strtol(av[1], &err, 10);
-
-			if ((*err != '\0') || ((value != FALSE) && (value != TRUE))) {
-
-				if (rehash)
-					send_globops(NULL, "Value %s for DETECT_PROMIRC_CLONES is not valid", av[1]);
-				else
-					fatal_error(FACILITY_CONF, __LINE__, "Value %s for DETECT_PROMIRC_CLONES is not valid", av[1]);
-			}
-			else
-				CONF_PROMIRC_DETECT = value;
-		}
-		else if (str_equals_nocase(av[0], "DETECT_VENOM_CLONES")) {
-
-			value = strtol(av[1], &err, 10);
-
-			if ((*err != '\0') || ((value != FALSE) && (value != TRUE))) {
-
-				if (rehash)
-					send_globops(NULL, "Value %s for DETECT_VENOM_CLONES is not valid", av[1]);
-				else
-					fatal_error(FACILITY_CONF, __LINE__, "Value %s for DETECT_VENOM_CLONES is not valid", av[1]);
-			}
-			else
-				CONF_VENOM_DETECT = value;
-		}
-		else if (str_equals_nocase(av[0], "DETECT_WARSATAN_CLONES")) {
-
-			value = strtol(av[1], &err, 10);
-
-			if ((*err != '\0') || ((value != FALSE) && (value != TRUE))) {
-
-				if (rehash)
-					send_globops(NULL, "Value %s for DETECT_WARSATAN_CLONES is not valid", av[1]);
-				else
-					fatal_error(FACILITY_CONF, __LINE__, "Value %s for DETECT_WARSATAN_CLONES is not valid", av[1]);
-			}
-			else
-				CONF_WARSATAN_DETECT = value;
-		}
-		else if (str_equals_nocase(av[0], "DETECT_CLONESX_CLONES")) {
-
-			value = strtol(av[1], &err, 10);
-
-			if ((*err != '\0') || ((value != FALSE) && (value != TRUE))) {
-
-				if (rehash)
-					send_globops(NULL, "Value %s for DETECT_CLONESX_CLONES is not valid", av[1]);
-				else
-					fatal_error(FACILITY_CONF, __LINE__, "Value %s for DETECT_CLONESX_CLONES is not valid", av[1]);
-			}
-			else
-				CONF_CLONESX_DETECT = value;
-		}
-		else if (str_equals_nocase(av[0], "DETECT_UNKNOWN_CLONER_CLONES")) {
-
-			value = strtol(av[1], &err, 10);
-
-			if ((*err != '\0') || ((value != FALSE) && (value != TRUE))) {
-
-				if (rehash)
-					send_globops(NULL, "Value %s for DETECT_UNKNOWN_CLONER_CLONES is not valid", av[1]);
-				else
-					fatal_error(FACILITY_CONF, __LINE__, "Value %s for DETECT_UNKNOWN_CLONER_CLONES is not valid", av[1]);
-			}
-			else
-				CONF_UNKNOWN_CLONER_DETECT = value;
-		}
-		else if (str_equals_nocase(av[0], "DETECT_UNUTNET_WORM")) {
-
-			value = strtol(av[1], &err, 10);
-
-			if ((*err != '\0') || ((value != FALSE) && (value != TRUE))) {
-
-				if (rehash)
-					send_globops(NULL, "Value %s for DETECT_UNUTNET_WORM is not valid", av[1]);
-				else
-					fatal_error(FACILITY_CONF, __LINE__, "Value %s for DETECT_UNUTNET_WORM is not valid", av[1]);
-			}
-			else
-				CONF_UNUTNET_WORM_DETECT = value;
-		}
-		else if (str_equals_nocase(av[0], "DETECT_SABAN_CLONES")) {
-
-			value = strtol(av[1], &err, 10);
-
-			if ((*err != '\0') || ((value != FALSE) && (value != TRUE))) {
-
-				if (rehash)
-					send_globops(NULL, "Value %s for DETECT_SABAN_CLONES is not valid", av[1]);
-				else
-					fatal_error(FACILITY_CONF, __LINE__, "Value %s for DETECT_SABAN_CLONES is not valid", av[1]);
-			}
-			else
-				CONF_SABAN_DETECT = value;
-		}
-		else if (str_equals_nocase(av[0], "DETECT_MUHSTIK_CLONES")) {
-
-			value = strtol(av[1], &err, 10);
-
-			if ((*err != '\0') || ((value != FALSE) && (value != TRUE))) {
-
-				if (rehash)
-					send_globops(NULL, "Value %s for DETECT_MUHSTIK_CLONES is not valid", av[1]);
-				else
-					fatal_error(FACILITY_CONF, __LINE__, "Value %s for DETECT_MUHSTIK_CLONES is not valid", av[1]);
-			}
-			else
-				CONF_MUHSTIK_DETECT = value;
-		}
-		else if (str_equals_nocase(av[0], "DETECT_BOTTLERS")) {
-
-			value = strtol(av[1], &err, 10);
-
-			if ((*err != '\0') || ((value != FALSE) && (value != TRUE))) {
-
-				if (rehash)
-					send_globops(NULL, "Value %s for DETECT_BOTTLERS is not valid", av[1]);
-				else
-					fatal_error(FACILITY_CONF, __LINE__, "Value %s for DETECT_BOTTLERS is not valid", av[1]);
-			}
-			else
-				CONF_BOTTLER_DETECT = value;
-		}
-		else if (str_equals_nocase(av[0], "DETECT_TENERONE")) {
-
-			value = strtol(av[1], &err, 10);
-
-			if ((*err != '\0') || ((value != FALSE) && (value != TRUE))) {
-
-				if (rehash)
-					send_globops(NULL, "Value %s for DETECT_TENERONE is not valid", av[1]);
-				else
-					fatal_error(FACILITY_CONF, __LINE__, "Value %s for DETECT_TENERONE is not valid", av[1]);
-			}
-			else
-				CONF_TENERONE_DETECT = value;
-		}
-		else if (str_equals_nocase(av[0], "DETECT_NGI_LAMER")) {
-
-			value = strtol(av[1], &err, 10);
-
-			if ((*err != '\0') || ((value != FALSE) && (value != TRUE))) {
-
-				if (rehash)
-					send_globops(NULL, "Value %s for DETECT_NGI_LAMER is not valid", av[1]);
-				else
-					fatal_error(FACILITY_CONF, __LINE__, "Value %s for DETECT_NGI_LAMER is not valid", av[1]);
-			}
-			else
-				CONF_NGILAMER_DETECT = value;
-		}
-		else if (str_equals_nocase(av[0], "DETECT_DTHN_TROJAN")) {
-
-			value = strtol(av[1], &err, 10);
-
-			if ((*err != '\0') || ((value != FALSE) && (value != TRUE))) {
-
-				if (rehash)
-					send_globops(NULL, "Value %s for DETECT_DTHN_TROJAN is not valid", av[1]);
-				else
-					fatal_error(FACILITY_CONF, __LINE__, "Value %s for DETECT_DTHN_TROJAN is not valid", av[1]);
-			}
-			else
-				CONF_DTHN_DETECT = value;
-		}
-		else if (str_equals_nocase(av[0], "DETECT_GUEST_SPAMBOTS")) {
-
-			value = strtol(av[1], &err, 10);
-
-			if ((*err != '\0') || ((value != FALSE) && (value != TRUE))) {
-
-				if (rehash)
-					send_globops(NULL, "Value %s for DETECT_GUEST_SPAMBOTS is not valid", av[1]);
-				else
-					fatal_error(FACILITY_CONF, __LINE__, "Value %s for DETECT_GUEST_SPAMBOTS is not valid", av[1]);
-			}
-			else
-				CONF_GUEST_DETECT = value;
-		}
-		else if (str_equals_nocase(av[0], "DETECT_FIZZER_TROJAN")) {
-
-			value = strtol(av[1], &err, 10);
-
-			if ((*err != '\0') || ((value != FALSE) && (value != TRUE))) {
-
-				if (rehash)
-					send_globops(NULL, "Value %s for DETECT_FIZZER_TROJAN is not valid", av[1]);
-				else
-					fatal_error(FACILITY_CONF, __LINE__, "Value %s for DETECT_FIZZER_TROJAN is not valid", av[1]);
-			}
-			else
-				CONF_FIZZER_DETECT = value;
-		}
-		else if (str_equals_nocase(av[0], "DETECT_MAIL_CLONER")) {
-
-			value = strtol(av[1], &err, 10);
-
-			if ((*err != '\0') || ((value != FALSE) && (value != TRUE))) {
-
-				if (rehash)
-					send_globops(NULL, "Value %s for DETECT_MAIL_CLONER is not valid", av[1]);
-				else
-					fatal_error(FACILITY_CONF, __LINE__, "Value %s for DETECT_MAIL_CLONER is not valid", av[1]);
-			}
-			else
-				CONF_MAIL_DETECT = value;
-		}
-		else if (str_equals_nocase(av[0], "DETECT_OPTIXPRO_TROJAN")) {
-
-			value = strtol(av[1], &err, 10);
-
-			if ((*err != '\0') || ((value != FALSE) && (value != TRUE))) {
-
-				if (rehash)
-					send_globops(NULL, "Value %s for DETECT_OPTIXPRO_TROJAN is not valid", av[1]);
-				else
-					fatal_error(FACILITY_CONF, __LINE__, "Value %s for DETECT_OPTIXPRO_TROJAN is not valid", av[1]);
-			}
-			else
-				CONF_OPTIXPRO_DETECT = value;
-		}
-		else if (str_equals_nocase(av[0], "FLOOD_CACHE_EXPIRE")) {
-
-			value = strtol(av[1], &err, 10);
-
-			if ((*err != '\0') || (value < 0) || (value > ONE_DAY)) {
-
-				if (rehash)
-					send_globops(NULL, "Value %s for FLOOD_CACHE_EXPIRE is not valid", av[1]);
-				else
-					fatal_error(FACILITY_CONF, __LINE__, "Value %s for FLOOD_CACHE_EXPIRE is not valid", av[1]);
-			}
-			else
-				CONF_FLOOD_CACHE_EXPIRE = value;
-		}
-		else if (str_equals_nocase(av[0], "MAX_FLOOD_HITS")) {
-
-			value = strtol(av[1], &err, 10);
-
-			if ((*err != '\0') || (value < 5) || (value > 50)) {
-
-				if (rehash)
-					send_globops(NULL, "Value %s for MAX_FLOOD_HITS is not valid", av[1]);
-				else
-					fatal_error(FACILITY_CONF, __LINE__, "Value %s for MAX_FLOOD_HITS is not valid", av[1]);
-			}
-			else
-				CONF_MAX_FLOOD_HITS = value;
-		}
-#endif
 		else {
 
 			if (rehash)
@@ -1757,7 +1128,6 @@ static void conf_break(int ac, char **av, BOOL rehash) {
 			return;
 		}
 
-		#ifdef USE_SERVICES
 		case 'P': {
 
 			if (ac != 5) {
@@ -1818,7 +1188,6 @@ static void conf_break(int ac, char **av, BOOL rehash) {
 
 			return;
 		}
-		#endif
 
 		case 'U':
 			/* This cannot be changed at runtime. */
@@ -1888,158 +1257,7 @@ static void conf_break(int ac, char **av, BOOL rehash) {
 				CONF_SERVICES_MASTER = str_duplicate(av[1]);
 			}
 
-			#ifndef USE_SERVICES
-			if (ac != 3)
-				fatal_error(FACILITY_CONF, __LINE__, "Invalid number of params for M: line");
-
-			if (str_len(av[2]) > PASSMAX)
-				fatal_error(FACILITY_CONF, __LINE__, "Value %s for services master password in M: line is not valid", av[2]);
-
-			else {
-
-				if (CONF_SERVICES_MASTER_PASS)
-					mem_free(CONF_SERVICES_MASTER_PASS);
-				CONF_SERVICES_MASTER_PASS = str_duplicate(av[2]);
-			}
-			#endif
 			return;
-
-		#ifdef USE_SOCKSMONITOR
-		case 'E':
-			if (ac != 2) {
-
-				if (rehash)
-					send_globops(NULL, "Invalid number of params for E: line");
-				else
-					fatal_error(FACILITY_CONF, __LINE__, "Invalid number of params for E: line");
-			}
-			else {
-
-				if ((str_len(av[1]) > HOSTMAX) || !validate_host(av[1], FALSE, FALSE, FALSE)) {
-
-					if (rehash) {
-
-						send_globops(NULL, "Value %s for server in E: line is not valid", av[1]);
-						return;
-					}
-					else
-						fatal_error(FACILITY_CONF, __LINE__, "Value %s for server in E: line is not valid", av[1]);
-				}
-				else
-					server_create_entry(av[1], "E:Lined", SERVER_FLAG_SCANEXEMPT);
-			}
-
-			return;
-
-		case 'T': {
-
-			unsigned long int ip;
-
-
-			if (ac != 3) {
-
-				if (rehash)
-					send_globops(NULL, "Invalid number of params for T: line");
-				else
-					fatal_error(FACILITY_CONF, __LINE__, "Invalid number of params for T: line");
-			}
-			else {
-
-				int A, B, C, D;
-
-				if ((sscanf(av[1], "%d.%d.%d.%d", &A, &B, &C, &D) == 4) &&
-					(A < 255) && (B < 255) && (C < 255) && (D < 255)) {
-
-					if (CONF_MONITOR_TEST_IP)
-						mem_free(CONF_MONITOR_TEST_IP);
-					CONF_MONITOR_TEST_IP = str_duplicate(av[1]);
-				}
-				else {
-
-					if (rehash)
-						send_globops(NULL, "Invalid value %s for monitor test server ip in T: line", av[1]);
-					else
-						fatal_error(FACILITY_CONF, __LINE__, "Invalid value %s for monitor test server ip in T: line", av[1]);
-				}
-			}
-
-			value = strtol(av[2], &err, 10);
-
-			if ((*err != '\0') || (value <= 0) || (value > 65535)) {
-
-				if (rehash)
-					send_globops(NULL, "Invalid value %s for monitor test server port in T: line", av[2]);
-				else
-					fatal_error(FACILITY_CONF, __LINE__, "Invalid value %s for monitor test server port in T: line", av[2]);
-			}
-			else
-				CONF_MONITOR_TEST_PORT = value;
-
-			/* Update the buffers to send for a socks4/5 scan. */
-
-			ip = aton(CONF_MONITOR_TEST_IP);
-			ip = htonl(ip);
-
-			/* Socks4. */
-			SOCKS4_BUFFER[0] = 4;
-			SOCKS4_BUFFER[1] = 1;
-			SOCKS4_BUFFER[2] = ((CONF_MONITOR_TEST_PORT >> 8) & 0xFF);
-			SOCKS4_BUFFER[3] = (CONF_MONITOR_TEST_PORT & 0xFF);
-			SOCKS4_BUFFER[4] = (ip >> 24) & 0xFF;
-			SOCKS4_BUFFER[5] = (ip >> 16) & 0xFF;
-			SOCKS4_BUFFER[6] = (ip >> 8) & 0xFF;
-			SOCKS4_BUFFER[7] = ip & 0xFF;
-			SOCKS4_BUFFER[8] = 0;
-
-			/* Socks5. */
-			SOCKS5_BUFFER[0] = 5;
-			SOCKS5_BUFFER[1] = 1;
-			SOCKS5_BUFFER[2] = 0;
-			SOCKS5_BUFFER[3] = 1;
-			SOCKS5_BUFFER[4] = (ip >> 24) & 0xFF;
-			SOCKS5_BUFFER[5] = (ip >> 16) & 0xFF;
-			SOCKS5_BUFFER[6] = (ip >> 8) & 0xFF;
-			SOCKS5_BUFFER[7] = ip & 0xFF;
-			SOCKS5_BUFFER[8] = ((CONF_MONITOR_TEST_PORT >> 8) & 0xFF);
-			SOCKS5_BUFFER[9] = (CONF_MONITOR_TEST_PORT & 0xFF);
-
-			/* HTTP Proxy. */
-			snprintf(PROXY_BUFFER, sizeof(PROXY_BUFFER), "CONNECT %s:%u HTTP/1.0\n\n", CONF_MONITOR_TEST_IP, CONF_MONITOR_TEST_PORT);
-			PROXY_BUFFER_LEN = str_len(PROXY_BUFFER);
-
-			return;
-		}
-
-		case 'V':
-			/* This cannot be changed at runtime. */
-			if (rehash)
-				return;
-
-			if (ac < 2)
-				fatal_error(FACILITY_CONF, __LINE__, "Invalid number of params for V: line");
-
-			if (str_len(av[1]) > HOSTMAX || !validate_host(av[1], FALSE, FALSE, FALSE))
-				fatal_error(FACILITY_CONF, __LINE__, "Value %s for local host in V: line is not valid", av[1]);
-
-			else {
-
-				if (CONF_MONITOR_LOCAL_HOST)
-					mem_free(CONF_MONITOR_LOCAL_HOST);
-				CONF_MONITOR_LOCAL_HOST = str_duplicate(av[1]);
-			}
-
-			if (ac > 2) {
-
-				value = strtol(av[2], &err, 10);
-
-				if ((*err != '\0') || (value <= 0) || (value > 65535))
-					fatal_error(FACILITY_CONF, __LINE__, "Invalid value %s for local port in V: line", av[2]);
-				else
-					CONF_MONITOR_LOCAL_PORT = value;
-			}
-
-			return;
-		#endif	/* USE_SOCKSMONITOR */
 
 		default:
 			if (rehash)
@@ -2057,11 +1275,9 @@ void init_conf(BOOL rehash) {
 	char *param, *av[100];
 	int ac;
 	
-	#if defined(USE_SERVICES) || defined(USE_STATS)
 	/* Caricamento key di criptazione */
 	if (!crypt_load_key())
 		fatal_error(FACILITY_CONF, __LINE__, "Errors loading host encryption key file!");
-	#endif
 
 	/* Lettura opzioni */
 	if (IS_NULL(conf_file = fopen(CONFIG_FILE, "r"))) {
@@ -2096,9 +1312,7 @@ void init_conf(BOOL rehash) {
 
 	fclose(conf_file);
 
-#ifdef USE_SERVICES
 	AddFlag(CONF_DEF_MLOCKON, CMODE_r);
-#endif
 
 	if (!rehash) {
 
@@ -2118,18 +1332,11 @@ void init_conf(BOOL rehash) {
 		else if (IS_NULL(CONF_SERVICES_MASTER))
 			fatal_error(FACILITY_CONF, __LINE__, "ERROR: Missing M: line");
 
-#ifdef USE_SERVICES
 		else if (!CONF_USE_EMAIL && CONF_FORCE_AUTH)
 			fatal_error(FACILITY_CONF, __LINE__, "ERROR: Must have EMAIL enabled to use FORCE_AUTH");
 
 		else if (!CONF_USE_EMAIL && CONF_AUTHDEL_DAYS)
 			fatal_error(FACILITY_CONF, __LINE__, "ERROR: Must have EMAIL enabled to use AUTODEL");
-#endif
-
-#ifdef USE_SOCKSMONITOR
-		else if (IS_NULL(CONF_MONITOR_TEST_IP) || (CONF_MONITOR_TEST_PORT == 0) || (PROXY_BUFFER_LEN == 0))
-			fatal_error(FACILITY_CONF, __LINE__, "ERROR: Missing or invalid T: Line");
-#endif
 
 		/* If it's not a rehash, initialize these variables. Done this way so we have all
 		   of them duplicated in case of a rehash, where we can free and reallocate them. */
@@ -2140,7 +1347,6 @@ void init_conf(BOOL rehash) {
 		if (IS_NULL(CONF_DEBUG_CHAN))
 			CONF_DEBUG_CHAN = str_duplicate("#debug");
 
-#ifdef USE_SERVICES
 		if (IS_NULL(CONF_RETURN_EMAIL))
 			CONF_RETURN_EMAIL = str_duplicate("nickserv@azzurra.org");
 
@@ -2170,29 +1376,6 @@ void init_conf(BOOL rehash) {
 
 		if (s_GlobalNoticer[0] == c_NULL)
 			str_copy_checked(CONF_NETWORK_NAME, s_GlobalNoticer, sizeof(s_GlobalNoticer));
-#endif
-
-#ifdef USE_STATS
-		if (s_DebugServ[0] == c_NULL)
-			str_copy_checked("StatsDS", s_DebugServ, sizeof(s_DebugServ));
-
-		if (s_StatServ[0] == c_NULL)
-			str_copy_checked("StatServ", s_StatServ, sizeof(s_StatServ));
-
-		if (s_SeenServ[0] == c_NULL)
-			str_copy_checked("SeenServ", s_SeenServ, sizeof(s_SeenServ));
-#endif
-
-#ifdef USE_SOCKSMONITOR
-		if (s_DebugServ[0] == c_NULL)
-			str_copy_checked("CybCopDS", s_DebugServ, sizeof(s_DebugServ));
-
-		if (s_SocksMonitor[0] == c_NULL)
-			str_copy_checked("CybCop", s_SocksMonitor, sizeof(s_SocksMonitor));
-
-		if (IS_NULL(CONF_PROXY_CHAN))
-			CONF_PROXY_CHAN = str_duplicate("#APM");
-#endif
 	}
 }
 
@@ -2201,10 +1384,8 @@ void conf_rehash() {
 	LOG_DEBUG("Re-loading conf file");
 	init_conf(TRUE);
 
-	#ifdef USE_SERVICES
 	LOG_DEBUG("Re-loading news information");
 	rehash_news();
-	#endif
 
 	LOG_DEBUG("Rehash process complete.");
 }
@@ -2274,8 +1455,6 @@ void handle_set(const char *source, User *callerUser, ServiceCommandData *data) 
 		var = &CONF_SET_FLOOD;
 		desc = "Flood Detection";
 	}
-
-#ifdef USE_SERVICES
 	else if (str_equals(option, "CLONES")) {
 
 		var = &CONF_SET_CLONE;
@@ -2332,125 +1511,6 @@ void handle_set(const char *source, User *callerUser, ServiceCommandData *data) 
 
 		return;
 	}
-#endif
-
-#ifdef USE_SOCKSMONITOR
-	else if (str_equals(option, "WINGATE")) {
-
-		var = &CONF_SCAN_WINGATE;
-		desc = "Wingates scan";
-	}
-	else if (str_equals(option, "SOCKS4")) {
-
-		var = &CONF_SCAN_SOCKS4;
-		desc = "Socks4 scan";
-	}
-	else if (str_equals(option, "SOCKS5")) {
-
-		var = &CONF_SCAN_SOCKS4;
-		desc = "Socks5 scan";
-	}
-	else if (str_equals(option, "SCAN80")) {
-
-		var = &CONF_SCAN_80;
-		desc = "Open proxy on port 80 scan";
-	}
-	else if (str_equals(option, "SCAN3128")) {
-
-		var = &CONF_SCAN_3128;
-		desc = "Open proxy on port 3128 scan";
-	}
-	else if (str_equals(option, "SCAN6588")) {
-
-		var = &CONF_SCAN_6588;
-		desc = "Open proxy on port 6588 scan";
-	}
-	else if (str_equals(option, "SCAN8080")) {
-
-		var = &CONF_SCAN_8080;
-		desc = "Open proxy on port 8080 scan";
-	}
-	else if (str_equals(option, "PROMIRC")) {
-
-		var = &CONF_PROMIRC_DETECT;
-		desc = "PromIRC clones detection";
-	}
-	else if (str_equals(option, "WARMACHINE")) {
-
-		var = &CONF_WARMACHINE_DETECT;
-		desc = "WarMachine clones detection";
-	}
-	else if (str_equals(option, "CLONER")) {
-
-		var = &CONF_UNKNOWN_CLONER_DETECT;
-		desc = "Unknown cloner clones detection";
-	}
-	else if (str_equals(option, "UNUTNET")) {
-
-		var = &CONF_UNUTNET_WORM_DETECT;
-		desc = "Unut.net worm clones detection";
-	}
-	else if (str_equals(option, "VENOM")) {
-
-		var = &CONF_VENOM_DETECT;
-		desc = "Venom clones detection";
-	}
-	else if (str_equals(option, "WARSATAN")) {
-
-		var = &CONF_WARSATAN_DETECT;
-		desc = "WarSatan clones detection";
-	}
-	else if (str_equals(option, "CLONESX")) {
-
-		var = &CONF_CLONESX_DETECT;
-		desc = "ClonesX clones detection";
-	}
-	else if (str_equals(option, "SABAN")) {
-
-		var = &CONF_SABAN_DETECT;
-		desc = "Saban Power clones detection";
-	}
-	else if (str_equals(option, "PROXER")) {
-
-		var = &CONF_PROXER_DETECT;
-		desc = "Unknown proxer clones detection";
-	}
-	else if (str_equals(option, "MUHSTIK")) {
-
-		var = &CONF_MUHSTIK_DETECT;
-		desc = "Muhstik clones detection";
-	}
-	else if (str_equals(option, "BOTTLER")) {
-
-		var = &CONF_BOTTLER_DETECT;
-		desc = "Bottler detection";
-	}
-	else if (str_equals(option, "TENERONE")) {
-
-		var = &CONF_TENERONE_DETECT;
-		desc = "t3n3ron3 detection";
-	}
-	else if (str_equals(option, "DTHN")) {
-
-		var = &CONF_DTHN_DETECT;
-		desc = "DTHN trojan detection";
-	}
-	else if (str_equals(option, "GUEST")) {
-
-		var = &CONF_GUEST_DETECT;
-		desc = "Guest spambot clones";
-	}
-	else if (str_equals(option, "FIZZER")) {
-
-		var = &CONF_FIZZER_DETECT;
-		desc = "Fizzer trojan detection";
-	}
-	else if (str_equals(option, "MAIL")) {
-
-		var = &CONF_MAIL_DETECT;
-		desc = "Mail clones detection";
-	}
-#endif
 
 	if (IS_NULL(var) || IS_NULL(desc)) {
 

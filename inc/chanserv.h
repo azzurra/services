@@ -16,8 +16,6 @@
 #ifndef SRV_CHANSERV_H
 #define SRV_CHANSERV_H
 
-#ifdef USE_SERVICES
-
 
 /*********************************************************
  * Headers                                               *
@@ -404,7 +402,5 @@ extern void chanserv_listchans(const User *callerUser, CSTR nick, const BOOL isS
 extern void chanserv_ds_dump(CSTR sourceNick, const User *callerUser, STR request);
 extern unsigned long int chanserv_mem_report(CSTR sourceNick, const User *callerUser);
 
-
-#endif /* USE_SERVICES */
 
 #endif /* SRV_CHANSERV_H */

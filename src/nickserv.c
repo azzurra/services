@@ -18,9 +18,6 @@
  *********************************************************/
 
 #include "../inc/common.h"
-
-#ifdef USE_SERVICES
-
 #include "../inc/strings.h"
 #include "../inc/messages.h"
 #include "../inc/logging.h"
@@ -5893,5 +5890,3 @@ unsigned long nickserv_mem_report(CSTR sourceNick, const User *callerUser) {
 
 	return total_mem;
 }
-
-#endif /* USE_SERVICES */
