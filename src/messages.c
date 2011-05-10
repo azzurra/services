@@ -41,6 +41,7 @@
 #include "../inc/rootserv.h"
 #include "../inc/helpserv.h"
 #include "../inc/ignore.h"
+#include "../inc/trie.h"
 
 
 /*********************************************************
@@ -733,24 +734,15 @@ static void m_capab(CSTR source, const int ac, char **av) {
 /*********************************************************/
 
 Message messages[] = {
-
-	// Very High priority
-
 	{ "SJOIN",		0,	m_sjoin },
 	{ "NICK",		0,	user_handle_NICK },
 	{ "PRIVMSG",		0,	m_privmsg },
 	{ "QUIT",		0,	user_handle_QUIT },
 	{ "MODE",		0,	m_mode },
-
-	// High priority
-
 	{ "PART",		0,	user_handle_PART },
 	{ "KICK",		0,	user_handle_KICK },
 	{ "TOPIC",		0,	chan_handle_TOPIC },
 	{ "JOIN",		0,	user_handle_JOIN },
-
-	// Normal priority
-
 	{ "WHOIS",		0,	m_whois },
 	{ "KILL",		0,	user_handle_KILL },
 	{ "PING",		0,	m_ping },
@@ -758,18 +750,13 @@ Message messages[] = {
 	{ "SQUIT",		0,	server_handle_SQUIT },
 	{ "SERVER",		0,	server_handle_SERVER },
 	{ "AWAY",		0,	NULL },
-
 	{ "NOTICE",		0,	NULL },
-
 	{ "401",		0,	NULL },		/* 401 NickServ nick :No such nick/channel */
 	{ "402",		0,	NULL },		/* 402 services.azzurra.org nick :No such server */
 	{ "403",		0,	NULL },		/* 403 ChanServ #channel :No such channel */
 	{ "441",		0,	NULL },		/* 441 services.azzurra.org nick #channel :They aren't on that channel */
 	{ "443",		0,	NULL },		/* 443 ChanServ nick #channel :is already on channel */
 	{ "503",		0,	NULL },		/* 503 Message could not be delivered to nick */
-
-	// Low priority
-
 	{ "SVSMODE",		0,	m_svsmode },
 	{ "VERSION",		0,	m_version },
 	{ "SHUN",		0,	NULL },
@@ -786,9 +773,6 @@ Message messages[] = {
 	{ "SQLINE",		0,	NULL },
 	{ "UNSGLINE",		0,	NULL },
 	{ "UNSQLINE",		0,	NULL },
-
-	// Very Low priority
-
 	{ "301",		0,	NULL },		/* 301 CybCop NICK :Away message */
 	{ "436",		0,	NULL },		/* 436 NICK NICK :Nickname collision KILL */
 	{ "ADMIN",		0,	m_admin },
@@ -807,45 +791,37 @@ Message messages[] = {
 	{ "INVITE",		0,	NULL },
 	{ "SPAM",		0,	NULL },
 	{ "UNSPAM",		0,	NULL },
-
-	// End
-
 	{ NULL }
 };
 
 /*********************************************************/
 
-static __inline__ int message_str_compare(CSTR string1, CSTR string2) {
-	
-	register const unsigned char	*str1 = (const unsigned char *) string1;
-	register const unsigned char	*str2 = (const unsigned char *) string2;
-	register unsigned char			ch1, ch2;
+static trie *msg_trie;
 
-	
-	if (IS_NULL(str1) || IS_NULL(str2))
-		return (int)(str1 - str2);
+/* Initialize message parser */
+void message_init(void)
+{
+    Message *johnny; /* walker (cit.) */
+    msg_trie = trie_create();
 
-	do {
+    /* Walk message array and build the trie */
+    for (johnny = messages; johnny->name; ++johnny)
+    {
+        /* FIXME: abort services startup if trie node allocation fails */
+        trie_add(msg_trie, johnny->name, johnny);
+    }
 
-		ch1 = (unsigned char) *str1++;
-		ch2 = (unsigned char) *str2++;
-
-	} while ((ch1 != c_NULL) && (ch1 == ch2));
-
-	return ch1 - ch2;
+    /* Cave Johnson, we're done here */
 }
 
-/*********************************************************/
+/* Cleanup message parser */
+void message_terminate(void)
+{
+    trie_destroy(msg_trie);
+}
 
-Message *find_message(const char *name) {
-
-	Message *m;
-
-	for (m = messages; m->name; ++m) {
-
-		if (message_str_compare(name, m->name) == 0)
-			return m;
-	}
-
-	return NULL;
+/* Lookup message handler in msg_trie, returns NULL on failure */
+Message *find_message(const char *name)
+{
+    return (Message *)trie_find(msg_trie, name);
 }
