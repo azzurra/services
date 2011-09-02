@@ -836,7 +836,7 @@ static void do_sraw(const char *source, User *callerUser, ServiceCommandData *da
 		send_globops(s_DebugServ, "SRAW command used by \2%s\2 [\2%s\2]", source, text);
 
 		TRACE_MAIN();
-		send_cmd(text);
+		send_cmd("%s", text);
 		TRACE_MAIN();
 	}
 }
