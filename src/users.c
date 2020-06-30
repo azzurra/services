@@ -1030,7 +1030,12 @@ void user_handle_NICK(CSTR source, const int ac, char **av) {
 			/* IPv6 host. */
 			AddFlag(user->flags, USER_FLAG_HAS_IPV6);
 			if (is6) {
-				user->maskedHost = expand_ipv6(av[8]);
+				if (strchr(user->host, ':')) {
+					user->maskedHost = str_duplicate(crypt_userhost(av[8], htype, dotsCount));
+				} else {
+					htype = htHostname;
+					user->maskedHost = str_duplicate(crypt_userhost(user->host, htype, dotsCount));
+				}
 				//is 6to4?
 				if (user->ipv6[0] == 0x20 && user->ipv6[1] == 0x02) {
 					memcpy(&user->ip, &user->ipv6[2], sizeof(uint32_t));
@@ -1043,7 +1048,7 @@ void user_handle_NICK(CSTR source, const int ac, char **av) {
 				}
 			}
 			else
-				user->maskedHost = expand_ipv6(user->host);
+				user->maskedHost = user->host;
 		}
 		else
 			user->maskedHost = crypt_userhost(user->host, htype, dotsCount);
