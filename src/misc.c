@@ -259,19 +259,19 @@ BOOL validate_tld(CSTR tld, BOOL allowFW) {
 			return (str_equals_nocase(tld, "museum") || str_equals_nocase(tld, "travel"));
 
 		case 4:
-			return ( str_equals_nocase(tld, "info") || str_equals_nocase(tld, "aero") ||
-					 str_equals_nocase(tld, "coop") || str_equals_nocase(tld, "name") ||
-			      		 str_equals_nocase(tld, "mobi") || str_equals_nocase(tld, "jobs") ||
-			      		 str_equals_nocase(tld, "asia") ) ;
+			return (str_equals_nocase(tld, "info") || str_equals_nocase(tld, "aero") ||
+					str_equals_nocase(tld, "coop") || str_equals_nocase(tld, "name") ||
+					str_equals_nocase(tld, "mobi") || str_equals_nocase(tld, "jobs") ||
+					str_equals_nocase(tld, "asia") ) ;
 
 		case 3:
-			return ( str_equals_nocase(tld, "com") || str_equals_nocase(tld, "org") ||
-					 str_equals_nocase(tld, "cat") || str_equals_nocase(tld, "net") ||
-					 str_equals_nocase(tld, "biz") || str_equals_nocase(tld, "edu") ||
-					 str_equals_nocase(tld, "int") || str_equals_nocase(tld, "mil") ||
-					 str_equals_nocase(tld, "gov") || str_equals_nocase(tld, "thc") ||
-			      		 str_equals_nocase(tld, "lan") || str_equals_nocase(tld, "pro") ||
-					 str_equals_nocase(tld, "tel"));
+			return (str_equals_nocase(tld, "com") || str_equals_nocase(tld, "org") ||
+					str_equals_nocase(tld, "cat") || str_equals_nocase(tld, "net") ||
+					str_equals_nocase(tld, "biz") || str_equals_nocase(tld, "edu") ||
+					str_equals_nocase(tld, "int") || str_equals_nocase(tld, "mil") ||
+					str_equals_nocase(tld, "gov") || str_equals_nocase(tld, "thc") ||
+					str_equals_nocase(tld, "lan") || str_equals_nocase(tld, "pro") ||
+					str_equals_nocase(tld, "tel") || str_equals_nocase(tld, "ovh"));
 
 		case 2: {
 			switch (str_char_tolower(tld[0])) {
