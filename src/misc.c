@@ -241,7 +241,7 @@ BOOL validate_email(CSTR email, BOOL allowWild) {
 }
 
 
-BOOL validate_tld(CSTR tld, BOOL allowFW) {
+BOOL validate_tld(CSTR tld, BOOL allowFW) { //IANA Version 2020080100, Last Updated Sat Aug  1 07:07:01 2020 UTC
 
 	size_t	tldlen;
 
@@ -250,28 +250,601 @@ BOOL validate_tld(CSTR tld, BOOL allowFW) {
 
 	tldlen = str_len(tld);
 
-	if (tldlen < 2 || tldlen > 6)
+	if (tldlen < 2 || tldlen > 18)
 		return FALSE;
 
 	switch (tldlen) {
 
+		case 18:
+			return (str_equals_nocase(tld, "northwesternmutual") || str_equals_nocase(tld, "travelersinsurance"));
+
+		case 17:
+			return FALSE;
+
+		case 16:
+			return FALSE;
+
+		case 15:
+			return (str_equals_nocase(tld, "americanexpress") || str_equals_nocase(tld, "kerryproperties") ||
+					str_equals_nocase(tld, "sandvikcoromant"));
+
+		case 14:
+			return (str_equals_nocase(tld, "afamilycompany") || str_equals_nocase(tld, "americanfamily") ||
+					str_equals_nocase(tld, "bananarepublic") || str_equals_nocase(tld, "cancerresearch") ||
+					str_equals_nocase(tld, "cookingchannel") || str_equals_nocase(tld, "weatherchannel"));
+
+		case 13:
+			return (str_equals_nocase(tld, "international") || str_equals_nocase(tld, "lifeinsurance") ||
+					str_equals_nocase(tld, "spreadbetting") || str_equals_nocase(tld, "travelchannel") ||
+					str_equals_nocase(tld, "wolterskluwer"));
+
+		case 12:
+			return (str_equals_nocase(tld, "construction") || str_equals_nocase(tld, "lplfinancial") ||
+					str_equals_nocase(tld, "scholarships") || str_equals_nocase(tld, "versicherung"));
+
+		case 11:
+			return (str_equals_nocase(tld, "accountants") || str_equals_nocase(tld, "barclaycard") ||
+					str_equals_nocase(tld, "blackfriday") || str_equals_nocase(tld, "blockbuster") ||
+					str_equals_nocase(tld, "bridgestone") || str_equals_nocase(tld, "calvinklein") ||
+					str_equals_nocase(tld, "contractors") || str_equals_nocase(tld, "creditunion") ||
+					str_equals_nocase(tld, "engineering") || str_equals_nocase(tld, "enterprises") ||
+					str_equals_nocase(tld, "foodnetwork") || str_equals_nocase(tld, "investments") ||
+					str_equals_nocase(tld, "kerryhotels") || str_equals_nocase(tld, "lamborghini") ||
+					str_equals_nocase(tld, "motorcycles") || str_equals_nocase(tld, "olayangroup") ||
+					str_equals_nocase(tld, "photography") || str_equals_nocase(tld, "playstation") ||
+					str_equals_nocase(tld, "productions") || str_equals_nocase(tld, "progressive") ||
+					str_equals_nocase(tld, "redumbrella") || str_equals_nocase(tld, "williamhill"));
+
+		case 10:
+			return (str_equals_nocase(tld, "accountant") || str_equals_nocase(tld, "apartments") ||
+					str_equals_nocase(tld, "associates") || str_equals_nocase(tld, "basketball") ||
+					str_equals_nocase(tld, "bnpparibas") || str_equals_nocase(tld, "boehringer") ||
+					str_equals_nocase(tld, "capitalone") || str_equals_nocase(tld, "consulting") ||
+					str_equals_nocase(tld, "creditcard") || str_equals_nocase(tld, "cuisinella") ||
+					str_equals_nocase(tld, "eurovision") || str_equals_nocase(tld, "extraspace") ||
+					str_equals_nocase(tld, "foundation") || str_equals_nocase(tld, "healthcare") ||
+					str_equals_nocase(tld, "immobilien") || str_equals_nocase(tld, "industries") ||
+					str_equals_nocase(tld, "management") || str_equals_nocase(tld, "mitsubishi") ||
+					str_equals_nocase(tld, "nationwide") || str_equals_nocase(tld, "newholland") ||
+					str_equals_nocase(tld, "nextdirect") || str_equals_nocase(tld, "onyourside") ||
+					str_equals_nocase(tld, "properties") || str_equals_nocase(tld, "protection") ||
+					str_equals_nocase(tld, "prudential") || str_equals_nocase(tld, "realestate") ||
+					str_equals_nocase(tld, "republican") || str_equals_nocase(tld, "restaurant") ||
+					str_equals_nocase(tld, "schaeffler") || str_equals_nocase(tld, "swiftcover") ||
+					str_equals_nocase(tld, "tatamotors") || str_equals_nocase(tld, "technology") ||
+					str_equals_nocase(tld, "university") || str_equals_nocase(tld, "vlaanderen") ||
+					str_equals_nocase(tld, "volkswagen"));
+
+		case 9:
+			return (str_equals_nocase(tld, "accenture") || str_equals_nocase(tld, "alfaromeo") ||
+					str_equals_nocase(tld, "allfinanz") || str_equals_nocase(tld, "amsterdam") ||
+					str_equals_nocase(tld, "analytics") || str_equals_nocase(tld, "aquarelle") ||
+					str_equals_nocase(tld, "barcelona") || str_equals_nocase(tld, "bloomberg") ||
+					str_equals_nocase(tld, "christmas") || str_equals_nocase(tld, "community") ||
+					str_equals_nocase(tld, "directory") || str_equals_nocase(tld, "education") ||
+					str_equals_nocase(tld, "equipment") || str_equals_nocase(tld, "fairwinds") ||
+					str_equals_nocase(tld, "financial") || str_equals_nocase(tld, "firestone") ||
+					str_equals_nocase(tld, "fresenius") || str_equals_nocase(tld, "frontdoor") ||
+					str_equals_nocase(tld, "fujixerox") || str_equals_nocase(tld, "furniture") ||
+					str_equals_nocase(tld, "goldpoint") || str_equals_nocase(tld, "hisamitsu") ||
+					str_equals_nocase(tld, "homedepot") || str_equals_nocase(tld, "homegoods") ||
+					str_equals_nocase(tld, "homesense") || str_equals_nocase(tld, "institute") ||
+					str_equals_nocase(tld, "insurance") || str_equals_nocase(tld, "kuokgroup") ||
+					str_equals_nocase(tld, "lancaster") || str_equals_nocase(tld, "landrover") ||
+					str_equals_nocase(tld, "lifestyle") || str_equals_nocase(tld, "marketing") ||
+					str_equals_nocase(tld, "marshalls") || str_equals_nocase(tld, "melbourne") ||
+					str_equals_nocase(tld, "microsoft") || str_equals_nocase(tld, "panasonic") ||
+					str_equals_nocase(tld, "passagens") || str_equals_nocase(tld, "pramerica") ||
+					str_equals_nocase(tld, "richardli") || str_equals_nocase(tld, "scjohnson") ||
+					str_equals_nocase(tld, "shangrila") || str_equals_nocase(tld, "solutions") ||
+					str_equals_nocase(tld, "statebank") || str_equals_nocase(tld, "statefarm") ||
+					str_equals_nocase(tld, "stockholm") || str_equals_nocase(tld, "travelers") ||
+					str_equals_nocase(tld, "vacations") || str_equals_nocase(tld, "yodobashi"));
+
+		case 8:
+			return (str_equals_nocase(tld, "abudhabi") || str_equals_nocase(tld, "airforce") ||
+					str_equals_nocase(tld, "allstate") || str_equals_nocase(tld, "attorney") ||
+					str_equals_nocase(tld, "barclays") || str_equals_nocase(tld, "barefoot") ||
+					str_equals_nocase(tld, "bargains") || str_equals_nocase(tld, "baseball") ||
+					str_equals_nocase(tld, "boutique") || str_equals_nocase(tld, "bradesco") ||
+					str_equals_nocase(tld, "broadway") || str_equals_nocase(tld, "brussels") ||
+					str_equals_nocase(tld, "budapest") || str_equals_nocase(tld, "builders") ||
+					str_equals_nocase(tld, "business") || str_equals_nocase(tld, "capetown") ||
+					str_equals_nocase(tld, "catering") || str_equals_nocase(tld, "catholic") ||
+					str_equals_nocase(tld, "cipriani") || str_equals_nocase(tld, "cityeats") ||
+					str_equals_nocase(tld, "cleaning") || str_equals_nocase(tld, "clinique") ||
+					str_equals_nocase(tld, "clothing") || str_equals_nocase(tld, "commbank") ||
+					str_equals_nocase(tld, "computer") || str_equals_nocase(tld, "delivery") ||
+					str_equals_nocase(tld, "deloitte") || str_equals_nocase(tld, "democrat") ||
+					str_equals_nocase(tld, "diamonds") || str_equals_nocase(tld, "discount") ||
+					str_equals_nocase(tld, "discover") || str_equals_nocase(tld, "download") ||
+					str_equals_nocase(tld, "engineer") || str_equals_nocase(tld, "ericsson") ||
+					str_equals_nocase(tld, "etisalat") || str_equals_nocase(tld, "exchange") ||
+					str_equals_nocase(tld, "feedback") || str_equals_nocase(tld, "fidelity") ||
+					str_equals_nocase(tld, "firmdale") || str_equals_nocase(tld, "football") ||
+					str_equals_nocase(tld, "frontier") || str_equals_nocase(tld, "goodyear") ||
+					str_equals_nocase(tld, "grainger") || str_equals_nocase(tld, "graphics") ||
+					str_equals_nocase(tld, "guardian") || str_equals_nocase(tld, "hdfcbank") ||
+					str_equals_nocase(tld, "helsinki") || str_equals_nocase(tld, "holdings") ||
+					str_equals_nocase(tld, "hospital") || str_equals_nocase(tld, "infiniti") ||
+					str_equals_nocase(tld, "ipiranga") || str_equals_nocase(tld, "istanbul") ||
+					str_equals_nocase(tld, "jpmorgan") || str_equals_nocase(tld, "lighting") ||
+					str_equals_nocase(tld, "lundbeck") || str_equals_nocase(tld, "marriott") ||
+					str_equals_nocase(tld, "maserati") || str_equals_nocase(tld, "mckinsey") ||
+					str_equals_nocase(tld, "memorial") || str_equals_nocase(tld, "merckmsd") ||
+					str_equals_nocase(tld, "mortgage") || str_equals_nocase(tld, "observer") ||
+					str_equals_nocase(tld, "partners") || str_equals_nocase(tld, "pharmacy") ||
+					str_equals_nocase(tld, "pictures") || str_equals_nocase(tld, "plumbing") ||
+					str_equals_nocase(tld, "property") || str_equals_nocase(tld, "redstone") ||
+					str_equals_nocase(tld, "reliance") || str_equals_nocase(tld, "saarland") ||
+					str_equals_nocase(tld, "samsclub") || str_equals_nocase(tld, "security") ||
+					str_equals_nocase(tld, "services") || str_equals_nocase(tld, "shopping") ||
+					str_equals_nocase(tld, "showtime") || str_equals_nocase(tld, "softbank") ||
+					str_equals_nocase(tld, "software") || str_equals_nocase(tld, "stcgroup") ||
+					str_equals_nocase(tld, "supplies") || str_equals_nocase(tld, "training") ||
+					str_equals_nocase(tld, "vanguard") || str_equals_nocase(tld, "ventures") ||
+					str_equals_nocase(tld, "verisign") || str_equals_nocase(tld, "woodside") ||
+					str_equals_nocase(tld, "yokohama"));
+
+		case 7:
+			return (str_equals_nocase(tld, "abogado") || str_equals_nocase(tld, "academy") ||
+					str_equals_nocase(tld, "agakhan") || str_equals_nocase(tld, "alibaba") ||
+					str_equals_nocase(tld, "android") || str_equals_nocase(tld, "athleta") ||
+					str_equals_nocase(tld, "auction") || str_equals_nocase(tld, "audible") ||
+					str_equals_nocase(tld, "auspost") || str_equals_nocase(tld, "avianca") ||
+					str_equals_nocase(tld, "banamex") || str_equals_nocase(tld, "bauhaus") ||
+					str_equals_nocase(tld, "bentley") || str_equals_nocase(tld, "bestbuy") ||
+					str_equals_nocase(tld, "booking") || str_equals_nocase(tld, "brother") ||
+					str_equals_nocase(tld, "bugatti") || str_equals_nocase(tld, "capital") ||
+					str_equals_nocase(tld, "caravan") || str_equals_nocase(tld, "careers") ||
+					str_equals_nocase(tld, "channel") || str_equals_nocase(tld, "charity") ||
+					str_equals_nocase(tld, "chintai") || str_equals_nocase(tld, "citadel") ||
+					str_equals_nocase(tld, "clubmed") || str_equals_nocase(tld, "college") ||
+					str_equals_nocase(tld, "cologne") || str_equals_nocase(tld, "comcast") ||
+					str_equals_nocase(tld, "company") || str_equals_nocase(tld, "compare") ||
+					str_equals_nocase(tld, "contact") || str_equals_nocase(tld, "cooking") ||
+					str_equals_nocase(tld, "corsica") || str_equals_nocase(tld, "country") ||
+					str_equals_nocase(tld, "coupons") || str_equals_nocase(tld, "courses") ||
+					str_equals_nocase(tld, "cricket") || str_equals_nocase(tld, "cruises") ||
+					str_equals_nocase(tld, "dentist") || str_equals_nocase(tld, "digital") ||
+					str_equals_nocase(tld, "domains") || str_equals_nocase(tld, "exposed") ||
+					str_equals_nocase(tld, "express") || str_equals_nocase(tld, "farmers") ||
+					str_equals_nocase(tld, "fashion") || str_equals_nocase(tld, "ferrari") ||
+					str_equals_nocase(tld, "ferrero") || str_equals_nocase(tld, "finance") ||
+					str_equals_nocase(tld, "fishing") || str_equals_nocase(tld, "fitness") ||
+					str_equals_nocase(tld, "flights") || str_equals_nocase(tld, "florist") ||
+					str_equals_nocase(tld, "flowers") || str_equals_nocase(tld, "forsale") ||
+					str_equals_nocase(tld, "frogans") || str_equals_nocase(tld, "fujitsu") ||
+					str_equals_nocase(tld, "gallery") || str_equals_nocase(tld, "genting") ||
+					str_equals_nocase(tld, "godaddy") || str_equals_nocase(tld, "grocery") ||
+					str_equals_nocase(tld, "guitars") || str_equals_nocase(tld, "hamburg") ||
+					str_equals_nocase(tld, "hangout") || str_equals_nocase(tld, "hitachi") ||
+					str_equals_nocase(tld, "holiday") || str_equals_nocase(tld, "hosting") ||
+					str_equals_nocase(tld, "hoteles") || str_equals_nocase(tld, "hotmail") ||
+					str_equals_nocase(tld, "hyundai") || str_equals_nocase(tld, "ismaili") ||
+					str_equals_nocase(tld, "jewelry") || str_equals_nocase(tld, "juniper") ||
+					str_equals_nocase(tld, "kitchen") || str_equals_nocase(tld, "komatsu") ||
+					str_equals_nocase(tld, "lacaixa") || str_equals_nocase(tld, "lanxess") ||
+					str_equals_nocase(tld, "lasalle") || str_equals_nocase(tld, "latrobe") ||
+					str_equals_nocase(tld, "leclerc") || str_equals_nocase(tld, "limited") ||
+					str_equals_nocase(tld, "lincoln") || str_equals_nocase(tld, "markets") ||
+					str_equals_nocase(tld, "metlife") || str_equals_nocase(tld, "monster") ||
+					str_equals_nocase(tld, "netbank") || str_equals_nocase(tld, "netflix") ||
+					str_equals_nocase(tld, "network") || str_equals_nocase(tld, "neustar") ||
+					str_equals_nocase(tld, "okinawa") || str_equals_nocase(tld, "oldnavy") ||
+					str_equals_nocase(tld, "organic") || str_equals_nocase(tld, "origins") ||
+					str_equals_nocase(tld, "philips") || str_equals_nocase(tld, "pioneer") ||
+					str_equals_nocase(tld, "politie") || str_equals_nocase(tld, "realtor") ||
+					str_equals_nocase(tld, "recipes") || str_equals_nocase(tld, "rentals") ||
+					str_equals_nocase(tld, "reviews") || str_equals_nocase(tld, "rexroth") ||
+					str_equals_nocase(tld, "samsung") || str_equals_nocase(tld, "sandvik") ||
+					str_equals_nocase(tld, "schmidt") || str_equals_nocase(tld, "schwarz") ||
+					str_equals_nocase(tld, "science") || str_equals_nocase(tld, "shiksha") ||
+					str_equals_nocase(tld, "shriram") || str_equals_nocase(tld, "singles") ||
+					str_equals_nocase(tld, "staples") || str_equals_nocase(tld, "storage") ||
+					str_equals_nocase(tld, "support") || str_equals_nocase(tld, "surgery") ||
+					str_equals_nocase(tld, "systems") || str_equals_nocase(tld, "temasek") ||
+					str_equals_nocase(tld, "theater") || str_equals_nocase(tld, "theatre") ||
+					str_equals_nocase(tld, "tickets") || str_equals_nocase(tld, "tiffany") ||
+					str_equals_nocase(tld, "toshiba") || str_equals_nocase(tld, "trading") ||
+					str_equals_nocase(tld, "walmart") || str_equals_nocase(tld, "wanggou") ||
+					str_equals_nocase(tld, "watches") || str_equals_nocase(tld, "weather") ||
+					str_equals_nocase(tld, "website") || str_equals_nocase(tld, "wedding") ||
+					str_equals_nocase(tld, "whoswho") || str_equals_nocase(tld, "windows") ||
+					str_equals_nocase(tld, "winners") || str_equals_nocase(tld, "xfinity") ||
+					str_equals_nocase(tld, "yamaxun") || str_equals_nocase(tld, "youtube") ||
+					str_equals_nocase(tld, "zuerich"));
+
 		case 6:
-			return (str_equals_nocase(tld, "museum") || str_equals_nocase(tld, "travel"));
+			return (str_equals_nocase(tld, "abarth") || str_equals_nocase(tld, "abbott") ||
+					str_equals_nocase(tld, "abbvie") || str_equals_nocase(tld, "africa") ||
+					str_equals_nocase(tld, "agency") || str_equals_nocase(tld, "airbus") ||
+					str_equals_nocase(tld, "airtel") || str_equals_nocase(tld, "alipay") ||
+					str_equals_nocase(tld, "alsace") || str_equals_nocase(tld, "alstom") ||
+					str_equals_nocase(tld, "amazon") || str_equals_nocase(tld, "anquan") ||
+					str_equals_nocase(tld, "aramco") || str_equals_nocase(tld, "author") ||
+					str_equals_nocase(tld, "bayern") || str_equals_nocase(tld, "beauty") ||
+					str_equals_nocase(tld, "berlin") || str_equals_nocase(tld, "bharti") ||
+					str_equals_nocase(tld, "bostik") || str_equals_nocase(tld, "boston") ||
+					str_equals_nocase(tld, "broker") || str_equals_nocase(tld, "camera") ||
+					str_equals_nocase(tld, "career") || str_equals_nocase(tld, "caseih") ||
+					str_equals_nocase(tld, "casino") || str_equals_nocase(tld, "center") ||
+					str_equals_nocase(tld, "chanel") || str_equals_nocase(tld, "chrome") ||
+					str_equals_nocase(tld, "church") || str_equals_nocase(tld, "circle") ||
+					str_equals_nocase(tld, "claims") || str_equals_nocase(tld, "clinic") ||
+					str_equals_nocase(tld, "coffee") || str_equals_nocase(tld, "comsec") ||
+					str_equals_nocase(tld, "condos") || str_equals_nocase(tld, "coupon") ||
+					str_equals_nocase(tld, "credit") || str_equals_nocase(tld, "cruise") ||
+					str_equals_nocase(tld, "dating") || str_equals_nocase(tld, "datsun") ||
+					str_equals_nocase(tld, "dealer") || str_equals_nocase(tld, "degree") ||
+					str_equals_nocase(tld, "dental") || str_equals_nocase(tld, "design") ||
+					str_equals_nocase(tld, "direct") || str_equals_nocase(tld, "doctor") ||
+					str_equals_nocase(tld, "dunlop") || str_equals_nocase(tld, "dupont") ||
+					str_equals_nocase(tld, "durban") || str_equals_nocase(tld, "emerck") ||
+					str_equals_nocase(tld, "energy") || str_equals_nocase(tld, "estate") ||
+					str_equals_nocase(tld, "events") || str_equals_nocase(tld, "expert") ||
+					str_equals_nocase(tld, "family") || str_equals_nocase(tld, "flickr") ||
+					str_equals_nocase(tld, "futbol") || str_equals_nocase(tld, "gallup") ||
+					str_equals_nocase(tld, "garden") || str_equals_nocase(tld, "george") ||
+					str_equals_nocase(tld, "giving") || str_equals_nocase(tld, "global") ||
+					str_equals_nocase(tld, "google") || str_equals_nocase(tld, "gratis") ||
+					str_equals_nocase(tld, "health") || str_equals_nocase(tld, "hermes") ||
+					str_equals_nocase(tld, "hiphop") || str_equals_nocase(tld, "hockey") ||
+					str_equals_nocase(tld, "hotels") || str_equals_nocase(tld, "hughes") ||
+					str_equals_nocase(tld, "imamat") || str_equals_nocase(tld, "insure") ||
+					str_equals_nocase(tld, "intuit") || str_equals_nocase(tld, "jaguar") ||
+					str_equals_nocase(tld, "joburg") || str_equals_nocase(tld, "juegos") ||
+					str_equals_nocase(tld, "kaufen") || str_equals_nocase(tld, "kinder") ||
+					str_equals_nocase(tld, "kindle") || str_equals_nocase(tld, "kosher") ||
+					str_equals_nocase(tld, "lancia") || str_equals_nocase(tld, "latino") ||
+					str_equals_nocase(tld, "lawyer") || str_equals_nocase(tld, "lefrak") ||
+					str_equals_nocase(tld, "living") || str_equals_nocase(tld, "locker") ||
+					str_equals_nocase(tld, "london") || str_equals_nocase(tld, "luxury") ||
+					str_equals_nocase(tld, "madrid") || str_equals_nocase(tld, "maison") ||
+					str_equals_nocase(tld, "makeup") || str_equals_nocase(tld, "market") ||
+					str_equals_nocase(tld, "mattel") || str_equals_nocase(tld, "mobile") ||
+					str_equals_nocase(tld, "monash") || str_equals_nocase(tld, "mormon") ||
+					str_equals_nocase(tld, "moscow") || str_equals_nocase(tld, "museum") ||
+					str_equals_nocase(tld, "mutual") || str_equals_nocase(tld, "nagoya") ||
+					str_equals_nocase(tld, "natura") || str_equals_nocase(tld, "nissan") ||
+					str_equals_nocase(tld, "nissay") || str_equals_nocase(tld, "norton") ||
+					str_equals_nocase(tld, "nowruz") || str_equals_nocase(tld, "office") ||
+					str_equals_nocase(tld, "olayan") || str_equals_nocase(tld, "online") ||
+					str_equals_nocase(tld, "oracle") || str_equals_nocase(tld, "orange") ||
+					str_equals_nocase(tld, "otsuka") || str_equals_nocase(tld, "pfizer") ||
+					str_equals_nocase(tld, "photos") || str_equals_nocase(tld, "physio") ||
+					str_equals_nocase(tld, "pictet") || str_equals_nocase(tld, "quebec") ||
+					str_equals_nocase(tld, "racing") || str_equals_nocase(tld, "realty") ||
+					str_equals_nocase(tld, "reisen") || str_equals_nocase(tld, "repair") ||
+					str_equals_nocase(tld, "report") || str_equals_nocase(tld, "review") ||
+					str_equals_nocase(tld, "rocher") || str_equals_nocase(tld, "rogers") ||
+					str_equals_nocase(tld, "ryukyu") || str_equals_nocase(tld, "safety") ||
+					str_equals_nocase(tld, "sakura") || str_equals_nocase(tld, "sanofi") ||
+					str_equals_nocase(tld, "school") || str_equals_nocase(tld, "schule") ||
+					str_equals_nocase(tld, "search") || str_equals_nocase(tld, "secure") ||
+					str_equals_nocase(tld, "select") || str_equals_nocase(tld, "shouji") ||
+					str_equals_nocase(tld, "soccer") || str_equals_nocase(tld, "social") ||
+					str_equals_nocase(tld, "stream") || str_equals_nocase(tld, "studio") ||
+					str_equals_nocase(tld, "supply") || str_equals_nocase(tld, "suzuki") ||
+					str_equals_nocase(tld, "swatch") || str_equals_nocase(tld, "sydney") ||
+					str_equals_nocase(tld, "taipei") || str_equals_nocase(tld, "taobao") ||
+					str_equals_nocase(tld, "target") || str_equals_nocase(tld, "tattoo") ||
+					str_equals_nocase(tld, "tennis") || str_equals_nocase(tld, "tienda") ||
+					str_equals_nocase(tld, "tjmaxx") || str_equals_nocase(tld, "tkmaxx") ||
+					str_equals_nocase(tld, "toyota") || str_equals_nocase(tld, "travel") ||
+					str_equals_nocase(tld, "unicom") || str_equals_nocase(tld, "viajes") ||
+					str_equals_nocase(tld, "viking") || str_equals_nocase(tld, "villas") ||
+					str_equals_nocase(tld, "virgin") || str_equals_nocase(tld, "vision") ||
+					str_equals_nocase(tld, "voting") || str_equals_nocase(tld, "voyage") ||
+					str_equals_nocase(tld, "vuelos") || str_equals_nocase(tld, "walter") ||
+					str_equals_nocase(tld, "webcam") || str_equals_nocase(tld, "xihuan") ||
+					str_equals_nocase(tld, "yachts") || str_equals_nocase(tld, "yandex") ||
+					str_equals_nocase(tld, "zappos"));
+
+		case 5:
+			return (str_equals_nocase(tld, "actor") || str_equals_nocase(tld, "adult") ||
+					str_equals_nocase(tld, "aetna") || str_equals_nocase(tld, "amfam") ||
+					str_equals_nocase(tld, "amica") || str_equals_nocase(tld, "apple") ||
+					str_equals_nocase(tld, "archi") || str_equals_nocase(tld, "audio") ||
+					str_equals_nocase(tld, "autos") || str_equals_nocase(tld, "azure") ||
+					str_equals_nocase(tld, "baidu") || str_equals_nocase(tld, "beats") ||
+					str_equals_nocase(tld, "bible") || str_equals_nocase(tld, "bingo") ||
+					str_equals_nocase(tld, "black") || str_equals_nocase(tld, "boats") ||
+					str_equals_nocase(tld, "bosch") || str_equals_nocase(tld, "build") ||
+					str_equals_nocase(tld, "canon") || str_equals_nocase(tld, "cards") ||
+					str_equals_nocase(tld, "chase") || str_equals_nocase(tld, "cheap") ||
+					str_equals_nocase(tld, "cisco") || str_equals_nocase(tld, "citic") ||
+					str_equals_nocase(tld, "click") || str_equals_nocase(tld, "cloud") ||
+					str_equals_nocase(tld, "coach") || str_equals_nocase(tld, "codes") ||
+					str_equals_nocase(tld, "crown") || str_equals_nocase(tld, "cymru") ||
+					str_equals_nocase(tld, "dabur") || str_equals_nocase(tld, "dance") ||
+					str_equals_nocase(tld, "deals") || str_equals_nocase(tld, "delta") ||
+					str_equals_nocase(tld, "drive") || str_equals_nocase(tld, "dubai") ||
+					str_equals_nocase(tld, "earth") || str_equals_nocase(tld, "edeka") ||
+					str_equals_nocase(tld, "email") || str_equals_nocase(tld, "epson") ||
+					str_equals_nocase(tld, "faith") || str_equals_nocase(tld, "fedex") ||
+					str_equals_nocase(tld, "final") || str_equals_nocase(tld, "forex") ||
+					str_equals_nocase(tld, "forum") || str_equals_nocase(tld, "gallo") ||
+					str_equals_nocase(tld, "games") || str_equals_nocase(tld, "gifts") ||
+					str_equals_nocase(tld, "gives") || str_equals_nocase(tld, "glade") ||
+					str_equals_nocase(tld, "glass") || str_equals_nocase(tld, "globo") ||
+					str_equals_nocase(tld, "gmail") || str_equals_nocase(tld, "green") ||
+					str_equals_nocase(tld, "gripe") || str_equals_nocase(tld, "group") ||
+					str_equals_nocase(tld, "gucci") || str_equals_nocase(tld, "guide") ||
+					str_equals_nocase(tld, "homes") || str_equals_nocase(tld, "honda") ||
+					str_equals_nocase(tld, "horse") || str_equals_nocase(tld, "house") ||
+					str_equals_nocase(tld, "hyatt") || str_equals_nocase(tld, "ikano") ||
+					str_equals_nocase(tld, "intel") || str_equals_nocase(tld, "irish") ||
+					str_equals_nocase(tld, "iveco") || str_equals_nocase(tld, "jetzt") ||
+					str_equals_nocase(tld, "koeln") || str_equals_nocase(tld, "kyoto") ||
+					str_equals_nocase(tld, "lamer") || str_equals_nocase(tld, "lease") ||
+					str_equals_nocase(tld, "legal") || str_equals_nocase(tld, "lexus") ||
+					str_equals_nocase(tld, "lilly") || str_equals_nocase(tld, "linde") ||
+					str_equals_nocase(tld, "lipsy") || str_equals_nocase(tld, "lixil") ||
+					str_equals_nocase(tld, "loans") || str_equals_nocase(tld, "locus") ||
+					str_equals_nocase(tld, "lotte") || str_equals_nocase(tld, "lotto") ||
+					str_equals_nocase(tld, "lupin") || str_equals_nocase(tld, "macys") ||
+					str_equals_nocase(tld, "mango") || str_equals_nocase(tld, "media") ||
+					str_equals_nocase(tld, "miami") || str_equals_nocase(tld, "money") ||
+					str_equals_nocase(tld, "movie") || str_equals_nocase(tld, "nexus") ||
+					str_equals_nocase(tld, "nikon") || str_equals_nocase(tld, "ninja") ||
+					str_equals_nocase(tld, "nokia") || str_equals_nocase(tld, "nowtv") ||
+					str_equals_nocase(tld, "omega") || str_equals_nocase(tld, "osaka") ||
+					str_equals_nocase(tld, "paris") || str_equals_nocase(tld, "parts") ||
+					str_equals_nocase(tld, "party") || str_equals_nocase(tld, "phone") ||
+					str_equals_nocase(tld, "photo") || str_equals_nocase(tld, "pizza") ||
+					str_equals_nocase(tld, "place") || str_equals_nocase(tld, "poker") ||
+					str_equals_nocase(tld, "praxi") || str_equals_nocase(tld, "press") ||
+					str_equals_nocase(tld, "prime") || str_equals_nocase(tld, "promo") ||
+					str_equals_nocase(tld, "quest") || str_equals_nocase(tld, "radio") ||
+					str_equals_nocase(tld, "rehab") || str_equals_nocase(tld, "reise") ||
+					str_equals_nocase(tld, "ricoh") || str_equals_nocase(tld, "rocks") ||
+					str_equals_nocase(tld, "rodeo") || str_equals_nocase(tld, "rugby") ||
+					str_equals_nocase(tld, "salon") || str_equals_nocase(tld, "sener") ||
+					str_equals_nocase(tld, "seven") || str_equals_nocase(tld, "sharp") ||
+					str_equals_nocase(tld, "shell") || str_equals_nocase(tld, "shoes") ||
+					str_equals_nocase(tld, "skype") || str_equals_nocase(tld, "sling") ||
+					str_equals_nocase(tld, "smart") || str_equals_nocase(tld, "smile") ||
+					str_equals_nocase(tld, "solar") || str_equals_nocase(tld, "space") ||
+					str_equals_nocase(tld, "sport") || str_equals_nocase(tld, "stada") ||
+					str_equals_nocase(tld, "store") || str_equals_nocase(tld, "study") ||
+					str_equals_nocase(tld, "style") || str_equals_nocase(tld, "sucks") ||
+					str_equals_nocase(tld, "swiss") || str_equals_nocase(tld, "tatar") ||
+					str_equals_nocase(tld, "tires") || str_equals_nocase(tld, "tirol") ||
+					str_equals_nocase(tld, "tmall") || str_equals_nocase(tld, "today") ||
+					str_equals_nocase(tld, "tokyo") || str_equals_nocase(tld, "tools") ||
+					str_equals_nocase(tld, "toray") || str_equals_nocase(tld, "total") ||
+					str_equals_nocase(tld, "tours") || str_equals_nocase(tld, "trade") ||
+					str_equals_nocase(tld, "trust") || str_equals_nocase(tld, "tunes") ||
+					str_equals_nocase(tld, "tushu") || str_equals_nocase(tld, "ubank") ||
+					str_equals_nocase(tld, "vegas") || str_equals_nocase(tld, "video") ||
+					str_equals_nocase(tld, "vodka") || str_equals_nocase(tld, "volvo") ||
+					str_equals_nocase(tld, "wales") || str_equals_nocase(tld, "watch") ||
+					str_equals_nocase(tld, "weber") || str_equals_nocase(tld, "weibo") ||
+					str_equals_nocase(tld, "works") || str_equals_nocase(tld, "world") ||
+					str_equals_nocase(tld, "xerox") || str_equals_nocase(tld, "yahoo"));
 
 		case 4:
-			return (str_equals_nocase(tld, "info") || str_equals_nocase(tld, "aero") ||
-					str_equals_nocase(tld, "coop") || str_equals_nocase(tld, "name") ||
-					str_equals_nocase(tld, "mobi") || str_equals_nocase(tld, "jobs") ||
-					str_equals_nocase(tld, "asia") ) ;
+			return (str_equals_nocase(tld, "aarp") || str_equals_nocase(tld, "able") ||
+					str_equals_nocase(tld, "adac") || str_equals_nocase(tld, "aero") ||
+					str_equals_nocase(tld, "akdn") || str_equals_nocase(tld, "ally") ||
+					str_equals_nocase(tld, "amex") || str_equals_nocase(tld, "arab") ||
+					str_equals_nocase(tld, "army") || str_equals_nocase(tld, "arpa") ||
+					str_equals_nocase(tld, "arte") || str_equals_nocase(tld, "asda") ||
+					str_equals_nocase(tld, "asia") || str_equals_nocase(tld, "audi") ||
+					str_equals_nocase(tld, "auto") || str_equals_nocase(tld, "baby") ||
+					str_equals_nocase(tld, "band") || str_equals_nocase(tld, "bank") ||
+					str_equals_nocase(tld, "bbva") || str_equals_nocase(tld, "beer") ||
+					str_equals_nocase(tld, "best") || str_equals_nocase(tld, "bike") ||
+					str_equals_nocase(tld, "bing") || str_equals_nocase(tld, "blog") ||
+					str_equals_nocase(tld, "blue") || str_equals_nocase(tld, "bofa") ||
+					str_equals_nocase(tld, "bond") || str_equals_nocase(tld, "book") ||
+					str_equals_nocase(tld, "buzz") || str_equals_nocase(tld, "cafe") ||
+					str_equals_nocase(tld, "call") || str_equals_nocase(tld, "camp") ||
+					str_equals_nocase(tld, "care") || str_equals_nocase(tld, "cars") ||
+					str_equals_nocase(tld, "casa") || str_equals_nocase(tld, "case") ||
+					str_equals_nocase(tld, "cash") || str_equals_nocase(tld, "cbre") ||
+					str_equals_nocase(tld, "cern") || str_equals_nocase(tld, "chat") ||
+					str_equals_nocase(tld, "citi") || str_equals_nocase(tld, "city") ||
+					str_equals_nocase(tld, "club") || str_equals_nocase(tld, "cool") ||
+					str_equals_nocase(tld, "coop") || str_equals_nocase(tld, "cyou") ||
+					str_equals_nocase(tld, "data") || str_equals_nocase(tld, "date") ||
+					str_equals_nocase(tld, "dclk") || str_equals_nocase(tld, "deal") ||
+					str_equals_nocase(tld, "dell") || str_equals_nocase(tld, "desi") ||
+					str_equals_nocase(tld, "diet") || str_equals_nocase(tld, "dish") ||
+					str_equals_nocase(tld, "docs") || str_equals_nocase(tld, "duck") ||
+					str_equals_nocase(tld, "dvag") || str_equals_nocase(tld, "erni") ||
+					str_equals_nocase(tld, "fage") || str_equals_nocase(tld, "fail") ||
+					str_equals_nocase(tld, "fans") || str_equals_nocase(tld, "farm") ||
+					str_equals_nocase(tld, "fast") || str_equals_nocase(tld, "fiat") ||
+					str_equals_nocase(tld, "fido") || str_equals_nocase(tld, "film") ||
+					str_equals_nocase(tld, "fire") || str_equals_nocase(tld, "fish") ||
+					str_equals_nocase(tld, "flir") || str_equals_nocase(tld, "food") ||
+					str_equals_nocase(tld, "ford") || str_equals_nocase(tld, "free") ||
+					str_equals_nocase(tld, "fund") || str_equals_nocase(tld, "game") ||
+					str_equals_nocase(tld, "gbiz") || str_equals_nocase(tld, "gent") ||
+					str_equals_nocase(tld, "ggee") || str_equals_nocase(tld, "gift") ||
+					str_equals_nocase(tld, "gmbh") || str_equals_nocase(tld, "gold") ||
+					str_equals_nocase(tld, "golf") || str_equals_nocase(tld, "goog") ||
+					str_equals_nocase(tld, "guge") || str_equals_nocase(tld, "guru") ||
+					str_equals_nocase(tld, "hair") || str_equals_nocase(tld, "haus") ||
+					str_equals_nocase(tld, "hdfc") || str_equals_nocase(tld, "help") ||
+					str_equals_nocase(tld, "here") || str_equals_nocase(tld, "hgtv") ||
+					str_equals_nocase(tld, "host") || str_equals_nocase(tld, "hsbc") ||
+					str_equals_nocase(tld, "icbc") || str_equals_nocase(tld, "ieee") ||
+					str_equals_nocase(tld, "imdb") || str_equals_nocase(tld, "immo") ||
+					str_equals_nocase(tld, "info") || str_equals_nocase(tld, "itau") ||
+					str_equals_nocase(tld, "java") || str_equals_nocase(tld, "jeep") ||
+					str_equals_nocase(tld, "jobs") || str_equals_nocase(tld, "jprs") ||
+					str_equals_nocase(tld, "kddi") || str_equals_nocase(tld, "kiwi") ||
+					str_equals_nocase(tld, "kpmg") || str_equals_nocase(tld, "kred") ||
+					str_equals_nocase(tld, "land") || str_equals_nocase(tld, "lego") ||
+					str_equals_nocase(tld, "lgbt") || str_equals_nocase(tld, "lidl") ||
+					str_equals_nocase(tld, "life") || str_equals_nocase(tld, "like") ||
+					str_equals_nocase(tld, "limo") || str_equals_nocase(tld, "link") ||
+					str_equals_nocase(tld, "live") || str_equals_nocase(tld, "loan") ||
+					str_equals_nocase(tld, "loft") || str_equals_nocase(tld, "love") ||
+					str_equals_nocase(tld, "ltda") || str_equals_nocase(tld, "luxe") ||
+					str_equals_nocase(tld, "maif") || str_equals_nocase(tld, "meet") ||
+					str_equals_nocase(tld, "meme") || str_equals_nocase(tld, "menu") ||
+					str_equals_nocase(tld, "mini") || str_equals_nocase(tld, "mint") ||
+					str_equals_nocase(tld, "mobi") || str_equals_nocase(tld, "moda") ||
+					str_equals_nocase(tld, "moto") || str_equals_nocase(tld, "name") ||
+					str_equals_nocase(tld, "navy") || str_equals_nocase(tld, "news") ||
+					str_equals_nocase(tld, "next") || str_equals_nocase(tld, "nico") ||
+					str_equals_nocase(tld, "nike") || str_equals_nocase(tld, "ollo") ||
+					str_equals_nocase(tld, "open") || str_equals_nocase(tld, "page") ||
+					str_equals_nocase(tld, "pars") || str_equals_nocase(tld, "pccw") ||
+					str_equals_nocase(tld, "pics") || str_equals_nocase(tld, "ping") ||
+					str_equals_nocase(tld, "pink") || str_equals_nocase(tld, "play") ||
+					str_equals_nocase(tld, "plus") || str_equals_nocase(tld, "pohl") ||
+					str_equals_nocase(tld, "porn") || str_equals_nocase(tld, "post") ||
+					str_equals_nocase(tld, "prod") || str_equals_nocase(tld, "prof") ||
+					str_equals_nocase(tld, "qpon") || str_equals_nocase(tld, "raid") ||
+					str_equals_nocase(tld, "read") || str_equals_nocase(tld, "reit") ||
+					str_equals_nocase(tld, "rent") || str_equals_nocase(tld, "rest") ||
+					str_equals_nocase(tld, "rich") || str_equals_nocase(tld, "rmit") ||
+					str_equals_nocase(tld, "room") || str_equals_nocase(tld, "rsvp") ||
+					str_equals_nocase(tld, "ruhr") || str_equals_nocase(tld, "safe") ||
+					str_equals_nocase(tld, "sale") || str_equals_nocase(tld, "sarl") ||
+					str_equals_nocase(tld, "save") || str_equals_nocase(tld, "saxo") ||
+					str_equals_nocase(tld, "scot") || str_equals_nocase(tld, "seat") ||
+					str_equals_nocase(tld, "seek") || str_equals_nocase(tld, "sexy") ||
+					str_equals_nocase(tld, "shaw") || str_equals_nocase(tld, "shia") ||
+					str_equals_nocase(tld, "shop") || str_equals_nocase(tld, "show") ||
+					str_equals_nocase(tld, "silk") || str_equals_nocase(tld, "sina") ||
+					str_equals_nocase(tld, "site") || str_equals_nocase(tld, "skin") ||
+					str_equals_nocase(tld, "sncf") || str_equals_nocase(tld, "sohu") ||
+					str_equals_nocase(tld, "song") || str_equals_nocase(tld, "sony") ||
+					str_equals_nocase(tld, "spot") || str_equals_nocase(tld, "star") ||
+					str_equals_nocase(tld, "surf") || str_equals_nocase(tld, "talk") ||
+					str_equals_nocase(tld, "taxi") || str_equals_nocase(tld, "team") ||
+					str_equals_nocase(tld, "tech") || str_equals_nocase(tld, "teva") ||
+					str_equals_nocase(tld, "tiaa") || str_equals_nocase(tld, "tips") ||
+					str_equals_nocase(tld, "town") || str_equals_nocase(tld, "toys") ||
+					str_equals_nocase(tld, "tube") || str_equals_nocase(tld, "vana") ||
+					str_equals_nocase(tld, "visa") || str_equals_nocase(tld, "viva") ||
+					str_equals_nocase(tld, "vivo") || str_equals_nocase(tld, "vote") ||
+					str_equals_nocase(tld, "voto") || str_equals_nocase(tld, "wang") ||
+					str_equals_nocase(tld, "weir") || str_equals_nocase(tld, "wien") ||
+					str_equals_nocase(tld, "wiki") || str_equals_nocase(tld, "wine") ||
+					str_equals_nocase(tld, "work") || str_equals_nocase(tld, "xbox") ||
+					str_equals_nocase(tld, "yoga") || str_equals_nocase(tld, "zara") ||
+					str_equals_nocase(tld, "zero") || str_equals_nocase(tld, "zone"));
 
 		case 3:
-			return (str_equals_nocase(tld, "com") || str_equals_nocase(tld, "org") ||
-					str_equals_nocase(tld, "cat") || str_equals_nocase(tld, "net") ||
-					str_equals_nocase(tld, "biz") || str_equals_nocase(tld, "edu") ||
-					str_equals_nocase(tld, "int") || str_equals_nocase(tld, "mil") ||
-					str_equals_nocase(tld, "gov") || str_equals_nocase(tld, "thc") ||
-					str_equals_nocase(tld, "lan") || str_equals_nocase(tld, "pro") ||
-					str_equals_nocase(tld, "tel") || str_equals_nocase(tld, "ovh"));
+			return (str_equals_nocase(tld, "aaa") || str_equals_nocase(tld, "abb") ||
+					str_equals_nocase(tld, "abc") || str_equals_nocase(tld, "aco") ||
+					str_equals_nocase(tld, "ads") || str_equals_nocase(tld, "aeg") ||
+					str_equals_nocase(tld, "afl") || str_equals_nocase(tld, "aig") ||
+					str_equals_nocase(tld, "anz") || str_equals_nocase(tld, "aol") ||
+					str_equals_nocase(tld, "app") || str_equals_nocase(tld, "art") ||
+					str_equals_nocase(tld, "aws") || str_equals_nocase(tld, "axa") ||
+					str_equals_nocase(tld, "bar") || str_equals_nocase(tld, "bbc") ||
+					str_equals_nocase(tld, "bbt") || str_equals_nocase(tld, "bcg") ||
+					str_equals_nocase(tld, "bcn") || str_equals_nocase(tld, "bet") ||
+					str_equals_nocase(tld, "bid") || str_equals_nocase(tld, "bio") ||
+					str_equals_nocase(tld, "biz") || str_equals_nocase(tld, "bms") ||
+					str_equals_nocase(tld, "bmw") || str_equals_nocase(tld, "bom") ||
+					str_equals_nocase(tld, "boo") || str_equals_nocase(tld, "bot") ||
+					str_equals_nocase(tld, "box") || str_equals_nocase(tld, "buy") ||
+					str_equals_nocase(tld, "bzh") || str_equals_nocase(tld, "cab") ||
+					str_equals_nocase(tld, "cal") || str_equals_nocase(tld, "cam") ||
+					str_equals_nocase(tld, "car") || str_equals_nocase(tld, "cat") ||
+					str_equals_nocase(tld, "cba") || str_equals_nocase(tld, "cbn") ||
+					str_equals_nocase(tld, "cbs") || str_equals_nocase(tld, "ceb") ||
+					str_equals_nocase(tld, "ceo") || str_equals_nocase(tld, "cfa") ||
+					str_equals_nocase(tld, "cfd") || str_equals_nocase(tld, "com") ||
+					str_equals_nocase(tld, "cpa") || str_equals_nocase(tld, "crs") ||
+					str_equals_nocase(tld, "csc") || str_equals_nocase(tld, "dad") ||
+					str_equals_nocase(tld, "day") || str_equals_nocase(tld, "dds") ||
+					str_equals_nocase(tld, "dev") || str_equals_nocase(tld, "dhl") ||
+					str_equals_nocase(tld, "diy") || str_equals_nocase(tld, "dnp") ||
+					str_equals_nocase(tld, "dog") || str_equals_nocase(tld, "dot") ||
+					str_equals_nocase(tld, "dtv") || str_equals_nocase(tld, "dvr") ||
+					str_equals_nocase(tld, "eat") || str_equals_nocase(tld, "eco") ||
+					str_equals_nocase(tld, "edu") || str_equals_nocase(tld, "esq") ||
+					str_equals_nocase(tld, "eus") || str_equals_nocase(tld, "fan") ||
+					str_equals_nocase(tld, "fit") || str_equals_nocase(tld, "fly") ||
+					str_equals_nocase(tld, "foo") || str_equals_nocase(tld, "fox") ||
+					str_equals_nocase(tld, "frl") || str_equals_nocase(tld, "ftr") ||
+					str_equals_nocase(tld, "fun") || str_equals_nocase(tld, "fyi") ||
+					str_equals_nocase(tld, "gal") || str_equals_nocase(tld, "gap") ||
+					str_equals_nocase(tld, "gay") || str_equals_nocase(tld, "gdn") ||
+					str_equals_nocase(tld, "gea") || str_equals_nocase(tld, "gle") ||
+					str_equals_nocase(tld, "gmo") || str_equals_nocase(tld, "gmx") ||
+					str_equals_nocase(tld, "goo") || str_equals_nocase(tld, "gop") ||
+					str_equals_nocase(tld, "got") || str_equals_nocase(tld, "gov") ||
+					str_equals_nocase(tld, "hbo") || str_equals_nocase(tld, "hiv") ||
+					str_equals_nocase(tld, "hkt") || str_equals_nocase(tld, "hot") ||
+					str_equals_nocase(tld, "how") || str_equals_nocase(tld, "ibm") ||
+					str_equals_nocase(tld, "ice") || str_equals_nocase(tld, "icu") ||
+					str_equals_nocase(tld, "ifm") || str_equals_nocase(tld, "inc") ||
+					str_equals_nocase(tld, "ing") || str_equals_nocase(tld, "ink") ||
+					str_equals_nocase(tld, "int") || str_equals_nocase(tld, "ist") ||
+					str_equals_nocase(tld, "itv") || str_equals_nocase(tld, "jcb") ||
+					str_equals_nocase(tld, "jcp") || str_equals_nocase(tld, "jio") ||
+					str_equals_nocase(tld, "jll") || str_equals_nocase(tld, "jmp") ||
+					str_equals_nocase(tld, "jnj") || str_equals_nocase(tld, "jot") ||
+					str_equals_nocase(tld, "joy") || str_equals_nocase(tld, "kfh") ||
+					str_equals_nocase(tld, "kia") || str_equals_nocase(tld, "kim") ||
+					str_equals_nocase(tld, "kpn") || str_equals_nocase(tld, "krd") ||
+					str_equals_nocase(tld, "lat") || str_equals_nocase(tld, "law") ||
+					str_equals_nocase(tld, "lds") || str_equals_nocase(tld, "llc") ||
+					str_equals_nocase(tld, "llp") || str_equals_nocase(tld, "lol") ||
+					str_equals_nocase(tld, "lpl") || str_equals_nocase(tld, "ltd") ||
+					str_equals_nocase(tld, "man") || str_equals_nocase(tld, "map") ||
+					str_equals_nocase(tld, "mba") || str_equals_nocase(tld, "med") ||
+					str_equals_nocase(tld, "men") || str_equals_nocase(tld, "mil") ||
+					str_equals_nocase(tld, "mit") || str_equals_nocase(tld, "mlb") ||
+					str_equals_nocase(tld, "mls") || str_equals_nocase(tld, "mma") ||
+					str_equals_nocase(tld, "moe") || str_equals_nocase(tld, "moi") ||
+					str_equals_nocase(tld, "mom") || str_equals_nocase(tld, "mov") ||
+					str_equals_nocase(tld, "msd") || str_equals_nocase(tld, "mtn") ||
+					str_equals_nocase(tld, "mtr") || str_equals_nocase(tld, "nab") ||
+					str_equals_nocase(tld, "nba") || str_equals_nocase(tld, "nec") ||
+					str_equals_nocase(tld, "net") || str_equals_nocase(tld, "new") ||
+					str_equals_nocase(tld, "nfl") || str_equals_nocase(tld, "ngo") ||
+					str_equals_nocase(tld, "nhk") || str_equals_nocase(tld, "now") ||
+					str_equals_nocase(tld, "nra") || str_equals_nocase(tld, "nrw") ||
+					str_equals_nocase(tld, "ntt") || str_equals_nocase(tld, "nyc") ||
+					str_equals_nocase(tld, "obi") || str_equals_nocase(tld, "off") ||
+					str_equals_nocase(tld, "one") || str_equals_nocase(tld, "ong") ||
+					str_equals_nocase(tld, "onl") || str_equals_nocase(tld, "ooo") ||
+					str_equals_nocase(tld, "org") || str_equals_nocase(tld, "ott") ||
+					str_equals_nocase(tld, "ovh") || str_equals_nocase(tld, "pay") ||
+					str_equals_nocase(tld, "pet") || str_equals_nocase(tld, "phd") ||
+					str_equals_nocase(tld, "pid") || str_equals_nocase(tld, "pin") ||
+					str_equals_nocase(tld, "pnc") || str_equals_nocase(tld, "pro") ||
+					str_equals_nocase(tld, "pru") || str_equals_nocase(tld, "pub") ||
+					str_equals_nocase(tld, "pwc") || str_equals_nocase(tld, "qvc") ||
+					str_equals_nocase(tld, "red") || str_equals_nocase(tld, "ren") ||
+					str_equals_nocase(tld, "ril") || str_equals_nocase(tld, "rio") ||
+					str_equals_nocase(tld, "rip") || str_equals_nocase(tld, "run") ||
+					str_equals_nocase(tld, "rwe") || str_equals_nocase(tld, "sap") ||
+					str_equals_nocase(tld, "sas") || str_equals_nocase(tld, "sbi") ||
+					str_equals_nocase(tld, "sbs") || str_equals_nocase(tld, "sca") ||
+					str_equals_nocase(tld, "scb") || str_equals_nocase(tld, "ses") ||
+					str_equals_nocase(tld, "sew") || str_equals_nocase(tld, "sex") ||
+					str_equals_nocase(tld, "sfr") || str_equals_nocase(tld, "ski") ||
+					str_equals_nocase(tld, "sky") || str_equals_nocase(tld, "soy") ||
+					str_equals_nocase(tld, "srl") || str_equals_nocase(tld, "stc") ||
+					str_equals_nocase(tld, "tab") || str_equals_nocase(tld, "tax") ||
+					str_equals_nocase(tld, "tci") || str_equals_nocase(tld, "tdk") ||
+					str_equals_nocase(tld, "tel") || str_equals_nocase(tld, "thd") ||
+					str_equals_nocase(tld, "tjx") || str_equals_nocase(tld, "top") ||
+					str_equals_nocase(tld, "trv") || str_equals_nocase(tld, "tui") ||
+					str_equals_nocase(tld, "tvs") || str_equals_nocase(tld, "ubs") ||
+					str_equals_nocase(tld, "uno") || str_equals_nocase(tld, "uol") ||
+					str_equals_nocase(tld, "ups") || str_equals_nocase(tld, "vet") ||
+					str_equals_nocase(tld, "vig") || str_equals_nocase(tld, "vin") ||
+					str_equals_nocase(tld, "vip") || str_equals_nocase(tld, "wed") ||
+					str_equals_nocase(tld, "win") || str_equals_nocase(tld, "wme") ||
+					str_equals_nocase(tld, "wow") || str_equals_nocase(tld, "wtc") ||
+					str_equals_nocase(tld, "wtf") || str_equals_nocase(tld, "xin") ||
+					str_equals_nocase(tld, "xxx") || str_equals_nocase(tld, "xyz") ||
+					str_equals_nocase(tld, "you") || str_equals_nocase(tld, "yun") ||
+					str_equals_nocase(tld, "zip"));
 
 		case 2: {
 			switch (str_char_tolower(tld[0])) {
@@ -285,7 +858,6 @@ BOOL validate_tld(CSTR tld, BOOL allowFW) {
 						case 'i':
 						case 'l':
 						case 'm':
-						case 'n':
 						case 'o':
 						case 'q':
 						case 'r':
@@ -312,7 +884,6 @@ BOOL validate_tld(CSTR tld, BOOL allowFW) {
 						case 'h':
 						case 'i':
 						case 'j':
-						case 'l':
 						case 'm':
 						case 'n':
 						case 'o':
@@ -346,6 +917,7 @@ BOOL validate_tld(CSTR tld, BOOL allowFW) {
 						case 'r':
 						case 'u':
 						case 'v':
+						case 'w':
 						case 'x':
 						case 'y':
 						case 'z':
@@ -374,7 +946,6 @@ BOOL validate_tld(CSTR tld, BOOL allowFW) {
 						case 'c':
 						case 'e':
 						case 'g':
-						case 'h':
 						case 'r':
 						case 's':
 						case 't':
@@ -633,9 +1204,11 @@ BOOL validate_tld(CSTR tld, BOOL allowFW) {
 						case 'n':
 						case 'o':
 						case 'r':
+						case 's':
 						case 't':
 						case 'u':
 						case 'v':
+						case 'x':
 						case 'y':
 						case 'z':
 							return TRUE;
@@ -657,7 +1230,6 @@ BOOL validate_tld(CSTR tld, BOOL allowFW) {
 						case 'm':
 						case 'n':
 						case 'o':
-						case 'p':
 						case 'r':
 						case 't':
 						case 'v':
@@ -674,7 +1246,6 @@ BOOL validate_tld(CSTR tld, BOOL allowFW) {
 						case 'a':
 						case 'g':
 						case 'k':
-						case 'm':
 						case 's':
 						case 'y':
 						case 'z':
