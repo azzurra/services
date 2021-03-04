@@ -1,0 +1,41 @@
+Verificare di avere installate le librerie corrette (sudo apt-get install build-essential gcc-multilib lib32z1-dev) come minimo;
+
+Lanciare il configure come segue:
+CFLAGS="-m32" ./configure;
+
+Modificare Makefile come segue:
+# Compile flags
+CFLAGS= -pipe -Wall -O3 -g -Wshadow -Wcast-align -Wsign-compare
+# linker flags.
+LDFLAGS=
+
+diventa
+# Compile flags
+CFLAGS= -pipe -fgnu89-inline -m32 -Wall -O3 -g -Wshadow -Wcast-align -Wsign-compare
+# linker flags.
+LDFLAGS= -m32
+
+Modificare Makefile.inc come segue:
+CC=gcc
+BASE_CFLAGS=-O2
+LFLAGS=
+LIBS=-lnsl -lresolv
+
+diventa
+CC=gcc
+BASE_CFLAGS=-O2 -m32 -fgnu89-inline
+LFLAGS= -m32
+LIBS=-lnsl -lresolv
+
+Lanciare make (non e' necessario make install);
+Recarsi in /src/ e spostare il file denominato services nella cartella /run/;
+Recarsi in /doc/ e copiare i 4 files qui presenti (crypt.key.example, lang.conf.example, services.conf.example e services.motd.example) in /run/, dopodoche' rimuovere il .example;
+E' possibile anche non modificare i files fatta eccezione per services.conf;
+Dopo aver modificato services.conf (si veda sotto per maggiori info) ed essersi assicurati di aver inserito le C/N lines per la connessione, sarà possibile recarsi in /run/ e startare i services:
+./services
+Varie
+
+    E' possibile disattivare il sendmail in services.conf; in tal caso sara' necessario disabilitare tutte le funzioni mail-related o i services non starteranno;
+    La quasi totalita' delle modifiche operabili e' da fare su services.conf;
+    Ricordarsi di registrare il nickname del Services Master al primo avvio;
+    Se utilizzati in abbinamento con il Bahamut di Azzurra, gli alias sono gia' configurati. L'unico svc a non avere un alias è DebugServ (che non dispone neanche di un OHELP); i comandi di DebugServ sono da ricercare in /src/debugserv.c.
