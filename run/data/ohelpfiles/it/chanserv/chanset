@@ -7,6 +7,8 @@ Syntax: CHANSET #channel [FOUNDER|PASSWD|REGDATE|TOPIC] value
  
 PASSWD Changes the channel password.
  
+REGDATE Changes the channel registration date.
+ 
 TOPIC Changes the channel topic.
  
 This command is limited to Services Root Administrators.

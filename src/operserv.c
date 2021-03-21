@@ -165,7 +165,7 @@ static ServiceCommand	operserv_commands_M[] = {
 	{ "MUNBAN",		ULEVEL_SA,				0, handle_masscmds },
 	{ "MVOICE",		ULEVEL_SA,				0, do_mass_op_voice },
 	{ "MKILL",		ULEVEL_SA,				0, do_masskill },
-	{ "MHALFOP",		ULEVEL_SA,				0, do_mass_op_voice },
+	{ "MHALFOP",	ULEVEL_SA,				0, do_mass_op_voice },
 	{ "MDEHALFOP",	ULEVEL_SA,				0, handle_masscmds },
 	{ NULL,			0,						0, NULL }
 };

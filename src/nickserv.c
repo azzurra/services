@@ -4910,7 +4910,7 @@ static void do_listchans(CSTR source, User *callerUser, ServiceCommandData *data
 /*********************************************************/
 
 /*
-NS LISTREG type pattern page_number
+NS LISTREG type pattern [page_number]
 
 TYPE:
 - NICK : nick	N

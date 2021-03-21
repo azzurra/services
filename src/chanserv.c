@@ -11274,7 +11274,7 @@ static BOOL cs_listreg_match_is_closed(const ChannelInfo *ci, CSTR pattern) {
 
 
 /*
-CS LISTREG type pattern page_number
+CS LISTREG type pattern [page_number]
 
 TYPE:
 
