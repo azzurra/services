@@ -327,7 +327,7 @@ CS_LEVEL_SRAONLY_KICK_REASON
 CS_LEVEL_SYNTAX_ERROR
 	Syntax: LEVEL #channel [OPERS|SOP|SA|SRA|MASTERS|NONE]
 CS_LISTREG_SYNTAX_ERROR
-	Syntax: LISTREG LIST|COUNT|MAIL type pattern
+	Syntax: LISTREG N|D|T|U|NU|R|DR|H|K|F|Z|C pattern [page_number]
 CS_MKICK_SYNTAX_ERROR
 	Syntax: MKICK #channel [reason]
 CS_MODE_COMPLETE
@@ -1458,7 +1458,7 @@ NS_LISTCHANS_LIST_ENTRIES
 NS_LISTCHANS_LIST_HEADER
 	Nickname %s has access to the following channels:
 NS_LISTREG_SYNTAX_ERROR
-	Syntax: LISTREG pattern N|M|RN|E|NA|IA|H|K|F|Z [start] [end]
+	Syntax: LISTREG N|M|RN|E|NA|IA|H|K|F|Z pattern [page_number]
 NS_NICK_EXPIRE
 	Note: Nicknames will expire after %d days of inactivity.
 NS_RECOVER_ERROR_CANT_RECOVER_SELF

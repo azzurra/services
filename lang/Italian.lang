@@ -328,7 +328,7 @@ CS_LEVEL_SRAONLY_KICK_REASON
 CS_LEVEL_SYNTAX_ERROR
 	Syntax: LEVEL #channel [OPERS|SOP|SA|SRA|CODERS|MASTERS|NONE]
 CS_LISTREG_SYNTAX_ERROR
-	Syntax: LISTREG LIST|COUNT|MAIL type pattern
+	Syntax: LISTREG N|D|T|U|NU|R|DR|H|K|F|Z|C pattern [page_number]
 CS_MKICK_SYNTAX_ERROR
 	Sintassi: MKICK #canale [motivo]
 CS_MODE_COMPLETE
@@ -1345,9 +1345,9 @@ NS_ERROR_MUST_IDENTIFY
 NS_ERROR_NICK_ALREADY_AUTH
 	ERRORE: La registrazione del tuo nick e' gia' stata confermata.
 NS_ERROR_NICK_FORBIDDEN
-	Il nick %s e' vietato e non può essere usato ne' registrato.
+	Il nick %s e' vietato e non puÃ² essere usato ne' registrato.
 NS_ERROR_NICK_FROZEN
-	Il nick %s e' bloccato e non può essere usato.
+	Il nick %s e' bloccato e non puÃ² essere usato.
 NS_ERROR_NICK_NOT_IN_USE
 	Nessuno sta usando il nick %s in questo momento.
 NS_FLAG_ERROR_NICK_ALREADY_FLAGGED
@@ -1459,7 +1459,7 @@ NS_LISTCHANS_LIST_ENTRIES
 NS_LISTCHANS_LIST_HEADER
 	Il nick %s ha accesso ai seguenti canali:
 NS_LISTREG_SYNTAX_ERROR
-	Syntax: LISTREG pattern N|M|RN|E|NA|IA|H|K|F|Z [start] [end]
+	Syntax: LISTREG N|M|RN|E|NA|IA|H|K|F|Z pattern [page_number]
 NS_NICK_EXPIRE
 	N.B.: I nicks scadranno dopo %d giorni di inattivita'.
 NS_RECOVER_ERROR_CANT_RECOVER_SELF

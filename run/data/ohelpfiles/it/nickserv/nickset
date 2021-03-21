@@ -17,5 +17,5 @@ Syntax: NICKSET nick [CHANNELCOUNT|LASTSEEN|PASS|REALNAME|REGDATE|URL|USERMASK
  
 USERMASK changes the nick's last usermask.
  
-This command is limited to Services Administrators.
+This command is limited to Services Root Administrators.
 *** End of OHelp ***

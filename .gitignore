@@ -6,10 +6,13 @@ run/services
 run/*.conf
 run/crypt.key
 run/services.motd
+run/services.pid
+run/data/lang/*
 run/data/logs/*
 run/data/*.db
 run/data/services.core-*
 run/data/services-*
+lang/*.clng
 Makefile.inc
 inc/sysconf.h
 configure.log

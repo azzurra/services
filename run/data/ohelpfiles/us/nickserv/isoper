@@ -1,7 +1,0 @@
-*** NickServ Operator Help - Command: ISOPER ***
-Checks if the given user is an IRC Operator from the Services point of view.
-This is not a check on +o/+O flags.
- 
-Syntax: ISOPER nickname
- 
-*** End of OHelp ***

@@ -4076,7 +4076,7 @@ static void do_set_founder(User *callerUser, ChannelInfo *ci, CSTR param, CSTR a
 				anAccess->flags = 0;
 				anAccess->creationTime = 0;
 
- 				/* E' possibile chiamarla direttamente qua poiché il for() termina al successivo break. */
+ 				/* E' possibile chiamarla direttamente qua poichÃ© il for() termina al successivo break. */
 				compact_chan_access_list(ci, 1);
 
 				TRACE_MAIN();
@@ -8500,7 +8500,7 @@ static void do_chan_access_DEL(const int listLevel, CSTR source, const User *cal
 
 	else if ((accessLevel != CS_ACCESS_FOUNDER) && (ci->settings & get_chan_list_lock_flag(listLevel))) {
 
-		/* La lista è bloccata e il chiamante non è identificato come founder del canale. */
+		/* La lista Ã¨ bloccata e il chiamante non Ã¨ identificato come founder del canale. */
 		send_notice_lang_to_user(s_ChanServ, callerUser, GetCallerLang(), CS_XOP_ERROR_LIST_LOCKED, listName, ci->name);
 	}
 	else {
@@ -8651,7 +8651,7 @@ static void do_chan_access_CLEAN(const int listLevel, CSTR source, const User *c
 
 	else if ((accessLevel != CS_ACCESS_FOUNDER) && (ci->settings & get_chan_list_lock_flag(listLevel))) {
 
-		/* La lista e' bloccata e il chiamante non e' identificato come founder del canale. */
+		/* La lista Ã¨ bloccata e il chiamante non Ã¨ identificato come founder del canale. */
 		send_notice_lang_to_user(s_ChanServ, callerUser, GetCallerLang(), CS_XOP_ERROR_LIST_LOCKED, listName, ci->name);
 	}
 	else {
@@ -8733,7 +8733,7 @@ static void do_chan_access_WIPE(const int listLevel, CSTR source, const User *ca
 
 	else if ((accessLevel != CS_ACCESS_FOUNDER) && (ci->settings & get_chan_list_lock_flag(listLevel))) {
 
-		/* La lista è bloccata e il chiamante non è identificato come founder del canale. */
+		/* La lista Ã¨ bloccata e il chiamante non Ã¨ identificato come founder del canale. */
 		send_notice_lang_to_user(s_ChanServ, callerUser, GetCallerLang(), CS_XOP_ERROR_LIST_LOCKED, listName, ci->name);
 	}
 	else {
@@ -11274,9 +11274,7 @@ static BOOL cs_listreg_match_is_closed(const ChannelInfo *ci, CSTR pattern) {
 
 
 /*
-CS LISTREG LIST type pattern page_number
-CS LISTREG COUNT type pattern 
-CS LISTREG MAIL type pattern
+CS LISTREG type pattern page_number
 
 TYPE:
 

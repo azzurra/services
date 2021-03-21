@@ -1,7 +1,0 @@
-*** NickServ Operator Help - Command: ISAGENT ***
-Checks if the given user is a Services Agent from the Services point of view.
-This is just a check against Usermode +z.
- 
-Syntax: ISAGENT nickname
- 
-*** End of OHelp ***

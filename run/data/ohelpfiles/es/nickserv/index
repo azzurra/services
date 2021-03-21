@@ -10,12 +10,6 @@ These commands are also available to Help Operators
 SENDPASS      E-Mails the nick password to the owner
 UMODE         Shows the user mode(s) of the given user (from the Services pov)
  
-These commands are also available to Services Agents:
- 
-IP            Returns the real IP and the crypted (+x) one of the given user
-ISAGENT       Checks if the given user is a Services Agent (from the Services pov)
-ISOPER        Checks if the given user is an IRC Operator (from the Services pov)
- 
 These commands are available to Services Operators:
  
 FREEZE        Freezes a nick, not letting anyone use it or ident to it

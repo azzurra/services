@@ -12,10 +12,10 @@ Syntax: AKILL ADD|PERM user@host reason
         AKILL REASON user@host newreason
         AKILL LIST [start [end]] [pattern]
  
+ADD adds a 60 minutes temporary AKILL.
+ 
 TIME adds a temporary AKILL. expiry must be an integer
 followed by one of d (days), h (hours), or m (minutes).
-If a unit specifier is not included, the default is days
-(so +30 by itself means 30 days).
  
 ID returns the user@host mask of an AKILL.
 You cannot remove an AKILL by ID.
