@@ -81,11 +81,11 @@ static CSTR	lang_names[LANG_COUNT][LANG_COUNT] = {
 	{
 	/* LANG_ES */
 		/*  IT */ "Italiano",
-		/*  US */ "Inglés",
-		/*  ES */ "Español",
-		/*  FR */ "Francés",
-		/*  DE */ "Alemán",
-		/*  JP */ "Japonés"
+		/*  US */ "InglÃ©s",
+		/*  ES */ "EspaÃ±ol",
+		/*  FR */ "FrancÃ©s",
+		/*  DE */ "AlemÃ¡n",
+		/*  JP */ "JaponÃ©s"
 	},
 
 	{
@@ -683,7 +683,7 @@ const LANG_MSG lang_msg(LANG_ID lang_id, LANG_MSG_ID msg_id) {
 
 	if (table->flags != LIF_UNUSED) {
 
-		// lingua non è disattiva o non utilizzata
+		// lingua non Ã¨ disattiva o non utilizzata
 
 		// lingua offline ?
 		if (FlagSet(table->flags, LIF_OFFLINE)) {

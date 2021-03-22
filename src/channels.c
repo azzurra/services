@@ -448,7 +448,7 @@ void chan_handle_SJOIN(CSTR source, const int ac, char **av) {
 
 					TRACE_MAIN();
 					if (FlagSet(chan->mode, CMODE_l))
-						/* il chan e' +l -> prima del parametro del +k c'è quello del +l -> saltarlo */
+						/* il chan e' +l -> prima del parametro del +k c'Ã¨ quello del +l -> saltarlo */
 						chan->key = str_duplicate(av[5 - param]);
 					else
 						chan->key = str_duplicate(av[4 - param]);
@@ -461,7 +461,7 @@ void chan_handle_SJOIN(CSTR source, const int ac, char **av) {
 
 					TRACE_MAIN();
 					if (FlagSet(chan->mode, CMODE_k))
-						/* il chan e' +k -> prima del parametro del +l c'è quello del +k -> saltarlo */
+						/* il chan e' +k -> prima del parametro del +l c'Ã¨ quello del +k -> saltarlo */
 						chan->limit = atoi(av[5 - param]);
 					else
 						chan->limit = atoi(av[4 - param]);
