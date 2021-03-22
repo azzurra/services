@@ -13,21 +13,21 @@ Syntax:
 /cs CF #channel EXPLIST
 /cs CF #channel WIPE
  
-ADD command adds the given nickname to the Co-Founder list. If the nick or
+ADD adds the given nickname to the Co-Founder list. If the nick or
 mask is already present on the list, its access level is changed to the CF level.
  
-DEL command removes the given nick or mask from the Co-Founder list.
+DEL removes the given nick or mask from the Co-Founder list.
  
-LIST command displays the current Co-Founder list; if a mask is given,
+LIST displays the current Co-Founder list; if a mask is given,
 only those entries matching the mask are displayed.
  
-FIND command search the entries matching the given mask (in the nick!user@host format)
+FIND search the entries matching the given mask (in the nick!user@host format)
  
-CLEAN command removes all the expired nicks from the Co-Founder list.
+CLEAN removes all the expired nicks from the Co-Founder list.
  
-EXPLIST command displays all the expired nicks in the Co-Founder list.
+EXPLIST displays all the expired nicks in the Co-Founder list.
  
-WIPE command removes all nicks and masks from the Co-Founder list.
+WIPE removes all nicks and masks from the Co-Founder list.
  
 Examples:
 /cs CF #Lamer ADD picci

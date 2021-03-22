@@ -13,27 +13,27 @@ Syntax:
 /cs HOP #channel LOCK [nick|mask]
 /cs HOP #channel UNLOCK [nick|mask]
  
-ADD command adds the given nickname to the Auto-HalfOp list. If the nick or
+ADD adds the given nickname to the Auto-HalfOp list. If the nick or
 mask is already present on the list, its access level is changed to the HOP level.
  
-DEL command removes the given nick or mask from the Auto-HalfOp list.
+DEL removes the given nick or mask from the Auto-HalfOp list.
  
-LIST command displays the current Auto-HalfOp list; if a mask is given,
+LIST displays the current Auto-HalfOp list; if a mask is given,
 only those entries matching the mask are displayed.
  
-FIND command search the entries matching the given mask (in the nick!user@host format)
+FIND search the entries matching the given mask (in the nick!user@host format)
  
-CLEAN command removes all the expired nicks from the Auto-HalfOp list.
+CLEAN removes all the expired nicks from the Auto-HalfOp list.
  
-EXPLIST command displays all the expired nicks in the Auto-HalfOp list.
+EXPLIST displays all the expired nicks in the Auto-HalfOp list.
  
-WIPE command removes all nicks and masks from the Auto-HalfOp list.
+WIPE removes all nicks and masks from the Auto-HalfOp list.
  
-LOCK command locks the Auto-HalfOp list. Only the founder will be able
+LOCK locks the Auto-HalfOp list. Only the founder will be able
 to maintain it if it's locked. If a single entry is specified, only that one
 will be locked.
  
-UNLOCK command unlocks the Auto-HalfOp list if it was previously locked.
+UNLOCK unlocks the Auto-HalfOp list if it was previously locked.
 If a single entry is specified, only that one will be unlocked.
  
 Examples:
