@@ -1,0 +1,19 @@
+*** DebugServ Operator Help ***
+ 
+These commands are available to Services Coders:
+ 
+COMMAND		Manages the commands list
+CRYPT			Returns various encryption of the given host
+CLONES		Loads drones for testing purpose
+DUMP			Returns dumps of facilities
+INJECT		Injects inputs into buffer
+KILLUSER		Kills services ghosts
+LOG			Search log files
+MEM			Shows services memory usage
+SHOW			Display last errors input buffer or TS
+SET			Sets various Services options
+SVSNICK		Forces users to change their nick
+SRAW			Sends text to the server AS IS
+SYSINFO		Shows system informations
+ 
+*** End of OHelp ***

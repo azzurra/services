@@ -43,6 +43,7 @@
 #include "../inc/memoserv.h"
 #include "../inc/operserv.h"
 #include "../inc/rootserv.h"
+#include "../inc/helpserv.h"
 #include "../inc/trigger.h"
 #include "../inc/ignore.h"
 #include "../inc/sxline.h"
@@ -132,6 +133,10 @@ static ServiceCommand	debugserv_commands_M[] = {
 };
 // 'N' (78 / 13)
 // 'O' (79 / 14)
+static ServiceCommand	debugserv_commands_O[] = {
+	{ "OHELP",		CMDLEVEL_CODER,		0, handle_help },
+	{ NULL,			0,					0, NULL }
+};
 // 'P' (80 / 15)
 // 'Q' (81 / 16)
 // 'R' (82 / 17)
@@ -160,7 +165,7 @@ ServiceCommand	*debugserv_commands[26] = {
 	debugserv_commands_I,	NULL,
 	debugserv_commands_K,	debugserv_commands_L,
 	debugserv_commands_M,	NULL,
-	NULL,					NULL,
+	debugserv_commands_O,	NULL,
 	NULL,					NULL,
 	debugserv_commands_S,	NULL,
 	NULL,					NULL,
@@ -171,12 +176,20 @@ ServiceCommand	*debugserv_commands[26] = {
 
 void debugserv(const char *source, User *callerUser, char *buf) {
 
-	char *cmd = strtok(buf, " ");
+	char *cmd;
 
 	TRACE_MAIN_FCLT(FACILITY_DEBUGSERV);
 
-	if (!cmd)
+	if (IS_NULL(callerUser->oper) || (callerUser->oper->level < ULEVEL_CODER)) {
+
+		LOG_SNOOP(s_DebugServ, "\2%s\2 tried sending the following command: %s", source, buf);
 		return;
+	}
+
+	cmd = strtok(buf, " ");
+
+	if (IS_NULL(cmd))
+		send_notice_to_user(s_DebugServ, callerUser, "Type \2/ds OHELP\2 for a listing of DebugServ commands.");
 
 	else if (cmd[0] == '\001') {
 
