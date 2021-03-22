@@ -1,7 +1,7 @@
 *** MemoServ Help - Commande: UNSEND ***
-Récupère le dernier mémo que tu as envoyé au 
-nick spécifié et l'efface. Il n'est pas possible
-de récupérer de mémos déjà lus par le destinataire.
+RÃ©cupÃ¨re le dernier mÃ©mo que tu as envoyÃ© au 
+nick spÃ©cifiÃ© et l'efface. Il n'est pas possible
+de rÃ©cupÃ©rer de mÃ©mos dÃ©jÃ  lus par le destinataire.
  
 Syntaxe:
 /ms UNSEND nick

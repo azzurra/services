@@ -2,7 +2,7 @@
   a  - (Services Only) Marque un Services Administrator
   A  - (IRCop Only) Marque un Server Administrator
   b  - (IRCop Only) Permet la vision des messages CHATOPS
-  c  - (IRCop Only) Visualise les connexions/déconnexions des clients
+  c  - (IRCop Only) Visualise les connexions/dÃ©connexions des clients
   d  - (IRCop Only) Permet la vision des messages de Debug
   e  - (IRCop Only) Permet la vision des messages de DCC pas valides
   f  - (IRCop Only) Permet la vision des messages de Flood
@@ -10,7 +10,7 @@
   g  - (IRCop Only) Permet la vision des messages GLOBOPS
   h  - (Services Only) Marque un Help Operator
   i  - Invisible aux usagers qui employent la commande /names ou /who
-  I  - (IRCop Only) Permet de cacher le temps d'inactivité dans le WHOIS
+  I  - (IRCop Only) Permet de cacher le temps d'inactivitÃ© dans le WHOIS
   j  - Marque un client Java
   k  - (IRCop Only) Permet la vision des messages de Kill par clients non U:Lined
   K  - (IRCop Only) Permet la vision des messages de Kill par clients U:Lined
@@ -18,8 +18,8 @@
   n  - (IRCop Only) Permet la vision des messages de Routing
   o  - (IRCop Only) Marque un IRC Operator global
   O  - (IRCop Only) Marque un IRC Operator local
-  r  - (Services Only) Marque un nick enregistré et identifié avec NickServ
-  R  - Accepte query seulement par nicks enregistrés et identifiés avec NickServ
+  r  - (Services Only) Marque un nick enregistrÃ© et identifiÃ© avec NickServ
+  R  - Accepte query seulement par nicks enregistrÃ©s et identifiÃ©s avec NickServ
   s  - Permet la vision des messages du serveur (par exemple les Kills)
   S  - Marque un client connexe par SSL (Secure Sockets Layer)
   w  - Permet la vision des messages WALLOPS

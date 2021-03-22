@@ -5,7 +5,7 @@
   d  - Impedisce di cambiare nick a chi non e' operatore o voice nel canale.
   h  - Permette di settare un nickname come half operator del canale.
   i  - Rende il canale solo ad invito.
-  j  - Permette solo a chi è identificato ad un nick registrato di entrare nel canale.
+  j  - Permette solo a chi Ã¨ identificato ad un nick registrato di entrare nel canale.
   k  - Rende il canale protetto da password.
   l  - Setta il massimo numero di utenti che possono stare nel canale.
   m  - Rende il canale moderato: solo i +o, +h e +v possono parlare.

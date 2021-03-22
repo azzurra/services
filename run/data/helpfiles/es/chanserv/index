@@ -4,10 +4,10 @@ segun sus preferencias. Registrar un canal significa limitar el numero de person
 acceso al mismo, haciendo imposible un takeover. Los comandos disponibles se 
 encuentran en seguida; para poderlos utilizar necesitas escribir /cs COMANDO. 
  
-    Comando  -  Descripciòn
+    Comando  -  DescripciÃ²n
  
     REGISTER -  Registra un canal
-    IDENTIFY -  Te identifica a tu canal, con tu contraseña
+    IDENTIFY -  Te identifica a tu canal, con tu contraseÃ±a
     SET      -  Permite configurar las opciones de un canal
     CFOUNDER -  Maneja la Co-Founder list
     SOP      -  Maneja la Super-Op list
@@ -15,15 +15,15 @@ encuentran en seguida; para poderlos utilizar necesitas escribir /cs COMANDO.
     HOP      -  Maneja la Auto-HalfOp list
     VOP      -  Maneja la Voice-Op list
     AKICK    -  Maneja la AutoKick list
-    DROP     -  Anula la registraciòn de un canal
-    WHY      -  Te informa sobre la razòn por la que un usuario es operador en el canal
+    DROP     -  Anula la registraciÃ²n de un canal
+    WHY      -  Te informa sobre la razÃ²n por la que un usuario es operador en el canal
     REMOVE   -  Te remueve de la lista VOP/HOP/AOP/SOP/CF de un canal
  
 Otros comandos disponibles:
 COUNT, DEHALFOP, DEOP, DEVOICE, HALFOP, INFO, INVITE, MDEHALFOP, 
 MDEOP, MDEVOICE, MKICK, MODE, OP, RESETMODES, UNBAN, VOICE.
  
-Para mas informaciòn sobre estos comandos sòlo digita /cs HELP comando.
+Para mas informaciÃ²n sobre estos comandos sÃ²lo digita /cs HELP comando.
  
-Para mas informaciòn, digita /join #IRCHelp
+Para mas informaciÃ²n, digita /join #IRCHelp
 *** Fin del Help ***

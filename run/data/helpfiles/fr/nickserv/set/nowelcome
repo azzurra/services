@@ -1,0 +1,13 @@
+*** NickServ Help - Commande: SET NOWELCOME ***
+Si l'option NOWELCOME est active, tu ne tu ne recevras aucun message
+d'accueil à l'entrée même s'il a été défini par le propriétaire.
+ 
+Syntaxe:
+/ns SET NOWELCOME <ON|OFF>
+ 
+Exemples:
+/ns SET NOWELCOME ON
+/ns SET NOWELCOME OFF
+ 
+Pour tout renseignement, tape /join #IRCHelp
+*** Fin de l'Help ***

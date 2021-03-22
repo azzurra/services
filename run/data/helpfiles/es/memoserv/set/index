@@ -3,14 +3,14 @@ Permite ajustar las opciones de MemoServ. Para utilizar
 este comando necesitas estar identificado con tu nick.
  
 Sintaxis:
-/ms SET OPZIONE par‡metros
+/ms SET OPZIONE par√†metros
  
 Las opciones disponibles son:
  
     IGNORETYPE  - Permite escojer la modalidad de utilizo de la Memo Ignore List
-    NOTIFY      - Cuando quieras recibir notificaciÚn de nuevos memos
+    NOTIFY      - Cuando quieras recibir notificaci√≤n de nuevos memos
  
-Para recibir mas informaciÚn sobre estos comando sÚlo digita /ms HELP SET opzione.
+Para recibir mas informaci√≤n sobre estos comando s√≤lo digita /ms HELP SET opzione.
  
-Para mas informaciÚn, digita /join #IRCHelp
+Para mas informaci√≤n, digita /join #IRCHelp
 *** Fin del Help ***

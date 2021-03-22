@@ -1,7 +1,7 @@
 *** ChanServ Help - Comando: DEVOICE ***
 Quita el voice al nick especificado, en el canal especificado. Se puede especificar mas
 de un nick. Necesitas ser minimo VOP en el canal para utilizarlo sobre ti mismo
-nick, y minimo AOP para poderlo utilizar con los de m‡s.
+nick, y minimo AOP para poderlo utilizar con los de m√†s.
  
 Sintaxis:
 /cs DEVOICE #canal nick(s)
@@ -10,5 +10,5 @@ Ejemplos:
 /cs DEVOICE #IRCHelp Tenerone
 /cs DEVOICE #IRCHelp picci Alduccio gogeta14
  
-Para mas informaciÚn, digita /join #IRCHelp
+Para mas informaci√≤n, digita /join #IRCHelp
 *** Fin del Help ***

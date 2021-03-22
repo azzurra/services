@@ -1,21 +1,21 @@
 *** MemoServ Help - Comando: SET NOTIFY ***
-Permite especificar en que momento recibir notificaciÚn de
+Permite especificar en que momento recibir notificaci√≤n de
 nuevos memos.
  
 Sintaxis:
-/ms SET NOTIFY par‡metro
+/ms SET NOTIFY par√†metro
  
-Los par‡metros disponibles son:
+Los par√†metros disponibles son:
  
-    ON     -    Se te envia notificaciÚn tras haberte identificado,
+    ON     -    Se te envia notificaci√≤n tras haberte identificado,
                 y haber recibido nuevos memos.
-    LOGON  -    Se te envia notificaciÚn tras haberte identificado.
-    NEW    -    Se te envia notificaciÚn tras haber recibido memos.
-    OFF    -    Nunca se te enviar‡ alguna notificaciÚn.
+    LOGON  -    Se te envia notificaci√≤n tras haberte identificado.
+    NEW    -    Se te envia notificaci√≤n tras haber recibido memos.
+    OFF    -    Nunca se te enviar√† alguna notificaci√≤n.
  
 Ejemplos:
 /ms SET NOTIFY LOGON
 /ms SET NOTIFY OFF
  
-Para mas informaciÚn, digita /join #IRCHelp
+Para mas informaci√≤n, digita /join #IRCHelp
 *** Fin del Help ***

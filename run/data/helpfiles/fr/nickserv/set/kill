@@ -1,8 +1,8 @@
 *** NickServ Help - Commande: SET KILL ***
 Active l'option Enforced de ton nick. Si un 
 autre usager essaie d'employer ton nick lorsque
-tu n'est pas l‡, on donnera lui une minute de temps pour changer
-nick, aprËs laquelle on le lui changera en Guest.
+tu n'est pas l√†, on donnera lui une minute de temps pour changer
+nick, apr√®s laquelle on le lui changera en Guest.
  
 Syntaxe:
 /ns SET KILL <SLOW|NORMAL|FAST|OFF>

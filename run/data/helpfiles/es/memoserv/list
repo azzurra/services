@@ -1,7 +1,7 @@
 *** MemoServ Help - Comando: LIST ***
-Visualiza todos los memos que tienes. Los que todavia no estèn leydos tienen un "*"
+Visualiza todos los memos que tienes. Los que todavia no estÃ¨n leydos tienen un "*"
 a lado, mientras los marcados para borrarse tienen una "D" a lado.
-Especificando la opciòn NEW se visualizan nada mas los memos nuevos (no leydos).
+Especificando la opciÃ²n NEW se visualizan nada mas los memos nuevos (no leydos).
  
 Sintaxis:
 /ms LIST [NEW]
@@ -10,5 +10,5 @@ Ejemplos:
 /ms LIST
 /ms LIST NEW
  
-Para mas informaciòn, digita /join #IRCHelp
+Para mas informaciÃ²n, digita /join #IRCHelp
 *** Fin del Help ***

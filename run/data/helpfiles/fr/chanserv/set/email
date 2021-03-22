@@ -1,7 +1,7 @@
 *** ChanServ Help - Commande: SET EMAIL ***
-Associe une E-Mail au canal spécifié. Cette adresse E-Mail est celle
-qui sera montrée aux usagers qui employeront la commande INFO.
-Pour l'effacer il faut spécifier NONE comme adresse E-Mail.
+Associe une E-Mail au canal spÃ©cifiÃ©. Cette adresse E-Mail est celle
+qui sera montrÃ©e aux usagers qui employeront la commande INFO.
+Pour l'effacer il faut spÃ©cifier NONE comme adresse E-Mail.
  
 Syntaxe:
 /cs SET #canal EMAIL adresse

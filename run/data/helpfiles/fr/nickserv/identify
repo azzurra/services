@@ -1,9 +1,9 @@
 *** NickServ Help - Commande: IDENTIFY ***
-Fait reconnaître à NickServ que tu es le vrai propriétaire
+Fait reconnaÃ®tre Ã  NickServ que tu es le vrai propriÃ©taire
 du nick que tu es en train d'employer. Beaucoup de commandes
-peuvent être employées seulement si on est identifié au nick.
-Il est possible de s'identifier à plusieurs nicks en les 
-spécifiant un à la fois avant le mot de passe.
+peuvent Ãªtre employÃ©es seulement si on est identifiÃ© au nick.
+Il est possible de s'identifier Ã  plusieurs nicks en les 
+spÃ©cifiant un Ã  la fois avant le mot de passe.
  
 Syntaxe:
 /ns IDENTIFY [nick] mot-de-passe
@@ -13,7 +13,7 @@ Exemple:
 /ns IDENTIFY Edric Storm
  
 N.B.: pour s'identifier au nick en emploi il est possible
-d'employer la commande /pass mot-de-passe en obtenant le même résultat.
+d'employer la commande /pass mot-de-passe en obtenant le mÃªme rÃ©sultat.
  
 Pour tout renseignement, tape /join #IRCHelp
 *** Fin de l'Help ***

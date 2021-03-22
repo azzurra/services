@@ -1,24 +1,26 @@
 *** NickServ Help - Commande: SET ***
 Cette commande te permet de modifier les options de ton nick.
-Pour pouvoir employer cette commande il faut Ítre identifiÈs
+Pour pouvoir employer cette commande il faut √™tre identifi√©s
 au nick dont on veut changer les options.
  
-Important: Les nicks qui ne sont pas autorisÈs ne peuvent pas modifier ces options.
+Important: Les nicks qui ne sont pas autoris√©s ne peuvent pas modifier ces options.
  
 Syntaxe:
-/ns SET OPTION paramËtres
+/ns SET OPTION param√®tres
  
 Les options disponibles sont:
  
-    EMAIL      - GËre l'adresse E-Mail associÈe ‡ ton nick.
-    KILL       - Fait que personne ne peut employer ton nick lorsque tu n'est pas l‡.
-    LANG       - Configure la langue employÈe par les services.
-    NEVEROP    - Fait que ChanServ ne te donne l'op dans aucun canal.
-    NOMEMO     - Fait que un nick ne peut pas recevoir de mÈmos.
-    NOOP       - Ne permet pas que d'autres usagers t'ajoutent dans aucune liste.
-    PASSWD     - Permet de changer le mot de passe d'un nick.
-    SECURE     - Augmente la sÈcuritÈ de ton nick, en ignorant ta Liste d'accËs.
-    URL        - Associe une URL ‡ ton nick.
+    EMAIL        - G√®re l'adresse E-Mail associ√©e √† ton nick.
+    KILL         - Fait que personne ne peut employer ton nick lorsque tu n'est pas l√†.
+    LANG         - Configure la langue employ√©e par les services.
+    NEVEROP      - Fait que ChanServ ne te donne l'op dans aucun canal.
+    NOCHANMEMO   - Fait que un nick ne peut pas recevoir de m√©mos envoy√©s √† un canal.
+    NOMEMO       - Fait que un nick ne peut pas recevoir de m√©mos.
+    NOOP         - Ne permet pas que d'autres usagers t'ajoutent dans aucune liste.
+    NOWELCOME    - Fait que un nick ne r√©√ßoit pas de message d'accueil lorsqu'il entre dans un canal.
+    PASSWD       - Permet de changer le mot de passe d'un nick.
+    SECURE       - Augmente la s√©curit√© de ton nick, en ignorant ta Liste d'acc√®s.
+    URL          - Associe une URL √† ton nick.
  
 Pour avoir des renseignements sur ces options tape: /ns HELP SET option
  

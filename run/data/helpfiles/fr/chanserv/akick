@@ -1,6 +1,6 @@
 *** ChanServ Help - Commande: AKICK ***
-Gère l'AutoKick list d'un canal. Si quelqu'un dans l'Akick list entre 
-dans le canal, il sera banni et tout de suite kické par ChanServ.
+GÃ¨re l'AutoKick list d'un canal. Si quelqu'un dans l'Akick list entre 
+dans le canal, il sera banni et tout de suite kickÃ© par ChanServ.
  
 Syntaxe:
 /cs AKICK #canal ADD masque [raison]
@@ -10,27 +10,27 @@ Syntaxe:
 /cs AKICK #canal LOCK [nick|masque]
 /cs AKICK #canal UNLOCK [nick|masque]
  
-ADD ajoute le masque ou le nick spécifié à l'AutoKick list. Il est possible
-de spécifier le type de ban qui sera appliqué aux usagers qui entrent et qui
-ont le masque mise en akick. Il y a 10 types de bans différents, les mêmes de
+ADD ajoute le masque ou le nick spÃ©cifiÃ© Ã  l'AutoKick list. Il est possible
+de spÃ©cifier le type de ban qui sera appliquÃ© aux usagers qui entrent et qui
+ont le masque mise en akick. Il y a 10 types de bans diffÃ©rents, les mÃªmes de
 la commande SET BANTYPE. Pour avoir la liste tape: /cs HELP SET BANTYPE.
-Si on spécifie une raison, celle-ci sera employée comme raison au moment du kick, 
-autrement sera employée celle de défault: "Tu es banni de ce canal".
+Si on spÃ©cifie une raison, celle-ci sera employÃ©e comme raison au moment du kick, 
+autrement sera employÃ©e celle de dÃ©fault: "Tu es banni de ce canal".
  
-DEL efface le masque ou le nick spécifié de l'AutoKick list. N'efface pas 
-d'eventuels bans mis par ChanServ à la suite d'AutoKicks précédents; ces 
-derniers doivent être effacés manuellement.
+DEL efface le masque ou le nick spÃ©cifiÃ© de l'AutoKick list. N'efface pas 
+d'eventuels bans mis par ChanServ Ã  la suite d'AutoKicks prÃ©cÃ©dents; ces 
+derniers doivent Ãªtre effacÃ©s manuellement.
  
-LIST montre la liste complète des AutoKicks du canal, ou éventuellement 
-seulement celles qui contiennent le masque spécifié.
+LIST montre la liste complÃ¨te des AutoKicks du canal, ou Ã©ventuellement 
+seulement celles qui contiennent le masque spÃ©cifiÃ©.
  
 WIPE efface toute l'AutoKick list.
  
-LOCK bloque la liste, en permettant seulement au propriétaire de la manipuler.
-On peut bloquer soulement un masque en le spécifiant dans la commande.
+LOCK bloque la liste, en permettant seulement au propriÃ©taire de la manipuler.
+On peut bloquer soulement un masque en le spÃ©cifiant dans la commande.
  
-UNLOCK débloque la liste, dans le cas où elle a été bloquée par la commande LOCK.
-On peut débloquer soulement un masque en le spécifiant dans la commande.
+UNLOCK dÃ©bloque la liste, dans le cas oÃ¹ elle a Ã©tÃ© bloquÃ©e par la commande LOCK.
+On peut dÃ©bloquer soulement un masque en le spÃ©cifiant dans la commande.
  
 Exemples:
 /cs AKICK #IRCHelp ADD Saitta 3 Pas de spam ici!

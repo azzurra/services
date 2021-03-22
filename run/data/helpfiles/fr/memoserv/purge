@@ -1,10 +1,10 @@
 *** MemoServ Help - Commande: PURGE ***
-Efface tous les mémo marqués comme "à effacer",
-c'est-à-dire ceux qui sont précédés par un "D"
-à chaque commande LIST.
+Efface tous les mÃ©mo marquÃ©s comme "Ã  effacer",
+c'est-Ã -dire ceux qui sont prÃ©cÃ©dÃ©s par un "D"
+Ã  chaque commande LIST.
  
 ATTENTION: Lorsque on emploie la commande PURGE
-il ne sera plus possible de récupérer les messages effacés.
+il ne sera plus possible de rÃ©cupÃ©rer les messages effacÃ©s.
  
 Syntaxe:
 /ms PURGE

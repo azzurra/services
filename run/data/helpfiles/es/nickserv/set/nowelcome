@@ -1,0 +1,13 @@
+*** NickServ Help - Comando: SET NOWELCOME ***
+Si está activado, impide que un nick reciba el greeting
+cuando entra en los canales.
+ 
+Sintaxis:
+/ns SET NOWELCOME <ON|OFF>
+ 
+Ejemplos:
+/ns SET NOWELCOME ON
+/ns SET NOWELCOME OFF
+ 
+Para mas informaciòn, digita /join #IRCHelp
+*** Fin del Help ***

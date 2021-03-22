@@ -12,6 +12,7 @@ run/data/logs/*
 run/data/*.db
 run/data/services.core-*
 run/data/services-*
+lang/lang_msg_svc.h
 lang/*.clng
 Makefile.inc
 inc/sysconf.h

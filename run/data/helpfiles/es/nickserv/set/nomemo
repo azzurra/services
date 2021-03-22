@@ -1,6 +1,6 @@
 *** NickServ Help - Comando: SET NOMEMO ***
-Si est‡ activado no deja que otros usuarios te envien memos. Podr‡s 
-seguir enviando memos a otros usuarios aun activando la opciÚn NOMEMO.
+Si est√† activado no deja que otros usuarios te envien memos. Podr√†s 
+seguir enviando memos a otros usuarios aun activando la opci√≤n NOMEMO.
  
 Sintaxis:
 /ns SET NOMEMO <ON|OFF>
@@ -9,5 +9,5 @@ Ejemplos:
 /ns SET NOMEMO ON
 /ns SET NOMEMO OFF
  
-Para mas informaciÚn, digita /join #IRCHelp
+Para mas informaci√≤n, digita /join #IRCHelp
 *** Fin del Help ***

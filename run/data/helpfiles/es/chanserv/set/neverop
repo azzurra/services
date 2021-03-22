@@ -1,0 +1,14 @@
+*** ChanServ Help - Comando: SET NEVEROP ***
+Cuando la opción NEVEROP está ON, desabilita el op automatico
+para ChanServ para todos los AOP y superiores que entren en el canal.
+Se puede recibir l'OP con el comando /CS OP cuando lo quieras.
+ 
+Sintaxis:
+/cs SET #canal NEVEROP <ON|OFF>
+ 
+Ejemplos:
+/cs SET #IRCHelp NEVEROP ON
+/cs SET #Services NEVEROP OFF
+ 
+Para mas informaciòn, digita /join #IRCHelp
+*** Fin del Help ***

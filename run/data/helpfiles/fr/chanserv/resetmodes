@@ -1,7 +1,7 @@
 *** ChanServ Help - Commande: RESETMODES ***
-Fait effacer à ChanServ les modes suivants dans le canal spécifié:
+Fait effacer Ã  ChanServ les modes suivants dans le canal spÃ©cifiÃ©:
 c,C, d, i, k, l, m, M, n, p, R, s, t, u.
-Il faut être au moins SOP pour pouvoir employer cette commande.
+Il faut Ãªtre au moins SOP pour pouvoir employer cette commande.
  
 Syntaxe:
 /cs RESETMODES #canal

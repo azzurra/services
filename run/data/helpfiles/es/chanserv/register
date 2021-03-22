@@ -1,31 +1,31 @@
 *** ChanServ Help - Comando: REGISTER ***
 Registra un canal en el database de ChanServ. Para poder utilizar el comando tienes que estar
-de operador en el canal que quieras registrar. La contraseÒa es necesaria en futuro para
-identificarte como fundador y ajustar las opciones del canal. El ultimo par‡metro,
-lo cual tiene que ser incluydo, es una pequeÒa descripciÚn de los argumentos
+de operador en el canal que quieras registrar. La contrase√±a es necesaria en futuro para
+identificarte como fundador y ajustar las opciones del canal. El ultimo par√†metro,
+lo cual tiene que ser incluydo, es una peque√±a descripci√≤n de los argumentos
 relativos al canal.
  
-En el mismo momento que se registre el canal,tu nick equivaldr‡ a su fundador y en
-calidad de fundador podr‡s ajustar todas las opciones de tu propio canal.
-Adem‡s Chanserv te dar‡ el OP automaticamente cuando entres en el canal, pero solamente
-si tendr‡s tu nick identificado como fundador del canal mismo.
+En el mismo momento que se registre el canal,tu nick equivaldr√† a su fundador y en
+calidad de fundador podr√†s ajustar todas las opciones de tu propio canal.
+Adem√†s Chanserv te dar√† el OP automaticamente cuando entres en el canal, pero solamente
+si tendr√†s tu nick identificado como fundador del canal mismo.
  
-En caso de que el nick del fundador expire o se anule su registraciÚn,
-se anular‡ de la misma manera la registraciÚn de los canales asociados a este mismo.
+En caso de que el nick del fundador expire o se anule su registraci√≤n,
+se anular√† de la misma manera la registraci√≤n de los canales asociados a este mismo.
  
 N.B.: Para poder registrar un canal es necesario tener un nick registrado con NickServ.
-Para recibir informaciÚn sobre la registraciÚn del nick digita /ns HELP register.
+Para recibir informaci√≤n sobre la registraci√≤n del nick digita /ns HELP register.
  
-ATENCION: NUNCA compartas la contraseÒa de tu canal con otros usuarios, aunque confies. En caso
-de que alguna de ellas decida cambiar contraseÒa y robarte el canal, no va a ser posible
-restaurar la registraciÚn anteriÚr, por haberse completado la registraciÚn de manera legitima.
+ATENCION: NUNCA compartas la contrase√±a de tu canal con otros usuarios, aunque confies. En caso
+de que alguna de ellas decida cambiar contrase√±a y robarte el canal, no va a ser posible
+restaurar la registraci√≤n anteri√≤r, por haberse completado la registraci√≤n de manera legitima.
  
 Sintaxis:
-/cs REGISTER #canal contraseÒa descripciÚn
+/cs REGISTER #canal contrase√±a descripci√≤n
  
 Ejemplos:
-/cs REGISTER #IRCHelp pippo El canal de ayuda ofici‡l de AzzurraNet
+/cs REGISTER #IRCHelp pippo El canal de ayuda ofici√†l de AzzurraNet
 /cs REGISTER #linux devnull El canal para los usuarios de Linux
  
-Para mas informaciÚn, digita /join #IRCHelp
+Para mas informaci√≤n, digita /join #IRCHelp
 *** Fin del Help ***

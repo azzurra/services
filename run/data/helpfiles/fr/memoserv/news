@@ -1,10 +1,10 @@
 *** MemoServ Help - Commande: NEWS ***
-Montre les dernières NEWS du réseau. S'il y a
-des nouveaux mémos NEWS, MemoServ te notifiera ça
-lorsque tu t'identifieras à ton nick, et quand tu 
-auras lu ce mémo, MemoServ ne t'envoiera plus de
-messages jusqu'au moment où un nouveau mémo NEWS
-sera envoyé. L'envoi des mémos NEWS est réservé aux IRCOPs.
+Montre les derniÃ¨res NEWS du rÃ©seau. S'il y a
+des nouveaux mÃ©mos NEWS, MemoServ te notifiera Ã§a
+lorsque tu t'identifieras Ã  ton nick, et quand tu 
+auras lu ce mÃ©mo, MemoServ ne t'envoiera plus de
+messages jusqu'au moment oÃ¹ un nouveau mÃ©mo NEWS
+sera envoyÃ©. L'envoi des mÃ©mos NEWS est rÃ©servÃ© aux IRCOPs.
  
 Syntaxe:
 /ms NEWS

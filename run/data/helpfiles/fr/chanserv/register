@@ -1,25 +1,25 @@
 *** ChanServ Help - Commande: REGISTER ***
-Enregistre un canal par ChanServ. Pour pouvoir employer cette commande tu dois être
-opérateur dans le canal que tu veux enregistrer. Il te faudra ensuite le mot de passe pour
-t'identifier comme propriétaire et modifier les options du canal. Le dernier paramètre,
-qui doit être inclus, est une brève description générale des arguments traités
+Enregistre un canal par ChanServ. Pour pouvoir employer cette commande tu dois Ãªtre
+opÃ©rateur dans le canal que tu veux enregistrer. Il te faudra ensuite le mot de passe pour
+t'identifier comme propriÃ©taire et modifier les options du canal. Le dernier paramÃ¨tre,
+qui doit Ãªtre inclus, est une brÃ¨ve description gÃ©nÃ©rale des arguments traitÃ©s
 dans le canal.
  
-Au moment de l'enregistrement du canal ton nick sera configuré comme propriétaire, et 
-tu auras la possibilité de modifier toutes les options du canal. En outre ChanServ te 
+Au moment de l'enregistrement du canal ton nick sera configurÃ© comme propriÃ©taire, et 
+tu auras la possibilitÃ© de modifier toutes les options du canal. En outre ChanServ te 
 donnera l'op automatiquement quand tu entreras dans le canal, mais seulement si tu 
-t'es identifié précédemment au nick par lequel tu es propriétaire.
+t'es identifiÃ© prÃ©cÃ©demment au nick par lequel tu es propriÃ©taire.
  
-Si le nick du propriétaire expire ou est effacé,
-aussi tous les canaux enregistrés à son nom seront effacés.
+Si le nick du propriÃ©taire expire ou est effacÃ©,
+aussi tous les canaux enregistrÃ©s Ã  son nom seront effacÃ©s.
  
-Important: Pour pouvoir enregistrer un canal il faut employer un nick enregistré 
+Important: Pour pouvoir enregistrer un canal il faut employer un nick enregistrÃ© 
 avec NickServ. Pour savoir comment enregistrer ton nick tape /ns HELP register.
  
-ATTENTION: NE JAMAIS donner le mot de passe du canal à d'autres personnes, même si de
-confiance. Dans le cas où une de ces personnes décide un jour de changer le mot de passe
-et de te voler le canal, il ne sera pas possible de te le donner de nouveau dans aucune façon,
-du moment que le passage est légitime.
+ATTENTION: NE JAMAIS donner le mot de passe du canal Ã  d'autres personnes, mÃªme si de
+confiance. Dans le cas oÃ¹ une de ces personnes dÃ©cide un jour de changer le mot de passe
+et de te voler le canal, il ne sera pas possible de te le donner de nouveau dans aucune faÃ§on,
+du moment que le passage est lÃ©gitime.
  
 Syntaxe:
 /cs REGISTER #canal mot-de-passe description

@@ -3,24 +3,26 @@ Este comando te permite modificar las opciones de tu nick.
 Para poder utilizar este comando tienes que identificarte con el nick
 del que quieras ajustar las opciones.
  
-N.B.: Los nicks no autorizados no pueden modificar ninguna opciÚn.
+N.B.: Los nicks no autorizados no pueden modificar ninguna opci√≤n.
  
 Sintaxis:
-/ns SET OPZIONE par‡metros
+/ns SET OPZIONE par√†metros
  
-Las opciÚnes disponibles son:
+Las opci√≤nes disponibles son:
  
-    EMAIL      - Maneja la direcciÚn E-Mail asociada con tu nick.
-    KILL       - ImplÏca que nadie pueda utilizar tu propio nick cuando no estËs.
+    EMAIL      - Maneja la direcci√≤n E-Mail asociada con tu nick.
+    KILL       - Impl√¨ca que nadie pueda utilizar tu propio nick cuando no est√®s.
     LANG       - Ajusta el idioma utilizado por los servicios
-    NEVEROP    - No deja que Chanserv te dË el Op en ningun canal.
+    NEVEROP    - No deja que Chanserv te d√® el Op en ningun canal.
+	NOCHANMEMO - Impide que un nick reciba memos por los canales.
     NOMEMO     - Impide que un nick reciba memos por otros usuarios.
     NOOP       - No permite que algun otro usuario te agregue en ninguna lista.
-    PASSWD     - Permite modificar la contraseÒa de tu nick.
+	NOWELCOME  - Impide que un nick reciba el greeting cuando entra en el canal.
+    PASSWD     - Permite modificar la contrase√±a de tu nick.
     SECURE     - Aumenta la seguridad de tu nick no tomando en cuenta la Access List.
     URL        - Asocia un URL a tu nick.
  
-Para recibir mas informaciÚn sobre estos comandos: /ns HELP SET opzione
+Para recibir mas informaci√≤n sobre estos comandos: /ns HELP SET opzione
  
-Para mas informaciÚn, digita /join #IRCHelp
+Para mas informaci√≤n, digita /join #IRCHelp
 *** Fin del Help ***

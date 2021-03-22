@@ -1,8 +1,8 @@
 *** NickServ Help - Commande: INFO ***
 Montre tous les renseignements disponibles pour le 
-nick spécifié (si enregistré), entre lesquels la date
-d'enregistrement, les options configurées, et quand
-il a été vu la dernière fois sur le réseau.
+nick spÃ©cifiÃ© (si enregistrÃ©), entre lesquels la date
+d'enregistrement, les options configurÃ©es, et quand
+il a Ã©tÃ© vu la derniÃ¨re fois sur le rÃ©seau.
  
 Syntaxe:
 /ns INFO nick

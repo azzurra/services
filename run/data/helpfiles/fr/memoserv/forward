@@ -1,10 +1,10 @@
 *** MemoServ Help - Commande: FORWARD ***
-Expédie tous les mémos envoyés au nick que tu es
+ExpÃ©die tous les mÃ©mos envoyÃ©s au nick que tu es
 en train d'employer au moment que tu donne la commande,
-y compris les mémos envoyés aux canaux dans lesquels tu
-es enregistré, au nick spécifié, qui doit être enregistré
-par NickServ et auquel tu dois être identifié.
-Pour désactiver cette option il faut spécifier NONE comme nick.
+y compris les mÃ©mos envoyÃ©s aux canaux dans lesquels tu
+es enregistrÃ©, au nick spÃ©cifiÃ©, qui doit Ãªtre enregistrÃ©
+par NickServ et auquel tu dois Ãªtre identifiÃ©.
+Pour dÃ©sactiver cette option il faut spÃ©cifier NONE comme nick.
  
 Syntaxe:
 /ms FORWARD nick

@@ -1,7 +1,7 @@
 *** ChanServ Help - Commande: SET URL ***
-Associe un URL au canal spécifié. Cet URL est celui qui
-sera montré aux usagers qui employeront la commande INFO.
-Pour effacer l'URL actuel il faut spécifier NONE comme URL.
+Associe un URL au canal spÃ©cifiÃ©. Cet URL est celui qui
+sera montrÃ© aux usagers qui employeront la commande INFO.
+Pour effacer l'URL actuel il faut spÃ©cifier NONE comme URL.
  
 Syntaxe:
 /cs SET #canal URL url

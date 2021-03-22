@@ -1,7 +1,7 @@
 *** NickServ Help - Commande: LISTCHANS ***
-Montre la liste des canaux auxquels ton nick à accès.
+Montre la liste des canaux auxquels ton nick Ã  accÃ¨s.
 Les canaux dans lesquels tu es VOP/AOP/SOP/CF
-ou propriétaire seront montrés.
+ou propriÃ©taire seront montrÃ©s.
  
 Syntaxe:
 /ns LISTCHANS

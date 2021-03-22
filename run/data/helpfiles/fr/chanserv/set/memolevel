@@ -1,8 +1,8 @@
 *** ChanServ Help - Commande: SET MEMOLEVEL ***
-L'option MEMOLEVEL permet de spécifier le niveau d'accès minimum demandé
-pour pouvoir envoyer des mémos au canal. Le paramètre niveau peut
-être VOP, AOP, SOP, CF ou FOUNDER. Pour faire si qu'il ne soit pas possible
-d'envoyer de mémos au canal il faut spécifier NONE comme niveau.
+L'option MEMOLEVEL permet de spÃ©cifier le niveau d'accÃ¨s minimum demandÃ©
+pour pouvoir envoyer des mÃ©mos au canal. Le paramÃ¨tre niveau peut
+Ãªtre VOP, AOP, SOP, CF ou FOUNDER. Pour faire si qu'il ne soit pas possible
+d'envoyer de mÃ©mos au canal il faut spÃ©cifier NONE comme niveau.
  
 Syntaxe:
 /cs SET #canal MEMOLEVEL niveau

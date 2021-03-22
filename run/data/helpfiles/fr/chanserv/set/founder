@@ -1,7 +1,7 @@
 *** ChanServ Help - Commande: SET FOUNDER ***
-Change le nick du propriétaire du canal spécifié. Le nouveau nick doit être
-enregistré. Pour pouvoir employer cette commande il faut être identifiés
-soit au nick de l'actuel propriétaire qu'au canal par la commande IDENTIFY.
+Change le nick du propriÃ©taire du canal spÃ©cifiÃ©. Le nouveau nick doit Ãªtre
+enregistrÃ©. Pour pouvoir employer cette commande il faut Ãªtre identifiÃ©s
+soit au nick de l'actuel propriÃ©taire qu'au canal par la commande IDENTIFY.
  
 Syntaxe:
 /cs SET #canal FOUNDER nick

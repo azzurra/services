@@ -1,9 +1,9 @@
 *** ChanServ Help - Commande: SET AUTOVOICE ***
 Quand l'option AUTOVOICE est active, ChanServ donnera automatiquement le voice
-à tous les usagers qui entreront dans le canal.
+Ã  tous les usagers qui entreront dans le canal.
  
-Important: Le voice donné par AUTOVOICE est seulement temporaire, aucun nick
-ne sera ajouté ni supprimé de la liste VOP.
+Important: Le voice donnÃ© par AUTOVOICE est seulement temporaire, aucun nick
+ne sera ajoutÃ© ni supprimÃ© de la liste VOP.
  
 Syntaxe:
 /cs SET #canal AUTOVOICE <ON|OFF>

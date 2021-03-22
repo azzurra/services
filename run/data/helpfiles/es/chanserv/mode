@@ -7,9 +7,9 @@ Sintaxis:
 /cs MODE #canal mode(s)
  
 Ejemplos:
-/cs MODE #España -l
+/cs MODE #EspaÃ±a -l
 /cs MODE #IRCHelp -sp+c
 /cs MODE #linux +mi-k *
  
-Para mas informaciòn, digita /join #IRCHelp
+Para mas informaciÃ²n, digita /join #IRCHelp
 *** Fin del Help ***

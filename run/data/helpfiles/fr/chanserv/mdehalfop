@@ -1,0 +1,12 @@
+*** ChanServ Help - Commande: MDEHALFOP ***
+Permet que ChanServ enlève le halfop à tous les usagers du canal.
+Il faut être au moins SOP pour pouvoir employer cette commande.
+ 
+Syntax:
+/cs MDEHALFOP #canal
+ 
+Example:
+/cs MDEHALFOP #iac
+ 
+Pour tout renseignement, tape /join #IRCHelp
+*** Fin de l'Help ***

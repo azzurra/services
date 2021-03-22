@@ -1,6 +1,6 @@
 *** ChanServ Help - Commande: SET DESC ***
-Permet de changer la description du canal spécifié. Cette description est celle qui
-sera montrée aux usagers qui employeront la commande INFO.
+Permet de changer la description du canal spÃ©cifiÃ©. Cette description est celle qui
+sera montrÃ©e aux usagers qui employeront la commande INFO.
  
 Syntaxe:
 /cs SET #canal DESC description

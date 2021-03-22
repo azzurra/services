@@ -1,8 +1,8 @@
 *** ChanServ Help - Commande: SET NOMKICK ***
 Quand l'option NOMKICK est ON, la commande MKICK de
 ChanServ est interdite pour ce canal. Pour modifier
-cette option il faut être identifiés aussi bien au 
-nick du propriétaire qu'au canal.
+cette option il faut Ãªtre identifiÃ©s aussi bien au 
+nick du propriÃ©taire qu'au canal.
  
 Syntaxe:
 /cs SET #canal NOMKICK <ON|OFF>

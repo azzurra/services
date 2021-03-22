@@ -1,7 +1,7 @@
 *** MemoServ Help - Comando: UNDEL ***
 Si el memo especificado habia estado marcado para borrarse anteriormente, osea
 tiene una "D" a lado, esta misma se le quita, y el mensaje no se borra al desconectarte
-o al utiliz‡r el comando PURGE. Especificando ALL en lugar del numero del memo,
+o al utiliz√†r el comando PURGE. Especificando ALL en lugar del numero del memo,
 la "D" se le quita a todos los mensajes ya marcados para borrarse.
  
 Sintaxis:
@@ -11,5 +11,5 @@ Ejemplos:
 /ms UNDEL 4
 /ms UNDEL ALL
  
-Para mas informaciÚn, digita /join #IRCHelp
+Para mas informaci√≤n, digita /join #IRCHelp
 *** Fin del Help ***
