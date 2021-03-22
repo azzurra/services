@@ -13,27 +13,27 @@ Syntax:
 /cs AOP #channel LOCK [nick|mask]
 /cs AOP #channel UNLOCK [nick|mask]
  
-The AOP ADD command adds the given nickname to the Auto-Op list. If the nick or
+ADD command adds the given nickname to the Auto-Op list. If the nick or
 mask is already present on the list, its access level is changed to the AOP level.
  
-The AOP DEL command removes the given nick or mask from the Auto-Op list.
+DEL command removes the given nick or mask from the Auto-Op list.
  
-The AOP LIST command displays the current Auto-Op list; if a mask is given,
+LIST command displays the current Auto-Op list; if a mask is given,
 only those entries matching the mask are displayed.
  
-The AOP FIND command search the entries matching the given mask (in the nick!user@host format)
+FIND command search the entries matching the given mask (in the nick!user@host format)
  
-The AOP CLEAN command removes all the expired nicks from the Auto-Op list.
+CLEAN command removes all the expired nicks from the Auto-Op list.
  
-The AOP EXPLIST command displays all the expired nicks in the Auto-Op List.
+EXPLIST command displays all the expired nicks in the Auto-Op List.
  
-The AOP WIPE command removes all nicks and masks from the Auto-Op list.
+WIPE command removes all nicks and masks from the Auto-Op list.
  
-The AOP LOCK command locks the Auto-Op list. Only the founder will be able
+LOCK command locks the Auto-Op list. Only the founder will be able
 to maintain it if it's locked. If a single entry is specified, only that one
 will be locked.
  
-The AOP UNLOCK command unlocks the Auto-Op list if it was previously locked.
+UNLOCK command unlocks the Auto-Op list if it was previously locked.
 If a single entry is specified, only that one will be unlocked.
  
 Examples:

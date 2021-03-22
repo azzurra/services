@@ -13,27 +13,27 @@ Syntax:
 /cs VOP #channel LOCK [nick|mask]
 /cs VOP #channel UNLOCK [nick|mask]
  
-The VOP ADD command adds the given nickname to the Voice-Op list. If the nick or
+ADD command adds the given nickname to the Voice-Op list. If the nick or
 mask is already present on the list, its access level is changed to the VOP level.
  
-The VOP DEL command removes the given nick or mask from the Voice-Op list.
+DEL command removes the given nick or mask from the Voice-Op list.
  
-The VOP LIST command displays the current Voice-Op list; if a mask is given,
+LIST command displays the current Voice-Op list; if a mask is given,
 only those entries matching the mask are displayed.
  
-The AOP FIND command search the entries matching the given mask (in the nick!user@host format)
+FIND command search the entries matching the given mask (in the nick!user@host format)
  
-The VOP CLEAN command removes all the expired nicks from the Voice-Op list.
+CLEAN command removes all the expired nicks from the Voice-Op list.
  
-The VOP EXPLIST command displays all the expired nicks in the Voice-Op list.
+EXPLIST command displays all the expired nicks in the Voice-Op list.
  
-The VOP WIPE command removes all nicks and masks from the Voice-Op list.
+WIPE command removes all nicks and masks from the Voice-Op list.
  
-The VOP LOCK command locks the Voice-Op list. Only the founder will be able
+LOCK command locks the Voice-Op list. Only the founder will be able
 to maintain it if it's locked. If a single entry is specified, only that one
 will be locked.
  
-The VOP UNLOCK command unlocks the Voice-Op list if it was previously locked.
+UNLOCK command unlocks the Voice-Op list if it was previously locked.
 If a single entry is specified, only that one will be unlocked.
  
 Examples:
