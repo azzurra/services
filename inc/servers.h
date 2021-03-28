@@ -16,6 +16,13 @@
 
 
 /*********************************************************
+ * Headers                                               *
+ *********************************************************/
+
+#include "statserv.h"
+
+
+/*********************************************************
  * Data types                                            *
  *********************************************************/
 
@@ -35,6 +42,8 @@ struct _Server {
 
 	unsigned short int	userCount;
 	time_t				connected;	/* When the server linked. */
+
+	ServerStats 		*stats;
 };
 
 
@@ -95,5 +104,10 @@ extern void burst_servers(Server *hub);
 
 extern void servers_user_add(User *user);
 extern void servers_user_remove(User *user);
+
+extern void servers_oper_add(User *user);
+extern void servers_oper_remove(User *user);
+extern void servers_update_killcount(User *user, User *killer);
+extern void servers_increase_messages(User *user);
 
 #endif /* SRV_SERVERS_H */

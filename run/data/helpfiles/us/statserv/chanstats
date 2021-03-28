@@ -1,0 +1,22 @@
+*** StatServ Help - Comando: CHANSTATS ***
+Mostra alcune statistiche di un canale, fra cui il
+record di utenza, il numero di join, quello di ban, ecc.
+Per poter utilizzare questo comando e' necessario essere
+operatori nel canale di cui si richiedono le statistiche.
+ 
+Legenda:
+ 
+ T = Total (Totale statistiche dall'inizio del monitoraggio)
+ M = Monthly (Totale del mese in corso)
+ W = Weekly (Totale della settimana in corso)
+ D = Daily (Totale della giornata in corso)
+ 
+Sintassi del comando CHANSTATS:
+ 
+/msg StatServ CHANSTATS #canale
+ 
+Esempio:
+/msg StatServ CHANSTATS #Services
+ 
+Per ulteriori chiarimenti, digita /join #IRCHelp
+*** Fine dell'Help ***

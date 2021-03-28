@@ -24,7 +24,8 @@
 #include "../inc/send.h"
 #include "../inc/conf.h"
 #include "../inc/main.h"
-
+#include "../inc/statserv.h"
+#include "../inc/seenserv.h"
 
 /*********************************************************
  * Timeouts                                              *
@@ -325,6 +326,7 @@ void time_check(const time_t now) {
 		send_globops(NULL, "Running Daily Database Expire %d", daily_dbcnt);
 		nickserv_daily_expire();
 		chanserv_daily_expire();
+		statserv_daily_expire();
 		++daily_dbcnt;
 
 		// week checks
@@ -332,6 +334,8 @@ void time_check(const time_t now) {
 
 			// la settimana e' cambiata
 			time_today_wday = new_wday;
+			statserv_weekly_expire();
+			seenserv_weekly_expire();
 		}
 
 		// month checks
@@ -339,6 +343,7 @@ void time_check(const time_t now) {
 			
 			// il mese e' cambiato
 			time_today_month = new_month;
+			statserv_monthly_expire();
 		}
 
 		// year checks

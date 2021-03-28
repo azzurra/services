@@ -108,9 +108,9 @@
 
 #define VERS_BUILDNAME	"Core Services"
 #define VERS_MAJOR	"2"
-#define VERS_MINOR	"2"
-#define VERS_REVISION	"2"
-#define VERS_CODENAME	"Zero"
+#define VERS_MINOR	"5"
+#define VERS_REVISION	"0"
+#define VERS_CODENAME	"Uno"
 
 extern STDSTR	s_vers_name;
 extern STDSTR	s_vers_build_name;

@@ -4,13 +4,13 @@ include ../Makefile.inc
 
 OBJS =	access.o akill.o blacklist.o channels.o chanserv.o compat.o conf.o cidr.o crypt_shs1.o crypt_userhost.o \
 	datafiles.o debugserv.o helpserv.o ignore.o jupe.o lang.o logging.o main.o memory.o memoserv.o messages.o misc.o \
-	mtab.o nickserv.o oper.o operserv.o process.o regions.o reserved.o rootserv.o send.o servers.o signals.o \
-	sockutil.o spam.o storage.o strings.o sxline.o tagline.o timeout.o trie.o trigger.o users.o version.o
+	mtab.o nickserv.o oper.o operserv.o process.o regions.o reserved.o rootserv.o seenserv.o send.o servers.o signals.o \
+	sockutil.o spam.o statserv.o storage.o strings.o sxline.o tagline.o timeout.o trie.o trigger.o users.o version.o
 
 SRCS =	access.c akill.c blacklist.c channels.c chanserv.c compat.c conf.c cidr.c crypt_shs1.c crypt_userhost.c \
 	datafiles.c debugserv.c helpserv.c ignore.c jupe.c lang.c logging.c main.c memory.c memoserv.c messages.c misc.c \
-	mtab.c nickserv.c oper.c operserv.c process.c regions.c reserved.c rootserv.c send.c servers.c signals.c \
-	sockutil.c spam.c storage.c strings.c sxline.c tagline.c timeout.c trie.c trigger.c users.c version.c
+	mtab.c nickserv.c oper.c operserv.c process.c regions.c reserved.c rootserv.c seenserv.c send.c servers.c signals.c \
+	sockutil.c spam.c statserv.c storage.c strings.c sxline.c tagline.c timeout.c trie.c trigger.c users.c version.c
 
 build: services
 
@@ -54,11 +54,13 @@ process.o:			process.c			../inc/version.h
 regions.o:			regions.c			../inc/regions.h
 reserved.o:			reserved.c			../inc/reserved.h
 rootserv.o:			rootserv.c  			../inc/lang.h ../inc/lang_msg.h ../inc/options.h
+seenserv.o:			seenserv.c			../inc/options.h
 send.o:				send.c				../inc/lang.h ../inc/lang_msg.h
 servers.o:			servers.c
 signals.o:			signals.c
 sockutil.o:			sockutil.c			../inc/options.h
 spam.o:				spam.c				../inc/spam.h ../inc/common.h ../inc/send.h
+statserv.o:			statserv.c			../inc/options.h
 storage.o:			storage.c			../inc/storage.h
 strings.o:			strings.c
 sxline.o:			sxline.c			../inc/sxline.h

@@ -96,6 +96,7 @@ extern Message messages[];
 /* my uplink CAPAB */
 extern unsigned int		uplink_capab;
 
+extern int nservers;
 
 /*********************************************************
  * Public code                                           *

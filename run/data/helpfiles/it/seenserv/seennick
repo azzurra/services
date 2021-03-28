@@ -1,0 +1,14 @@
+*** SeenServ Help - Comando: SEENNICK ***
+Permette di ottenere informazioni sull'ultima volta in cui e' stato
+visto un determinato utente, fra cui quando e' stato visto, l'ultimo
+indirizzo usato, e se era identificato al nick che stava usando.
+ 
+Sintassi del comando SEENNICK:
+ 
+/msg SeenServ SEENNICK nick
+ 
+Esempi:
+/msg SeenServ SEENNICK Wolf7
+ 
+Per ulteriori chiarimenti, digita /join #IRCHelp
+*** Fine dell'Help ***

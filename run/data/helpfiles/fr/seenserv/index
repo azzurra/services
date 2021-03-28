@@ -1,0 +1,15 @@
+*** SeenServ Help ***
+SeenServ est un service qui permet de savoir quand un
+usager a été sur le réseau pour la dernière fois. Les
+commandes disponibles sont dans la liste ci-dessous;
+pour pouvoir les employer il faut taper /ss commande.
+
+    Commande   -  Description
+
+SEEN     - Recherche un nick dans le database
+SEENNICK - Semblable à SEEN, mais donne plus de renseignements
+
+Pour autres renseignements sur les commandes il faut taper /cs HELP commande.
+ 
+Pour tout renseignement, tape /join #IRCHelp
+*** Fin de l'Help ***

@@ -138,7 +138,8 @@ extern ServiceCommand	*memoserv_commands[26];
 extern ServiceCommand	*operserv_commands[26];
 extern ServiceCommand	*rootserv_commands[26];
 extern ServiceCommand	*helpserv_commands[26];
-
+extern ServiceCommand	*statserv_commands[26];
+extern ServiceCommand	*seenserv_commands[26];
 extern ServiceCommand	*debugserv_commands[26];
 
 

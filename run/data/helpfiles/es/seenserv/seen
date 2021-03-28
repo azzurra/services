@@ -1,0 +1,14 @@
+*** SeenServ Help - Comando: SEEN ***
+Mostra brevemente l'ultima volta in cui e' stato visto un utente.
+Per avere informazioni piu' accurate (messaggio di QUIT, ultimo
+indirizzo usato, etc.) usare il comando SEENNICK.
+ 
+Sintassi del comando SEEN:
+ 
+/msg SeenServ SEEN nick
+ 
+Esempio:
+/msg SeenServ SEEN picci
+ 
+Per ulteriori chiarimenti, digita /join #IRCHelp
+*** Fine dell'Help ***

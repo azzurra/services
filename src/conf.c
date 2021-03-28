@@ -111,6 +111,8 @@ char s_MemoServ[NICKSIZE] = "";
 char s_HelpServ[NICKSIZE] = "";
 char s_OperServ[NICKSIZE] = "";
 char s_RootServ[NICKSIZE] = "";
+char s_StatServ[NICKSIZE] = "";
+char s_SeenServ[NICKSIZE] = "";
 char s_GlobalNoticer[NICKSIZE] = "";
 char s_NS[3] = "NS";
 char s_CS[3] = "CS";
@@ -118,6 +120,9 @@ char s_MS[3] = "MS";
 char s_HS[3] = "HS";
 char s_OS[3] = "OS";
 char s_RS[3] = "RS";
+char s_ST[3] = "ST";
+char s_SS[3] = "SS";
+
 
 /* Number of seconds to wait for the next timeout check. */
 time_t CONF_TIMEOUT_CHECK = 2;
@@ -210,6 +215,15 @@ int CONF_AUTHDEL_DAYS = 1;
 
 /* Show taglines when saving databases? */
 BOOL CONF_SHOW_TAGLINES = FALSE;
+
+/* Channel stats expiration time, in days. */
+int CONF_STATS_EXPIRE = 30;
+
+/* Seen expiration time, in days. */
+int CONF_SEEN_EXPIRE = 30;
+
+/* Number of matches to report when doing a wild seen. */
+int CONF_MAX_WILD_SEEN = 10;
 
 /* Maximum percentage of users allowed to be AutoKilled. */
 float CONF_AKILL_PERCENT = 50.0;
@@ -958,6 +972,74 @@ static void conf_break(int ac, char **av, BOOL rehash) {
 			else
 				CONF_CLONE_SCAN_V6 = value;
 		}
+
+		else if (str_equals_nocase(av[0], "STATSERV") || str_equals_nocase(av[0], "ST")) {
+
+			if (str_len(av[1]) > NICKMAX || !validate_nick(av[1], FALSE)) {
+
+				if (rehash)
+					send_globops(NULL, "Value %s for STATSERV is not valid", av[1]);
+				else
+					fatal_error(FACILITY_CONF, __LINE__, "Value %s for STATSERV is not valid", av[1]);
+			}
+			else
+				str_copy_checked(av[1], s_StatServ, sizeof(s_StatServ));
+		}
+		else if (str_equals_nocase(av[0], "STATS_EXPIRE")) {
+
+			value = strtol(av[1], &err, 10);
+
+			if ((*err != '\0') || (value <= 0) || (value > 120)) {
+
+				if (rehash)
+					send_globops(NULL, "Value %s for STATS_EXPIRE is not valid", av[1]);
+				else
+					fatal_error(FACILITY_CONF, __LINE__, "Value %s for STATS_EXPIRE is not valid", av[1]);
+			}
+			else
+				CONF_STATS_EXPIRE = value;
+		}
+		else if (str_equals_nocase(av[0], "SEENSERV") || str_equals_nocase(av[0], "SS")) {
+
+			if (str_len(av[1]) > NICKMAX || !validate_nick(av[1], FALSE)) {
+
+				if (rehash)
+					send_globops(NULL, "Value %s for SEENSERV is not valid", av[1]);
+				else
+					fatal_error(FACILITY_CONF, __LINE__, "Value %s for SEENSERV is not valid", av[1]);
+			}
+			else
+				str_copy_checked(av[1], s_SeenServ, sizeof(s_SeenServ));
+		}
+		else if (str_equals_nocase(av[0], "SEEN_EXPIRE")) {
+
+			value = strtol(av[1], &err, 10);
+
+			if ((*err != '\0') || (value <= 0) || (value > 120)) {
+
+				if (rehash)
+					send_globops(NULL, "Value %s for SEEN_EXPIRE is not valid", av[1]);
+				else
+					fatal_error(FACILITY_CONF, __LINE__, "Value %s for SEEN_EXPIRE is not valid", av[1]);
+			}
+			else
+				CONF_SEEN_EXPIRE = value;
+		}
+		else if (str_equals_nocase(av[0], "MAXWILDSEEN")) {
+
+			value = strtol(av[1], &err, 10);
+
+			if ((*err != '\0') || (value <= 0) || (value > 30)) {
+
+				if (rehash)
+					send_globops(NULL, "Value %s for MAXWILDSEEN is not valid", av[1]);
+				else
+					fatal_error(FACILITY_CONF, __LINE__, "Value %s for MAXWILDSEEN is not valid", av[1]);
+			}
+			else
+				CONF_MAX_WILD_SEEN = value;
+		}
+
 		else if (str_equals_nocase(av[0], "PERCENT")) {
 
 			value = strtol(av[1], &err, 10);
@@ -1370,6 +1452,12 @@ void init_conf(BOOL rehash) {
 
 		if (s_RootServ[0] == c_NULL)
 			str_copy_checked("RootServ", s_RootServ, sizeof(s_RootServ));
+
+		if (s_StatServ[0] == c_NULL)
+			str_copy_checked("StatServ", s_StatServ, sizeof(s_StatServ));
+
+		if (s_SeenServ[0] == c_NULL)
+			str_copy_checked("SeenServ", s_SeenServ, sizeof(s_SeenServ));
 
 		if (s_HelpServ[0] == c_NULL)
 			str_copy_checked("HelpServ", s_HelpServ, sizeof(s_HelpServ));

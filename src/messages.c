@@ -39,6 +39,8 @@
 #include "../inc/memoserv.h"
 #include "../inc/operserv.h"
 #include "../inc/rootserv.h"
+#include "../inc/seenserv.h"
+#include "../inc/statserv.h"
 #include "../inc/helpserv.h"
 #include "../inc/ignore.h"
 #include "../inc/trie.h"
@@ -57,6 +59,7 @@ unsigned int	uplink_capab = CAPAB_UNKNOWN;
 
 unsigned long int npings = 0;
 
+int nservers = 0;
 
 /*********************************************************
  * msg_update_flood_levels()                             *
@@ -233,6 +236,8 @@ static void m_version(CSTR source, const int ac, char **av) {
 	if (!user_is_ircop(user) && ignore_match(user))
 		return;
 
+	servers_increase_messages(user);
+
 	LOG_SNOOP(s_Snooper, "VERSION requested by \2%s\2", source);
 
 	if (IS_NOT_NULL(source))
@@ -256,6 +261,14 @@ static void m_ping(CSTR source, const int ac, char **av) {
 		LOG_SNOOP(s_Snooper, "Synched to network data.");
 		send_SJOIN(s_DebugServ, CONF_DEBUG_CHAN);
 		send_SJOIN(s_GlobalNoticer, CONF_SNOOP_CHAN);
+		send_SJOIN(s_NickServ, CONF_SNOOP_CHAN);
+		send_SJOIN(s_ChanServ, CONF_SNOOP_CHAN);
+		send_SJOIN(s_HelpServ, CONF_SNOOP_CHAN);
+		send_SJOIN(s_MemoServ, CONF_SNOOP_CHAN);
+		send_SJOIN(s_OperServ, CONF_SNOOP_CHAN);
+		send_SJOIN(s_RootServ, CONF_SNOOP_CHAN);
+		send_SJOIN(s_StatServ, CONF_SNOOP_CHAN);
+		send_SJOIN(s_SeenServ, CONF_SNOOP_CHAN);
 	}
 
 	send_cmd("PONG %s %s", ac > 1 ? av[1] : CONF_SERVICES_NAME, av[0]);
@@ -279,6 +292,15 @@ static void m_burst(CSTR source, const int ac, char **av) {
 		LOG_SNOOP(s_Snooper, "Synched to network data.");
 		send_SJOIN(s_DebugServ, CONF_DEBUG_CHAN);
 		send_SJOIN(s_GlobalNoticer, CONF_SNOOP_CHAN);
+		send_SJOIN(s_NickServ, CONF_SNOOP_CHAN);
+		send_SJOIN(s_ChanServ, CONF_SNOOP_CHAN);
+		send_SJOIN(s_HelpServ, CONF_SNOOP_CHAN);
+		send_SJOIN(s_MemoServ, CONF_SNOOP_CHAN);
+		send_SJOIN(s_OperServ, CONF_SNOOP_CHAN);
+		send_SJOIN(s_RootServ, CONF_SNOOP_CHAN);
+		send_SJOIN(s_StatServ, CONF_SNOOP_CHAN);
+		send_SJOIN(s_SeenServ, CONF_SNOOP_CHAN);
+
 	}
 #endif
 }
@@ -308,6 +330,8 @@ static void m_motd(CSTR source, const int ac, char **av) {
 	/* Check if we should ignore. Operators always get through. */
 	if (!user_is_ircop(user) && ignore_match(user))
 		return;
+
+	servers_increase_messages(user);
 
 	LOG_SNOOP(s_Snooper, "MOTD requested by \2%s\2", source);
 
@@ -368,6 +392,8 @@ static void m_privmsg(CSTR source, const int ac, char **av) {
 	if (!isOper && ignore_match(currentUser))
 		return;
 
+	servers_increase_messages(currentUser);
+
 	if (strchr(av[0], '@')) {
 
 		str_tokenize(av[0], buffer, sizeof(buffer), c_AT);
@@ -396,6 +422,12 @@ static void m_privmsg(CSTR source, const int ac, char **av) {
 
 	else if (str_equals_nocase(nick, s_HelpServ))
 		helpserv(source, currentUser, av[1]);
+
+	else if (str_equals_nocase(nick, s_StatServ))
+		statserv(source, currentUser, av[1]);
+
+	else if (str_equals_nocase(nick, s_SeenServ))
+		seenserv(source, currentUser, av[1]);
 
 	else if (is_services_coder(currentUser) && str_equals_nocase(nick, s_DebugServ))
 		debugserv(source, currentUser, av[1]);
@@ -427,6 +459,8 @@ static void m_stats(CSTR source, const int ac, char **av) {
 	/* Check if we should ignore. Operators always get through. */
 	if (!user_is_ircop(user) && ignore_match(user))
 		return;
+
+	servers_increase_messages(user);
 
 	switch (*av[0]) {
 
@@ -535,6 +569,8 @@ static void m_whois(CSTR source, const int ac, char **av) {
 	if (!user_is_ircop(user) && ignore_match(user))
 		return;
 
+	servers_increase_messages(user);
+
 	if (IS_NULL(localUser = hash_onlineuser_find(av[1])))
 		send_cmd("401 %s %s :No such service.", source, av[1]);
 
@@ -572,6 +608,8 @@ static void m_admin(CSTR source, const int ac, char **av) {
 	if (!user_is_ircop(user) && ignore_match(user))
 		return;
 
+	servers_increase_messages(user);
+
 	send_cmd("256 %s :Administrative info about %s", source, CONF_SERVICES_NAME);
 	send_cmd("257 %s :Azzurra IRC Network IRC Services", source);
 	send_cmd("258 %s :Admin: Azzurra Network Roots", source);
@@ -603,6 +641,8 @@ static void m_time(CSTR source, const int ac, char **av) {
 	if (!user_is_ircop(user) && ignore_match(user))
 		return;
 
+	servers_increase_messages(user);
+
 	lang_format_localtime(timebuf, sizeof(timebuf), LANG_US, TIME_FORMAT_FULLDATE, NOW);
 
 	send_cmd("391 %s %s :%s", source, CONF_SERVICES_NAME, timebuf);
@@ -633,6 +673,8 @@ static void m_info(CSTR source, const int ac, char **av) {
 	/* Check if we should ignore. Operators always get through. */
 	if (!user_is_ircop(user) && ignore_match(user))
 		return;
+
+	servers_increase_messages(user);
 
 	if (IS_NOT_NULL(f = fopen(MOTD_FILENAME, "r"))) {
 

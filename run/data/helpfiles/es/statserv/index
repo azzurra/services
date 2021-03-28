@@ -1,0 +1,13 @@
+*** StatServ Help ***
+StatServ e' un servizio che permette di ottenere alcune
+statistiche riguardanti i canali. I comandi disponibili sono elencati
+qui sotto; per poterli usare bisogna scrivere: /msg StatServ COMANDO
+ 
+    Comando       Descrizione
+ 
+    CHANSTATS - Mostra le statistiche disponibili per un canale
+ 
+Per avere maggiori informazioni sui comandi basta scrivere: /msg StatServ HELP nomedelcomando
+ 
+Per ulteriori chiarimenti, digita /join #IRCHelp
+*** Fine dell'Help ***

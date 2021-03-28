@@ -63,6 +63,8 @@ extern char s_MemoServ[NICKSIZE];
 extern char s_HelpServ[NICKSIZE];
 extern char s_OperServ[NICKSIZE];
 extern char s_RootServ[NICKSIZE];
+extern char s_StatServ[NICKSIZE];
+extern char s_SeenServ[NICKSIZE];
 extern char s_GlobalNoticer[NICKSIZE];
 extern char s_NS[3];
 extern char s_CS[3];
@@ -70,6 +72,8 @@ extern char s_MS[3];
 extern char s_HS[3];
 extern char s_OS[3];
 extern char s_RS[3];
+extern char s_ST[3];
+extern char s_SS[3];
 
 extern time_t CONF_TIMEOUT_CHECK;
 #ifndef NEW_SOCK
@@ -107,6 +111,9 @@ extern long int CONF_DEF_MLOCKOFF;
 extern BOOL CONF_FORCE_AUTH;
 extern int CONF_AUTHDEL_DAYS;
 extern BOOL CONF_SHOW_TAGLINES;
+extern int CONF_STATS_EXPIRE;
+extern int CONF_SEEN_EXPIRE;
+extern int CONF_MAX_WILD_SEEN;
 
 extern float CONF_AKILL_PERCENT;
 extern time_t CONF_DEFAULT_AKILL_EXPIRY;

@@ -76,7 +76,9 @@ typedef	int	agentid_t;
 #define LANGMATCH_DB		"langmatch.db"
 #define SUSPEND_DB		"suspend.db"
 #define EXEMPT_DB		"exempt.db"
-
+#define STATSERV_DB		"statserv.db"
+#define SERVSTATS_DB	"servstats.db"
+#define SEENSERV_DB		"seenserv.db"
 #define AKILL_DB		"akill.db"
 
 /******* OperServ configuration *******/
