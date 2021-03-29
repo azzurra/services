@@ -1853,36 +1853,36 @@ CS_EXPLIST_HEADER
 	Liste des nick perimes dans la liste %s de %s
 CS_SENDCODE_SYNTAX_ERROR
 	Syntax: SENDCODE #channel
-REPLY_TYPE_NICK		
-	Missing: REPLY_TYPE_NICK
-REPLY_TYPE_QUIT		
+REPLY_TYPE_NICK
+	I saw %s connect %s ago.
+REPLY_TYPE_QUIT
 	I saw %s quit %s ago stating: %s
 REPLY_TYPE_NCTO_OPER
-	Missing: REPLY_TYPE_NCTO_OPER
+	I saw %s change nick to %s %s ago.
 REPLY_TYPE_NCTO
-	Missing: REPLY_TYPE_NCTO
+	I saw %s change nick %s ago.
 REPLY_TYPE_NCFR_OPER
-	Missing: REPLY_TYPE_NCFR_OPER
+	%s was using the nick %s up to %s ago.
 REPLY_TYPE_NCFR
 	Missing: REPLY_TYPE_NCFR
 REPLY_TYPE_KILL
-	Missing: REPLY_TYPE_KILL
+	I saw %s kill %s %s ago.
 REPLY_TYPE_REASON
 	Reason: %s
 REPLY_TYPE_SPLIT
 	Missing: REPLY_TYPE_SPLIT
 REPLY_TYPE_KLINE
-	Missing: REPLY_TYPE_KLINE
+	I saw %s get K-Lined %s ago.
 REPLY_TYPE_AKILL
-	Missing: REPLY_TYPE_AKILL
+	I saw %s get autokilled %s ago.
 REPLY_TYPE_NOSEEN
 	Missing: REPLY_TYPE_NOSEEN
 SS_SEENNICK_SYNTAX_ERROR
-	Missing: SS_SEENNICK_SYNTAX_ERROR
+	Syntax: SEENNICK nick
 REPLY_NICK_IS_ONLINE
-	Missing: REPLY_NICK_IS_ONLINE
+	%s is currently on IRC. Type /whois %s for more information.
 REPLY_NO_SEEN
-	Missing: REPLY_NO_SEEN
+	I have not seen %s.
 SS_SEENNICK_HEADER
 	Seen info for %s:
 SS_SEENNICK_REPLY_REALNAME
@@ -1894,7 +1894,7 @@ SS_SEENNICK_REPLY_ADDRESS_OPER
 SS_SEENNICK_REPLY_IDENTIFIED_ONLINE
 	User is identified to that nick
 SS_SEENNICK_REPLY_IDENTIFIED_OFFLINE
-	Missing: SS_SEENNICK_REPLY_IDENTIFIED_OFFLINE
+	User was identified to that nick
 SS_SEENNICK_REPLY_NOTID_ONLINE
 	Missing: SS_SEENNICK_REPLY_NOTID_ONLINE
 SS_SEENNICK_REPLY_NOTID_OFFLINE
@@ -1904,16 +1904,16 @@ END_OF_SEEN
 SS_SEENNICK_REPLY_USERMODE
 	Last usermode: %s
 SS_SEEN_SYNTAX_ERROR_OPER
-	Missing: SS_SEEN_SYNTAX_ERROR_OPER
+	Syntax: SEEN [nick!]user@host
 SS_SEEN_REPLY_MAXSEEN
 	Missing: SS_SEEN_REPLY_MAXSEEN
 SS_SEEN_REPLY_NOMATCH
 	No matches to your query were found.
 SS_SEEN_REPLY_MANY
-	Missing: SS_SEEN_REPLY_MANY
+	I found %s matches to your query. Here are the %s most recent (sorted): 
 SS_SEEN_REPLY_ONE
-	Missing: SS_SEEN_REPLY_ONE
+	I found only one match to your query: 
 SS_SEEN_REPLY_SOME
-	Missing: SS_SEEN_REPLY_SOME
+	I found %s matches to your query (sorted): 
 SS_SEEN_SYNTAX_ERROR
-	Missing: SS_SEEN_SYNTAX_ERROR
+	Syntax: SEEN nick

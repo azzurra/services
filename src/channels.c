@@ -1895,7 +1895,7 @@ void chan_handle_chanMODE(const char *source, const int ac, char **av) {
 					break;
 				}
 
-				if (add)
+				if (add) {
 					chan_add_voice(chan, targetUser);
 					++total.voicings;
 					++monthly.voicings;
@@ -1910,7 +1910,7 @@ void chan_handle_chanMODE(const char *source, const int ac, char **av) {
 						++cs->dailyvoicings;
 						cs->last_change = NOW;
 					}
-				else
+				} else {
 					chan_remove_voice(chan, targetUser);
 					++total.devoicings;
 					++monthly.devoicings;
@@ -1925,6 +1925,7 @@ void chan_handle_chanMODE(const char *source, const int ac, char **av) {
 						++cs->dailydevoicings;
 						cs->last_change = NOW;
 					}
+				}
 				break;
 		}
 	}

@@ -857,7 +857,7 @@ void add_channel_stats(CSTR channel) {
 	cs->last_change = NOW;
 
 	if (CONF_SET_EXTRASNOOP)
-		LOG_SNOOP(s_StatServ, "ST R %s", channel);
+		LOG_SNOOP(s_OperServ, "ST R %s", channel);
 }
 
 /*********************************************************/
@@ -1070,14 +1070,14 @@ static void do_map(CSTR source, User *callerUser, ServiceCommandData *data) {
 
 						send_globops(s_StatServ, "\2%s\2 deleted server stats for \2%s\2", source, ss->name);
 
-						LOG_SNOOP(s_StatServ, "ST -M %s -- by %s (%s@%s)", ss->name, source, callerUser->username, callerUser->host);
+						LOG_SNOOP(s_OperServ, "ST -M %s -- by %s (%s@%s)", ss->name, source, callerUser->username, callerUser->host);
 						log_services(LOG_SERVICES_STATSERV, "-M %s -- by %s (%s@%s)", ss->name, source, callerUser->username, callerUser->host);
 					}
 					else {
 
 						send_globops(s_StatServ, "\2%s\2 (through \2%s\2) deleted server stats for \2%s\2", source, data->operName, ss->name);
 
-						LOG_SNOOP(s_StatServ, "ST -M %s -- by %s (%s@%s) through %s", ss->name, source, callerUser->username, callerUser->host, data->operName);
+						LOG_SNOOP(s_OperServ, "ST -M %s -- by %s (%s@%s) through %s", ss->name, source, callerUser->username, callerUser->host, data->operName);
 						log_services(LOG_SERVICES_STATSERV, "-M %s -- by %s (%s@%s) through %s", ss->name, source, callerUser->username, callerUser->host, data->operName);
 					}
 
@@ -1118,14 +1118,14 @@ static void do_map(CSTR source, User *callerUser, ServiceCommandData *data) {
 
 						send_globops(s_StatServ, "\2%s\2 hid server stats for \2%s\2", source, ss->name);
 
-						LOG_SNOOP(s_StatServ, "ST M %s -- by %s (%s@%s) [Hide]", ss->name, source, callerUser->username, callerUser->host);
+						LOG_SNOOP(s_OperServ, "ST M %s -- by %s (%s@%s) [Hide]", ss->name, source, callerUser->username, callerUser->host);
 						log_services(LOG_SERVICES_STATSERV, "M %s -- by %s (%s@%s) [Hide]", ss->name, source, callerUser->username, callerUser->host);
 					}
 					else {
 
 						send_globops(s_StatServ, "\2%s\2 (through \2%s\2) hid server stats for \2%s\2", source, data->operName, ss->name);
 
-						LOG_SNOOP(s_StatServ, "ST M %s -- by %s (%s@%s) through %s [Hide]", ss->name, source, callerUser->username, callerUser->host, data->operName);
+						LOG_SNOOP(s_OperServ, "ST M %s -- by %s (%s@%s) through %s [Hide]", ss->name, source, callerUser->username, callerUser->host, data->operName);
 						log_services(LOG_SERVICES_STATSERV, "M %s -- by %s (%s@%s) through %s [Hide]", ss->name, source, callerUser->username, callerUser->host, data->operName);
 					}
 
@@ -1162,14 +1162,14 @@ static void do_map(CSTR source, User *callerUser, ServiceCommandData *data) {
 
 					if (data->operMatch) {
 
-						LOG_SNOOP(s_StatServ, "ST M %s -- by %s (%s@%s) [Show]", ss->name, source, callerUser->username, callerUser->host);
+						LOG_SNOOP(s_OperServ, "ST M %s -- by %s (%s@%s) [Show]", ss->name, source, callerUser->username, callerUser->host);
 						log_services(LOG_SERVICES_STATSERV, "M %s -- by %s (%s@%s) [Hide]", ss->name, source, callerUser->username, callerUser->host);
 
 						send_globops(s_StatServ, "\2%s\2 unhid server stats for \2%s\2", source, ss->name);
 					}
 					else {
 
-						LOG_SNOOP(s_StatServ, "ST M %s -- by %s (%s@%s) through %s [Show]", ss->name, source, callerUser->username, callerUser->host, data->operName);
+						LOG_SNOOP(s_OperServ, "ST M %s -- by %s (%s@%s) through %s [Show]", ss->name, source, callerUser->username, callerUser->host, data->operName);
 						log_services(LOG_SERVICES_STATSERV, "M %s -- by %s (%s@%s) through %s [Show]", ss->name, source, callerUser->username, callerUser->host, data->operName);
 
 						send_globops(s_StatServ, "\2%s\2 (through \2%s\2) unhid server stats for \2%s\2", source, data->operName, ss->name);
@@ -1208,6 +1208,8 @@ static void do_netstats(CSTR source, User *callerUser, ServiceCommandData *data)
 	send_notice_to_user(s_StatServ, callerUser, "Connections: T: \2%ld\2, M: \2%ld\2, W: \2%ld\2, D:\2%ld\2", total.connections, monthly.connections, weekly.connections, daily.connections);
 	send_notice_to_user(s_StatServ, callerUser, "Oppings: T: \2%ld\2, M: \2%ld\2, W: \2%ld\2, D:\2%ld\2", total.oppings, monthly.oppings, weekly.oppings, daily.oppings);
 	send_notice_to_user(s_StatServ, callerUser, "Deoppings: T: \2%ld\2, M: \2%ld\2, W: \2%ld\2, D:\2%ld\2", total.deoppings, monthly.deoppings, weekly.deoppings, daily.deoppings);
+	send_notice_to_user(s_StatServ, callerUser, "Halfoppings: T: \2%ld\2, M: \2%ld\2, W: \2%ld\2, D:\2%ld\2", total.halfoppings, monthly.halfoppings, weekly.halfoppings, daily.halfoppings);
+	send_notice_to_user(s_StatServ, callerUser, "Dehalfoppings: T: \2%ld\2, M: \2%ld\2, W: \2%ld\2, D:\2%ld\2", total.dehalfoppings, monthly.dehalfoppings, weekly.dehalfoppings, daily.dehalfoppings);
 	send_notice_to_user(s_StatServ, callerUser, "Voicings: T: \2%ld\2, M: \2%ld\2, W: \2%ld\2, D:\2%ld\2", total.voicings, monthly.voicings, weekly.voicings, daily.voicings);
 	send_notice_to_user(s_StatServ, callerUser, "Devoicings: T: \2%ld\2, M: \2%ld\2, W: \2%ld\2, D:\2%ld\2", total.devoicings, monthly.devoicings, weekly.devoicings, daily.devoicings);
 	send_notice_to_user(s_StatServ, callerUser, "Topics: T: \2%ld\2, M: \2%ld\2, W: \2%ld\2, D:\2%ld\2", total.topics, monthly.topics, weekly.topics, daily.topics);
@@ -1399,12 +1401,12 @@ static void do_delete(CSTR source, User *callerUser, ServiceCommandData *data) {
 
 		if (data->operMatch) {
 
-			LOG_SNOOP(s_StatServ, "ST *De %s -- by %s (%s@%s)", channel, source, callerUser->username, callerUser->host);
+			LOG_SNOOP(s_OperServ, "ST *De %s -- by %s (%s@%s)", channel, source, callerUser->username, callerUser->host);
 			log_services(LOG_SERVICES_STATSERV, "*De %s -- by %s (%s@%s)", channel, source, callerUser->username, callerUser->host);
 		}
 		else {
 
-			LOG_SNOOP(s_StatServ, "ST *De %s -- by %s (%s@%s) through %s", channel, source, callerUser->username, callerUser->host, data->operName);
+			LOG_SNOOP(s_OperServ, "ST *De %s -- by %s (%s@%s) through %s", channel, source, callerUser->username, callerUser->host, data->operName);
 			log_services(LOG_SERVICES_STATSERV, "*De %s -- by %s (%s@%s) through %s", channel, source, callerUser->username, callerUser->host, data->operName);
 		}
 
@@ -1414,14 +1416,14 @@ static void do_delete(CSTR source, User *callerUser, ServiceCommandData *data) {
 
 	if (data->operMatch) {
 
-		LOG_SNOOP(s_StatServ, "ST De %s -- by %s (%s@%s)", cs->name, source, callerUser->username, callerUser->host);
+		LOG_SNOOP(s_OperServ, "ST De %s -- by %s (%s@%s)", cs->name, source, callerUser->username, callerUser->host);
 		log_services(LOG_SERVICES_STATSERV, "De %s -- by %s (%s@%s)", cs->name, source, callerUser->username, callerUser->host);
 
 		send_globops(s_StatServ, "\2%s\2 deleted stats for channel \2%s\2", source, cs->name);
 	}
 	else {
 
-		LOG_SNOOP(s_StatServ, "ST De %s -- by %s (%s@%s) through %s", cs->name, source, callerUser->username, callerUser->host, data->operName);
+		LOG_SNOOP(s_OperServ, "ST De %s -- by %s (%s@%s) through %s", cs->name, source, callerUser->username, callerUser->host, data->operName);
 		log_services(LOG_SERVICES_STATSERV, "De %s -- by %s (%s@%s) through %s", cs->name, source, callerUser->username, callerUser->host, data->operName);
 
 		send_globops(s_StatServ, "\2%s\2 (through \2%s\2) deleted stats for channel \2%s\2", source, data->operName, cs->name);

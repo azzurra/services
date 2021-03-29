@@ -1,0 +1,20 @@
+*** StatServ Operator Help - Command: LIST ***
+Similar to the IRCd's /LIST command.
+ 
+Syntax: LIST [+|-][cklmnostTuv] [args]
+ 
+The flags work as follows:
+ 
++/-c <TS>: channel was created more [less] than <TS> seconds ago
++k <key>: channel has <key> set
++/-l <limit>: channel has +l set to a value greater [smaller] than <limit>
++/-m <modes>: channel has <modes> [not] set
++/-n <name>: channel name matches [doesn't match] <name>
++/-o <number>: channel has more [less] than <number> operators
++/-s <nick>: channel's topic was [not] set by <nick>
++/-t <string>: channel's topic matches [doesn't match] <string>
++/-T <TS>: channel's topic was set more [less] than <TS> seconds ago
++/-u <number>: channel has more [less] than <number> users
++/-v <number>: channel has more [less] than <number> voices
+ 
+*** End of OHelp ***

@@ -654,6 +654,14 @@ int main(int ac, char **av, char **envp) {
 
 		TRACE_MAIN();
 
+		if (NOW >= next_hour_check) {
+
+			TRACE_MAIN();
+
+			update_hour();
+			next_hour_check = NOW + ONE_HOUR;
+		}
+
 		#ifdef NEW_SOCK
 		if (NOW >= next_timeout_check) {
 

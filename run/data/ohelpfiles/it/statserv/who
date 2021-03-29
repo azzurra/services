@@ -1,0 +1,22 @@
+*** StatServ Operator Help - Command: WHO ***
+Similar to the IRCd's /WHO command.
+ 
+Syntax: WHO [+|-][cCghiImnrstu] [args]
+ 
+The flags work as follows:
+ 
++c [@|+]<channel>: user is [op|voice] on <channel> (no wildcards accepted)
+-c: user is in no channels
++C: Show the first channel the user is in
++/-g <text>: user has [not] string <text> in their realname
++/-h <host>: user has [not] string <host> in their hostname
++/-i <ip>: user is [not]connecting from IP address <ip>
++I: Always show IPs instead of hostnames
++/-m <usermodes>: user has <usermodes> [not] set on them (available modes: aAhiIorRSxyz)
++/-n <nick>: user has [not] string <nick> in their nickname
++r <pattern>: use with ONE of g, n or u to do a regex match (i.e. aaa1A matches fsq6J)
++/-s <server>: user is [not] on server <server> (no wildcards accepted)
++/-t <seconds>: user has been online for longer [less] than or equal to <seconds> seconds
++/-u <user>: user has [not] string <user> in their username
+ 
+*** End of OHelp ***
