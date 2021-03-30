@@ -637,7 +637,7 @@ void expire_stats() {
 
 	TRACE();
 	if (CONF_DISPLAY_UPDATES)
-		send_globops(NULL, "Completed Stat Records Expire (%d/%d)", xcount, count);
+		send_globops(NULL, "Completed Stats Expire (%d/%d)", xcount, count);
 }
 
 /*********************************************************/
@@ -662,6 +662,8 @@ void statserv_daily_expire() {
 			cs->dailybans = 0;
 			cs->dailyoppings = 0;
 			cs->dailydeoppings = 0;
+			cs->dailyhalfoppings = 0;
+			cs->dailydehalfoppings = 0;
 			cs->dailyvoicings = 0;
 			cs->dailydevoicings = 0;
 			cs->dailytopics = 0;
@@ -690,7 +692,7 @@ void statserv_daily_expire() {
 	stats_daily_maxchans = 0;
 
 	if (CONF_DISPLAY_UPDATES)
-		send_globops(NULL, "Completed Daily Stats Expire (Channels/Servers in DataBase: %d/%d)", count, scount);
+		send_globops(NULL, "Completed Daily Stats Expire (Channels/Servers in database: %d/%d)", count, scount);
 }
 
 /*********************************************************/
@@ -715,6 +717,8 @@ void statserv_weekly_expire() {
 			cs->weeklybans = 0;
 			cs->weeklyoppings = 0;
 			cs->weeklydeoppings = 0;
+			cs->weeklyhalfoppings = 0;
+			cs->weeklydehalfoppings = 0;
 			cs->weeklyvoicings = 0;
 			cs->weeklydevoicings = 0;
 			cs->weeklytopics = 0;
@@ -734,7 +738,7 @@ void statserv_weekly_expire() {
 	weekly.last_update = NOW;
 
 	if (CONF_DISPLAY_UPDATES)
-		send_globops(NULL, "Completed Weekly Stats Expire (Channels in DataBase: %d)", count);
+		send_globops(NULL, "Completed Weekly Stats Expire (Channels in database: %d)", count);
 }
 
 /*********************************************************/
@@ -759,6 +763,8 @@ void statserv_monthly_expire() {
 			cs->monthlybans = 0;
 			cs->monthlyoppings = 0;
 			cs->monthlydeoppings = 0;
+			cs->monthlyhalfoppings = 0;
+			cs->monthlydehalfoppings = 0;
 			cs->monthlyvoicings = 0;
 			cs->monthlydevoicings = 0;
 			cs->monthlytopics = 0;
@@ -778,7 +784,7 @@ void statserv_monthly_expire() {
 	monthly.last_update = NOW;
 
 	if (CONF_DISPLAY_UPDATES)
-		send_globops(NULL, "Completed Monthly Stats Expire (Channels in DataBase: %d)", count);
+		send_globops(NULL, "Completed Monthly Stats Expire (Channels in database: %d)", count);
 }
 
 
@@ -1570,6 +1576,10 @@ static void do_chanstats(CSTR source, User *callerUser, ServiceCommandData *data
 			cs->totaloppings, cs->monthlyoppings, cs->weeklyoppings, cs->dailyoppings);
 		send_notice_to_user(s_StatServ, callerUser, "Deoppings: T: \2%ld\2, M: \2%ld\2, W: \2%ld\2, D: \2%ld\2",
 			cs->totaldeoppings, cs->monthlydeoppings, cs->weeklydeoppings, cs->dailydeoppings);
+		send_notice_to_user(s_StatServ, callerUser, "Halfoppings: T: \2%ld\2, M: \2%ld\2, W: \2%ld\2, D: \2%ld\2",
+			cs->totalhalfoppings, cs->monthlyhalfoppings, cs->weeklyhalfoppings, cs->dailyhalfoppings);
+		send_notice_to_user(s_StatServ, callerUser, "Dehalfoppings: T: \2%ld\2, M: \2%ld\2, W: \2%ld\2, D: \2%ld\2",
+			cs->totaldehalfoppings, cs->monthlydehalfoppings, cs->weeklydehalfoppings, cs->dailydehalfoppings);
 		send_notice_to_user(s_StatServ, callerUser, "Voicings: T: \2%ld\2, M: \2%ld\2, W: \2%ld\2, D: \2%ld\2",
 			cs->totalvoicings, cs->monthlyvoicings, cs->weeklyvoicings, cs->dailyvoicings);
 		send_notice_to_user(s_StatServ, callerUser, "Devoicings: T: \2%ld\2, M: \2%ld\2, W: \2%ld\2, D: \2%ld\2",
