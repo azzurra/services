@@ -244,7 +244,7 @@ BOOL validate_email(CSTR email, BOOL allowWild) {
 }
 
 
-BOOL validate_tld(CSTR tld, BOOL allowFW) { //IANA Version 2020080100, Last Updated Sat Aug  1 07:07:01 2020 UTC
+BOOL validate_tld(CSTR tld, BOOL allowFW) {
 
 	size_t	tldlen;
 

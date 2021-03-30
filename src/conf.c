@@ -142,6 +142,8 @@ int CONF_INVALID_PASSWORD_SECOND_IGNORE = 30;			/* Number of minutes to ignore t
 int CONF_CHANNEL_EXPIRE = 30;		/* Channel expiration time, in days. */
 int CONF_NICK_EXPIRE = 30;			/* Nickname expiration time, in days. */
 int CONF_MEMO_EXPIRE = 30;			/* Memo expiration time, in days. */
+int CONF_STATS_EXPIRE = 30;			/* Channel stats expiration time, in days. */
+int CONF_SEEN_EXPIRE = 30;			/* Seen expiration time, in days. */
 
 /* Send an E-Mail reminder when nicknames or channels are about to expire? */
 int CONF_SEND_REMINDER = 0;		/* Defaults to 0 days (off). */
@@ -215,15 +217,6 @@ int CONF_AUTHDEL_DAYS = 1;
 
 /* Show taglines when saving databases? */
 BOOL CONF_SHOW_TAGLINES = FALSE;
-
-/* Channel stats expiration time, in days. */
-int CONF_STATS_EXPIRE = 30;
-
-/* Seen expiration time, in days. */
-int CONF_SEEN_EXPIRE = 30;
-
-/* Number of matches to report when doing a wild seen. */
-int CONF_MAX_WILD_SEEN = 10;
 
 /* Maximum percentage of users allowed to be AutoKilled. */
 float CONF_AKILL_PERCENT = 50.0;
@@ -525,6 +518,30 @@ static void conf_break(int ac, char **av, BOOL rehash) {
 			}
 			else
 				str_copy_checked(av[1], s_RootServ, sizeof(s_RootServ));
+		}
+		else if (str_equals_nocase(av[0], "STATSERV") || str_equals_nocase(av[0], "ST")) {
+
+			if (str_len(av[1]) > NICKMAX || !validate_nick(av[1], FALSE)) {
+
+				if (rehash)
+					send_globops(NULL, "Value %s for STATSERV is not valid", av[1]);
+				else
+					fatal_error(FACILITY_CONF, __LINE__, "Value %s for STATSERV is not valid", av[1]);
+			}
+			else
+				str_copy_checked(av[1], s_StatServ, sizeof(s_StatServ));
+		}
+		else if (str_equals_nocase(av[0], "SEENSERV") || str_equals_nocase(av[0], "SS")) {
+
+			if (str_len(av[1]) > NICKMAX || !validate_nick(av[1], FALSE)) {
+
+				if (rehash)
+					send_globops(NULL, "Value %s for SEENSERV is not valid", av[1]);
+				else
+					fatal_error(FACILITY_CONF, __LINE__, "Value %s for SEENSERV is not valid", av[1]);
+			}
+			else
+				str_copy_checked(av[1], s_SeenServ, sizeof(s_SeenServ));
 		}
 		else if (str_equals_nocase(av[0], "GLOBAL")) {
 
@@ -972,74 +989,34 @@ static void conf_break(int ac, char **av, BOOL rehash) {
 			else
 				CONF_CLONE_SCAN_V6 = value;
 		}
-
-		else if (str_equals_nocase(av[0], "STATSERV") || str_equals_nocase(av[0], "ST")) {
-
-			if (str_len(av[1]) > NICKMAX || !validate_nick(av[1], FALSE)) {
-
-				if (rehash)
-					send_globops(NULL, "Value %s for STATSERV is not valid", av[1]);
-				else
-					fatal_error(FACILITY_CONF, __LINE__, "Value %s for STATSERV is not valid", av[1]);
-			}
-			else
-				str_copy_checked(av[1], s_StatServ, sizeof(s_StatServ));
-		}
-		else if (str_equals_nocase(av[0], "STATS_EXPIRE")) {
+		else if (str_equals_nocase(av[0], "STATEXP")) {
 
 			value = strtol(av[1], &err, 10);
 
 			if ((*err != '\0') || (value <= 0) || (value > 120)) {
 
 				if (rehash)
-					send_globops(NULL, "Value %s for STATS_EXPIRE is not valid", av[1]);
+					send_globops(NULL, "Value %s for STATEXP is not valid", av[1]);
 				else
-					fatal_error(FACILITY_CONF, __LINE__, "Value %s for STATS_EXPIRE is not valid", av[1]);
+					fatal_error(FACILITY_CONF, __LINE__, "Value %s for STATEXP is not valid", av[1]);
 			}
 			else
 				CONF_STATS_EXPIRE = value;
 		}
-		else if (str_equals_nocase(av[0], "SEENSERV") || str_equals_nocase(av[0], "SS")) {
-
-			if (str_len(av[1]) > NICKMAX || !validate_nick(av[1], FALSE)) {
-
-				if (rehash)
-					send_globops(NULL, "Value %s for SEENSERV is not valid", av[1]);
-				else
-					fatal_error(FACILITY_CONF, __LINE__, "Value %s for SEENSERV is not valid", av[1]);
-			}
-			else
-				str_copy_checked(av[1], s_SeenServ, sizeof(s_SeenServ));
-		}
-		else if (str_equals_nocase(av[0], "SEEN_EXPIRE")) {
+		else if (str_equals_nocase(av[0], "SEENEXP")) {
 
 			value = strtol(av[1], &err, 10);
 
 			if ((*err != '\0') || (value <= 0) || (value > 120)) {
 
 				if (rehash)
-					send_globops(NULL, "Value %s for SEEN_EXPIRE is not valid", av[1]);
+					send_globops(NULL, "Value %s for SEENEXP is not valid", av[1]);
 				else
-					fatal_error(FACILITY_CONF, __LINE__, "Value %s for SEEN_EXPIRE is not valid", av[1]);
+					fatal_error(FACILITY_CONF, __LINE__, "Value %s for SEENEXPSEENEXP is not valid", av[1]);
 			}
 			else
 				CONF_SEEN_EXPIRE = value;
 		}
-		else if (str_equals_nocase(av[0], "MAXWILDSEEN")) {
-
-			value = strtol(av[1], &err, 10);
-
-			if ((*err != '\0') || (value <= 0) || (value > 30)) {
-
-				if (rehash)
-					send_globops(NULL, "Value %s for MAXWILDSEEN is not valid", av[1]);
-				else
-					fatal_error(FACILITY_CONF, __LINE__, "Value %s for MAXWILDSEEN is not valid", av[1]);
-			}
-			else
-				CONF_MAX_WILD_SEEN = value;
-		}
-
 		else if (str_equals_nocase(av[0], "PERCENT")) {
 
 			value = strtol(av[1], &err, 10);

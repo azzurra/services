@@ -824,8 +824,8 @@ static void do_settings(CSTR source, User *callerUser, ServiceCommandData *data)
 	send_notice_to_user(s_OperServ, callerUser, "Nick Release Timeout: \2%ds\2 - ChanServ/NickServ Register Delay: \2%ds\2 - Chan Inhabit: \2%ds\2",
 		CONF_RELEASE_TIMEOUT, CONF_REGISTER_DELAY, CONF_CHANNEL_INHABIT);
 
-	send_notice_to_user(s_OperServ, callerUser, "Expiry Times: Nicks: \2%d\2 - Chans: \2%d\2 - Memos: \2%d\2",
-		CONF_NICK_EXPIRE, CONF_CHANNEL_EXPIRE, CONF_MEMO_EXPIRE);
+	send_notice_to_user(s_OperServ, callerUser, "Expiry Times: Nicks: \2%d\2 - Chans: \2%d\2 - Memos: \2%d\2 - Stats: \2%d\2 - Seens: \2%d\2",
+		CONF_NICK_EXPIRE, CONF_CHANNEL_EXPIRE, CONF_MEMO_EXPIRE, CONF_STATS_EXPIRE, CONF_SEEN_EXPIRE);
 
 	if (CONF_SEND_REMINDER == 0) {
 
