@@ -4,6 +4,7 @@ tags
 src/services
 run/services
 run/*.conf
+run/core
 run/crypt.key
 run/services.motd
 run/services.pid
