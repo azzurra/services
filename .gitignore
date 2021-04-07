@@ -8,9 +8,11 @@ run/core
 run/crypt.key
 run/services.motd
 run/services.pid
+run/data/backup/*
 run/data/lang/*
 run/data/logs/*
 run/data/*.db
+run/data/*.save
 run/data/services.core-*
 run/data/services-*
 lang/lang_msg_svc.h

@@ -569,9 +569,7 @@ SeenInfo *seenserv_create_record(const User *user) {
 
 BOOL is_seen_exempt(CSTR nick, CSTR username, CSTR host, const unsigned long int ip) {
 
-	if ((ip == SERVICES_IP_NETWORK_ORDER) ||							/* Services' clients and enforcers. */
-		(ip == 591065044UL) ||											/* picard.azzurra.org */
-		((ip == 4213038297UL) && str_equals_partial(nick, "ircd", 4)))	/* golia.caltanet.it */
+	if (ip == SERVICES_IP_NETWORK_ORDER) /* Services' clients and enforcers. */
 		return TRUE;
 
 	return FALSE;
@@ -718,7 +716,7 @@ static void do_unseen(CSTR source, User *callerUser, ServiceCommandData *data) {
 
 	if (IS_NOT_NULL(user = hash_onlineuser_find(nick))) {
 
-		LOG_SNOOP(s_SeenServ, "SS *U %s -- by %s (%s@%s) [User Online]", user->nick, source, callerUser->username, callerUser->host);
+		LOG_SNOOP(s_OperServ, "SS *U %s -- by %s (%s@%s) [User Online]", user->nick, source, callerUser->username, callerUser->host);
 		send_notice_to_user(s_SeenServ, callerUser, "\2%s\2 is online, cannot delete seen information.", user->nick);
 		return;
 	}
@@ -727,21 +725,21 @@ static void do_unseen(CSTR source, User *callerUser, ServiceCommandData *data) {
 
 	if (IS_NULL(si = hash_seeninfo_find(nick))) {
 
-		LOG_SNOOP(s_SeenServ, "SS *U %s -- by %s (%s@%s) [Not Found]", nick, source, callerUser->username, callerUser->host);
+		LOG_SNOOP(s_OperServ, "SS *U %s -- by %s (%s@%s) [Not Found]", nick, source, callerUser->username, callerUser->host);
 		send_notice_to_user(s_SeenServ, callerUser, "No seen record found for \2%s\2.", nick);
 		return;
 	}
 
 	if (data->operMatch) {
 
-		LOG_SNOOP(s_SeenServ, "SS U %s -- by %s (%s@%s)", si->nick, source, callerUser->username, callerUser->host);
+		LOG_SNOOP(s_OperServ, "SS U %s -- by %s (%s@%s)", si->nick, source, callerUser->username, callerUser->host);
 		log_services(LOG_SERVICES_SEENSERV, "U %s -- by %s (%s@%s)", si->nick, source, callerUser->username, callerUser->host);
 
 		send_globops(s_SeenServ, "\2%s\2 deleted seen record for \2%s\2", source, si->nick);
 	}
 	else {
 
-		LOG_SNOOP(s_SeenServ, "SS U %s -- by %s (%s@%s) through %s", si->nick, source, callerUser->username, callerUser->host, data->operName);
+		LOG_SNOOP(s_OperServ, "SS U %s -- by %s (%s@%s) through %s", si->nick, source, callerUser->username, callerUser->host, data->operName);
 		log_services(LOG_SERVICES_SEENSERV, "U %s -- by %s (%s@%s) through %s", si->nick, source, callerUser->username, callerUser->host, data->operName);
 
 		send_globops(s_SeenServ, "\2%s\2 (through \2%s\2) deleted seen record for \2%s\2", source, data->operName, si->nick);

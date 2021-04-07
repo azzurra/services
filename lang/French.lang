@@ -326,7 +326,7 @@ CS_LEVEL_SOPONLY_KICK_REASON
 CS_LEVEL_SRAONLY_KICK_REASON
 	Seulement les Services Roots peuvent entrer dans ce canal.
 CS_LEVEL_SYNTAX_ERROR
-	Syntax: LEVEL #channel [OPERS|SOP|SA|SRA|CODERS|MASTERS|NONE]
+	Syntax: LEVEL #channel [SOP|SA|SRA|CODER|NONE]
 CS_LISTREG_SYNTAX_ERROR
 	Syntax: LISTREG N|D|T|U|NU|R|DR|H|K|F|Z|C pattern [page_number]
 CS_MKICK_SYNTAX_ERROR

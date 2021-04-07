@@ -43,7 +43,6 @@
 #include "../inc/statserv.h"
 #include "../inc/helpserv.h"
 #include "../inc/ignore.h"
-#include "../inc/trie.h"
 
 
 /*********************************************************
@@ -838,32 +837,34 @@ Message messages[] = {
 
 /*********************************************************/
 
-static trie *msg_trie;
+static __inline__ int message_str_compare(CSTR string1, CSTR string2) {
 
-/* Initialize message parser */
-void message_init(void)
-{
-    Message *johnny; /* walker (cit.) */
-    msg_trie = trie_create();
+	register const unsigned char	*str1 = (const unsigned char *) string1;
+	register const unsigned char	*str2 = (const unsigned char *) string2;
+	register unsigned char			ch1, ch2;
 
-    /* Walk message array and build the trie */
-    for (johnny = messages; johnny->name; ++johnny)
-    {
-        /* FIXME: abort services startup if trie node allocation fails */
-        trie_add(msg_trie, johnny->name, johnny);
-    }
 
-    /* Cave Johnson, we're done here */
+	if (IS_NULL(str1) || IS_NULL(str2))
+		return (int)(str1 - str2);
+
+	do {
+		ch1 = (unsigned char) *str1++;
+		ch2 = (unsigned char) *str2++;
+	} while ((ch1 != c_NULL) && (ch1 == ch2));
+	return ch1 - ch2;
 }
 
-/* Cleanup message parser */
-void message_terminate(void)
-{
-    trie_destroy(msg_trie);
-}
+/*********************************************************/
 
-/* Lookup message handler in msg_trie, returns NULL on failure */
-Message *find_message(const char *name)
-{
-    return (Message *)trie_find(msg_trie, name);
+Message *find_message(const char *name) {
+
+	Message *m;
+
+	for (m = messages; m->name; ++m) {
+
+		if (message_str_compare(name, m->name) == 0)
+			return m;
+	}
+
+	return NULL;
 }

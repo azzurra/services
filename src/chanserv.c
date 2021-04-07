@@ -10199,17 +10199,17 @@ static void do_level(CSTR source, User *callerUser, ServiceCommandData *data) {
 
 		if (data->operMatch) {
 
-			LOG_SNOOP(s_OperServ, "CS +L %s -- by %s (%s@%s) [MASTERS]", ci->name, callerUser->nick, callerUser->username, callerUser->host);
-			log_services(LOG_SERVICES_CHANSERV_GENERAL, "+L %s -- by %s (%s@%s) [MASTERS]", ci->name, callerUser->nick, callerUser->username, callerUser->host);
+			LOG_SNOOP(s_OperServ, "CS +L %s -- by %s (%s@%s) [CODER]", ci->name, callerUser->nick, callerUser->username, callerUser->host);
+			log_services(LOG_SERVICES_CHANSERV_GENERAL, "+L %s -- by %s (%s@%s) [CODER]", ci->name, callerUser->nick, callerUser->username, callerUser->host);
 
-			send_globops(s_ChanServ, "\2%s\2 set LEVEL for \2%s\2 to: \2CODERS\2", source, ci->name);
+			send_globops(s_ChanServ, "\2%s\2 set LEVEL for \2%s\2 to: \2CODER\2", source, ci->name);
 		}
 		else {
 
-			LOG_SNOOP(s_OperServ, "CS +L %s -- by %s (%s@%s) through %s [MASTERS]", ci->name, callerUser->nick, callerUser->username, callerUser->host, data->operName);
-			log_services(LOG_SERVICES_CHANSERV_GENERAL, "+L %s -- by %s (%s@%s) through %s [MASTERS]", ci->name, callerUser->nick, callerUser->username, callerUser->host, data->operName);
+			LOG_SNOOP(s_OperServ, "CS +L %s -- by %s (%s@%s) through %s [CODER]", ci->name, callerUser->nick, callerUser->username, callerUser->host, data->operName);
+			log_services(LOG_SERVICES_CHANSERV_GENERAL, "+L %s -- by %s (%s@%s) through %s [CODER]", ci->name, callerUser->nick, callerUser->username, callerUser->host, data->operName);
 
-			send_globops(s_ChanServ, "\2%s\2 (through \2%s\2) set LEVEL for \2%s\2 to: \2CODERS\2", source, data->operName, ci->name);
+			send_globops(s_ChanServ, "\2%s\2 (through \2%s\2) set LEVEL for \2%s\2 to: \2CODER\2", source, data->operName, ci->name);
 		}
 
 		send_notice_lang_to_user(s_ChanServ, callerUser, GetCallerLang(), CS_LEVEL_LEVEL_CHANGED, ci->name, "Masters");
