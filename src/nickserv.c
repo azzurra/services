@@ -98,6 +98,7 @@ static void do_info(CSTR source, User *callerUser, ServiceCommandData *data);
 static void do_recover(CSTR source, User *callerUser, ServiceCommandData *data);
 static void do_register(CSTR source, User *callerUser, ServiceCommandData *data);
 static void do_release(CSTR source, User *callerUser, ServiceCommandData *data);
+static void do_resetpass(CSTR source, User *callerUser, ServiceCommandData *data);
 static void do_listchans(CSTR source, User *callerUser, ServiceCommandData *data);
 static void do_isonaccess(CSTR source, User *callerUser, ServiceCommandData *data);
 static void do_show_umode(CSTR source, User *callerUser, ServiceCommandData *data);
@@ -234,6 +235,7 @@ static ServiceCommand	nickserv_commands_R[] = {
 	{ "REGISTER",	ULEVEL_USER,			0, do_register },
 	{ "RECOVER",	ULEVEL_USER,			0, do_recover },
 	{ "RELEASE",	ULEVEL_USER,			0, do_release },
+	{ "RESETPASS",	ULEVEL_USER,			0, do_resetpass },
 	{ NULL,			0,						0, NULL }
 };
 // 'S' (83 / 18)
@@ -1916,6 +1918,11 @@ static void do_drop(CSTR source, User *callerUser, ServiceCommandData *data) {
 				send_notice_lang_to_user(s_NickServ, callerUser, GetCallerLang(), NS_DROP_ERROR_MAILCHANGE_ON);
 				send_notice_lang_to_user(s_NickServ, callerUser, GetCallerLang(), RECEIVE_NETWORK_ASSISTANCE, CONF_NETWORK_NAME);
 			}
+			else if (FlagSet(ni->flags, NI_PASSRESET)) {
+
+				send_notice_lang_to_user(s_NickServ, callerUser, GetCallerLang(), NS_DROP_ERROR_RESETPASS_ON);
+				send_notice_lang_to_user(s_NickServ, callerUser, GetCallerLang(), RECEIVE_NETWORK_ASSISTANCE, CONF_NETWORK_NAME);
+			}
 			else if (FlagSet(ni->flags, NI_DROP)) {
 
 				send_notice_lang_to_user(s_NickServ, callerUser, GetCallerLang(), CSNS_ERROR_DROP_CODE_ALREADY_SENT);
@@ -2291,6 +2298,9 @@ static void do_set_email(const User *callerUser, CSTR param, BOOL hasmail) {
 		if (FlagSet(ni->flags, NI_DROP))
 			send_notice_lang_to_user(s_NickServ, callerUser, GetCallerLang(), NS_SET_EMAIL_ERROR_DROP_ON);
 
+		else if (FlagSet(ni->flags, NI_PASSRESET))
+			send_notice_lang_to_user(s_NickServ, callerUser, GetCallerLang(), NS_SET_EMAIL_ERROR_PASSRESET_ON);
+
 		else if (FlagUnset(ni->flags, NI_MAILCHANGE) && (hasmail == FALSE))
 			send_notice_lang_to_user(s_NickServ, callerUser, GetCallerLang(), NS_SET_EMAIL_ERROR_NO_MAILCHANGE, ni->nick);
 
@@ -2358,6 +2368,9 @@ static void do_set_email(const User *callerUser, CSTR param, BOOL hasmail) {
 
 		else if (FlagSet(ni->flags, NI_DROP))
 			send_notice_lang_to_user(s_NickServ, callerUser, GetCallerLang(), NS_SET_EMAIL_ERROR_DROP_ON);
+
+		else if (FlagSet(ni->flags, NI_PASSRESET))
+			send_notice_lang_to_user(s_NickServ, callerUser, GetCallerLang(), NS_SET_EMAIL_ERROR_PASSRESET_ON);
 
 		else if (str_len(param) > MAILMAX)
 			send_notice_lang_to_user(s_NickServ, callerUser, GetCallerLang(), CSNS_ERROR_MAIL_MAX_LENGTH, MAILMAX);
@@ -3168,6 +3181,9 @@ static void do_info(CSTR source, User *callerUser, ServiceCommandData *data) {
 			if (FlagSet(ni->flags, NI_MAILCHANGE))
 				send_notice_lang_to_user(s_NickServ, callerUser, GetCallerLang(), NS_INFO_MAIL_CHANGE, ni->regemail);
 
+			if (FlagSet(ni->flags, NI_PASSRESET))
+				send_notice_lang_to_user(s_NickServ, callerUser, GetCallerLang(), NS_INFO_PASSRESET_REQUEST);
+
 			if (FlagSet(ni->flags, NI_DROP))
 				send_notice_lang_to_user(s_NickServ, callerUser, GetCallerLang(), NS_INFO_DROP_REQUEST);
 		}
@@ -3192,6 +3208,9 @@ static void do_info(CSTR source, User *callerUser, ServiceCommandData *data) {
 
 			if (FlagSet(ni->flags, NI_MAILCHANGE))
 				send_notice_lang_to_user(s_NickServ, callerUser, GetCallerLang(), NS_INFO_OPER_MAILCHANGE, ni->regemail, ni->auth);
+
+			if (FlagSet(ni->flags, NI_PASSRESET))
+				send_notice_lang_to_user(s_NickServ, callerUser, GetCallerLang(), NS_INFO_OPER_PASSRESET_REQUEST, ni->auth);
 
 			if (FlagSet(ni->flags, NI_DROP))
 				send_notice_lang_to_user(s_NickServ, callerUser, GetCallerLang(), NS_INFO_OPER_DROP_REQUEST, ni->auth);
@@ -3343,6 +3362,82 @@ static void do_release(CSTR source, User *callerUser, ServiceCommandData *data) 
 		log_services(LOG_SERVICES_NICKSERV_GENERAL, "*Re %s -- by %s (%s@%s) [%s]", ni->nick, source, callerUser->username, callerUser->host, pass);
 
 		update_invalid_password_count(callerUser, s_NickServ, nick);
+	}
+}
+
+/*********************************************************/
+
+static void do_resetpass(CSTR source, User *callerUser, ServiceCommandData *data) {
+
+	char *nick, *auth, *newpass;
+	NickInfo	*ni;
+
+	unsigned long int authcode;
+
+	if (IS_NULL(nick = strtok(NULL, " ")) || IS_NULL(auth = strtok(NULL, " ")) || IS_NULL(newpass = strtok(NULL, " "))) {
+
+		send_notice_lang_to_user(s_NickServ, callerUser, GetCallerLang(), NS_RESETPASS_SYNTAX_ERROR);
+		send_notice_lang_to_user(s_NickServ, callerUser, GetCallerLang(), GET_MORE_INFO_ON_COMMAND, s_NS, "RESETPASS");
+	}
+	else if (str_len(nick) > NICKMAX)
+		send_notice_lang_to_user(s_NickServ, callerUser, GetCallerLang(), ERROR_NICK_MAX_LENGTH, NICKMAX);
+
+	else if (IS_NULL(ni = findnick(nick)))
+		send_notice_lang_to_user(s_NickServ, callerUser, GetCallerLang(), ERROR_NICK_NOT_REG, ni->nick);
+
+	else if (FlagSet(ni->flags, NI_FORBIDDEN)) {
+
+		send_notice_lang_to_user(s_NickServ, callerUser, GetCallerLang(), NS_ERROR_NICK_FORBIDDEN, ni->nick);
+		send_notice_lang_to_user(s_NickServ, callerUser, GetCallerLang(), EMAIL_NETWORK_FOR_MORE_INFO, MAIL_KLINE);
+	}
+	else if (FlagSet(ni->flags, NI_FROZEN)) {
+
+		send_notice_lang_to_user(s_NickServ, callerUser, GetCallerLang(), NS_ERROR_NICK_FROZEN, ni->nick);
+		send_notice_lang_to_user(s_NickServ, callerUser, GetCallerLang(), EMAIL_NETWORK_FOR_MORE_INFO, MAIL_KLINE);
+	}
+	else if (!FlagSet(ni->flags, NI_PASSRESET))
+		send_notice_lang_to_user(s_NickServ, callerUser, GetCallerLang(), NS_RESETPASS_ERROR_NOT_RESETTING, ni->nick);
+
+	else if (!(authcode = strtoul(auth, NULL, 10)) || !(authcode != 0) || !(authcode == ni->auth)) {
+
+		LOG_SNOOP(s_OperServ, "NS *RP %s -- by %s (%s@%s) [Wrong Reset Pass code: %lu]", ni->nick, callerUser->nick, callerUser->username, callerUser->host, authcode);
+		log_services(LOG_SERVICES_NICKSERV_GENERAL, "*RP %s -- by %s (%s@%s) [Wrong Reset Pass code: %lu]", ni->nick, callerUser->nick, callerUser->username, callerUser->host, authcode);
+
+		send_notice_lang_to_user(s_NickServ, callerUser, GetCallerLang(), NS_RESETPASS_ERROR_WRONG_CODE);
+
+		update_invalid_password_count(callerUser, s_NickServ, nick);
+	}
+	else if (strchr(newpass, ' '))
+		send_notice_lang_to_user(s_NickServ, callerUser, GetCallerLang(), CSNS_ERROR_PASSWORD_WITH_SPACES);
+
+	else if (str_equals_nocase(newpass, "PASSWORD"))
+		send_notice_lang_to_user(s_NickServ, callerUser, GetCallerLang(), CSNS_ERROR_PASSWORD_AS_PASS);
+
+	else if (str_equals_nocase(ni->nick, newpass) || (str_len(newpass) < 5))
+		send_notice_lang_to_user(s_NickServ, callerUser, GetCallerLang(), CSNS_ERROR_INSECURE_PASSWORD);
+
+	else if (str_len(newpass) > PASSMAX)
+		send_notice_lang_to_user(s_NickServ, callerUser, GetCallerLang(), CSNS_ERROR_PASSWORD_MAX_LENGTH, PASSMAX);
+
+	else if (string_has_ccodes(newpass))
+		send_notice_lang_to_user(s_NickServ, callerUser, GetCallerLang(), CSNS_ERROR_PASSWORD_WITH_CCODES);
+
+	else {
+
+		if (CONF_SET_EXTRASNOOP && !user_is_ircop(callerUser))
+			LOG_SNOOP(s_OperServ, "NS RP %s -- by %s (%s@%s) [%s -> %s]", ni->nick, callerUser->nick, callerUser->username, callerUser->host, ni->pass, newpass);
+		else
+			LOG_SNOOP(s_OperServ, "NS RP %s -- by %s (%s@%s) [Logged]", ni->nick, callerUser->nick, callerUser->username, callerUser->host);
+
+		log_services(LOG_SERVICES_NICKSERV_GENERAL, "RP %s -- by %s (%s@%s) [%s -> %s]", ni->nick, callerUser->nick, callerUser->username, callerUser->host, ni->pass, newpass);
+
+		send_notice_lang_to_user(s_NickServ, callerUser, GetCallerLang(), NS_SET_PASSWD_PASSWORD_CHANGED, ni->nick, newpass);
+
+		str_copy_checked(newpass, ni->pass, PASSMAX);
+		ni->auth = 0;
+		ni->last_email_request = 0;
+		RemoveFlag(ni->flags, NI_PASSRESET);
+		user_remove_id(ni->nick, TRUE);
 	}
 }
 
@@ -3575,7 +3670,7 @@ static void do_sendcode(CSTR source, User *callerUser, ServiceCommandData *data)
 	else if (FlagSet(ni->flags, NI_FORBIDDEN))
 		send_notice_lang_to_user(s_NickServ, callerUser, GetCallerLang(), NS_ERROR_NICK_FORBIDDEN, ni->nick);
 	
-	else if (!FlagSet(ni->flags, NI_AUTH | NI_DROP | NI_MAILCHANGE) && (ni->auth == 0))
+	else if (!FlagSet(ni->flags, NI_AUTH | NI_DROP | NI_MAILCHANGE | NI_PASSRESET) && (ni->auth == 0))
 		send_notice_lang_to_user(s_NickServ, callerUser, GetCallerLang(), NS_SENDCODE_ERROR_NO_CODE, ni->nick);
 	
 	else {
@@ -3591,10 +3686,14 @@ static void do_sendcode(CSTR source, User *callerUser, ServiceCommandData *data)
 		else if (FlagSet(ni->flags, NI_MAILCHANGE)) {
 			snprintf(type, 7, "MAIL");
 			operation_msg_id = NS_SENDCODE_EMAIL_SUBJECT_MAIL;
-		} 
-		else {  /* It must be a registration code then... */
+		}
+		else if (FlagSet(ni->flags, NI_AUTH)) {
 			snprintf(type, 7, "AUTH");
 			operation_msg_id = NS_SENDCODE_EMAIL_SUBJECT_AUTH;
+		}
+		else {  /* It must be a password reset then... */
+			snprintf(type, 7, "RPWD");
+			operation_msg_id = NS_SENDCODE_EMAIL_SUBJECT_RPWD;
 		}
 		
 		if (data->operMatch) {
@@ -3636,7 +3735,10 @@ static void do_sendcode(CSTR source, User *callerUser, ServiceCommandData *data)
 				fprintf(mailfile, lang_msg(GetNickLang(ni), NS_SENDCODE_EMAIL_MAIL1), ni->email, ni->regemail, CONF_NETWORK_NAME, ni->nick, ni->auth);
 				fprintf(mailfile, lang_msg(GetNickLang(ni), NS_SENDCODE_EMAIL_MAIL2), CONF_NETWORK_NAME, ni->nick);
 			}
-			
+			else if (FlagSet(ni->flags, NI_PASSRESET)) {
+				fprintf(mailfile, lang_msg(GetNickLang(ni), NS_SENDCODE_EMAIL_RPWD), CONF_NETWORK_NAME, ni->nick, ni->auth);
+			}
+
 			fprintf(mailfile, lang_msg(GetNickLang(ni), CSNS_EMAIL_TEXT_ABUSE), MAIL_ABUSE, CONF_NETWORK_NAME);
 			fclose(mailfile);
 
@@ -3703,6 +3805,12 @@ static void do_sendpass(CSTR source, User *callerUser, ServiceCommandData *data)
 	else if (FlagSet(ni->flags, NI_AUTH) || !ni->email)
 		send_notice_lang_to_user(s_NickServ, callerUser, GetCallerLang(), NS_SENDPASS_ERROR_NICK_NOT_AUTH, ni->nick);
 
+	else if (FlagSet(ni->flags, NI_MAILCHANGE))
+		send_notice_lang_to_user(s_NickServ, callerUser, GetCallerLang(), NS_INFO_OPER_MAILCHANGE, ni->nick);
+
+	else if (FlagSet(ni->flags, NI_DROP))
+		send_notice_lang_to_user(s_NickServ, callerUser, GetCallerLang(), NS_INFO_OPER_DROP_REQUEST, ni->nick);
+
 	else {
 
 		FILE *mailfile;
@@ -3724,6 +3832,11 @@ static void do_sendpass(CSTR source, User *callerUser, ServiceCommandData *data)
 
 		send_notice_lang_to_user(s_NickServ, callerUser, GetCallerLang(), CSNS_SENDPASS_PASSWORD_SENT, ni->nick, ni->email);
 
+		srand(randomseed());
+		ni->auth = ni->time_registered + (getrandom(1, 99999) * getrandom(1, 9999));
+		ni->last_email_request = NOW;
+		AddFlag(ni->flags, NI_PASSRESET);
+
 		if (IS_NOT_NULL(mailfile = fopen("sendpass.txt", "w"))) {
 
 			char timebuf[64];
@@ -3732,9 +3845,8 @@ static void do_sendpass(CSTR source, User *callerUser, ServiceCommandData *data)
 			fprintf(mailfile, "To: %s\n", ni->email);
 
 			lang_format_localtime(timebuf, sizeof(timebuf), GetCallerLang(), TIME_FORMAT_DATETIME, NOW);
-
 			fprintf(mailfile, lang_msg(GetNickLang(ni), NS_SENDPASS_EMAIL_SUBJECT), ni->nick);
-			fprintf(mailfile, lang_msg(GetNickLang(ni), NS_SENDPASS_EMAIL_TEXT), data->operName, timebuf, ni->nick, ni->pass);
+			fprintf(mailfile, lang_msg(GetNickLang(ni), NS_SENDPASS_EMAIL_TEXT), data->operName, timebuf, ni->nick, ni->auth);
 			fprintf(mailfile, lang_msg(GetNickLang(ni), CSNS_EMAIL_TEXT_ABUSE), MAIL_ABUSE, CONF_NETWORK_NAME);
 			fclose(mailfile);
 
@@ -4635,6 +4747,7 @@ static void do_authnick(CSTR source, User *callerUser, ServiceCommandData *data)
 			User *user;
 
 			RemoveFlag(ni->flags, NI_AUTH);
+			RemoveFlag(ni->flags, NI_PASSRESET);
 			RemoveFlag(ni->flags, NI_MAILCHANGE);
 			RemoveFlag(ni->flags, NI_DROP);
 			RemoveFlag(ni->flags, NI_NOMAIL);
@@ -4720,6 +4833,7 @@ static void do_authreset(CSTR source, User *callerUser, ServiceCommandData *data
 
 			TRACE_MAIN();
 			AddFlag(ni->flags, NI_AUTH);
+			RemoveFlag(ni->flags, NI_PASSRESET);
 			RemoveFlag(ni->flags, NI_DROP);
 			RemoveFlag(ni->flags, NI_MAILCHANGE);
 			RemoveFlag(ni->flags, NI_NOMAIL);
@@ -4801,6 +4915,29 @@ static void do_authreset(CSTR source, User *callerUser, ServiceCommandData *data
 				log_services(LOG_SERVICES_NICKSERV_GENERAL, "AR %s -- by %s (%s@%s) through %s [Drop]", ni->nick, callerUser->nick, callerUser->username, callerUser->host, data->operName);
 
 				send_globops(s_NickServ, "\2%s\2 (through \2%s\2) removed Drop status for nickname \2%s\2", callerUser->nick, data->operName, ni->nick);
+			}
+
+			send_notice_lang_to_user(s_NickServ, callerUser, GetCallerLang(), NS_AUTHRESET_AUTH_RESET, ni->nick);
+		}
+		else if (str_equals_nocase(what, "RESETPASS")) {
+
+			RemoveFlag(ni->flags, NI_PASSRESET);
+			ni->auth = 0;
+			ni->last_email_request = 0;
+
+			if (data->operMatch) {
+
+				LOG_SNOOP(s_OperServ, "NS PR %s -- by %s (%s@%s) [Pass Reset]", ni->nick, callerUser->nick, callerUser->username, callerUser->host);
+				log_services(LOG_SERVICES_NICKSERV_GENERAL, "PR %s -- by %s (%s@%s) [Pass Reset]", ni->nick, callerUser->nick, callerUser->username, callerUser->host);
+
+				send_globops(s_NickServ, "\2%s\2 removed Pass Reset status for nickname \2%s\2", callerUser->nick, ni->nick);
+			}
+			else {
+
+				LOG_SNOOP(s_OperServ, "NS PR %s -- by %s (%s@%s) through %s [Pass Reset]", ni->nick, callerUser->nick, callerUser->username, callerUser->host, data->operName);
+				log_services(LOG_SERVICES_NICKSERV_GENERAL, "PR %s -- by %s (%s@%s) through %s [Pass Reset]", ni->nick, callerUser->nick, callerUser->username, callerUser->host, data->operName);
+
+				send_globops(s_NickServ, "\2%s\2 (through \2%s\2) removed Pass Reset status for nickname \2%s\2", callerUser->nick, data->operName, ni->nick);
 			}
 
 			send_notice_lang_to_user(s_NickServ, callerUser, GetCallerLang(), NS_AUTHRESET_AUTH_RESET, ni->nick);
@@ -5597,6 +5734,7 @@ static char *get_nick_flags(long int flags) {
 	APPEND_FLAG(flags, NI_TIMEOUT, "NI_TIMEOUT")
 	APPEND_FLAG(flags, NI_ENFORCE, "NI_ENFORCE")
 	APPEND_FLAG(flags, NI_MAILCHANGE, "NI_MAILCHANGE")
+	APPEND_FLAG(flags, NI_PASSRESET, "NI_PASSRESET")
 	APPEND_FLAG(flags, NI_DROP, "NI_DROP")
 	APPEND_FLAG(flags, NI_ENFORCED, "NI_ENFORCED")
 	APPEND_FLAG(flags, NI_NOWELCOME, "NI_NOWELCOME")
