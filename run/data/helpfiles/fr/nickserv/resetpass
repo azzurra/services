@@ -1,0 +1,12 @@
+*** NickServ Help - Commande: RESETPASS ***
+Réinitialise le mot de passe utilisé pour vous identifier en tant que
+propriétaire de nick via un code de vérification.
+ 
+Syntaxe:
+/ns RESETPASS nick code nouveau-mot-de-passe
+ 
+Exemple:
+/ns RESETPASS AesSedai 1777872660 m@C75k
+ 
+Pour tout renseignement, tape /join #IRCHelp
+*** Fin de l'Help ***

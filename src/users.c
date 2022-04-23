@@ -2202,12 +2202,13 @@ void user_handle_userMODE(CSTR source, const int ac, char **av) {
 							user->current_lang = EXTRACT_LANG_ID(user->ni->langID);
 						}
 					}
-					else
+					else {
 						RemoveFlag(user->mode, UMODE_r);
 
 						if (IS_NOT_NULL(si))
 							RemoveFlag(si->mode, UMODE_r);
 				}
+			}
 
 				break;
 

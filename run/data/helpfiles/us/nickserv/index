@@ -16,6 +16,7 @@ Command        Description
 RECOVER    - Regain your nickname if someone else is using it
 REGISTER   - Register a nickname
 RELEASE    - Release services custody on a nickname
+RESETPASS  - Resets your password through a verification code
 SET        - Set various nickname options
  
 For more information on a specific command,

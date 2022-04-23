@@ -451,6 +451,9 @@ void servers_user_remove(User *user) {
 	/* Decrease this server's user count. */
 	--(server->userCount);
 
+	if (user_is_services_client(user))
+		return;
+
 	if (IS_NULL(stats = server->stats)) {
 
 		log_error(FACILITY_SERVERS_USER_REMOVE, __LINE__, LOG_TYPE_ERROR_ASSERTION, LOG_SEVERITY_ERROR_HALTED,

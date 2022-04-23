@@ -1,0 +1,12 @@
+*** NickServ Help - Command: RESETPASS ***
+Resets the password used to identify you as the
+nick's owner through a verification code.
+ 
+Syntax:
+/ns RESETPASS nick code new-password
+ 
+Example:
+/ns RESETPASS AesSedai 1777872660 m@C75k
+ 
+Type /join #IRCHelp for more information.
+*** End of Help ***

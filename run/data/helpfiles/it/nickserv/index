@@ -15,6 +15,7 @@ Comando        Descrizione
 RECOVER    - Permette di riappropriarti del tuo nick
 REGISTER   - Registra un nick
 RELEASE    - Rimuove il finto client caricato dai servizi per custodire il tuo nick
+RESETPASS  - Reimposta la tua password tramite un codice di verifica
 SET        - Permette di configurare le opzioni del tuo nick
  
 Per avere maggiori informazioni sui comandi basta scrivere /ns HELP nomedelcomando
