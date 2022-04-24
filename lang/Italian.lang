@@ -1589,18 +1589,12 @@ NS_SENDCODE_ERROR_NO_CODE
 NS_SENDCODE_SYNTAX_ERROR
 	Syntax: SENDCODE nickname
 NS_SENDPASS_EMAIL_SUBJECT
-	Subject: Richiesta reset password del nick %s
+	Subject: Password del nick %s
 	
 NS_SENDPASS_EMAIL_TEXT
-	Richiesta di reset password inviata da: %s
+	Richiesta di password inviata da: %s
 	Ricevuta: %s
-	
-	Per convalidare questa richiesta, digita
-	/ns RESETPASS %s %lu nuova-password
-
-	Se non hai effettuato questa richiesta, ignora semplicemente
-	questo messaggio, nessun'azione verra' eseguita sul tuo ncik
-	e la tua password NON verra' reimpostata.
+	La password del nick %s e': %s
 	
 NS_SENDPASS_ERROR_NICK_NOT_AUTH
 	User %s has not authorized via email.
@@ -1921,28 +1915,3 @@ SS_SEEN_REPLY_SOME
 	I found %d matches to your query (sorted): 
 SS_SEEN_SYNTAX_ERROR
 	Syntax: SEEN nick
-NS_RESETPASS_SYNTAX_ERROR
-	Syntax: RESETPASS nick code new-password
-NS_RESETPASS_ERROR_NOT_RESETTING
-	There is no ongoing password reset request for nickname %s.
-NS_RESETPASS_ERROR_WRONG_CODE
-	ERROR: Invalid password reset code.
-NS_DROP_ERROR_RESETPASS_ON
-	You cannot drop your nick until your password reset is completed or expired.
-NS_SET_EMAIL_ERROR_PASSRESET_ON
-	You cannot request an E-Mail change until your password reset is completed or expired.
-NS_INFO_PASSRESET_REQUEST
-	 * This nick requested a password reset.
-NS_INFO_OPER_PASSRESET_REQUEST
-	 * This nick requested a password reset. [ RESETPASS Code: %lu ]
-NS_SENDCODE_EMAIL_SUBJECT_RPWD
-	the password reset
-NS_SENDCODE_EMAIL_RPWD
-	To confirm the password reset
-	log back onto %s and type:
-	/ns RESETPASS %s %lu <new password>
-	
-CS_SENDPASS_PASSWORD_MEMO
-	Memo with new password for %s sent to %s
-CS_SENDPASS_MEMO_TEXT
-	%s resets password of %s for you. The new channel password is %s-%lu. Write it down, you will need it later.

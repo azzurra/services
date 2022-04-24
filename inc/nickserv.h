@@ -140,7 +140,6 @@ typedef struct nick_timeout_data {
 #define NI_KILL_NORMAL		0x00800000  /* "Guest" if not identified in 20s */
 #define NI_KILL_FAST		0x01000000  /* "Guest" if not identified in 5s */
 #define NI_NOCHANMEMO		0x02000000  /* No memos sent to channels will be received. */
-#define NI_PASSRESET		0x04000000  /* Nick requested a password reset. */
 #define NI_ENFORCED			0x20000000  /* Nick is being held after a kill */
 #define NI_NOWELCOME		0x40000000  /* Was NI_RECOGNIZED */
 #define NI_IDENTIFIED		0x80000000  /* This is free */

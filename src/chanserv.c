@@ -9402,8 +9402,7 @@ static void do_sendpass(CSTR source, User *callerUser, ServiceCommandData *data)
 
 	else {
 
-		long int randID;
-		char memoText[512];
+		FILE *mailfile;
 
 		if (data->operMatch) {
 
@@ -9420,21 +9419,31 @@ static void do_sendpass(CSTR source, User *callerUser, ServiceCommandData *data)
 			send_globops(s_ChanServ, "\2%s\2 (through \2%s\2) used SENDPASS on channel \2%s\2", source, data->operName, ci->name);
 		}
 
-		send_notice_lang_to_user(s_ChanServ, callerUser, GetCallerLang(), CS_SENDPASS_PASSWORD_MEMO, ci->name, ci->founder);
+		send_notice_lang_to_user(s_ChanServ, callerUser, GetCallerLang(), CSNS_SENDPASS_PASSWORD_SENT, ci->founder, ni->email);
 
-		/* Generate a random password. */
-		srand(randomseed());
-		randID = (NOW + getrandom(1, 99999) * getrandom(1, 9999));
+		if (IS_NOT_NULL(mailfile = fopen("sendpass.txt", "w"))) {
 
-		/* Change the channel password to the new (random) one. */
-		snprintf(ci->founderpass, sizeof(ci->founderpass), "%s-%lu", CRYPT_NETNAME, randID);
+			char timebuf[64];
 
-		/* Notify the new owner about it via memo. */
-		snprintf(memoText, sizeof(memoText), lang_msg(EXTRACT_LANG_ID(ni->langID), CS_SENDPASS_MEMO_TEXT), data->operName, ci->name, CRYPT_NETNAME, randID);
-		send_memo_internal(ni, memoText);
+			fprintf(mailfile, "From: %s <%s>\n", CONF_NETWORK_NAME, CONF_RETURN_EMAIL);
+			fprintf(mailfile, "To: %s\n", ni->email);
 
-		/* Remove identification to this channel from all users. */
-		user_remove_chanid(ci);
+			fprintf(mailfile, lang_msg(GetNickLang(ni), CS_SENDPASS_EMAIL_SUBJECT), ci->name);
+
+			lang_format_localtime(timebuf, sizeof(timebuf), GetCallerLang(), TIME_FORMAT_DATETIME, NOW);
+
+			fprintf(mailfile, lang_msg(GetNickLang(ni), CS_SENDPASS_EMAIL_TEXT), data->operName, timebuf, ci->name, ci->founderpass);
+			fprintf(mailfile, lang_msg(GetNickLang(ni), CSNS_EMAIL_TEXT_ABUSE), MAIL_ABUSE, CONF_NETWORK_NAME);
+			fclose(mailfile);
+
+			snprintf(misc_buffer, MISC_BUFFER_SIZE, "%s -f %s -t < sendpass.txt", CONF_SENDMAIL_PATH, CONF_RETURN_EMAIL);
+			system(misc_buffer);
+
+			snprintf(misc_buffer, MISC_BUFFER_SIZE, "rm -f sendpass.txt");
+			system(misc_buffer);
+		}
+		else
+			log_error(FACILITY_CHANSERV_HANDLE_SENDPASS, __LINE__, LOG_TYPE_ERROR_RTL, LOG_SEVERITY_ERROR_HALTED, "do_sendpass(): unable to create sendpass.txt");
 	}
 }
 

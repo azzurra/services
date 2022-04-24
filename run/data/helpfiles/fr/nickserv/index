@@ -15,7 +15,6 @@ Commande     Description
 RECOVER    - Te permet de reprendre ton nick
 REGISTER   - Enregistre un nick
 RELEASE    - Déconnecte le faux client connecté par les Services pour garder ton nick
-RESETPASS  - Réinitialise votre mot de passe via un code de vérification
 SET        - Te permet de configurer les options du nick
  
 Pour autres renseignements sur les commandes il faut écrire /ns HELP nom-de-la-commande

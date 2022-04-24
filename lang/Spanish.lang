@@ -1589,18 +1589,12 @@ NS_SENDCODE_ERROR_NO_CODE
 NS_SENDCODE_SYNTAX_ERROR
 	Syntax: SENDCODE nickname
 NS_SENDPASS_EMAIL_SUBJECT
-	Subject: Solicitud de restablecimiento de contraseña del nick %s
+	Subject: Contraseña del nick %s
 	
 NS_SENDPASS_EMAIL_TEXT
-	Solicitud de restablecimiento de contraseña enviada por: %s
+	Pedida de contraseña enviada por: %s
 	Recibida: %s
-	
-	Para autenticar esta solicitud, envíe:
-	/ns RESETPASS %s %lu nueva-contraseña
-
-	Si no solicitó esto, simplemente ignore este mensaje,
-	no se tomará ninguna acción con su nick y su contraseña
-	NO se restablecerá.
+	La contraseña del nick %s es: %s
 	
 NS_SENDPASS_ERROR_NICK_NOT_AUTH
 	User %s has not authorized via email.
