@@ -20,9 +20,9 @@
 RM=/bin/rm
 
 # Compile flags
-CFLAGS= -pipe -fgnu89-inline -m32 -Wall -O3 -g -Wshadow -Wcast-align -Wsign-compare -g
+CFLAGS= -pipe -Wall -O3 -g -Wshadow -Wcast-align -Wsign-compare
 # linker flags.
-LDFLAGS= -m32
+LDFLAGS=
 
 SHELL=/bin/sh
 SUBDIRS=src
