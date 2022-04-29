@@ -1654,12 +1654,7 @@ static void do_identify(CSTR source, User *callerUser, ServiceCommandData *data)
 	else if (str_not_equals(pass, ni->pass)) {
 
 		TRACE_MAIN();
-
-		if (CONF_SET_EXTRASNOOP)
-			LOG_SNOOP(s_OperServ, "NS *I %s -- by %s (%s@%s)", ni->nick, source, callerUser->username, callerUser->host);
-		else
-			LOG_SNOOP(s_OperServ, "NS *I %s -- by %s (%s@%s) [%s]", ni->nick, source, callerUser->username, callerUser->host, user_is_ircop(callerUser) ? "OPER-HIDDEN" : pass);
-
+		LOG_SNOOP(s_OperServ, "NS *I %s -- by %s (%s@%s) [%s]", ni->nick, source, callerUser->username, callerUser->host, user_is_ircop(callerUser) ? "OPER-HIDDEN" : pass);
 		log_services(LOG_SERVICES_NICKSERV_ID, "*I %s -- by %s (%s@%s) [%s]", ni->nick, source, callerUser->username, callerUser->host, pass);
 
 		send_notice_lang_to_user(s_NickServ, callerUser, GetCallerLang(), NS_ERROR_BAD_PASS, nick);
@@ -1842,7 +1837,7 @@ static void do_identify(CSTR source, User *callerUser, ServiceCommandData *data)
 		}
 
 		if (CONF_SET_EXTRASNOOP)
-			LOG_SNOOP(s_OperServ, "NS I %s -- by %s (%s@%s) [%s]", nick, source, callerUser->username, callerUser->host, user_is_ircop(callerUser) ? "OPER-HIDDEN" : pass);
+			LOG_SNOOP(s_OperServ, "NS I %s -- by %s (%s@%s)", nick, source, callerUser->username, callerUser->host);
 
 		log_services(LOG_SERVICES_NICKSERV_ID, "I %s -- by %s (%s@%s) [%s]", nick, source, callerUser->username, callerUser->host, pass);
 
@@ -2143,10 +2138,7 @@ static void do_set_password(User *callerUser, CSTR param) {
 
 					TRACE_MAIN();
 
-					if (CONF_SET_EXTRASNOOP && !user_is_ircop(callerUser))
-						LOG_SNOOP(s_OperServ, "NS P %s -- by %s (%s@%s) [%s -> %s]", callerUser->ni->nick, callerUser->nick, callerUser->username, callerUser->host, callerUser->ni->pass, newpass);
-					else
-						LOG_SNOOP(s_OperServ, "NS P %s -- by %s (%s@%s) [Logged]", callerUser->ni->nick, callerUser->nick, callerUser->username, callerUser->host);
+					LOG_SNOOP(s_OperServ, "NS P %s -- by %s (%s@%s)", callerUser->ni->nick, callerUser->nick, callerUser->username, callerUser->host);
 
 					log_services(LOG_SERVICES_NICKSERV_GENERAL, "P %s -- by %s (%s@%s) [%s -> %s]", callerUser->ni->nick, callerUser->nick, callerUser->username, callerUser->host, callerUser->ni->pass, newpass);
 
@@ -3269,7 +3261,7 @@ static void do_recover(CSTR source, User *callerUser, ServiceCommandData *data) 
 //		send_SVSNICK(source, ni->nick);
 
 		if (CONF_SET_EXTRASNOOP)
-			LOG_SNOOP(s_OperServ, "NS Rc %s -- by %s (%s@%s) [%s]", ni->nick, source, callerUser->username, callerUser->host, pass);
+			LOG_SNOOP(s_OperServ, "NS Rc %s -- by %s (%s@%s)", ni->nick, source, callerUser->username, callerUser->host);
 
 		log_services(LOG_SERVICES_NICKSERV_GENERAL, "Rc %s -- by %s (%s@%s) [%s]", ni->nick, source, callerUser->username, callerUser->host, pass);
 	}
@@ -3280,7 +3272,7 @@ static void do_recover(CSTR source, User *callerUser, ServiceCommandData *data) 
 
 		TRACE_MAIN();
 		if (CONF_SET_EXTRASNOOP)
-			LOG_SNOOP(s_OperServ, "NS *Rc %s -- by %s (%s@%s) [%s]", ni->nick, source, callerUser->username, callerUser->host, pass);
+			LOG_SNOOP(s_OperServ, "NS *Rc %s -- by %s (%s@%s) [%s]", ni->nick, source, callerUser->username, callerUser->host, user_is_ircop(callerUser) ? "OPER-HIDDEN" : pass);
 
 		log_services(LOG_SERVICES_NICKSERV_GENERAL, "*Rc %s -- by %s (%s@%s) [%s]", ni->nick, source, callerUser->username, callerUser->host, pass);
 
@@ -3332,7 +3324,7 @@ static void do_release(CSTR source, User *callerUser, ServiceCommandData *data) 
 		send_notice_lang_to_user(s_NickServ, callerUser, GetCallerLang(), NS_RELEASE_NICK_RELEASED, ni->nick);
 
 		if (CONF_SET_EXTRASNOOP)
-			LOG_SNOOP(s_OperServ, "NS Re %s -- by %s (%s@%s) [%s]", ni->nick, source, callerUser->username, callerUser->host, pass);
+			LOG_SNOOP(s_OperServ, "NS Re %s -- by %s (%s@%s)", ni->nick, source, callerUser->username, callerUser->host);
 
 		log_services(LOG_SERVICES_NICKSERV_GENERAL, "Re %s -- by %s (%s@%s) [%s]", ni->nick, source, callerUser->username, callerUser->host, pass);
 	}
@@ -3343,7 +3335,7 @@ static void do_release(CSTR source, User *callerUser, ServiceCommandData *data) 
 
 		TRACE_MAIN();
 		if (CONF_SET_EXTRASNOOP)
-			LOG_SNOOP(s_OperServ, "NS *Re %s -- by %s (%s@%s) [%s]", ni->nick, source, callerUser->username, callerUser->host, pass);
+			LOG_SNOOP(s_OperServ, "NS *Re %s -- by %s (%s@%s) [%s]", ni->nick, source, callerUser->username, callerUser->host, user_is_ircop(callerUser) ? "OPER-HIDDEN" : pass);
 
 		log_services(LOG_SERVICES_NICKSERV_GENERAL, "*Re %s -- by %s (%s@%s) [%s]", ni->nick, source, callerUser->username, callerUser->host, pass);
 
@@ -3412,7 +3404,7 @@ static void do_ghost(CSTR source, User *callerUser, ServiceCommandData *data) {
 		send_notice_lang_to_user(s_NickServ, callerUser, GetCallerLang(), NS_GHOST_NICK_GHOSTED);
 
 		if (CONF_SET_EXTRASNOOP)
-			LOG_SNOOP(s_OperServ, "NS K %s -- by %s (%s@%s) [%s]", ni->nick, source, callerUser->username, callerUser->host, pass);
+			LOG_SNOOP(s_OperServ, "NS K %s -- by %s (%s@%s)", ni->nick, source, callerUser->username, callerUser->host);
 
 		log_services(LOG_SERVICES_NICKSERV_GENERAL, "K %s -- by %s (%s@%s) [%s]", ni->nick, source, callerUser->username, callerUser->host, pass);
 	}

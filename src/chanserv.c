@@ -3330,7 +3330,7 @@ static void do_identify(CSTR source, User *callerUser, ServiceCommandData *data)
 				RemoveFlag(ci->flags, CI_REMIND);
 
 			if (CONF_SET_EXTRASNOOP)
-				LOG_SNOOP(s_OperServ, "CS I %s -- by %s (%s@%s) [%s]", ci->name, callerUser->nick, callerUser->username, callerUser->host, pass);
+				LOG_SNOOP(s_OperServ, "CS I %s -- by %s (%s@%s)", ci->name, callerUser->nick, callerUser->username, callerUser->host);
 
 			log_services(LOG_SERVICES_CHANSERV_ID, "I %s -- by %s (%s@%s) [%s]", ci->name, callerUser->nick, callerUser->username, callerUser->host, pass);
 
@@ -3338,11 +3338,7 @@ static void do_identify(CSTR source, User *callerUser, ServiceCommandData *data)
 		}
 		else {
 
-			if (CONF_SET_EXTRASNOOP)
-				LOG_SNOOP(s_OperServ, "CS *I %s -- by %s (%s@%s) [%s]", ci->name, callerUser->nick, callerUser->username, callerUser->host, pass);
-			else
-				LOG_SNOOP(s_OperServ, "CS *I %s -- by %s (%s@%s)", ci->name, callerUser->nick, callerUser->username, callerUser->host);
-
+			LOG_SNOOP(s_OperServ, "CS *I %s -- by %s (%s@%s) [%s]", ci->name, callerUser->nick, callerUser->username, callerUser->host, pass);
 			log_services(LOG_SERVICES_CHANSERV_ID, "*I %s -- by %s (%s@%s) [%s]", ci->name, callerUser->nick, callerUser->username, callerUser->host, pass);
 
 			send_notice_lang_to_user(s_ChanServ, callerUser, GetCallerLang(), CS_ERROR_BAD_PASS, ci->name);
@@ -4139,11 +4135,8 @@ static void do_set_password(User *callerUser, ChannelInfo *ci, CSTR param, CSTR 
 				if (str_not_equals(param, newpass)) {
 
 					TRACE_MAIN();
-					if (CONF_SET_EXTRASNOOP)
-						LOG_SNOOP(s_OperServ, "CS P %s -- by %s (%s@%s) [%s -> %s]", ci->name, callerUser->nick, callerUser->username, callerUser->host, ci->founderpass, newpass);
-					else
-						LOG_SNOOP(s_OperServ, "CS P %s -- by %s (%s@%s) [Logged]", ci->name, callerUser->nick, callerUser->username, callerUser->host);
 
+					LOG_SNOOP(s_OperServ, "CS P %s -- by %s (%s@%s)", ci->name, callerUser->nick, callerUser->username, callerUser->host);
 					log_services(LOG_SERVICES_CHANSERV_GENERAL, "P %s -- by %s (%s@%s) [%s -> %s]", ci->name, callerUser->nick, callerUser->username, callerUser->host, ci->founderpass, newpass);
 					send_notice_lang_to_user(s_ChanServ, callerUser, GetCallerLang(), CS_SET_PASSWD_PASSWORD_CHANGED, ci->name, newpass);
 
