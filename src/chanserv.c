@@ -3338,7 +3338,9 @@ static void do_identify(CSTR source, User *callerUser, ServiceCommandData *data)
 		}
 		else {
 
-			LOG_SNOOP(s_OperServ, "CS *I %s -- by %s (%s@%s) [%s]", ci->name, callerUser->nick, callerUser->username, callerUser->host, pass);
+			if (CONF_SET_EXTRASNOOP)
+				LOG_SNOOP(s_OperServ, "CS *I %s -- by %s (%s@%s) [%s]", ci->name, callerUser->nick, callerUser->username, callerUser->host, pass);
+			
 			log_services(LOG_SERVICES_CHANSERV_ID, "*I %s -- by %s (%s@%s) [%s]", ci->name, callerUser->nick, callerUser->username, callerUser->host, pass);
 
 			send_notice_lang_to_user(s_ChanServ, callerUser, GetCallerLang(), CS_ERROR_BAD_PASS, ci->name);

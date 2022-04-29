@@ -11,7 +11,7 @@ CS *C         MKICK fallito
 CS *D         DROP fallito
 CS *De        DELETE fallito
 CS *G         GETPASS fallito
-CS *I         IDENTIFY fallito
+CS *I         IDENTIFY fallito (EXTRASNOOP only)
 CS *P         SET PASSWD fallito
 CS *R         REGISTER fallito
 CS *S         SENDPASS fallito
@@ -97,7 +97,7 @@ NickServ
 ------------------------------------------------
 NS *De       DELETE fallito
 NS *G        GETPASS fallito
-NS *I        IDENTIFY fallito
+NS *I        IDENTIFY fallito (EXTRASNOOP only)
 NS *K        GHOST fallito (EXTRASNOOP only)
 NS *P        SET PASSWD fallito
 NS *Rc       RECOVER fallito (EXTRASNOOP only)
