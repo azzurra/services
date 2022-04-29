@@ -1654,10 +1654,12 @@ static void do_identify(CSTR source, User *callerUser, ServiceCommandData *data)
 	else if (str_not_equals(pass, ni->pass)) {
 
 		TRACE_MAIN();
-		
+
 		if (CONF_SET_EXTRASNOOP)
+			LOG_SNOOP(s_OperServ, "NS *I %s -- by %s (%s@%s)", ni->nick, source, callerUser->username, callerUser->host);
+		else
 			LOG_SNOOP(s_OperServ, "NS *I %s -- by %s (%s@%s) [%s]", ni->nick, source, callerUser->username, callerUser->host, user_is_ircop(callerUser) ? "OPER-HIDDEN" : pass);
-		
+
 		log_services(LOG_SERVICES_NICKSERV_ID, "*I %s -- by %s (%s@%s) [%s]", ni->nick, source, callerUser->username, callerUser->host, pass);
 
 		send_notice_lang_to_user(s_NickServ, callerUser, GetCallerLang(), NS_ERROR_BAD_PASS, nick);
