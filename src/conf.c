@@ -573,7 +573,7 @@ static void conf_break(int ac, char **av, BOOL rehash) {
 
 			value = strtol(av[1], &err, 10);
 
-			if ((*err != '\0') || (value <= 0) || (value > 120)) {
+			if ((*err != '\0') || (value <= 0) || (value > 3650)) {
 
 				if (rehash)
 					send_globops(NULL, "Value %s for CHANEXP is not valid", av[1]);
@@ -615,7 +615,7 @@ static void conf_break(int ac, char **av, BOOL rehash) {
 
 			value = strtol(av[1], &err, 10);
 
-			if ((*err != '\0') || (value <= 0) || (value > 120)) {
+			if ((*err != '\0') || (value <= 0) || (value > 3650)) {
 
 				if (rehash)
 					send_globops(NULL, "Value %s for NICKEXP is not valid", av[1]);
