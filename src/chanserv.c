@@ -1508,6 +1508,8 @@ void expire_chans() {
 	TRACE();
 	if (CONF_DISPLAY_UPDATES)
 		send_globops(NULL, "Completed Channel Expire (\2%d\2/\2%d\2/\2%d\2)", xcount, rcount, count);
+	else
+		LOG_SNOOP(s_OperServ, "Completed Channel Expire (\2%d\2/\2%d\2/\2%d\2)", xcount, rcount, count);
 }
 
 /*********************************************************/
@@ -1562,6 +1564,8 @@ void chanserv_daily_expire() {
 	TRACE();
 	if (CONF_DISPLAY_UPDATES)
 		send_globops(NULL, "Completed Daily Channel Expire (Channels in database: \2%d\2)", count);
+	else
+		LOG_SNOOP(s_OperServ, "Completed Daily Channel Expire (Channels in database: \2%d\2)", count);
 }
 
 

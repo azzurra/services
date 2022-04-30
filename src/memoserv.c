@@ -494,6 +494,8 @@ void expire_memos() {
 
 	if (CONF_DISPLAY_UPDATES)
 		send_globops(NULL, "Completed MemoServ Expire: (%d/%d) Record Expire: (%d/%d)", expiredMemoCount, memoCount, expiredRecordCount, recordCount);
+	else
+		LOG_SNOOP(s_OperServ, "Completed MemoServ Expire: (%d/%d) Record Expire: (%d/%d)", expiredMemoCount, memoCount, expiredRecordCount, recordCount);
 }
 
 

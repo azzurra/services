@@ -472,6 +472,8 @@ void database_expire(const time_t now) {
 
 	if (CONF_DISPLAY_UPDATES)
 		send_globops(NULL, "Running Database Store & Expire #%d", expire_count);
+	else
+		LOG_SNOOP(s_OperServ, "Running Database Store & Expire #%d", expire_count);
 
 	++expire_count;
 
