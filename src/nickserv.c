@@ -1751,31 +1751,35 @@ static void do_identify(CSTR source, User *callerUser, ServiceCommandData *data)
 					modebuf[modeIdx++] = 'h';
 					AddFlag(callerUser->mode, UMODE_h);
 				}
+				str_copy_checked(lang_msg(GetCallerLang(), NS_IDENTIFY_SOURCE_IS_HELPOP), accessLevel, sizeof(accessLevel));
 
 				if (sameNick && FlagUnset(callerUser->mode, UMODE_r)) {
 
 					modebuf[modeIdx++] = 'r';
 					AddFlag(callerUser->mode, UMODE_r);
 				}
-
-				str_copy_checked(lang_msg(GetCallerLang(), NS_IDENTIFY_SOURCE_IS_HELPOP), accessLevel, sizeof(accessLevel));
 				break;
 
 			case ULEVEL_SOP:
+				if (isOper)
+					str_copy_checked(lang_msg(GetCallerLang(), NS_IDENTIFY_SOURCE_IS_SOP), accessLevel, sizeof(accessLevel));
+
 				if (sameNick && FlagUnset(callerUser->mode, UMODE_r)) {
 
 					modebuf[modeIdx++] = 'r';
 					AddFlag(callerUser->mode, UMODE_r);
 				}
-
-				str_copy_checked(lang_msg(GetCallerLang(), NS_IDENTIFY_SOURCE_IS_SOP), accessLevel, sizeof(accessLevel));
 				break;
 
 			case ULEVEL_SA:
-				if (isOper && FlagUnset(callerUser->mode, UMODE_a)) {
+				if (isOper) {
 
-					modebuf[modeIdx++] = 'a';
-					AddFlag(callerUser->mode, UMODE_a);
+					if (FlagUnset(callerUser->mode, UMODE_a)) {
+
+						modebuf[modeIdx++] = 'a';
+						AddFlag(callerUser->mode, UMODE_a);
+					}
+					str_copy_checked(lang_msg(GetCallerLang(), NS_IDENTIFY_SOURCE_IS_ADMIN), accessLevel, sizeof(accessLevel));
 				}
 
 				if (sameNick && FlagUnset(callerUser->mode, UMODE_r)) {
@@ -1783,15 +1787,17 @@ static void do_identify(CSTR source, User *callerUser, ServiceCommandData *data)
 					modebuf[modeIdx++] = 'r';
 					AddFlag(callerUser->mode, UMODE_r);
 				}
-
-				str_copy_checked(lang_msg(GetCallerLang(), NS_IDENTIFY_SOURCE_IS_ADMIN), accessLevel, sizeof(accessLevel));
 				break;
 
 			case ULEVEL_SRA:
-				if (isOper && FlagUnset(callerUser->mode, UMODE_a)) {
+				if (isOper) {
 
-					modebuf[modeIdx++] = 'a';
-					AddFlag(callerUser->mode, UMODE_a);
+					if (FlagUnset(callerUser->mode, UMODE_a)) {
+
+						modebuf[modeIdx++] = 'a';
+						AddFlag(callerUser->mode, UMODE_a);
+					}
+					str_copy_checked(lang_msg(GetCallerLang(), NS_IDENTIFY_SOURCE_IS_ROOT), accessLevel, sizeof(accessLevel));
 				}
 
 				if (sameNick && FlagUnset(callerUser->mode, UMODE_r)) {
@@ -1799,15 +1805,24 @@ static void do_identify(CSTR source, User *callerUser, ServiceCommandData *data)
 					modebuf[modeIdx++] = 'r';
 					AddFlag(callerUser->mode, UMODE_r);
 				}
-
-				str_copy_checked(lang_msg(GetCallerLang(), NS_IDENTIFY_SOURCE_IS_ROOT), accessLevel, sizeof(accessLevel));
 				break;
 
 			case ULEVEL_CODER:
-				if (isOper && FlagUnset(callerUser->mode, UMODE_a)) {
+				if (isOper) {
 
-					modebuf[modeIdx++] = 'a';
-					AddFlag(callerUser->mode, UMODE_a);
+					if (FlagUnset(callerUser->mode, UMODE_a)) {
+
+						modebuf[modeIdx++] = 'a';
+						AddFlag(callerUser->mode, UMODE_a);
+					}
+					str_copy_checked(lang_msg(GetCallerLang(), NS_IDENTIFY_SOURCE_IS_CODER), accessLevel, sizeof(accessLevel));
+				}
+
+				if (FlagUnset(callerUser->mode, UMODE_o) && str_char_toupper(data->commandName[0]) == 'S') {
+
+					modebuf[modeIdx++] = 'o';
+					AddFlag(callerUser->mode, UMODE_o);
+					str_copy_checked(s_STAR, accessLevel, sizeof(accessLevel));
 				}
 
 				if (sameNick && FlagUnset(callerUser->mode, UMODE_r)) {
@@ -1815,15 +1830,17 @@ static void do_identify(CSTR source, User *callerUser, ServiceCommandData *data)
 					modebuf[modeIdx++] = 'r';
 					AddFlag(callerUser->mode, UMODE_r);
 				}
-
-				str_copy_checked(lang_msg(GetCallerLang(), NS_IDENTIFY_SOURCE_IS_CODER), accessLevel, sizeof(accessLevel));
 				break;
 
 			case ULEVEL_MASTER:
-				if (isOper && FlagUnset(callerUser->mode, UMODE_a)) {
+				if (isOper) {
 
-					modebuf[modeIdx++] = 'a';
-					AddFlag(callerUser->mode, UMODE_a);
+					if (FlagUnset(callerUser->mode, UMODE_a)) {
+
+						modebuf[modeIdx++] = 'a';
+						AddFlag(callerUser->mode, UMODE_a);
+					}
+					str_copy_checked(lang_msg(GetCallerLang(), NS_IDENTIFY_SOURCE_IS_MASTER), accessLevel, sizeof(accessLevel));
 				}
 
 				if (sameNick && FlagUnset(callerUser->mode, UMODE_r)) {
@@ -1831,8 +1848,6 @@ static void do_identify(CSTR source, User *callerUser, ServiceCommandData *data)
 					modebuf[modeIdx++] = 'r';
 					AddFlag(callerUser->mode, UMODE_r);
 				}
-
-				str_copy_checked(lang_msg(GetCallerLang(), NS_IDENTIFY_SOURCE_IS_MASTER), accessLevel, sizeof(accessLevel));
 				break;
 
 			default:
