@@ -36,7 +36,7 @@ los que tengan la mask especificada.
  
 Ejemplos:
 /cs AOP #IRCHelp ADD Gastaman
-/cs AOP #IRCHelp ADD *!*gastaman@*.azzurranet.org
+/cs AOP #IRCHelp ADD *!*gastaman@*.azzurra.chat
 /cs AOP #IRCHelp DEL 2
 /cs AOP #IRCHelp LIST *.it
  

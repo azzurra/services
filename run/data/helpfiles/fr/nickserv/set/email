@@ -29,7 +29,7 @@ problemes avec ton nick, ou tu oublierais ton mot de passe, il ne sera pas possi
 de t'aider dans aucune façon si l'adresse E-Mail ne sera pas valide.
  
 Exemples:
-/ns SET EMAIL irc@azzurra.org
+/ns SET EMAIL irc@azzurra.chat
 /ns SET EMAIL HIDE
  
 Pour tout renseignement, tape /join #IRCHelp

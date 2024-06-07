@@ -1473,7 +1473,7 @@ static void do_masskill(CSTR source, User *callerUser, ServiceCommandData *data)
 			return;
 		}
 
-		if (user_is_services_client(targetUser) || str_equals_nocase("azzurra.org", targetUser->host) || str_match_wild_nocase("*.azzurra.org", targetUser->host)) {
+		if (user_is_services_client(targetUser) || str_equals_nocase("azzurra.chat", targetUser->host) || str_match_wild_nocase("*.azzurra.chat", targetUser->host)) {
 
 			if (data->operMatch) {
 
@@ -1654,7 +1654,7 @@ static void do_masskill(CSTR source, User *callerUser, ServiceCommandData *data)
 					matches[x] = user;
 
 					if (user_is_services_client(user) || user_is_services_agent(user) || user_is_ircop(user) ||
-						str_equals_nocase("azzurra.org", user->host) || str_match_wild_nocase("*.azzurra.org", user->host)) {
+						str_equals_nocase("azzurra.chat", user->host) || str_match_wild_nocase("*.azzurra.chat", user->host)) {
 
 						check = 1;
 						break;

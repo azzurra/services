@@ -9,7 +9,7 @@ Syntax:
 /cs SET #channel EMAIL address
  
 Examples:
-/cs SET #Services EMAIL irc@azzurra.org
+/cs SET #Services EMAIL irc@azzurra.chat
 /cs SET #italia EMAIL NONE
  
 Type /join #IRCHelp for more information.

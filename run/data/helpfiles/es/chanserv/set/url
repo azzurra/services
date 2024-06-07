@@ -7,7 +7,7 @@ Sintaxis:
 /cs SET #canal URL url
  
 Ejemplo:
-/cs SET #IRCHelp URL http://help.azzurra.org
+/cs SET #IRCHelp URL http://www.azzurra.chat
 /cs SET #España URL NONE
  
 Para mas informaciòn, digita /join #IRCHelp

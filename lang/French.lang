@@ -1,7 +1,7 @@
 BOTTLER_AKILL_REASON
 	L'emploi du software Bottler n'est pas admis dans ce réseau. Employe un VRAI client si tu veux jouir des services d'Azzurra.
 CLONES_AKILL_REASON
-	Trop de clones de ce host. Cette AutoKill sera éffacé entre %d minutes. Visite http://kline.azzurra.org/ pour plus d'informations.
+	Trop de clones de ce host. Cette AutoKill sera éffacé entre %d minutes. Visite http://www.azzurra.chat/ pour plus d'informations.
 CSNS_EMAIL_TEXT_ABUSE
 	Si on t'a envoyé erronément ce message, nous te prions de l'ignorer et de signaler ce qui c'est passé à %s
 	%s IRC Network
@@ -932,7 +932,7 @@ GET_SERVICE_COMMAND_LIST
 GET_SERVICE_COMMAND_LIST_MSG
 	Tape /msg %s HELP pour la liste des commandes disponibles.
 IDENT_AKILL_REASON
-	Par faute de spam de la part de certains usagers de cet Internet Service Provider, tous ses usagers doivent activer l'identd . Visite http://kline.azzurra.org/ pour plus d'informations.
+	Par faute de spam de la part de certains usagers de cet Internet Service Provider, tous ses usagers doivent activer l'identd . Visite http://www.azzurra.chat/ pour plus d'informations.
 INFO_CURRENT_TIME
 	Heure actuelle: %s
 INVALID_PASSWORD_FIRST_WARNING
@@ -944,7 +944,7 @@ JOIN_CHAN_IS_REGISTERED
 LANG_LIST_HEADER
 	Langues disponibles:
 MIRCWORM_AKILL_REASON
-	Tu as un worm de mIRC qui employe des clones et fait du spam avec des autres usagers à ta insu. Efface et installe de nouveau mIRC avant de te reconnecter sur Azzurra. Visite http://kline.azzurra.org/ pour plus d'informations.
+	Tu as un worm de mIRC qui employe des clones et fait du spam avec des autres usagers à ta insu. Efface et installe de nouveau mIRC avant de te reconnecter sur Azzurra. Visite http://www.azzurra.chat/ pour plus d'informations.
 MS_DEL_ALL_MEMOS_MARKED_DEL
 	Tous les memos demandés ont été marqués comme à être effacés.
 MS_DEL_ERROR_MEMO_ALREADY_DEL
@@ -1480,22 +1480,22 @@ NS_REGISTER_EMAIL_TEXT_1
 NS_REGISTER_EMAIL_TEXT_2
 	L'enregistrement de ton nick sera confirmé et ton nick
 	sera protégé contre les abus et les vols.
-	Le site officiel du réseau est http://www.azzurra.org/
+	Le site officiel du réseau est http://www.azzurra.chat/
 	
 NS_REGISTER_EMAIL_TEXT_3
 	Le règlement du réseau et les documents officiels sont
-	disponibiles à l'adresse http://www.azzurra.org/netfiles.php
+	disponibiles à l'adresse http://www.azzurra.chat/netfiles.php
 	
 NS_REGISTER_EMAIL_TEXT_4
 	Pour recevoir assistance sur les services du réseau ou sur IRC
 	tu peux t'adresser au canal officiel #IRCHelp
-	ou online à l'adresse http://help.azzurra.org/
+	ou online à l'adresse http://www.azzurra.chat/
 	Aussi les services suivantes sont disponibles:
 	
 NS_REGISTER_EMAIL_TEXT_5
 	- %s IRC Network Forum
 	  Forum de discussion d'%s
-	  à l'adresse http://www.azzurra.org/forum/
+	  à l'adresse http://www.azzurra.chat/forum/
 	  Sur le forum, non seulement tu peux exprimer ton opinion,
 	  mais tu pourras aussi t'informer sur les nouveautés et sur les nouveaux services du réseau.
 	  
@@ -1503,13 +1503,13 @@ NS_REGISTER_EMAIL_TEXT_6
 	- %s Ticket Service
 	  Pour recevoir du support technique on peut employer
 	  le service offert par %s à l'adresse 
-	  http://ticket.azzurra.org
+	  http://www.azzurra.chat
 	  en spécifiant le même nick et le même mot de passe
 	  employés pour l'accès.
 	  
 NS_REGISTER_EMAIL_TEXT_7
 	Pour une connexion plus rapide et sûre il est très
-	conseillé d'utiliser le serveur suivant: irc.azzurra.org
+	conseillé d'utiliser le serveur suivant: irc.azzurra.chat
 	%s IRC Network
 NS_REGISTER_ERROR_NICK_ALREADY_REG
 	Le nick %s est déjà enregistré!
@@ -1846,7 +1846,7 @@ TIME_REPLY_WEEK
 TIME_REPLY_WEEKS
 	%d semaines
 TROJAN_AKILL_REASON
-	Tu as un trojan dans ton PC, visite http://www.azzurra.org/forum/viewtopic.php?p=18543#18543, lis les instructions pour l'enlever et puis connecte-toi de nouveau. Visite http://kline.azzurra.org/ pour plus d'informations.
+	Tu as un trojan dans ton PC, visite http://www.azzurra.chat/forum/viewtopic.php?p=18543#18543, lis les instructions pour l'enlever et puis connecte-toi de nouveau. Visite http://www.azzurra.chat/ pour plus d'informations.
 WARNING_READONLY
 	Attention: Les services sont pour le moment en modalité lecture-seule. Les changements ne seront pas sauvegardés!
 CS_EXPLIST_HEADER

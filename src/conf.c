@@ -1407,7 +1407,7 @@ void init_conf(BOOL rehash) {
 			CONF_DEBUG_CHAN = str_duplicate("#debug");
 
 		if (IS_NULL(CONF_RETURN_EMAIL))
-			CONF_RETURN_EMAIL = str_duplicate("nickserv@azzurra.org");
+			CONF_RETURN_EMAIL = str_duplicate("nickserv@azzurra.chat");
 
 		if (IS_NULL(CONF_SENDMAIL_PATH))
 			CONF_SENDMAIL_PATH = str_duplicate("/usr/sbin/sendmail");

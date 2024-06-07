@@ -612,7 +612,7 @@ static void m_admin(CSTR source, const int ac, char **av) {
 	send_cmd("256 %s :Administrative info about %s", source, CONF_SERVICES_NAME);
 	send_cmd("257 %s :Azzurra IRC Network IRC Services", source);
 	send_cmd("258 %s :Admin: Azzurra Network Roots", source);
-	send_cmd("259 %s :E-Mail Address: irc@azzurra.org", source);
+	send_cmd("259 %s :E-Mail Address: irc@azzurra.chat", source);
 }
 
 /*********************************************************/
@@ -793,9 +793,9 @@ Message messages[] = {
 	{ "AWAY",		0,	NULL },
 	{ "NOTICE",		0,	NULL },
 	{ "401",		0,	NULL },		/* 401 NickServ nick :No such nick/channel */
-	{ "402",		0,	NULL },		/* 402 services.azzurra.org nick :No such server */
+	{ "402",		0,	NULL },		/* 402 services.azzurra.chat nick :No such server */
 	{ "403",		0,	NULL },		/* 403 ChanServ #channel :No such channel */
-	{ "441",		0,	NULL },		/* 441 services.azzurra.org nick #channel :They aren't on that channel */
+	{ "441",		0,	NULL },		/* 441 services.azzurra.chat nick #channel :They aren't on that channel */
 	{ "443",		0,	NULL },		/* 443 ChanServ nick #channel :is already on channel */
 	{ "503",		0,	NULL },		/* 503 Message could not be delivered to nick */
 	{ "SVSMODE",		0,	m_svsmode },

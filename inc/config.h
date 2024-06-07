@@ -131,8 +131,8 @@ typedef	int	agentid_t;
 #define IRCD_MAX_BANS		100
 
 /* E-Mail defines */
-#define MAIL_KLINE 		"kline@azzurra.org"
-#define MAIL_ABUSE		"abuse@azzurra.org"
+#define MAIL_KLINE 		"irc@azzurra.chat"
+#define MAIL_ABUSE		"irc@azzurra.chat"
 
 /* For SeenServ */
 #define WILDSEEN		5

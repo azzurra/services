@@ -1,7 +1,7 @@
 BOTTLER_AKILL_REASON
-	Bottler is not welcome on this network. Please remove any *.azzurra.org servers from your list. Load a REAL client if you want to stay here.
+	Bottler is not welcome on this network. Please remove any *.azzurra.chat servers from your list. Load a REAL client if you want to stay here.
 CLONES_AKILL_REASON
-	Demasiados clones por este host. Este AutoKill va a ser removida en %d minutos. Visìta http://kline.azzurra.org para mas informaciòn.
+	Demasiados clones por este host. Este AutoKill va a ser removida en %d minutos. Visìta http://www.azzurra.chat para mas informaciòn.
 CSNS_EMAIL_TEXT_ABUSE
 	Si este mensaje ha sido enviado por error favor de ignorarlo y enviar señalaciòn a %s
 	%s
@@ -932,7 +932,7 @@ GET_SERVICE_COMMAND_LIST
 GET_SERVICE_COMMAND_LIST_MSG
 	Teclar /msg %s HELP para ver la lista de comandos disponibles.
 IDENT_AKILL_REASON
-	Due to repeated spam from this Internet Service Provider, all its users are now required to enable ident. Please visit http://kline.azzurra.org for more information.
+	Due to repeated spam from this Internet Service Provider, all its users are now required to enable ident. Please visit http://www.azzurra.chat for more information.
 INFO_CURRENT_TIME
 	Hora actual: %s
 INVALID_PASSWORD_FIRST_WARNING
@@ -944,7 +944,7 @@ JOIN_CHAN_IS_REGISTERED
 LANG_LIST_HEADER
 	Idiomas disponibles:
 MIRCWORM_AKILL_REASON
-	Your copy of mIRC is infected with a worm that loads up clones to spam other users. Delete ad reinstall your copy of mIRC before reconnecting. Please visit http://kline.azzurra.org for more information.
+	Your copy of mIRC is infected with a worm that loads up clones to spam other users. Delete ad reinstall your copy of mIRC before reconnecting. Please visit http://www.azzurra.chat for more information.
 MS_DEL_ALL_MEMOS_MARKED_DEL
 	Todos los memos requeridos han sido marcados para borrarse.
 MS_DEL_ERROR_MEMO_ALREADY_DEL
@@ -1480,22 +1480,22 @@ NS_REGISTER_EMAIL_TEXT_1
 NS_REGISTER_EMAIL_TEXT_2
 	La registraciòn del tu nick estàra confirmada y tu nick
 	estarà protegido de cualquier abuso u robo.
-	El sitio oficial de la red se encuentra en http://www.azzurra.org/
+	El sitio oficial de la red se encuentra en http://www.azzurra.chat/
 	
 NS_REGISTER_EMAIL_TEXT_3
 	Las reglas de la red y toda la documentaciòn oficial se
-	encuentran en la pagina http://www.azzurra.org/netfiles.php
+	encuentran en la pagina http://www.azzurra.chat/netfiles.php
 	
 NS_REGISTER_EMAIL_TEXT_4
 	Para obtener ayuda sobre servicios de la red o sobre IRC
 	en general puedes visitar el canal oficial #IRCHelp
-	o tambien visitar http://help.azzurra.org/
+	o tambien visitar http://www.azzurra.chat/
 	Los siguentes Servicios estàn disponibles tambien:
 	
 NS_REGISTER_EMAIL_TEXT_5
 	- %s IRC Network Forum
 	  Forum de discusion de %s, consultable
-	  en la direcciòn http://www.azzurra.org/forum/
+	  en la direcciòn http://www.azzurra.chat/forum/
 	  En el forum, tras compartir tus propias opiniones,
 	  podras informarte sobre novidades y sobre los nuevos servicios
 	  de esta red.
@@ -1504,12 +1504,12 @@ NS_REGISTER_EMAIL_TEXT_6
 	- %s Ticket Service
 	  Para pedir soporte tecnico es posible utilizar el
 	  servicio ofrecido por %s en la pagina
-	  http://ticket.azzurra.org utilizando su propio nick
+	  http://www.azzurra.chat utilizando su propio nick
 	  y su propio password de acceso.
 	
 NS_REGISTER_EMAIL_TEXT_7
 	Para una conecciòn mas rapida y segura te aconsejamos
-	utilizar este servidor: irc.azzurra.org
+	utilizar este servidor: irc.azzurra.chat
 	%s IRC Network
 NS_REGISTER_ERROR_NICK_ALREADY_REG
 	El nick %s ya està registrado!
@@ -1846,7 +1846,7 @@ TIME_REPLY_WEEK
 TIME_REPLY_WEEKS
 	%d semanas
 TROJAN_AKILL_REASON
-	You match the pattern of a known trojan. Scan your computer with an up-to-date antivirus. Please visit http://kline.azzurra.org for more information.
+	You match the pattern of a known trojan. Scan your computer with an up-to-date antivirus. Please visit http://www.azzurra.chat for more information.
 WARNING_READONLY
 	Atenciòn: Los servicios estàn temporalmente en modalidad de sòla lectura. Ninguna modifica va a ser agregada!
 CS_EXPLIST_HEADER

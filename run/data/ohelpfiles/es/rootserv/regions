@@ -13,7 +13,7 @@ Syntax: REGIONS ADDCIDR mask region reason
  
 DELCIDR removes a CIDR-type host from the region specified, if present.
  
-ADDHOST adds a host (i.e. *.azzurra.org) to the region specified.
+ADDHOST adds a host (i.e. *.azzurra.chat) to the region specified.
  
 DELHOST removes a host from the region specified, if present.
  

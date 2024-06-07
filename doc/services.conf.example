@@ -20,7 +20,7 @@
 # Port: The socket port services will use to connect to the server.   #
 #                                                                     #
 # #####################################################################
-# C:services.azzurra.org:*password*:1.1.1.1:6667
+# C:services.azzurra.chat:*password*:1.1.1.1:6667
 
 
 # #####################################################################
@@ -44,7 +44,7 @@ D:Azzurra IRC Services
 # use.                                                                #
 #                                                                     #
 # #####################################################################
-U:service:azzurra.org
+U:service:azzurra.chat
 
 
 # #####################################################################

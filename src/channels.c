@@ -139,7 +139,7 @@ __inline__ void chan_terminate() {
  * chan_handle_SJOIN()                                                                       *
  *                                                                                           *
  * Senza SSJOIN:                                                                             *
- * :nomeserver.azzurra.org SJOIN 998558815 998558815 #shaka +tnr  :@Shaka marco              *
+ * :nomeserver.azzurra.chat SJOIN 998558815 998558815 #shaka +tnr  :@Shaka marco              *
  *                                                                                           *
  * av[0] = time stamp 1                                                                      *
  * av[1] = time stamp 2 (ignorata)                                                           *
@@ -152,7 +152,7 @@ __inline__ void chan_terminate() {
  * Con SSJOIN:                                                                               *
  *                                                                                           *
  *   Durante il sync o con canale vuoto:                                                     *
- *   :kodocha.azzurra.org SJOIN 1041739068 #bugs +nrt :@Wolf7                                *
+ *   :kodocha.azzurra.chat SJOIN 1041739068 #bugs +nrt :@Wolf7                                *
  *                                                                                           *
  *   av[0] = time stamp                                                                      *
  *   av[1] = #chan                                                                           *
