@@ -1,13 +1,13 @@
 *** NickServ Help - Comando: SET LANG ***
-Cambia el idioma utilizado por los servicios para enviarte informaciòn,
+Cambia el idioma utilizado por los servicios para enviarte informaciÃ²n,
 como por ejemplo los mensajes de respuesta para los comandos ejecutados.
  
 Utilizar LIST como numero para ver la lista de idiomas disponibles.
  
 N.B.: No es necesario tener un nick registrado para utilizar
-este comando. De toda manera, en caso de que el nick no estè
+este comando. De toda manera, en caso de que el nick no estÃ¨
 registrado, el cambio de idioma se va a tener que efectuar
-por cada conecciòn.
+por cada conecciÃ²n.
  
 Sintaxis:
 /ns SET LANG numero
@@ -15,5 +15,5 @@ Sintaxis:
 Ejemplo:
 /ns SET LANG 1
  
-Digita /join #IRCHelp para mas informaciòn.
+Digita /join #IRCHelp para mas informaciÃ²n.
 *** Fin del Help ***

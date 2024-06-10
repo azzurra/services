@@ -2,11 +2,11 @@
 Ajusta el bloqueo de los modes para un canal. ChanServ te permite hacer que
 unos modes para tu canal siempre queden activados o desactivados. Los modes 
 que pueden ser bloqueados son c, C, i, k, l, m, M, n, p, R, s, t, u, y U.
-Los par‡metros tienen la misma sintaxis del comando /MODE: los que tengan
-un + antes est‡n bloqueados y los que tengan un - antes est‡n desbloqueados.
+Los par√†metros tienen la misma sintaxis del comando /MODE: los que tengan
+un + antes est√†n bloqueados y los que tengan un - antes est√†n desbloqueados.
 Para que ChanServ no bloquee ningun mode tienes que especificar NONE como mode.
  
-N.B.: Si el modelock de un canal est‡ en +nt y quieres bloquear en seguida
+N.B.: Si el modelock de un canal est√† en +nt y quieres bloquear en seguida
  tambien el mode +s, necesitas especificar +nts como modes, y no +s lo cual
 bloquearia al contrario unicamente el mode +s y no los +nt.
  
@@ -14,11 +14,11 @@ Sintaxis:
 /cs SET #canal MLOCK mode
  
 Ejemplo:
-/cs SET #EspaÒa MLOCK +nt-iklps
+/cs SET #Espa√±a MLOCK +nt-iklps
 /cs SET #fano MLOCK +k Clavesecreta
 /cs SET #SolyLuna MLOCK +l 2316
 /cs SET #Chateamos MLOCK -k *
 /cs SET #IRCHelp MLOCK NONE
  
-Para mas informaciÚn, digita /join #IRCHelp
+Para mas informaci√≤n, digita /join #IRCHelp
 *** Fin del Help ***

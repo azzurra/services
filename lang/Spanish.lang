@@ -1,20 +1,20 @@
 BOTTLER_AKILL_REASON
-	Bottler is not welcome on this network. Please remove any *.azzurra.org servers from your list. Load a REAL client if you want to stay here.
+	Bottler is not welcome on this network. Please remove any *.azzurra.chat servers from your list. Load a REAL client if you want to stay here.
 CLONES_AKILL_REASON
-	Demasiados clones por este host. Este AutoKill va a ser removida en %d minutos. VisÏta http://kline.azzurra.org para mas informaciÚn.
+	Demasiados clones por este host. Este AutoKill va a ser removida en %d minutos. Vis√¨ta http://www.azzurra.chat para mas informaci√≤n.
 CSNS_EMAIL_TEXT_ABUSE
-	Si este mensaje ha sido enviado por error favor de ignorarlo y enviar seÒalaciÚn a %s
+	Si este mensaje ha sido enviado por error favor de ignorarlo y enviar se√±alaci√≤n a %s
 	%s
 CSNS_ERROR_BRAKES_IN_PASS
-	La contraseÒa no puede contener los caractËres %s o %s.
+	La contrase√±a no puede contener los caract√®res %s o %s.
 CSNS_ERROR_DROP_CODE_ALREADY_SENT
 	ERROR: Ya ha sido enviado via E-Mail un codigo de drop.
 CSNS_ERROR_INSECURE_PASSWORD
-	Reintentar utilizando una contraseÒa mas segura. Las contraseÒas deben contener minimo unos 5 caractËres, no deberian ser palabras faciles para adivinar (como por ejemplo tu nombre o tu nick), y no pueden contener espacios.
+	Reintentar utilizando una contrase√±a mas segura. Las contrase√±as deben contener minimo unos 5 caract√®res, no deberian ser palabras faciles para adivinar (como por ejemplo tu nombre o tu nick), y no pueden contener espacios.
 CSNS_ERROR_INVALID_PASSWORD
-	ERROR: La contraseÒa contiene caractËres no validos.
+	ERROR: La contrase√±a contiene caract√®res no validos.
 CSNS_ERROR_MAIL_MAX_LENGTH
-	ERROR: La extenciÚn maxima permitida para una direcciÚn E-Mail es de %d caractËres.
+	ERROR: La extenci√≤n maxima permitida para una direcci√≤n E-Mail es de %d caract√®res.
 CSNS_ERROR_MAX_REG_REACHED
 	En este momento non es posible procesar nuevas registraciones.
 CSNS_ERROR_NO_NICK_AT_USER_AT_HOST_MASK
@@ -22,21 +22,21 @@ CSNS_ERROR_NO_NICK_AT_USER_AT_HOST_MASK
 CSNS_ERROR_NO_USER_AT_HOST_MASK
 	La mask debe de estar en el formato user@host.
 CSNS_ERROR_PASSWORD_AS_PASS
-	AtenciÚn: Necesitas modificar el campo o"passwordr" insertando una palabra clave secreta.
+	Atenci√≤n: Necesitas modificar el campo o"passwordr" insertando una palabra clave secreta.
 CSNS_ERROR_PASSWORD_MAX_LENGTH
-	ERROR: La extenciÚn maxima permitida para una contraseÒa es de %d caractËres.
+	ERROR: La extenci√≤n maxima permitida para una contrase√±a es de %d caract√®res.
 CSNS_ERROR_PASSWORD_WITH_CCODES
-	La contraseÒa no puede contener control codes (bold, colores, reverse, subrayado).
+	La contrase√±a no puede contener control codes (bold, colores, reverse, subrayado).
 CSNS_ERROR_PASSWORD_WITH_SPACES
-	La contraseÒa no puede contener espacios.
+	La contrase√±a no puede contener espacios.
 CSNS_ERROR_SAME_PASSWORD
-	La nueva contraseÒa debe de ser diferente de la anteriÚr.
+	La nueva contrase√±a debe de ser diferente de la anteri√≤r.
 CSNS_ERROR_URL_FORMAT
 	El URL especificado no es valido.
 CSNS_ERROR_URL_MAX_LENGTH
-	ERROR: El URL no puede est‡r mas largo de %d caractËres.
+	ERROR: El URL no puede est√†r mas largo de %d caract√®res.
 CSNS_ERROR_WRONG_DROP_CODE
-	ERROR: El codigo drop digitado est‡ equivocado.
+	ERROR: El codigo drop digitado est√† equivocado.
 CSNS_GETPASS_ERROR_ENCRYPTION_ON
 	GETPASS command unavailable when encryption is in use.
 CSNS_GETPASS_SHOW_PASSWORD
@@ -44,9 +44,9 @@ CSNS_GETPASS_SHOW_PASSWORD
 CSNS_HELP_HOW_TO_IDENT
 	Teclar /%s IDENTIFY %s password y reintentar.
 CSNS_INFO_DATE_REG
-	Fecha de registraciÚn: %s
+	Fecha de registraci√≤n: %s
 CSNS_INFO_EMAIL_ADDRESS
-	DirecciÚn E-Mail: %s
+	Direcci√≤n E-Mail: %s
 CSNS_INFO_LANGUAGE
 	Idioma: %s (%s)
 CSNS_INFO_NO_OPTIONS_SET
@@ -76,7 +76,7 @@ CS_AKICK_ERROR_MAX_AKICKS
 CS_AKICK_ERROR_ONACCESS
 	%s must be removed from the %s list for %s in order to be added to the AKick list.
 CS_AKICK_KICK_REASON
-	Est‡s baneado de este canal.
+	Est√†s baneado de este canal.
 CS_AKICK_LIST_HEADER
 	AKICK list de %s (busqueda de %s):
 CS_AKICK_MASK_AKICKED
@@ -84,11 +84,11 @@ CS_AKICK_MASK_AKICKED
 CS_AKICK_MASK_DELETED
 	%s ha sido removido de la Akick list de %s.
 CS_AKICK_REASON_WRAPPER
-	 [RazÚn:
+	 [Raz√≤n:
 CS_AKICK_SYNTAX_ERROR
 	Sintaxis: AKICK #canal [ADD|DEL|LIST|LOCK|UNLOCK|WIPE] [nick|mask]
 CS_AKICK_WIPE_ERROR_LIST_EMPTY
-	La AKick list de %s est‡ vacia.
+	La AKick list de %s est√† vacia.
 CS_AKICK_X_MASKS_DEL
 	%d masks removidas de la Akick list de %s.
 CS_AUTHRESET_AUTH_RESET
@@ -98,7 +98,7 @@ CS_AUTHRESET_ERROR_NOT_AUTH
 CS_AUTHRESET_SYNTAX_ERROR
 	Syntax: AUTHRESET #channel
 CS_BANLIST_EMPTY
-	La banlist de %s est‡ vacÏa.
+	La banlist de %s est√† vac√¨a.
 CS_CF_SYNTAX_ERROR
 	Sintaxis: %s #canal [ADD|CLEAN|EXPLIST|DEL|LIST|WIPE|FIND] [nick] | [mask]
 CS_CHANSET_CHANGED_FOUNDER
@@ -112,7 +112,7 @@ CS_CHANSET_SYNTAX_ERROR
 CS_CHAN_DOES_NOT_EXIST
 	El canal %s no existe.
 CS_CHAN_EXPIRE
-	N.B.: Los canales expirar‡n tras %d dias de inactividad.
+	N.B.: Los canales expirar√†n tras %d dias de inactividad.
 CS_CLEAR_ERROR_NOMKICK_ON
 	Este comando ha sido desabilitado por el Fundador de %s.
 CS_CLEAR_HALFOPS_COMPLETE
@@ -132,13 +132,13 @@ CS_CLEAR_USERS_KICK_NOREASON
 CS_CLEAR_USERS_KICK_NOREASON_THROUGH
 	Mass kick por orden de %s por %s
 CS_CLEAR_USERS_KICK_REASON
-	Mass kick por orden de %s (RazÚn: %s)
+	Mass kick por orden de %s (Raz√≤n: %s)
 CS_CLEAR_USERS_KICK_REASON_THROUGH
-	Mass kick por orden de %s por %s (RazÚn: %s)
+	Mass kick por orden de %s por %s (Raz√≤n: %s)
 CS_CLEAR_VOICES_COMPLETE
 	El mass devoice de %s ha sido completado.
 CS_CLOSED_KICK_REASON
-	Este canal ha sido cerrado por la AdministraciÚn de la Red.
+	Este canal ha sido cerrado por la Administraci√≤n de la Red.
 CS_CLOSE_ERROR_CHAN_NOT_REG
 	Only registered channels may be closed. Use FORBID.
 CS_CLOSE_SYNTAX_ERROR
@@ -158,25 +158,25 @@ CS_DELETE_CHAN_DELETED
 CS_DELETE_SYNTAX_ERROR
 	Syntax: DELETE #channel
 CS_DROP_CHAN_DROPPED
-	La registraciÚn del canal %s ha sido anulada.
+	La registraci√≤n del canal %s ha sido anulada.
 CS_DROP_CODE_SENT
-	En unos momentos recibiras una E-Mail con el drop code necesario para autorizar la anulaciÚn de la registraciÚn de tu canal. Sigue las instrucciones reportadas en el E-Mail para completar el proceso.
+	En unos momentos recibiras una E-Mail con el drop code necesario para autorizar la anulaci√≤n de la registraci√≤n de tu canal. Sigue las instrucciones reportadas en el E-Mail para completar el proceso.
 CS_DROP_EMAIL_SUBJECT
-	Subject: Codigo de autorizaciÚn para dar de baja tu canal en %s
+	Subject: Codigo de autorizaci√≤n para dar de baja tu canal en %s
 	
 CS_DROP_EMAIL_TEXT
-	Tu o alguien mas ha pedido la anulaciÚn de tu canal.
+	Tu o alguien mas ha pedido la anulaci√≤n de tu canal.
 	Si quieres confirmar el drop, sigue las instrucciones reportadas en seguida:
 	Tu DROP code es: %lu.
-	IdentifÏcate en %s para el canal %s y digita:
+	Identif√¨cate en %s para el canal %s y digita:
 	/msg %s DROP %s %lu
 	
 CS_DROP_ERROR_CHAN_SUSPENDED
-	El canal %s est‡ suspendido y no puede ser anulado.
+	El canal %s est√† suspendido y no puede ser anulado.
 CS_DROP_ERROR_NOT_DROPPING
 	There is no ongoing drop request for channel %s.
 CS_DROP_ERROR_READONLY
-	No es temporalmente posible anular la registraciÚn de un canal.
+	No es temporalmente posible anular la registraci√≤n de un canal.
 CS_DROP_ERROR_WAIT
 	You can only send one drop request for each channel per day. Please wait a few hours then try again.
 CS_DROP_REQUEST_UNDONE
@@ -184,37 +184,37 @@ CS_DROP_REQUEST_UNDONE
 CS_DROP_SYNTAX_ERROR
 	Sintaxis: DROP #canal [codigo | UNDO]
 CS_ERROR_BAD_PASS
-	La contraseÒa digitada para el canal %s est‡ equivocada.
+	La contrase√±a digitada para el canal %s est√† equivocada.
 CS_ERROR_CHAN_CLOSED
-	El canal %s ha sido cerrado por la AdministraciÚn de la red.
+	El canal %s ha sido cerrado por la Administraci√≤n de la red.
 CS_ERROR_CHAN_EMPTY
-	El canal %s est‡ vacÏo.
+	El canal %s est√† vac√¨o.
 CS_ERROR_CHAN_FORBIDDEN
-	El canal %s est‡ restringido y no puede ser utilizado ni registrado.
+	El canal %s est√† restringido y no puede ser utilizado ni registrado.
 CS_ERROR_CHAN_FROZEN
-	El canal %s est‡ bloqueado.
+	El canal %s est√† bloqueado.
 CS_ERROR_CHAN_SUSPENDED
-	El canal %s est‡ suspendido y no puede ser utilizado en este momento.
+	El canal %s est√† suspendido y no puede ser utilizado en este momento.
 CS_ERROR_FOUNDER_FROZEN
 	Identification to channel %s is currently disabled because the founder's nick is frozen.
 CS_ERROR_INVALID_AKICK
-	No est‡ permitido agregar masks criptadas en la lista Akick.
+	No est√† permitido agregar masks criptadas en la lista Akick.
 CS_ERROR_INVALID_CHAN_NAME
 	%s no es un canal valido. Reintentar utilizando #%s
 CS_ERROR_INVALID_EMAIL
-	La direcciÚn E-Mail especificada (%s) no es valida.
+	La direcci√≤n E-Mail especificada (%s) no es valida.
 CS_ERROR_INVALID_KEY
-	La clave especificada no es valida, o tiene caractËres no reconocidos.
+	La clave especificada no es valida, o tiene caract√®res no reconocidos.
 CS_ERROR_INVALID_MASK
-	La mask especificada no es valida, o tiene caractËres no reconocidos.
+	La mask especificada no es valida, o tiene caract√®res no reconocidos.
 CS_ERROR_INVALID_REASON
-	La razon especificada tiene caractËresno reconocidos.
+	La razon especificada tiene caract√®resno reconocidos.
 CS_ERROR_KEY_HAS_STAR
-	Una key no puede contener el caractËr asterisco (*).
+	Una key no puede contener el caract√®r asterisco (*).
 CS_ERROR_KEY_MAX_LENGTH
-	La extenciÚn maxima permitida para una key es de %d caractËres.
+	La extenci√≤n maxima permitida para una key es de %d caract√®res.
 CS_ERROR_MISSING_PARAM
-	Tienes que especificar el par‡metro para utilizarse con el mode +%c.
+	Tienes que especificar el par√†metro para utilizarse con el mode +%c.
 CS_ERROR_MUST_IDENTIFY
 	Tienes que identificarte en el canal %s antes de utilizar este comando.
 CS_ERROR_NEGATIVE_LIMIT
@@ -222,13 +222,13 @@ CS_ERROR_NEGATIVE_LIMIT
 CS_ERROR_NOENTRY_ON
 	Ha sido requerido un masskick del canal %s, esperar unos segundos antes de enviar este comando.
 CS_ERROR_PICK_ONE
-	No es posible ajustar la opciÚn %s si la opciÚn %s ya est‡ activada.
+	No es posible ajustar la opci√≤n %s si la opci√≤n %s ya est√† activada.
 CS_ERROR_REASON_MAX_LENGTH
-	La extenciÚn maxima permitida para una razÚn es de %d caractËres.
+	La extenci√≤n maxima permitida para una raz√≤n es de %d caract√®res.
 CS_ERROR_TOPIC_MAX_LENGTH
-	ERROR: La extenciÚn maxima permitida para un topic es de %d caractËres.
+	ERROR: La extenci√≤n maxima permitida para un topic es de %d caract√®res.
 CS_ERROR_VALUE_FOUNDER_ONLY
-	Unicamente el Founder del canale puede ajustar esta opciÚn.
+	Unicamente el Founder del canale puede ajustar esta opci√≤n.
 CS_FLAG_CHAN_FLAGGED
 	Channel %s has been %s.
 CS_FLAG_ERROR_CHAN_ALREADY_FLAGGED
@@ -238,15 +238,15 @@ CS_FLAG_ERROR_CHAN_NOT_FLAGGED
 CS_FLAG_SYNTAX_ERROR
 	Syntax: %s #channel
 CS_FORBIDDEN_KICK_REASON
-	Este canal est‡ restringido y no puede ser utilizado.
+	Este canal est√† restringido y no puede ser utilizado.
 CS_GETPASS_SYNTAX_ERROR
 	Syntax: GETPASS #channel
 CS_IDENTIFY_ID_OK
-	ContraseÒa aceptada para el canal %s. Ahora est‡s identificado fundador.
+	Contrase√±a aceptada para el canal %s. Ahora est√†s identificado fundador.
 CS_IDENTIFY_SYNTAX_ERROR
-	Sintaxis: IDENTIFY #canal contraseÒa
+	Sintaxis: IDENTIFY #canal contrase√±a
 CS_INFO_DESCRIPTION
-	DescripciÚn: %s
+	Descripci√≤n: %s
 CS_INFO_FOUNDER
 	Fundador: %s (%s)
 CS_INFO_FOUNDER_EXPIRED
@@ -268,7 +268,7 @@ CS_INFO_LAST_TOPIC_BY
 CS_INFO_LIST_HEADER
 	Info sobre el canal %s:
 CS_INFO_LOCKED_LISTS
-	Las siguentes listas est‡n bloqueadas: %s%s%s%s%s
+	Las siguentes listas est√†n bloqueadas: %s%s%s%s%s
 CS_INFO_MEMOLEV_AOP
 	Memo Level: AOP
 CS_INFO_MEMOLEV_CF
@@ -300,9 +300,9 @@ CS_INFO_URL
 CS_INFO_WELCOME
 	Mensaje de bienvenido: %s
 CS_INVITE_ERROR_ALREADY_IN
-	Ya est‡s en %s.
+	Ya est√†s en %s.
 CS_INVITE_ERROR_CHANSERV_ISIN
-	No puedes recibir alguna invitaciÚn en un canal reciËn masskicked. Espera unos segundos y vuelve a intentar.
+	No puedes recibir alguna invitaci√≤n en un canal reci√®n masskicked. Espera unos segundos y vuelve a intentar.
 CS_INVITE_ERROR_PARAM_GIVEN
 	No es posible invitar mas personas por el comando INVITE.
 CS_INVITE_SYNTAX_ERROR
@@ -326,11 +326,11 @@ CS_LEVEL_SOPONLY_KICK_REASON
 CS_LEVEL_SRAONLY_KICK_REASON
 	Unicamente los Services Roots pueden acceder a este canal.
 CS_LEVEL_SYNTAX_ERROR
-	Syntax: LEVEL #channel [OPERS|SOP|SA|SRA|CODERS|MASTERS|NONE]
+	Syntax: LEVEL #channel [SOP|SA|SRA|CODER|NONE]
 CS_LISTREG_SYNTAX_ERROR
-	Syntax: LISTREG LIST|COUNT|MAIL type pattern
+	Syntax: LISTREG N|D|T|U|NU|R|DR|H|K|F|Z|C pattern [page_number]
 CS_MKICK_SYNTAX_ERROR
-	Sintaxis: MKICK #canal [razÚn]
+	Sintaxis: MKICK #canal [raz√≤n]
 CS_MODE_COMPLETE
 	Los modes del canal %s han sido ajustados en: %s
 CS_MODE_ERROR_INVALID_MODES
@@ -340,7 +340,7 @@ CS_MODE_ERROR_IRCOP_ONLY_MODE
 CS_MODE_ERROR_LOCKED_MODES
 	The following modes are locked and were ignored: %s
 CS_MODE_ERROR_NOTHING_TO_DO
-	Todos los modes requeridos ya est‡n ajustados.
+	Todos los modes requeridos ya est√†n ajustados.
 CS_MODE_ERROR_UNKNOWN_MODES
 	Los siguentes modes han sido ignorados por ser desconocidos: %s
 CS_MODE_SYNTAX_ERROR
@@ -360,17 +360,17 @@ CS_OP_DEOP_ERROR_PROTECT_ON
 CS_OP_DEOP_SYNTAX_ERROR
 	Sintaxis: %s #canal directorio-nick
 CS_REGISTER_ERROR_ALREADY_REG
-	El canal %s ya est‡ registrado!
+	El canal %s ya est√† registrado!
 CS_REGISTER_ERROR_CANT_REG_LOCAL
 	Los canales locales no pueden ser registrados.
 CS_REGISTER_ERROR_CHAN_RESERVED
 	El nombre %s es un nombre reservado y no puede ser registrado.
 CS_REGISTER_ERROR_CHAN_SUSPENDED
-	El canal %s est‡ suspendido y no puede ser registrado en este momento.
+	El canal %s est√† suspendido y no puede ser registrado en este momento.
 CS_REGISTER_ERROR_HIT_MAXREG
 	Ya alcanzaste tu valor limite de %d canales registrados a tu nombre.
 CS_REGISTER_ERROR_MUST_AUTH_NICK
-	No puedes registrar ningun canal hasta que hayas confirmado la registraciÚn de tu nick.
+	No puedes registrar ningun canal hasta que hayas confirmado la registraci√≤n de tu nick.
 CS_REGISTER_ERROR_MUST_BE_OP
 	Tienes que ser operador en el canal %s para poderlo registrar.
 CS_REGISTER_ERROR_NICK_NOT_REG_1
@@ -380,25 +380,25 @@ CS_REGISTER_ERROR_NICK_NOT_REG_2
 CS_REGISTER_ERROR_OVER_MAXREG
 	Ya sobrepasaste el limite de %d canales registrados a tu nombre.
 CS_REGISTER_ERROR_READONLY
-	El servicio de registraciÚn de canales est‡ temporalmente no disponible.
+	El servicio de registraci√≤n de canales est√† temporalmente no disponible.
 CS_REGISTER_ERROR_SAME_PASS_AS_NICK
-	No est‡ permitido registrar un canal utilizando la misma contraseÒa utilizada para el nick.
+	No est√† permitido registrar un canal utilizando la misma contrase√±a utilizada para el nick.
 CS_REGISTER_REG_OK_1
 	El canal %s ha sido registrado con exito por el nick: %s
 CS_REGISTER_REG_OK_2
-	La contraseÒa del canal es %s. Anotarla en un lugar seguro, la vas a necesitar en seguida.
+	La contrase√±a del canal es %s. Anotarla en un lugar seguro, la vas a necesitar en seguida.
 CS_REGISTER_REG_OK_3
-	El modelock del canal ha sido automaticamente ajustado en %s. Digita /%s HELP SET MLOCK para mas informaciÚn.
+	El modelock del canal ha sido automaticamente ajustado en %s. Digita /%s HELP SET MLOCK para mas informaci√≤n.
 CS_REGISTER_REG_OK_4
-	AtenciÚn: NO compartas para ninguna razÚn tu contraseÒa con otros usuarios. Equivaldria a cederles tu canal y NO habria ninguna manera para recuperarlo!
+	Atenci√≤n: NO compartas para ninguna raz√≤n tu contrase√±a con otros usuarios. Equivaldria a cederles tu canal y NO habria ninguna manera para recuperarlo!
 CS_REGISTER_SYNTAX_ERROR
-	Sintaxis: REGISTER #canal contraseÒa descripciÚn
+	Sintaxis: REGISTER #canal contrase√±a descripci√≤n
 CS_REMIND_EMAIL_SUBJECT
-	Subject: RegistraciÚn de tu canal en %s
+	Subject: Registraci√≤n de tu canal en %s
 	
 CS_REMIND_EMAIL_TEXT
-	El canal %s expirar‡ en %d dias.
-	Si quieres evitar que se anule, tu o algun otro operador tienen que entrar minimo una vez antes de la fecha de expiraciÚn.
+	El canal %s expirar√† en %d dias.
+	Si quieres evitar que se anule, tu o algun otro operador tienen que entrar minimo una vez antes de la fecha de expiraci√≤n.
 	%s
 	
 CS_REMOVE_ERROR_CANT_REMOVE_FOUNDER
@@ -412,14 +412,14 @@ CS_REMOVE_SYNTAX_ERROR
 CS_RESERVED_KICK_REASON
 	Este es un canal reservado. No es posible utilizarlo.
 CS_RESTRICTED_KICK_REASON
-	No tienes ninguna autorizaciÚn para acceder a este canal.
+	No tienes ninguna autorizaci√≤n para acceder a este canal.
 CS_SENDPASS_EMAIL_SUBJECT
 	Subject: Password del canal %s
 	
 CS_SENDPASS_EMAIL_TEXT
-	SolicitaciÚn de contraseÒa enviada por: %s
+	Solicitaci√≤n de contrase√±a enviada por: %s
 	Recibida: %s
-	La contraseÒa del canal %s es: %s
+	La contrase√±a del canal %s es: %s
 	
 CS_SENDPASS_ERROR_NO_REGEMAIL
 	User %s doesn't have a valid AUTH E-Mail
@@ -432,9 +432,9 @@ CS_SET_BANTYPE_SET
 CS_SET_BANTYPE_SYNTAX_ERROR
 	Syntax: SET #channel BANTYPE type
 CS_SET_DESC_CHANGED
-	La descripciÚn de %s ha sido modificada en: %s
+	La descripci√≤n de %s ha sido modificada en: %s
 CS_SET_DESC_ERROR_MAX_LENGTH
-	ERROR: La extenciÚn maxima permitida para la descripciÚn de un canal es de %d caractËres.
+	ERROR: La extenci√≤n maxima permitida para la descripci√≤n de un canal es de %d caract√®res.
 CS_SET_EMAIL_CHANGED
 	El E-Mail asociado al canal %s ha sido modificado en: %s
 CS_SET_EMAIL_DELETED
@@ -442,25 +442,25 @@ CS_SET_EMAIL_DELETED
 CS_SET_EMAIL_ERROR_NO_EMAIL
 	EL E-Mail asociado al canal %s no estaba ajustado.
 CS_SET_ERROR_OPTION_ALREADY_OFF
-	La opciÚn %s para el canal %s ya est‡ disabilitada.
+	La opci√≤n %s para el canal %s ya est√† disabilitada.
 CS_SET_ERROR_OPTION_ALREADY_ON
-	La opciÚn %s para el canal %s ya est‡ abilitada.
+	La opci√≤n %s para el canal %s ya est√† abilitada.
 CS_SET_ERROR_OTHER_ON
-	La opciÚn %s no puede ser ajustada si la opciÚn %s est‡ activada.
+	La opci√≤n %s no puede ser ajustada si la opci√≤n %s est√† activada.
 CS_SET_ERROR_READONLY
-	El servicio de administraciÚn de opciones para los canales est‡ temporalmente no disponible.
+	El servicio de administraci√≤n de opciones para los canales est√† temporalmente no disponible.
 CS_SET_FOUNDER_CHANGED
 	El fundador de %s desde este momento es %s.
 CS_SET_FOUNDER_CHANGED_NEW
-	%s transfered the foundership of %s to you. La contraseÒa del canal es %s-%lu. Anotarla en un lugar seguro, la vas a necesitar en seguida.
+	%s transfered the foundership of %s to you. La contrase√±a del canal es %s-%lu. Anotarla en un lugar seguro, la vas a necesitar en seguida.
 CS_SET_FOUNDER_ERROR_ALREADY_FOUNDER
 	%s ya es fundador de %s.
 CS_SET_FOUNDER_ERROR_NICK_NOT_AUTH
-	No es posible poner fundador de un canal un nick cuya registraciÚn no ha sido confirmada. Favor de comunicarle a %s que tiene que confirmar su registraciÚn cuanto antes.
+	No es posible poner fundador de un canal un nick cuya registraci√≤n no ha sido confirmada. Favor de comunicarle a %s que tiene que confirmar su registraci√≤n cuanto antes.
 CS_SET_FOUNDER_ERROR_NICK_OFFLINE
-	%s debe de estar online y identificato a su nick para poderse efectuar la operaciÚn.
+	%s debe de estar online y identificato a su nick para poderse efectuar la operaci√≤n.
 CS_SET_FOUNDER_ERROR_NOOP_ON
-	%s tiene la opciÚn No Op activada y no quiere ser agregado Fundador de ningun can‡l.
+	%s tiene la opci√≤n No Op activada y no quiere ser agregado Fundador de ningun can√†l.
 CS_SET_FOUNDER_SUCCESSOR
 	Due to the expiration of the former founder's nickname, the foundership of %s has been transfered to you, the channel successor. The new channel password is %s-%lu. Write it down, you will need it later.
 CS_SET_LANG_CHANGED
@@ -468,15 +468,15 @@ CS_SET_LANG_CHANGED
 CS_SET_LANG_ERROR_INVALID
 	El idioma seleccionado no es valido.
 CS_SET_LANG_SYNTAX_ERROR
-	Sintaxis: SET #canal LANG n˘mero
+	Sintaxis: SET #canal LANG n√πmero
 CS_SET_MEMOLEVEL_ERROR_ALREADY_NONE
-	La opciÚn Memo Level para el canal %s ya est‡ disabilitada.
+	La opci√≤n Memo Level para el canal %s ya est√† disabilitada.
 CS_SET_MEMOLEVEL_ERROR_ALREADY_SET
-	La opciÚn Memo Level para el canal %s ya est‡ ajustada a %s.
+	La opci√≤n Memo Level para el canal %s ya est√† ajustada a %s.
 CS_SET_MEMOLEVEL_NONE
 	De ahora en adelante no va a ser posible enviar memo a todo el canal %s.
 CS_SET_MEMOLEVEL_ON
-	El Memo Level de %s ahora est‡ en %s.
+	El Memo Level de %s ahora est√† en %s.
 CS_SET_MEMOLEVEL_SYNTAX_ERROR
 	Sintaxis: SET #canal MEMOLEVEL nivel
 CS_SET_MLOCK_CHANGED_K
@@ -494,7 +494,7 @@ CS_SET_MLOCK_ERROR_INVALID_MODE
 CS_SET_MLOCK_ERROR_IRCOP_ONLY_MODE
 	El siguente mode ha sido ignorado por ser restringido a IRCop: %c
 CS_SET_MLOCK_ERROR_NOTHING_TO_DO
-	Todos los modes requeridos ya est‡n ajustados.
+	Todos los modes requeridos ya est√†n ajustados.
 CS_SET_MLOCK_ERROR_UNKNOWN_MODE
 	Los siguentes modes han sido ignorados por ser desconocidos: %s
 CS_SET_MLOCK_NONE
@@ -502,17 +502,17 @@ CS_SET_MLOCK_NONE
 CS_SET_MLOCK_SYNTAX_ERROR
 	Sintaxis: SET %s MLOCK +|-mode[mode[...]][+|-mode[mode[...]]] | NONE
 CS_SET_OPTION_OFF
-	La opciÚn %s para el canal %s ahora es OFF.
+	La opci√≤n %s para el canal %s ahora es OFF.
 CS_SET_OPTION_ON
-	La opciÚn %s para el canal %s ahora es ON.
+	La opci√≤n %s para el canal %s ahora es ON.
 CS_SET_OPTION_SYNTAX_ERROR
 	Sintaxis: SET #canal %s [ON|OFF]
 CS_SET_PASSWD_ERROR_WRONG_OLD_PASS
-	La vieja contraseÒa insertada para el canal %s no es corecta.
+	La vieja contrase√±a insertada para el canal %s no es corecta.
 CS_SET_PASSWD_PASSWORD_CHANGED
-	La contraseÒa de %s ha sido ajustada a %s.
+	La contrase√±a de %s ha sido ajustada a %s.
 CS_SET_PASSWD_SYNTAX_ERROR
-	Sintaxis: SET #canal PASSWD vieja-contraseÒa nueva-contraseÒa
+	Sintaxis: SET #canal PASSWD vieja-contrase√±a nueva-contrase√±a
 CS_SET_SUCCESSOR_CHANGED
 	%s ahora es el Successor del canal %s.
 CS_SET_SUCCESSOR_ERROR_EMPTY
@@ -524,15 +524,15 @@ CS_SET_SUCCESSOR_ERROR_NOT_CF
 CS_SET_SUCCESSOR_REMOVED
 	El canal %s ahora no tiene Successor.
 CS_SET_SYNTAX_ERROR
-	Sintaxis: SET #canal OPCION par‡metros
+	Sintaxis: SET #canal OPCION par√†metros
 CS_SET_TOPICLOCK_ERROR_ALREADY_OFF
-	La opciÚn Topic Lock para el canal %s ya est‡ disabilitada.
+	La opci√≤n Topic Lock para el canal %s ya est√† disabilitada.
 CS_SET_TOPICLOCK_ERROR_ALREADY_SET
-	La opciÚn Topic Lock para el canal %s ya est‡ ajustada a %s.
+	La opci√≤n Topic Lock para el canal %s ya est√† ajustada a %s.
 CS_SET_TOPICLOCK_OFF
-	La opciÚn Topic Lock para el canal %s ahora es OFF.
+	La opci√≤n Topic Lock para el canal %s ahora es OFF.
 CS_SET_TOPICLOCK_ON
-	La opciÚn Topic Lock para el canal %s ahora es %s.
+	La opci√≤n Topic Lock para el canal %s ahora es %s.
 CS_SET_TOPICLOCK_SYNTAX_ERROR
 	Sintaxis: SET #canal TOPICLOCK [VOP|HOP|AOP|SOP|CFOUNDER|FOUNDER|OFF]
 CS_SET_TOPIC_CHANGED
@@ -556,7 +556,7 @@ CS_SET_WELCOME_DELETED
 CS_SET_WELCOME_ERROR_NO_WELCOME
 	El mensaje de bienvenido de %s no estaba ajustado.
 CS_SET_WELCOME_ERROR_TOO_LONG
-	ERROR: El Welcome Message no puede ser mas largo de %d caractËres.
+	ERROR: El Welcome Message no puede ser mas largo de %d caract√®res.
 CS_SUSPENDED_KICK_REASON
 	Este canal ha sido temporalmente suspendido.
 CS_SUSPEND_ADD_SYNTAX_ERROR
@@ -642,19 +642,19 @@ CS_VERBOSE_OPNOTICE_OP_DEOP_USED
 CS_VERBOSE_OPNOTICE_OP_DEOP_USED_THROUGH
 	:%s NOTICE @%s :%s (por %s) ha utilizado %s con %s
 CS_VERBOSE_OPNOTICE_REMOVE
-	:%s NOTICE @%s :%s se removiÚ de la %s list.
+	:%s NOTICE @%s :%s se removi√≤ de la %s list.
 CS_VERBOSE_OPNOTICE_SET_DESC
-	:%s NOTICE @%s :%s ha modificado la descripciÚn del canal.
+	:%s NOTICE @%s :%s ha modificado la descripci√≤n del canal.
 CS_VERBOSE_OPNOTICE_SET_DESC_THROUGH
-	:%s NOTICE @%s :%s (por %s) ha modificado la descripciÚn del canal.
+	:%s NOTICE @%s :%s (por %s) ha modificado la descripci√≤n del canal.
 CS_VERBOSE_OPNOTICE_SET_EMAIL_CHANGED
-	:%s NOTICE @%s :%s ha modificado la direcciÚn E-Mail del canal.
+	:%s NOTICE @%s :%s ha modificado la direcci√≤n E-Mail del canal.
 CS_VERBOSE_OPNOTICE_SET_EMAIL_CHANGED_THROUGH
-	:%s NOTICE @%s :%s (por %s) ha modificado la direcciÚn E-Mail del canal.
+	:%s NOTICE @%s :%s (por %s) ha modificado la direcci√≤n E-Mail del canal.
 CS_VERBOSE_OPNOTICE_SET_EMAIL_DELETED
-	:%s NOTICE @%s :%s ha removido la direcciÚn E-Mail del canal.
+	:%s NOTICE @%s :%s ha removido la direcci√≤n E-Mail del canal.
 CS_VERBOSE_OPNOTICE_SET_EMAIL_DELETED_THROUGH
-	:%s NOTICE @%s :%s (por %s) ha removido la direcciÚn E-Mail del canal.
+	:%s NOTICE @%s :%s (por %s) ha removido la direcci√≤n E-Mail del canal.
 CS_VERBOSE_OPNOTICE_SET_FOUNDER_CHANGED
 	:%s NOTICE @%s :%s hizo %s fundador del canal.
 CS_VERBOSE_OPNOTICE_SET_LANG_CHANGED
@@ -674,15 +674,15 @@ CS_VERBOSE_OPNOTICE_SET_MLOCK_NONE
 CS_VERBOSE_OPNOTICE_SET_MLOCK_NONE_THROUGH
 	:%s NOTICE @%s :%s (por %s) ha desabilitado el modelock del canal.
 CS_VERBOSE_OPNOTICE_SET_OPTION_OFF
-	:%s NOTICE @%s :%s ha desactivado la opciÚn %s.
+	:%s NOTICE @%s :%s ha desactivado la opci√≤n %s.
 CS_VERBOSE_OPNOTICE_SET_OPTION_OFF_THROUGH
-	:%s NOTICE @%s :%s (por %s) ha desactivado la opciÚn %s.
+	:%s NOTICE @%s :%s (por %s) ha desactivado la opci√≤n %s.
 CS_VERBOSE_OPNOTICE_SET_OPTION_ON
-	:%s NOTICE @%s :%s ha activado la opciÚn %s.
+	:%s NOTICE @%s :%s ha activado la opci√≤n %s.
 CS_VERBOSE_OPNOTICE_SET_OPTION_ON_THROUGH
-	:%s NOTICE @%s :%s (por %s) ha activado la opciÚn %s.
+	:%s NOTICE @%s :%s (por %s) ha activado la opci√≤n %s.
 CS_VERBOSE_OPNOTICE_SET_PASSWD
-	:%s NOTICE @%s :%s ha modificado la contraseÒa del canal.
+	:%s NOTICE @%s :%s ha modificado la contrase√±a del canal.
 CS_VERBOSE_OPNOTICE_SET_SUCCESSOR_CHANGED
 	:%s NOTICE @%s :%s hizo %s Successor del canal.
 CS_VERBOSE_OPNOTICE_SET_SUCCESSOR_CHANGED_THROUGH
@@ -720,9 +720,9 @@ CS_VERBOSE_OPNOTICE_SET_WELCOME_DELETED
 CS_VERBOSE_OPNOTICE_SET_WELCOME_DELETED_THROUGH
 	:%s NOTICE @%s :%s (por %s) ha desactivado el mensaje de bienvenido.
 CS_VERBOSE_OPNOTICE_UNBAN_ME
-	:%s NOTICE @%s :%s ha removido los bans sobre sÏ mismo.
+	:%s NOTICE @%s :%s ha removido los bans sobre s√¨ mismo.
 CS_VERBOSE_OPNOTICE_UNBAN_ME_THROUGH
-	:%s NOTICE @%s :%s (por %s) ha removido los bans sobre sÏ mismo.
+	:%s NOTICE @%s :%s (por %s) ha removido los bans sobre s√¨ mismo.
 CS_VERBOSE_OPNOTICE_USER_AKICKED
 	:%s NOTICE @%s :%s refleja el AKick en %s y va a ser baneado.
 CS_VERBOSE_OPNOTICE_XOP_ADDED
@@ -752,29 +752,29 @@ CS_VERBOSE_OPNOTICE_XOP_WIPED_THROUGH
 CS_WHY_ACCESS_LEVEL
 	WHY %s@%s: %s
 CS_WHY_BANNED_USER
-	%s no tiene acceso en el canal %s. RazÚn: Baneado.
+	%s no tiene acceso en el canal %s. Raz√≤n: Baneado.
 CS_WHY_ERROR_NICK_OFFLINE
-	El nick %s no est‡ online.
+	El nick %s no est√† online.
 CS_WHY_FOUNDER_ID_CHAN
-	%s es el Fundador de %s. RazÚn: Identificado en el canal por medio de contraseÒa.
+	%s es el Fundador de %s. Raz√≤n: Identificado en el canal por medio de contrase√±a.
 CS_WHY_FOUNDER_ID_NICK
-	%s es el Fundador de %s. RazÚn: Identificado con el nick del founder por medio de contraseÒa.
+	%s es el Fundador de %s. Raz√≤n: Identificado con el nick del founder por medio de contrase√±a.
 CS_WHY_FOUNDER_ON_ACCESS_LIST
-	%s es el Fundador de %s. RazÚn: Se encuentra en la Access List del nick del Fundador.
+	%s es el Fundador de %s. Raz√≤n: Se encuentra en la Access List del nick del Fundador.
 CS_WHY_IDENTIFIED
-	%s es un %s de %s. RazÚn: Identificado con el nick %s por medio de contraseÒa.
+	%s es un %s de %s. Raz√≤n: Identificado con el nick %s por medio de contrase√±a.
 CS_WHY_MASK_IN_LIST
-	%s es un %s de %s. RazÚn: mask correspondiente con %s
+	%s es un %s de %s. Raz√≤n: mask correspondiente con %s
 CS_WHY_NICK_IS_FOUNDER
 	WHY %s@%s: Nick del Fundador.
 CS_WHY_NICK_NOT_ON_LIST
 	WHY %s@%s: El nick no se encuentra en las listas del canal.
 CS_WHY_NICK_OFFLINE
-	WHY %s@%s: El usuario no est‡ online, busqueda directa en las listas...
+	WHY %s@%s: El usuario no est√† online, busqueda directa en las listas...
 CS_WHY_NORMAL_USER
-	%s no tiene acceso en el canal %s. RazÚn: Usuario normal.
+	%s no tiene acceso en el canal %s. Raz√≤n: Usuario normal.
 CS_WHY_ON_ACCESS_LIST
-	%s es un %s de %s. RazÚn: Se encuentra en la Access List del nick %s.
+	%s es un %s de %s. Raz√≤n: Se encuentra en la Access List del nick %s.
 CS_WHY_SYNTAX_ERROR
 	Sintaxis: WHY #canal nick
 CS_WIPE_ALL_LISTS_WIPED
@@ -794,33 +794,33 @@ CS_XOP_ADD_ERROR_HIT_MAXREG
 CS_XOP_ADD_ERROR_IDENT_ON
 	El canal %s tiene la opcion Ident activada. No es posible agregar nicks no registrados en ninguna de las listas.
 CS_XOP_ADD_ERROR_INVALID_ENTRY
-	No est‡ permitido agregar masks criptadas en ninguna lista.
+	No est√† permitido agregar masks criptadas en ninguna lista.
 CS_XOP_ADD_ERROR_LISTS_FULL
 	Has alcanzado el numero maximo (%d) de personas que puedas agregar en las listas del canal.
 CS_XOP_ADD_ERROR_NICK_FORBIDDEN
 	El nick %s no puede ser utilizado, por lo tanto no es posible agregarlo en ninguna lista.
 CS_XOP_ADD_ERROR_NICK_FROZEN
-	El nick %s est‡ bloqueado, por lo tanto no es posible agregarlo en ninguna lista.
+	El nick %s est√† bloqueado, por lo tanto no es posible agregarlo en ninguna lista.
 CS_XOP_ADD_ERROR_NICK_IS_FOUNDER
 	El nick %s ya es Fundador de %s y no necesita ser agregado en ninguna lista.
 CS_XOP_ADD_ERROR_NICK_IS_SUPERIOR
 	Acceso restringido: %s ya se encuentra en las listas de %s en un nivel igual o superior al tuyo.
 CS_XOP_ADD_ERROR_NICK_NOT_AUTH
-	No es posible agregar en ninguna lista un nick cuya registraciÚn no haya sido confirmada. Favor de comunicarle a %s que tiene que confirmar su registraciÚn cuanto antes.
+	No es posible agregar en ninguna lista un nick cuya registraci√≤n no haya sido confirmada. Favor de comunicarle a %s que tiene que confirmar su registraci√≤n cuanto antes.
 CS_XOP_ADD_ERROR_NICK_NOT_REG
-	El nick %s no est‡ registrado y no puede ser agregado en ninguna lista.
+	El nick %s no est√† registrado y no puede ser agregado en ninguna lista.
 CS_XOP_ADD_ERROR_NOOP_ON
-	%s tiene la opciÚn No Op activada y no quiere ser agregado en ninguna lista.
+	%s tiene la opci√≤n No Op activada y no quiere ser agregado en ninguna lista.
 CS_XOP_ADD_ERROR_OVER_MAXREG
 	ERROR: %s ya ha sobrepasado el numero maximo de %d canales a los que pueda acceder.
 CS_XOP_ADD_ERROR_QUESTION_MARK
-	La mask no puede tener caractËres '?'.
+	La mask no puede tener caract√®res '?'.
 CS_XOP_ADD_JUMP_NOOP_1
 	%s ya se encuentra en una de las listas del canal %s.
 CS_XOP_ADD_JUMP_NOOP_2
-	Por lo tanto va a ser movido a la %s list aun tenga la opciÚn No Op activada.
+	Por lo tanto va a ser movido a la %s list aun tenga la opci√≤n No Op activada.
 CS_XOP_ADD_JUMP_NOOP_2_SUCCESSOR
-	Por lo tanto va a ser movido a la %s list aun tenga la opciÚn No Op activada. Ahora el canal no tiene Successor.
+	Por lo tanto va a ser movido a la %s list aun tenga la opci√≤n No Op activada. Ahora el canal no tiene Successor.
 CS_XOP_ADD_LEVEL_CHANGED
 	%s ahora es un %s de %s.
 CS_XOP_ADD_LEVEL_CHANGED_SUCCESSOR
@@ -830,7 +830,7 @@ CS_XOP_ADD_MASK_ADDED
 CS_XOP_ADD_NICK_ADDED
 	El nick %s ha sido agregado en la %s list de %s.
 CS_XOP_ADD_WARNING_MASK_CHANGED
-	AtenciÚn: la mask ha sido modificada a: %s
+	Atenci√≤n: la mask ha sido modificada a: %s
 CS_XOP_CLEAN_1_ENTRY_CLEANED
 	El unico nick expirado presente ha sido removido de la %s list de %s.
 CS_XOP_CLEAN_ERROR_NOTHING_TO_CLEAN
@@ -850,15 +850,15 @@ CS_XOP_ENTRY_LOCKED
 CS_XOP_ENTRY_UNLOCKED
 	%s ha sido disbloqueado en la %s list de %s.
 CS_XOP_ERROR_ENTRY_ALREADY_LOCKED
-	%s ya est‡ bloqueado en la %s list de %s.
+	%s ya est√† bloqueado en la %s list de %s.
 CS_XOP_ERROR_ENTRY_ALREADY_UNLOCKED
-	%s ya est‡ desbloqueado en la %s list de %s.
+	%s ya est√† desbloqueado en la %s list de %s.
 CS_XOP_ERROR_ENTRY_LOCKED
 	Acceso restringido. %s ha sido bloqueado en la %s list de %s por el Fundador.
 CS_XOP_ERROR_LIST_ALREADY_LOCKED
-	La %s list de %s ya est‡ bloqueada.
+	La %s list de %s ya est√† bloqueada.
 CS_XOP_ERROR_LIST_ALREADY_UNLOCKED
-	La %s list de %s ya est‡ desbloqueada.
+	La %s list de %s ya est√† desbloqueada.
 CS_XOP_ERROR_LIST_LOCKED
 	Acceso restringido. La %s list de %s ha sido bloqueada por el Fundador.
 CS_XOP_ERROR_READONLY
@@ -868,7 +868,7 @@ CS_XOP_LIST_ENTRIES
 CS_XOP_LIST_HEADER
 	%s list de %s (busqueda de %s):
 CS_XOP_LIST_IS_LOCKED
-	La lista est‡ bloqueada.
+	La lista est√† bloqueada.
 CS_XOP_LIST_LOCKED
 	La %s list de %s ha sido bloqueada.
 CS_XOP_LIST_UNLOCKED
@@ -886,29 +886,29 @@ CS_XOP_WIPE_X_ENTRIES_WIPED
 CS_XOP_WIPE_X_ENTRIES_WIPED_SUCCESSOR
 	%d elementos removidos de la %s list de %s. ahora el canal no tiene Successor.
 EMAIL_NETWORK_FOR_MORE_INFO
-	EnvÏa una E-Mail a la direcciÚn %s para mas informaciÚn.
+	Env√¨a una E-Mail a la direcci√≤n %s para mas informaci√≤n.
 END_OF_INFO
 	*** Fin de las Info ***
 END_OF_LIST
-	*** FÏn de la Lista ***
+	*** F√¨n de la Lista ***
 ERROR_ACCESS_DENIED
 	Acceso restringido.
 ERROR_CHAN_MAX_LENGTH
-	ERROR: La extenciÚn maxima permitida para un canal es de %d caractËres.
+	ERROR: La extenci√≤n maxima permitida para un canal es de %d caract√®res.
 ERROR_CHAN_NOT_REG
-	El canal %s no est‡ registrado.
+	El canal %s no est√† registrado.
 ERROR_HOST_MAX_LENGTH
-	ERROR: La extenciÚn maxima permitida para un host es de %d caractËres.
+	ERROR: La extenci√≤n maxima permitida para un host es de %d caract√®res.
 ERROR_INVALID_NICK
-	ERRORE: El nick %s non es valido, o tiene caractËres no validos.
+	ERRORE: El nick %s non es valido, o tiene caract√®res no validos.
 ERROR_MASK_ALREADY_COVERED
 	%s is already covered by: %s
 ERROR_MASK_MAX_LENGTH
-	ERROR: La extenciÚn maxima permitida para una mask es de %d caractËres.
+	ERROR: La extenci√≤n maxima permitida para una mask es de %d caract√®res.
 ERROR_NICK_MAX_LENGTH
-	ERROR: La extenciÚn maxima permitida para un nick es de %d caractËres.
+	ERROR: La extenci√≤n maxima permitida para un nick es de %d caract√®res.
 ERROR_NICK_NOT_REG
-	El nick %s no est‡ registrado.
+	El nick %s no est√† registrado.
 ERROR_NICK_RESERVED
 	El nick %s es un nick reservado. Favor de cambiarlo inmediatamente.
 ERROR_NO_NICK_OR_USER_AT_HOST_MASK
@@ -920,19 +920,19 @@ ERROR_UNKNOWN_COMMAND
 ERROR_UNKNOWN_SET_COMMAND
 	Comando desconocido: SET %s.
 ERROR_USER_MAX_LENGTH
-	ERROR: La extenciÚn maxima permitida para un username es de %d caractËres.
+	ERROR: La extenci√≤n maxima permitida para un username es de %d caract√®res.
 FLOODER_AKILL_REASON
 	Spam/War/Flood clones are not welcome on this network.
 GET_MORE_INFO_ON_COMMAND
-	Teclar /%s HELP %s para mas informaciÚn.
+	Teclar /%s HELP %s para mas informaci√≤n.
 GET_MORE_INFO_ON_SET_COMMAND
-	Teclar /%s HELP SET %s para mas informaciÚn.
+	Teclar /%s HELP SET %s para mas informaci√≤n.
 GET_SERVICE_COMMAND_LIST
 	Teclar /%s HELP para ver la lista de comandos disponibles.
 GET_SERVICE_COMMAND_LIST_MSG
 	Teclar /msg %s HELP para ver la lista de comandos disponibles.
 IDENT_AKILL_REASON
-	Due to repeated spam from this Internet Service Provider, all its users are now required to enable ident. Please visit http://kline.azzurra.org for more information.
+	Due to repeated spam from this Internet Service Provider, all its users are now required to enable ident. Please visit http://www.azzurra.chat for more information.
 INFO_CURRENT_TIME
 	Hora actual: %s
 INVALID_PASSWORD_FIRST_WARNING
@@ -944,11 +944,11 @@ JOIN_CHAN_IS_REGISTERED
 LANG_LIST_HEADER
 	Idiomas disponibles:
 MIRCWORM_AKILL_REASON
-	Your copy of mIRC is infected with a worm that loads up clones to spam other users. Delete ad reinstall your copy of mIRC before reconnecting. Please visit http://kline.azzurra.org for more information.
+	Your copy of mIRC is infected with a worm that loads up clones to spam other users. Delete ad reinstall your copy of mIRC before reconnecting. Please visit http://www.azzurra.chat for more information.
 MS_DEL_ALL_MEMOS_MARKED_DEL
 	Todos los memos requeridos han sido marcados para borrarse.
 MS_DEL_ERROR_MEMO_ALREADY_DEL
-	El memo numero %d ya est‡ marcado para borrarse.
+	El memo numero %d ya est√† marcado para borrarse.
 MS_DEL_ERROR_READONLY
 	Sorry, memo deleting is temporarily disabled.
 MS_DEL_MEMO_MARKED_DEL
@@ -960,13 +960,13 @@ MS_ERROR_FORWARDED_OVER_MAX_MEMOS
 MS_ERROR_MEMO_DELAY
 	Tienes que esperar %d segundos antes de poder utilizar el comando %s.
 MS_ERROR_MEMO_MAX_LENGTH
-	ERROR: Los memos pueden contener maximo %d caractËres. Tu memo tiene: %d
+	ERROR: Los memos pueden contener maximo %d caract√®res. Tu memo tiene: %d
 MS_ERROR_NICK_FORBIDDEN
 	El nick %s no puede ser utilizado, y no puede recibir memos.
 MS_ERROR_NICK_FROZEN
-	El nick %s est‡ bloqueado, y no puede recibir memos.
+	El nick %s est√† bloqueado, y no puede recibir memos.
 MS_ERROR_NOMEMO_ON
-	El nick %s tiene la opciÚn No Memo activada.
+	El nick %s tiene la opci√≤n No Memo activada.
 MS_ERROR_NO_MATCH
 	No hay memos correspondientes al numero %d.
 MS_ERROR_NO_MEMOS
@@ -976,11 +976,11 @@ MS_ERROR_OVER_MAX_MEMOS
 MS_FORWARD_ERROR_CANT_FORWARD_SELF
 	No puedes reexpedir memos a ti mismo!
 MS_FORWARD_ERROR_FORWARD_OFF
-	La opciÚn de reenvio memos para el nick %s no est‡ activada.
+	La opci√≤n de reenvio memos para el nick %s no est√† activada.
 MS_FORWARD_ERROR_NOT_AUTH
-	No es posible reeinviar memos a un nick cuja registraciÚn no estË completa.
+	No es posible reeinviar memos a un nick cuja registraci√≤n no est√® completa.
 MS_FORWARD_ERROR_REJECTED
-	El memo ha sido rechasado por el nick %s, al que habia sido reexpedido, porque la opciÚn %s est‡ activada.
+	El memo ha sido rechasado por el nick %s, al que habia sido reexpedido, porque la opci√≤n %s est√† activada.
 MS_FORWARD_OFF
 	Los memos del nick %s ya no van a ser reexpedidos.
 MS_FORWARD_ON
@@ -988,9 +988,9 @@ MS_FORWARD_ON
 MS_FORWARD_SYNTAX_ERROR
 	Sintaxis: FORWARD [nick|none]
 MS_FORWARD_WARNING_TARGET_NOCHANMEMO_ON
-	AtenciÚn: El nick %s tiene la opciÚn No Chan Memo activada. Todos los canal memos enviados al nick %s se van a borrar automaticamente.
+	Atenci√≤n: El nick %s tiene la opci√≤n No Chan Memo activada. Todos los canal memos enviados al nick %s se van a borrar automaticamente.
 MS_FORWARD_WARNING_TARGET_NOMEMO_ON
-	AtenciÚn: El nick %s tiene la opciÚn No Memo activada. Todos los memos enviados al nick %s se van a borrar automaticamente.
+	Atenci√≤n: El nick %s tiene la opci√≤n No Memo activada. Todos los memos enviados al nick %s se van a borrar automaticamente.
 MS_GLOBAL_MEMO_SENT
 	Global Memo Complete.
 MS_GLOBAL_SYNTAX_ERROR
@@ -998,15 +998,15 @@ MS_GLOBAL_SYNTAX_ERROR
 MS_HELP_HOW_TO_READ
 	Digita /ms READ %d para leerlo.
 MS_IGNORE_ERROR_IGNORE_LIST_FULL
-	Tu Memo Ignore List est‡ llena.
+	Tu Memo Ignore List est√† llena.
 MS_IGNORE_ERROR_LIST_EMPTY
-	Tu Memo Ignore List est‡ vacia.
+	Tu Memo Ignore List est√† vacia.
 MS_IGNORE_ERROR_NICK_ALREADY_IGNORED
 	El nick %s ya se encuentra en tu Memo Ignore List.
 MS_IGNORE_ERROR_NICK_FORBIDDEN
-	El nick %s est‡ prohibido y no puede enviar memos.
+	El nick %s est√† prohibido y no puede enviar memos.
 MS_IGNORE_ERROR_NICK_FROZEN
-	El nick %s est‡ bloqueado y no puede enviar memos.
+	El nick %s est√† bloqueado y no puede enviar memos.
 MS_IGNORE_ERROR_NICK_NOT_IGNORED
 	El nick %s no se encuentra en tu Memo Ignore List.
 MS_IGNORE_ERROR_READONLY
@@ -1128,13 +1128,13 @@ MS_SENDTO_EMAIL_TEXT
 	%s
 	
 MS_SENDTO_ERROR_FORWARDED_NOMEMO_ON
-	El memo ha sido rechasado por el nick %s porque el nick al que se estan reexpediendo tiene la opciÚn No Memo activada.
+	El memo ha sido rechasado por el nick %s porque el nick al que se estan reexpediendo tiene la opci√≤n No Memo activada.
 MS_SENDTO_ERROR_FORWARDED_OVER_MAX_MEMOS
 	El memo ha sido rechasado por el nick %s porque el nick al que se estan reexpediendo tiene su mailbox llena.
 MS_SENDTO_ERROR_MEMOLEVEL_NONE
 	El fundador no permite enviar memos al canal %s.
 MS_SENDTO_ERROR_NO_ACCESS
-	Tu nivel de acceso no est‡ lo suficiente elevado.
+	Tu nivel de acceso no est√† lo suficiente elevado.
 MS_SENDTO_ERROR_OVER_MAX_MEMOS
 	El memo ha sido rechasado por el nick %s por tener su mailbox llena.
 MS_SENDTO_FOUNDER_ERROR_MEMOLEVEL_NONE
@@ -1161,11 +1161,11 @@ MS_SEND_ERROR_CANT_IGNORE_SELF
 MS_SEND_ERROR_CANT_MEMO_SELF
 	No puedes enviarte memos a ti mismo.
 MS_SEND_ERROR_FORWARD_TO_SELF
-	No es posible enviar memos a un nick que los estË inoltrando al tuyo.
+	No es posible enviar memos a un nick que los est√® inoltrando al tuyo.
 MS_SEND_ERROR_MUST_AUTH
-	No vas a poder enviar ningun memo hasta que la registraciÚn de tu nick haya sido confirmada.
+	No vas a poder enviar ningun memo hasta que la registraci√≤n de tu nick haya sido confirmada.
 MS_SEND_ERROR_NICK_NOT_AUTH
-	No se pueden enviar Memos a un nick cuja registraciÚn no haya sido confirmada. Enformale a %s que tiene que confirmar la registraciÚn de su nick cuanto antes.
+	No se pueden enviar Memos a un nick cuja registraci√≤n no haya sido confirmada. Enformale a %s que tiene que confirmar la registraci√≤n de su nick cuanto antes.
 MS_SEND_ERROR_READONLY
 	Sorry, memo sending is temporarily disabled.
 MS_SEND_ERROR_USE_SENDTO
@@ -1175,29 +1175,29 @@ MS_SEND_MEMO_SENT
 MS_SEND_SYNTAX_ERROR
 	Sintaxis: SEND nick texto
 MS_SET_ERROR_ALREADY_SET
-	La opciÚn %s para tu nick ya est‡ ajustada en %s.
+	La opci√≤n %s para tu nick ya est√† ajustada en %s.
 MS_SET_ERROR_READONLY
-	El servicio de administracion de las opciones para los memos no est‡ temporalmente disponible.
+	El servicio de administracion de las opciones para los memos no est√† temporalmente disponible.
 MS_SET_IGNORETYPE_ALL
 	Desde ahora van a ser ignorados todos los memos recibidos por usuarios que se encuentran en tu Memo Ignore List.
 MS_SET_IGNORETYPE_ALL_BUT
-	Desde ahora van a ser ignorados todos los memos recibidos por todos usuarios menos los que estËn en tu Memo Ignore List.
+	Desde ahora van a ser ignorados todos los memos recibidos por todos usuarios menos los que est√®n en tu Memo Ignore List.
 MS_SET_IGNORETYPE_SYNTAX_ERROR
 	Sintaxis: SET IGNORETYPE [1|2]
 MS_SET_NOTIFY_LOGON
-	La opciÚn NOTIFY ahora es LOGON. %s te va a avisar si tienes nuevos memos unicamente despues de haberte identificado con %s y regresando de tu estado AWAY.
+	La opci√≤n NOTIFY ahora es LOGON. %s te va a avisar si tienes nuevos memos unicamente despues de haberte identificado con %s y regresando de tu estado AWAY.
 MS_SET_NOTIFY_NEW
-	La opciÚn NOTIFY ahora es NEW. %s te va a avisar si tienes nuevos memos unicamente en el mismo momento en el que los recibas.
+	La opci√≤n NOTIFY ahora es NEW. %s te va a avisar si tienes nuevos memos unicamente en el mismo momento en el que los recibas.
 MS_SET_NOTIFY_OFF
-	La opciÚn NOTIFY ahora es OFF. %s nunca te va a avisar si tienes nuevos memos.
+	La opci√≤n NOTIFY ahora es OFF. %s nunca te va a avisar si tienes nuevos memos.
 MS_SET_NOTIFY_ON
-	La opciÚn NOTIFY ahora es ON. %s te va a avisar si tienes nuevos memos todas las veces que te identifiques con %s y en el mismo momento en el que recibas memos.
+	La opci√≤n NOTIFY ahora es ON. %s te va a avisar si tienes nuevos memos todas las veces que te identifiques con %s y en el mismo momento en el que recibas memos.
 MS_SET_NOTIFY_SYNTAX_ERROR
 	Sintaxis: SET NOTIFY [ON|LOGON|NEW|OFF]
 MS_SET_SYNTAX_ERROR
-	Sintaxis: SET opciÚn [par‡metro]
+	Sintaxis: SET opci√≤n [par√†metro]
 MS_UNDEL_ALL_MEMOS_UNMARKED
-	Ninguno de tus memos est‡ marcado para borrarse.
+	Ninguno de tus memos est√† marcado para borrarse.
 MS_UNDEL_ERROR_MEMO_NOT_MARKED
 	El memo %d no estaba marcado para borrarse.
 MS_UNDEL_ERROR_NO_MEMOS_TO_UNDEL
@@ -1205,7 +1205,7 @@ MS_UNDEL_ERROR_NO_MEMOS_TO_UNDEL
 MS_UNDEL_ERROR_READONLY
 	Sorry, memo undeleting is temporarily disabled.
 MS_UNDEL_MEMO_UNMARKED
-	El memo numero %d ya no est‡ marcado para borrarse.
+	El memo numero %d ya no est√† marcado para borrarse.
 MS_UNDEL_SYNTAX_ERROR
 	Sintaxis: UNDEL [numero|all]
 MS_UNSEND_ERROR_NO_MEMOS_FOR_CHAN
@@ -1227,19 +1227,19 @@ MS_UNSEND_MEMO_UNSENT_TARGET_CHAN
 MS_UNSEND_SYNTAX_ERROR
 	Sintaxis: UNSEND nick|#canal [lista]
 MS_WARNING_OVER_MEMO_LIMIT
-	AtenciÚn: Has sobrepasado el limite maximo de memo. No vas a poder recibir ninguno nuevo hasta que borres alguno de los ya leydos.
+	Atenci√≤n: Has sobrepasado el limite maximo de memo. No vas a poder recibir ninguno nuevo hasta que borres alguno de los ya leydos.
 MS_WARNING_REACHED_MEMO_LIMIT
-	AtenciÚn: Has sobrepasado el limite maximo de memo. No vas a poder recibir ninguno nuevo hasta que borres alguno de los ya leydos.
+	Atenci√≤n: Has sobrepasado el limite maximo de memo. No vas a poder recibir ninguno nuevo hasta que borres alguno de los ya leydos.
 NS_ACCESS_ERROR_INSECURE_MASK
 	Utilizar una mask mas segura.
 NS_ACCESS_ERROR_LIST_FULL
-	El Access list del nick %s est‡ llena.
+	El Access list del nick %s est√† llena.
 NS_ACCESS_ERROR_MASK_ALREADY_PRESENT
 	La mask %s ya se encuentra en tu Access List.
 NS_ACCESS_ERROR_MASK_NOT_PRESENT
 	La mask %s no se encuentra en tu Access List.
 NS_ACCESS_ERROR_MUST_AUTH
-	No puedes modificar tu Access List hasta que confirmes la registraciÚn por medio del codigo de autorizaciÚn.
+	No puedes modificar tu Access List hasta que confirmes la registraci√≤n por medio del codigo de autorizaci√≤n.
 NS_ACCESS_ERROR_READONLY
 	Sorry, nickname Access List modification is temporarily disabled.
 NS_ACCESS_LIST_ENTRIES
@@ -1283,9 +1283,9 @@ NS_AUTHRESET_AUTH_RESET
 NS_AUTHRESET_SYNTAX_ERROR
 	Syntax: AUTHRESET nick
 NS_AUTH_CODE_ACCEPTED
-	Codigo aceptado, la registraciÚn de tu nick ya est‡ completa.
+	Codigo aceptado, la registraci√≤n de tu nick ya est√† completa.
 NS_AUTH_ERROR_WRONG_CODE
-	ERROR: Il codigo insertado est‡ equivocado.
+	ERROR: Il codigo insertado est√† equivocado.
 NS_AUTH_SYNTAX_ERROR_1
 	Sintaxis: AUTH codigo
 NS_AUTH_SYNTAX_ERROR_2
@@ -1301,33 +1301,33 @@ NS_DELETE_NICK_DELETED
 NS_DELETE_SYNTAX_ERROR
 	Syntax: DELETE nickname
 NS_DROP_CODE_SENT
-	En unos momentos recibir‡s un E-Mail en la direcciÚn %s con el codigo de drop necesario para autorizar la registraciÚn de tu nick. Sigue las instrucciones del Email para completar el proceso.
+	En unos momentos recibir√†s un E-Mail en la direcci√≤n %s con el codigo de drop necesario para autorizar la registraci√≤n de tu nick. Sigue las instrucciones del Email para completar el proceso.
 NS_DROP_EMAIL_SUBJECT
-	Subject: Codico de autorizaciÚn para anular tu nick en %s
+	Subject: Codico de autorizaci√≤n para anular tu nick en %s
 	
 NS_DROP_EMAIL_TEXT
-	Tu o alguien mas pidiÚ la anulaciÚn de tu nick.
+	Tu o alguien mas pidi√≤ la anulaci√≤n de tu nick.
 	Si quieres completar el proceso, sigue las instrucciones reportadas en seguida:
 	Tu DROP CODE es: %lu.
 	Identificate en %s utilizando el nick %s y digita:
 	/msg %s DROP %s %lu
 	
 NS_DROP_ERROR_MAILCHANGE_ON
-	No puedes cancelar la registraciÚn del nick hasta que completes o anules la pedida de cambio de Email.
+	No puedes cancelar la registraci√≤n del nick hasta que completes o anules la pedida de cambio de Email.
 NS_DROP_ERROR_NICK_IS_MASTER
 	You are not permitted to delete a Master's account
 NS_DROP_ERROR_NOT_AUTH
-	No puedes dar de baja tu nick hasta que completes la registraciÚn por medio de autorizaciÚn.
+	No puedes dar de baja tu nick hasta que completes la registraci√≤n por medio de autorizaci√≤n.
 NS_DROP_ERROR_NOT_CURRENT_NICK
-	No es posible anular un nick que no est‡s utilizando.
+	No es posible anular un nick que no est√†s utilizando.
 NS_DROP_ERROR_NOT_DROPPING
 	There is no ongoing drop request for nickname %s.
 NS_DROP_ERROR_READONLY
-	No es temporalmente posible anular la registraciÚn de un nick.
+	No es temporalmente posible anular la registraci√≤n de un nick.
 NS_DROP_ERROR_WAIT
 	You can only send one drop request for each nick per day. Please wait a few hours then try again.
 NS_DROP_NICK_DROPPED
-	La registraciÚn de tu nick ha sido anulada.
+	La registraci√≤n de tu nick ha sido anulada.
 NS_DROP_REQUEST_UNDONE
 	The drop request for nickname %s has been cancelled.
 NS_DROP_SYNTAX_ERROR
@@ -1335,19 +1335,19 @@ NS_DROP_SYNTAX_ERROR
 NS_DROP_UNDO_HOWTO
 	If you wish to cancel the ongoing drop request, type: /ns DROP %s UNDO
 NS_ERROR_BAD_PASS
-	La contraseÒa enviada para el nick %s no es corecta.
+	La contrase√±a enviada para el nick %s no es corecta.
 NS_ERROR_EMAIL_BLACKLISTED
 	The E-Mail address you entered (%s) is blacklisted and may not be used.
 NS_ERROR_INVALID_EMAIL
-	La direcciÚn E-Mail especificada (%s) no es valida. N.B.: Con una direcciÚn equivocada o no valida no va a poderse completar la autorizaciÚn del nick, asi que su registraciÚn se anular‡ de manera automatica tras 24 horas.
+	La direcci√≤n E-Mail especificada (%s) no es valida. N.B.: Con una direcci√≤n equivocada o no valida no va a poderse completar la autorizaci√≤n del nick, asi que su registraci√≤n se anular√† de manera automatica tras 24 horas.
 NS_ERROR_MUST_IDENTIFY
 	Tienes que identificar el nick %s antes de utilizar este comando.
 NS_ERROR_NICK_ALREADY_AUTH
-	ERROR: La registraciÚn de tu nick ya ha sido confirmada.
+	ERROR: La registraci√≤n de tu nick ya ha sido confirmada.
 NS_ERROR_NICK_FORBIDDEN
-	El nick %s est‡ prohibido y no puede ser ni utilizado ni registrado.
+	El nick %s est√† prohibido y no puede ser ni utilizado ni registrado.
 NS_ERROR_NICK_FROZEN
-	El nick %s est‡ bloqueado y no puede ser utilizado.
+	El nick %s est√† bloqueado y no puede ser utilizado.
 NS_ERROR_NICK_NOT_IN_USE
 	No hay nadie utilizando el nick %s en este momento.
 NS_FLAG_ERROR_NICK_ALREADY_FLAGGED
@@ -1375,13 +1375,13 @@ NS_GHOST_KILL_REASON
 NS_GHOST_NICK_GHOSTED
 	Tu ghost ha sido desconectado.
 NS_GHOST_SYNTAX_ERROR
-	Sintaxis: GHOST nick contraseÒa
+	Sintaxis: GHOST nick contrase√±a
 NS_IDENTIFY_ID_OK
-	ContraseÒa reconocida para el nick %s. Desde este momento est‡s identificado%s.
+	Contrase√±a reconocida para el nick %s. Desde este momento est√†s identificado%s.
 NS_IDENTIFY_NOT_AUTH
 	IMPORTANT: this nick has not been authorized yet. It will expire in 24 hours if it is not authorized. In order to authorize it, please follow the steps described in the E-Mail sent to you upon registration to the following address: %s
 NS_IDENTIFY_NO_REGEMAIL_SET
-	Tu nick fue registrado antes de la activaciÚn del servicio de pedida de la autorizaciÚn. Para completar la registraciÚn de tu nick y hacerlo mas seguro, digita: /ns SET EMAIL una@email
+	Tu nick fue registrado antes de la activaci√≤n del servicio de pedida de la autorizaci√≤n. Para completar la registraci√≤n de tu nick y hacerlo mas seguro, digita: /ns SET EMAIL una@email
 NS_IDENTIFY_SOURCE_IS_ADMIN
 	 come Services Admin
 NS_IDENTIFY_SOURCE_IS_CODER
@@ -1395,15 +1395,15 @@ NS_IDENTIFY_SOURCE_IS_ROOT
 NS_IDENTIFY_SOURCE_IS_SOP
 	 come Services Operator
 NS_IDENTIFY_SYNTAX_ERROR
-	Sintaxis: IDENTIFY [nick] contraseÒa
+	Sintaxis: IDENTIFY [nick] contrase√±a
 NS_INFO_DROP_REQUEST
 	 * Este nick ha pedido un drop.
 NS_INFO_HEADER
 	Info sobre el nick %s:
 NS_INFO_IS_ONLINE_ID
-	(Est‡ en IRC en este momento [Identificado]) - Digita /whois %s para mas informaciÚn.
+	(Est√† en IRC en este momento [Identificado]) - Digita /whois %s para mas informaci√≤n.
 NS_INFO_IS_ONLINE_ON_ACCESS
-	(Est‡ en IRC en este momento [Reconocido]) - Digita /whois %s para mas informaciÚn.
+	(Est√† en IRC en este momento [Reconocido]) - Digita /whois %s para mas informaci√≤n.
 NS_INFO_LAST_SEEN_1D
 	Last seen: %s [hace mas de 1 dia]
 NS_INFO_LAST_SEEN_1H
@@ -1415,7 +1415,7 @@ NS_INFO_LAST_SEEN_XD
 NS_INFO_LAST_SEEN_XH
 	Last seen: %s [hace mas de %d horas]
 NS_INFO_LAST_USERMASK
-	Ultima direcciÚn utilizada: %s
+	Ultima direcci√≤n utilizada: %s
 NS_INFO_MAIL_CHANGE
 	 * Este nick ha pedido un cambio de Email a: %s
 NS_INFO_MEMO_FORWARD
@@ -1459,43 +1459,43 @@ NS_LISTCHANS_LIST_ENTRIES
 NS_LISTCHANS_LIST_HEADER
 	El nick %s tiene permiso para los siguentes canales:
 NS_LISTREG_SYNTAX_ERROR
-	Syntax: LISTREG pattern N|M|RN|E|NA|IA|H|K|F|Z [start] [end]
+	Syntax: LISTREG N|M|RN|E|NA|IA|H|K|F|Z pattern [page_number]
 NS_NICK_EXPIRE
 	N.B.: Los nicks se expiran tras %d dias de inactividad.
 NS_RECOVER_ERROR_CANT_RECOVER_SELF
 	No puedes utilizar el comando RECOVER con ti mismo!
 NS_RECOVER_NICK_RECOVERED
-	El nick %s ya est‡ libre.
+	El nick %s ya est√† libre.
 NS_RECOVER_SYNTAX_ERROR
-	Sintaxis: RECOVER nick contraseÒa
+	Sintaxis: RECOVER nick contrase√±a
 NS_REGISTER_EMAIL_SUBJECT
-	Subject: ConfirmaciÚn de la registraciÚn del nick %s.
+	Subject: Confirmaci√≤n de la registraci√≤n del nick %s.
 	
 NS_REGISTER_EMAIL_TEXT_1
 	Gracias por haber escogido %s!
-	El codigo de autorizaciÚn para tu nick es: %lu 
+	El codigo de autorizaci√≤n para tu nick es: %lu 
 	Identificate en %s utilizando el nick %s y digita:
 	/msg %s AUTH %lu
 	
 NS_REGISTER_EMAIL_TEXT_2
-	La registraciÚn del tu nick est‡ra confirmada y tu nick
-	estar‡ protegido de cualquier abuso u robo.
-	El sitio oficial de la red se encuentra en http://www.azzurra.org/
+	La registraci√≤n del tu nick est√†ra confirmada y tu nick
+	estar√† protegido de cualquier abuso u robo.
+	El sitio oficial de la red se encuentra en http://www.azzurra.chat/
 	
 NS_REGISTER_EMAIL_TEXT_3
-	Las reglas de la red y toda la documentaciÚn oficial se
-	encuentran en la pagina http://www.azzurra.org/netfiles.php
+	Las reglas de la red y toda la documentaci√≤n oficial se
+	encuentran en la pagina http://www.azzurra.chat/netfiles.php
 	
 NS_REGISTER_EMAIL_TEXT_4
 	Para obtener ayuda sobre servicios de la red o sobre IRC
 	en general puedes visitar el canal oficial #IRCHelp
-	o tambien visitar http://help.azzurra.org/
-	Los siguentes Servicios est‡n disponibles tambien:
+	o tambien visitar http://www.azzurra.chat/
+	Los siguentes Servicios est√†n disponibles tambien:
 	
 NS_REGISTER_EMAIL_TEXT_5
 	- %s IRC Network Forum
 	  Forum de discusion de %s, consultable
-	  en la direcciÚn http://www.azzurra.org/forum/
+	  en la direcci√≤n http://www.azzurra.chat/forum/
 	  En el forum, tras compartir tus propias opiniones,
 	  podras informarte sobre novidades y sobre los nuevos servicios
 	  de esta red.
@@ -1504,51 +1504,51 @@ NS_REGISTER_EMAIL_TEXT_6
 	- %s Ticket Service
 	  Para pedir soporte tecnico es posible utilizar el
 	  servicio ofrecido por %s en la pagina
-	  http://ticket.azzurra.org utilizando su propio nick
+	  http://www.azzurra.chat utilizando su propio nick
 	  y su propio password de acceso.
 	
 NS_REGISTER_EMAIL_TEXT_7
-	Para una conecciÚn mas rapida y segura te aconsejamos
-	utilizar este servidor: irc.azzurra.org
+	Para una conecci√≤n mas rapida y segura te aconsejamos
+	utilizar este servidor: irc.azzurra.chat
 	%s IRC Network
 NS_REGISTER_ERROR_NICK_ALREADY_REG
-	El nick %s ya est‡ registrado!
+	El nick %s ya est√† registrado!
 NS_REGISTER_ERROR_NICK_FORBIDDEN
 	El nick %s no puede ser registrado.
 NS_REGISTER_ERROR_NICK_RESERVED
-	El nick %s est‡ reservado y no puede ser registrado.
+	El nick %s est√† reservado y no puede ser registrado.
 NS_REGISTER_ERROR_PASS_AS_EMAIL
-	AtenciÚn: Muy probablemente has insertado la contraseÒa en lugar del E-Mail y viceversa. Checa la sintaxis.
+	Atenci√≤n: Muy probablemente has insertado la contrase√±a en lugar del E-Mail y viceversa. Checa la sintaxis.
 NS_REGISTER_ERROR_READONLY
-	El servicio del registraciÚn del nicknames no est‡ temporalmente disponible.
+	El servicio del registraci√≤n del nicknames no est√† temporalmente disponible.
 NS_REGISTER_REG_DELAY
 	Tienes que esperar %d segundos antes de volver a utilizar el comando REGISTER.
 NS_REGISTER_REG_OK_1
-	Tu contraseÒa es %s. Anotala en un lugar seguro, pues la vas a necesitar en futuro.
+	Tu contrase√±a es %s. Anotala en un lugar seguro, pues la vas a necesitar en futuro.
 NS_REGISTER_REG_OK_2
-	En unos momentos recibir‡s un E-Mail que te va a permitir confirmar la validez de tu direcciÚn E-Mail. De esta forma tu nickname va a ser protegido por cualquier intento de abuso o robo por otros usuarios.
+	En unos momentos recibir√†s un E-Mail que te va a permitir confirmar la validez de tu direcci√≤n E-Mail. De esta forma tu nickname va a ser protegido por cualquier intento de abuso o robo por otros usuarios.
 NS_REGISTER_REG_OK_3
-	IMPORTANTE: El nick expirar‡ automaticamente tras 24 horas si no se autoriza. En caso de que proveas un E-Mail equivocado o falso, tendr‡s que esperar 24 horas y volver a registrarlo.
+	IMPORTANTE: El nick expirar√† automaticamente tras 24 horas si no se autoriza. En caso de que proveas un E-Mail equivocado o falso, tendr√†s que esperar 24 horas y volver a registrarlo.
 NS_REGISTER_SYNTAX_ERROR
-	Sintaxis: REGISTER contraseÒa email
+	Sintaxis: REGISTER contrase√±a email
 NS_RELEASE_ERROR_NICK_NOT_HELD
-	El nick %s ya est‡ libre.
+	El nick %s ya est√† libre.
 NS_RELEASE_NICK_RELEASED
 	El nick %s ha sido liberado.
 NS_RELEASE_SYNTAX_ERROR
-	Sintaxis: RELEASE nick contraseÒa
+	Sintaxis: RELEASE nick contrase√±a
 NS_REMIND_EMAIL_SUBJECT
-	Subject: RegistraciÚn de tu nick en %s
+	Subject: Registraci√≤n de tu nick en %s
 	
 NS_REMIND_EMAIL_TEXT
-	El nick %s expirar‡ en %d dias.
+	El nick %s expirar√† en %d dias.
 	Si no quieres que esto pase, tienes que identificarte minimo una vez antes que se te expire.
 	Para hacerlo, conectate con %s y digita:
-	/msg %s IDENTIFY contraseÒa
+	/msg %s IDENTIFY contrase√±a
 	%s
 	
 NS_SENDCODE_EMAIL_AUTH
-	Para confirmar la registraciÚn identificate a %s utilizando el
+	Para confirmar la registraci√≤n identificate a %s utilizando el
 	nick %s y teclea:
 	/ns AUTH %lu
 	
@@ -1571,76 +1571,76 @@ NS_SENDCODE_EMAIL_MAIL2
 	desde la pedida del cambio.
 	
 NS_SENDCODE_EMAIL_SUBJECT
-	Subject: Codigo de autorizaciÚn para %s del nick %s
+	Subject: Codigo de autorizaci√≤n para %s del nick %s
 	
 NS_SENDCODE_EMAIL_SUBJECT_AUTH
-	la registraciÚn
+	la registraci√≤n
 NS_SENDCODE_EMAIL_SUBJECT_DROP
 	el drop
 NS_SENDCODE_EMAIL_SUBJECT_MAIL
 	el cambio del e-mail
 NS_SENDCODE_EMAIL_TEXT
-	Pedida del codigo de autorizaciÚn enviada por: %s
+	Pedida del codigo de autorizaci√≤n enviada por: %s
 	Recibida: %s
-	Tu codigo de autorizaciÚn es: %lu
+	Tu codigo de autorizaci√≤n es: %lu
 	
 NS_SENDCODE_ERROR_NO_CODE
 	User %s has no auth codes.
 NS_SENDCODE_SYNTAX_ERROR
 	Syntax: SENDCODE nickname
 NS_SENDPASS_EMAIL_SUBJECT
-	Subject: ContraseÒa del nick %s
+	Subject: Contrase√±a del nick %s
 	
 NS_SENDPASS_EMAIL_TEXT
-	Pedida de contraseÒa enviada por: %s
+	Pedida de contrase√±a enviada por: %s
 	Recibida: %s
-	La contraseÒa del nick %s es: %s
+	La contrase√±a del nick %s es: %s
 	
 NS_SENDPASS_ERROR_NICK_NOT_AUTH
 	User %s has not authorized via email.
 NS_SENDPASS_SYNTAX_ERROR
 	Syntax: SENDPASS nickname
 NS_SET_EMAILMEMOS_ERROR_DISABLED
-	Lo sentimos, el servicio de E-Mail Memos no est‡ activado.
+	Lo sentimos, el servicio de E-Mail Memos no est√† activado.
 NS_SET_EMAILMEMOS_ERROR_NO_EMAIL_SET
-	Tienes que insertar tu direcciÚn Email.
+	Tienes que insertar tu direcci√≤n Email.
 NS_SET_EMAILMEMOS_OFF
 	Tus memos no se te van a enviar mas por Email.
 NS_SET_EMAILMEMOS_ON
-	De ahora en adelante recibir‡s tus memos en la direccion Email: %s
+	De ahora en adelante recibir√†s tus memos en la direccion Email: %s
 NS_SET_EMAIL_COMPLETED
-	La direcciÚn E-Mail para el nick %s ha sido cambiada en: %s
+	La direcci√≤n E-Mail para el nick %s ha sido cambiada en: %s
 NS_SET_EMAIL_CONFIRM_ACTUAL
-	Para confirmar el cambio sigue las instrucciones reportadas en el E-Mail enviada a la direcciÚn: %s
+	Para confirmar el cambio sigue las instrucciones reportadas en el E-Mail enviada a la direcci√≤n: %s
 NS_SET_EMAIL_CONFIRM_OLD
-	Para confirmar el cambio sigue las instrucciones reportadas en el E-Mail enviada a tu direcciÚn anterior: %s
+	Para confirmar el cambio sigue las instrucciones reportadas en el E-Mail enviada a tu direcci√≤n anterior: %s
 NS_SET_EMAIL_ERROR_ALREADY_HIDDEN
-	Tu direcciÚn E-Mail ya est‡ escondida.
+	Tu direcci√≤n E-Mail ya est√† escondida.
 NS_SET_EMAIL_ERROR_DROP_ON
-	No puedes cambiar la direcciÚn E-Mail de tu nick hasta que hayas completado o anulado la pedida de DROP del mismo.
+	No puedes cambiar la direcci√≤n E-Mail de tu nick hasta que hayas completado o anulado la pedida de DROP del mismo.
 NS_SET_EMAIL_ERROR_INVALID_EMAIL
-	La direcciÚn E-Mail especificada (%s) no es valida. N.B.: Con una direcciÚn equivocada o no valida no vamos a poder enviarte tu propio password en caso de que se te olvido o que lo pierdas.
+	La direcci√≤n E-Mail especificada (%s) no es valida. N.B.: Con una direcci√≤n equivocada o no valida no vamos a poder enviarte tu propio password en caso de que se te olvido o que lo pierdas.
 NS_SET_EMAIL_ERROR_MAILCHANGE_ON
-	Ya hay una pedida de cambio de E-Mail para el nick %s en la direcciÚn: %s
+	Ya hay una pedida de cambio de E-Mail para el nick %s en la direcci√≤n: %s
 NS_SET_EMAIL_ERROR_NOT_HIDDEN
-	Tu direcciÚn Email ya est‡ visible.
+	Tu direcci√≤n Email ya est√† visible.
 NS_SET_EMAIL_ERROR_NO_MAIL
-	Tienes que especificar una direcciÚn E-Mail valida para utilizar este comando. Para hacerlo, teclar: /ns SET EMAIL tuverdadera@email
+	Tienes que especificar una direcci√≤n E-Mail valida para utilizar este comando. Para hacerlo, teclar: /ns SET EMAIL tuverdadera@email
 NS_SET_EMAIL_ERROR_NO_MAILCHANGE
 	No hay ninguna pedida de cambio de E-Mail actualmente para el nick %s.
 NS_SET_EMAIL_ERROR_SAME
-	La direcciÚn Email para el nick %s ya est‡ puesta en %s
+	La direcci√≤n Email para el nick %s ya est√† puesta en %s
 NS_SET_EMAIL_ERROR_WAIT
 	Hay que esperar 24 horas desde la ultima pedida de cambio de E-Mail para pedir otra.
 NS_SET_EMAIL_HIDDEN
-	La direcciÚn de Email del nick %s ha sido escondida.
+	La direcci√≤n de Email del nick %s ha sido escondida.
 NS_SET_EMAIL_SHOW
-	La direcciÚn de Email del nick %s ha sido ajustada en invisible.
+	La direcci√≤n de Email del nick %s ha sido ajustada en invisible.
 NS_SET_EMAIL_SUBJECT
 	Subject: Cambio direccion Email del nick %s
 	
 NS_SET_EMAIL_TEXT_1
-	Pedida de cambio de direcciÚn E-Mail enviada por
+	Pedida de cambio de direcci√≤n E-Mail enviada por
 	%s en la fecha %s
 	El codigo necesario para autorizar el cambio
 	de E-Mail es: %lu     
@@ -1659,36 +1659,36 @@ NS_SET_EMAIL_TEXT_2
 	%s IRC Network
 	
 NS_SET_EMAIL_TEXT_3
-	SolicitaciÚn de cambio de direcciÚn E-Mail enviada por
+	Solicitaci√≤n de cambio de direcci√≤n E-Mail enviada por
 	%s en la fecha %s
 	El codigo necesario para efectuar el cambio
 	de E-Mail es: %lu     
-	Para ajustar su priopria direcciÚn E-Mail a
-	%s sÚlo tecle:
+	Para ajustar su priopria direcci√≤n E-Mail a
+	%s s√≤lo tecle:
 	/ns AUTH %lu
 	
 NS_SET_EMAIL_UNDO
-	La solicitaciÚn de cambio de E-Mail para el nick %s ha sido anulada. Tienes que esperar 24 horas para pedir otra.
+	La solicitaci√≤n de cambio de E-Mail para el nick %s ha sido anulada. Tienes que esperar 24 horas para pedir otra.
 NS_SET_ERROR_MUST_AUTH
-	No puedes modificar ninguna opcion de tu nick hasta que confirmes la registraciÚn por medio del codigo de autorizaciÚn.
+	No puedes modificar ninguna opcion de tu nick hasta que confirmes la registraci√≤n por medio del codigo de autorizaci√≤n.
 NS_SET_ERROR_OPTION_ALREADY_OFF
-	La opciÚn %s para el nick %s no est‡ activada.
+	La opci√≤n %s para el nick %s no est√† activada.
 NS_SET_ERROR_OPTION_ALREADY_ON
-	La opciÚn %s para el nick %s ya est‡ activada.
+	La opci√≤n %s para el nick %s ya est√† activada.
 NS_SET_ERROR_READONLY
-	El servicio de AdministraciÚn de opciones del nick est‡ temporalmente no disponible.
+	El servicio de Administraci√≤n de opciones del nick est√† temporalmente no disponible.
 NS_SET_KILL_ERROR_ALREADY_FAST
-	La opciÚn Kill para el nick %s ya est‡ ajustada en ON (Fast).
+	La opci√≤n Kill para el nick %s ya est√† ajustada en ON (Fast).
 NS_SET_KILL_ERROR_ALREADY_NORMAL
-	La opciÚn Kill para el nick %s ya est‡ ajustada en ON (Normal).
+	La opci√≤n Kill para el nick %s ya est√† ajustada en ON (Normal).
 NS_SET_KILL_ERROR_ALREADY_SLOW
-	La opciÚn Kill para el nick %s ya est‡ ajustada en ON (Slow).
+	La opci√≤n Kill para el nick %s ya est√† ajustada en ON (Slow).
 NS_SET_KILL_FAST
-	La opciÚn Kill para el nick %s ahora est‡ ON (Fast).
+	La opci√≤n Kill para el nick %s ahora est√† ON (Fast).
 NS_SET_KILL_NORMAL
-	La opciÚn Kill para el nick %s ahora est‡ ON (Normal).
+	La opci√≤n Kill para el nick %s ahora est√† ON (Normal).
 NS_SET_KILL_SLOW
-	La opciÚn Kill para el nick %s ahora est‡ ON (Slow).
+	La opci√≤n Kill para el nick %s ahora est√† ON (Slow).
 NS_SET_KILL_SYNTAX_ERROR
 	Sintaxis: SET KILL [OFF|SLOW|NORMAL|FAST]
 NS_SET_LANG_ERROR_INVALID_ID
@@ -1704,19 +1704,19 @@ NS_SET_LANG_SET_USER_NOTREG
 NS_SET_LANG_SYNTAX_ERROR
 	Sintaxis: LANG numero|LIST
 NS_SET_OPTION_OFF
-	La opciÚn %s para el nick %s ahora est‡ OFF.
+	La opci√≤n %s para el nick %s ahora est√† OFF.
 NS_SET_OPTION_ON
-	La opciÚn %s para el nick %s ahora est‡ ON.
+	La opci√≤n %s para el nick %s ahora est√† ON.
 NS_SET_OPTION_SYNTAX_ERROR
 	Sintaxis: SET %s [ON|OFF]
 NS_SET_PASSWD_ERROR_WRONG_OLD_PASS
-	La contraseÒa vieja para el nick %s est‡ equivocada.
+	La contrase√±a vieja para el nick %s est√† equivocada.
 NS_SET_PASSWD_PASSWORD_CHANGED
-	La contraseÒa del nick %s ha sido modificada en: %s
+	La contrase√±a del nick %s ha sido modificada en: %s
 NS_SET_PASSWD_SYNTAX_ERROR
-	Sintaxis: SET PASSWD vieja-contraseÒa nueva-contraseÒa
+	Sintaxis: SET PASSWD vieja-contrase√±a nueva-contrase√±a
 NS_SET_SYNTAX_ERROR
-	Sintaxis: SET comando [par‡metro]
+	Sintaxis: SET comando [par√†metro]
 NS_SET_URL_CHANGED
 	El URL para el nick %s ha sido modificado en: %s
 NS_SET_URL_DELETED
@@ -1728,9 +1728,9 @@ NS_TIMEOUT_KILL_TIMER_1
 NS_TIMEOUT_KILL_TIMER_2
 	Tienes %d segundos de tiempo para cambiar tu nick, despues se te va a cambiar automaticamente.
 NS_TIMEOUT_NICK_FORBIDDEN
-	Se te ha cambiado el nick porque el nick %s est‡ prohibito y no puede ser utilizado.
+	Se te ha cambiado el nick porque el nick %s est√† prohibito y no puede ser utilizado.
 NS_TIMEOUT_NICK_FROZEN
-	Se te ha cambiado el nick porque el nick %s est‡ prohibito y no puede ser utilizado.
+	Se te ha cambiado el nick porque el nick %s est√† prohibito y no puede ser utilizado.
 NS_TIMEOUT_NICK_REGISTERED
 	Se te ha cambiado el nick porque %s es un nick ya registrado.
 NS_UMODE_SYNTAX_ERROR
@@ -1738,9 +1738,9 @@ NS_UMODE_SYNTAX_ERROR
 NS_UNMARK_ERROR_NO_PERMISSION
 	Non hai il permesso di togliere il MARK a questo nick.
 NS_VALIDATE_ERROR_NICK_FORBIDDEN
-	Este nick est‡ prohibido y no puede ser ni utilizado ni registrado.
+	Este nick est√† prohibido y no puede ser ni utilizado ni registrado.
 NS_VALIDATE_ERROR_NICK_FROZEN
-	Este nick est‡ bloqueado y no puede ser utilizado.
+	Este nick est√† bloqueado y no puede ser utilizado.
 NS_VALIDATE_NICK_REGISTERED
 	Este nick ha sido registrado por otro usuario. Favor de escoger otro.
 NS_VALIDATE_PASSWORD_REQUEST
@@ -1794,13 +1794,13 @@ RECEIVE_NETWORK_ASSISTANCE
 RESERVED_AKILL_REASON
 	You are not welcome on this network.
 RESERVED_BOT_KILL_REASON
-	Este nick est‡ reservado para un BOT ofici‡l del network.
+	Este nick est√† reservado para un BOT ofici√†l del network.
 RESERVED_NAME_KILL_REASON_REG
-	Este nombre est‡ reservado y no puede ser registrado.
+	Este nombre est√† reservado y no puede ser registrado.
 RESERVED_NAME_KILL_REASON_USE
-	Este nombre est‡ reservado y no puede ser utilizado.
+	Este nombre est√† reservado y no puede ser utilizado.
 SERVICES_FLOOD_FIRST_WARNING
-	Est‡s floodando los servicios, espera unos segundos antes de enviar nuevos comandos.
+	Est√†s floodando los servicios, espera unos segundos antes de enviar nuevos comandos.
 SERVICES_FLOOD_KILL_MESSAGE
 	Deja de floodar los servicios.
 SERVICES_FLOOD_SECOND_WARNING
@@ -1822,7 +1822,7 @@ TIME_FORMAT_MAILTIME
 TIME_FORMAT_SHORTDATE
 	%d %b %Y
 TIME_MONTHS_LONG
-	EnËro FebrËro M‡rzo AbrÏl Mayo Junio Julio Agosto Septiembre Octubre Noviembre Diciembre
+	En√®ro Febr√®ro M√†rzo Abr√¨l Mayo Junio Julio Agosto Septiembre Octubre Noviembre Diciembre
 TIME_MONTHS_SHORT
 	Ene Feb Mar Abr May Jun Jul Ago Sep Oct Nov Dic
 TIME_REPLY_DAY
@@ -1846,10 +1846,97 @@ TIME_REPLY_WEEK
 TIME_REPLY_WEEKS
 	%d semanas
 TROJAN_AKILL_REASON
-	You match the pattern of a known trojan. Scan your computer with an up-to-date antivirus. Please visit http://kline.azzurra.org for more information.
+	You match the pattern of a known trojan. Scan your computer with an up-to-date antivirus. Please visit http://www.azzurra.chat for more information.
 WARNING_READONLY
-	AtenciÚn: Los servicios est‡n temporalmente en modalidad de sÚla lectura. Ninguna modifica va a ser agregada!
+	Atenci√≤n: Los servicios est√†n temporalmente en modalidad de s√≤la lectura. Ninguna modifica va a ser agregada!
 CS_EXPLIST_HEADER
 	 Lista de los nick caducados en la lista de %s de %s
 CS_SENDCODE_SYNTAX_ERROR
 	Syntax: SENDCODE #channel
+REPLY_TYPE_NICK
+	I saw %s connect %s ago.
+REPLY_TYPE_QUIT
+	I saw %s quit %s ago stating: %s
+REPLY_TYPE_NCTO_OPER
+	I saw %s change nick to %s %s ago.
+REPLY_TYPE_NCTO
+	I saw %s change nick %s ago.
+REPLY_TYPE_NCFR_OPER
+	%s was using the nick %s up to %s ago.
+REPLY_TYPE_NCFR
+	Missing: REPLY_TYPE_NCFR
+REPLY_TYPE_KILL
+	I saw %s kill %s %s ago.
+REPLY_TYPE_REASON
+	Reason: %s
+REPLY_TYPE_SPLIT
+	Missing: REPLY_TYPE_SPLIT
+REPLY_TYPE_KLINE
+	I saw %s get K-Lined %s ago.
+REPLY_TYPE_AKILL
+	I saw %s get autokilled %s ago.
+REPLY_TYPE_NOSEEN
+	Missing: REPLY_TYPE_NOSEEN
+SS_SEENNICK_SYNTAX_ERROR
+	Syntax: SEENNICK nick
+REPLY_NICK_IS_ONLINE
+	%s is currently on IRC. Type /whois %s for more information.
+REPLY_NO_SEEN
+	I have not seen %s.
+SS_SEENNICK_HEADER
+	Seen info for %s:
+SS_SEENNICK_REPLY_REALNAME
+	Last seen Real Name: %s
+SS_SEENNICK_REPLY_ADDRESS
+	Last seen address: %s@%s
+SS_SEENNICK_REPLY_ADDRESS_OPER
+	Last seen address: %s@%s [%s]
+SS_SEENNICK_REPLY_IDENTIFIED_ONLINE
+	User is identified to that nick
+SS_SEENNICK_REPLY_IDENTIFIED_OFFLINE
+	User was identified to that nick
+SS_SEENNICK_REPLY_NOTID_ONLINE
+	User does not have access to that nick, or that nick is not registered
+SS_SEENNICK_REPLY_NOTID_OFFLINE
+	User did not have access to that nick, or that nick is not registered
+END_OF_SEEN
+	*** End of Seen ***
+SS_SEENNICK_REPLY_USERMODE
+	Last usermode: %s
+SS_SEEN_SYNTAX_ERROR_OPER
+	Syntax: SEEN [nick!]user@host
+SS_SEEN_REPLY_NOMATCH
+	No matches to your query were found.
+SS_SEEN_REPLY_MANY
+	I found %d matches to your query. Here are the %d most recent (sorted): 
+SS_SEEN_REPLY_ONE
+	I found only one match to your query: 
+SS_SEEN_REPLY_SOME
+	I found %d matches to your query (sorted): 
+SS_SEEN_SYNTAX_ERROR
+	Syntax: SEEN nick
+NS_RESETPASS_SYNTAX_ERROR
+	Syntax: RESETPASS nick code new-password
+NS_RESETPASS_ERROR_NOT_RESETTING
+	There is no ongoing password reset request for nickname %s.
+NS_RESETPASS_ERROR_WRONG_CODE
+	ERROR: Invalid password reset code.
+NS_DROP_ERROR_RESETPASS_ON
+	You cannot drop your nick until your password reset is completed or expired.
+NS_SET_EMAIL_ERROR_PASSRESET_ON
+	You cannot request an E-Mail change until your password reset is completed or expired.
+NS_INFO_PASSRESET_REQUEST
+	 * This nick requested a password reset.
+NS_INFO_OPER_PASSRESET_REQUEST
+	 * This nick requested a password reset. [ RESETPASS Code: %lu ]
+NS_SENDCODE_EMAIL_SUBJECT_RPWD
+	the password reset
+NS_SENDCODE_EMAIL_RPWD
+	To confirm the password reset
+	log back onto %s and type:
+	/ns RESETPASS %s %lu <new password>
+	
+CS_SENDPASS_PASSWORD_MEMO
+	Memo with new password for %s sent to %s
+CS_SENDPASS_MEMO_TEXT
+	%s resets password of %s for you. The new channel password is %s-%lu. Write it down, you will need it later.

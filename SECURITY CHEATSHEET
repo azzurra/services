@@ -1,0 +1,258 @@
+===============================================
+= Azzurra IRC Services - #security cheatsheet =
+===============================================
+Estratto da https://svn.azzurra.org/trunk/services r21
+ - 2008/01/10 <morpheus@azzurra.org>
+
+ChanServ
+------------------------------------------------
+CS *AR        AUTHRESET fallito
+CS *C         MKICK fallito
+CS *D         DROP fallito
+CS *De        DELETE fallito
+CS *G         GETPASS fallito
+CS *I         IDENTIFY fallito
+CS *P         SET PASSWD fallito
+CS *R         REGISTER fallito
+CS *S         SENDPASS fallito
+CS *SC        SENDCODE fallito
+CS *T         CHANSET fallito
+CS *W         WIPE fallito
+CS +C         CLOSE
+CS +C*        CLOSE fallito
+CS +F         FORBID
+CS +F*        FORBID fallito
+CS +H         HOLD
+CS +H*        HOLD fallito
+CS +L         LEVEL
+CS +L*        LEVEL fallito
+CS +M         MARK
+CS +M*        MARK fallito
+CS +S         SUSPEND ADD
+CS +Z         FREEZE
+CS +Z*        FREEZE fallito
+CS -C         OPEN
+CS -C*        OPEN fallito
+CS -F         UNFORBID
+CS -F*        UNFORBID fallito
+CS -H         UNHOLD
+CS -H*        UNHOLD fallito
+CS -L         LEVEL NONE
+CS -M         UNMARK
+CS -M*        UNMARK fallito
+CS -S         SUSPEND DEL
+CS -S*        SUSPEND DEL fallito
+CS -Z         UNFREEZE
+CS -Z*        UNFREEZE fallito
+CS AR         AUTHRESET
+CS C          MDEOP/MDEHALFOP/MDEVOICE/MKICK/UNBAN ALL
+CS D          DROP (invio dell'authcode)
+CS D!         DROP AUTH (drop confermato)
+CS De         DELETE
+CS F          SET FOUNDER
+CS G          GETPASS
+CS I          IDENTIFY (EXTRASNOOP only)
+CS M          MODE
+CS P          SET PASSWD
+CS R          REGISTER
+CS S          SENDPASS
+CS SC         SENDCODE
+CS T          CHANSET
+CS W          WIPE
+CS X          Expire del canale
+CS X!         Expire del founder di un canale heldato e passaggio ad AzzurraRoot
+CS X+         Invio del reminder al founder
+CS XF         Cascade expire del canale per expire del founder
+CS XF!        Expire del founder e passaggio al successor
+
+DebugServ
+------------------------------------------------
+DS RAW            SRAW
+DS SVSNICK        SVSNICK
+I restanti comandi sono loggati su #bugs
+
+MemoServ
+------------------------------------------------
+MS *G        GLOBAL fallito
+MS *L        LIMIT fallito
+MS *M        INFO fallito
+MS +F        FORWARD (EXTRASNOOP only)
+MS +I        IGNORE ADD (EXTRASNOOP only)
+MS -F        FORWARD NONE (EXTRASNOOP only)
+MS -I        IGNORE DEL (EXTRASNOOP only)
+MS D         DEL (EXTRASNOOP only)
+MS G         GLOBAL
+MS I!        IGNORE WIPE (EXTRASNOOP only)
+MS L         LIMIT
+MS M         INFO
+MS N         NEWS (EXTRASNOOP only)
+MS P         PURGE (EXTRASNOOP only)
+MS S         SEND (EXTRASNOOP only)
+MS T         SENDTO (EXTRASNOOP only)
+MS U         UNSEND (EXTRASNOOP only)
+MS UD        UNDELETE (EXTRASNOOP only)
+MS X         Expire del memo (EXTRASNOOP only)
+
+NickServ
+------------------------------------------------
+NS *De       DELETE fallito
+NS *G        GETPASS fallito
+NS *I        IDENTIFY fallito
+NS *K        GHOST fallito (EXTRASNOOP only)
+NS *P        SET PASSWD fallito
+NS *Rc       RECOVER fallito (EXTRASNOOP only)
+NS *Re       RELEASE fallito (EXTRASNOOP only)
+NS *S        SENDPASS fallito
+NS *SC       SENDCODE fallito
+NS +E        SET EMAIL (email precedente nulla)
+NS +F        FORBID
+NS +F*       FORBID fallito
+NS +H        HOLD
+NS +H*       HOLD fallito
+NS +M        MARK
+NS +M*       MARK fallito
+NS +Z        FREEZE
+NS +Z*       FREEZE fallito
+NS -F        UNFORBID
+NS -F*       UNFORBID fallito
+NS -H        UNHOLD
+NS -H*       UNHOLD fallito
+NS -M        UNMARK
+NS -M*       UNMARK fallito
+NS -Z        UNFREEZE
+NS -Z*       UNFREEZE fallito
+NS AN        AUTHNICK
+NS AR        AUTHRESET
+NS D         DROP AUTH (drop confermato)
+NS De        DELETE
+NS E         SET EMAIL (invio dell'authocode)
+NS E!        SET EMAIL AUTH (cambio confermato)
+NS E+        Cambio di email forzato dai Services per expire della richiesta
+NS G         GETPASS
+NS I         IDENTIFY (EXTRASNOOP only)
+NS K         GHOST (EXTRASNOOP only)
+NS N         NICKSET
+NS P         SET PASSWD
+NS R         REGISTER (in attesa di autorizzazione)
+NS Rc        RECOVER (EXTRASNOOP only)
+NS Re        RELEASE (EXTRASNOOP only)
+NS S         SENDPASS
+NS SC        SENDCODE
+NS X         Expire
+NS X+        Invio del reminder
+
+OperServ
+------------------------------------------------
+OS #                                 COUNT
+OS *F                                FIND fallito
+OS *G                                GLOBAL fallito
+OS *MA                               MassCommand (MOP/MHALFOP/MVOICE) fallito
+OS *Mk                               MKILL fallito
+OS *O                                OPER SET fallito (entry non presente)
+OS *R                                RESERVED SET fallito
+OS *SP!                              SPAM SET ENABLED|DISABLED fallito
+OS *SPT                              SPAM SET TYPE fallito
+OS *{MST|CDR|SRA|SA|SOP|HOP}         OPER SET ENABLED fallito
+OS +A                                AKILL ADD/TIME/PERM
+OS +A*                               AKILL ADD/TIME/PERM fallito
+OS +BL                               BLACKLIST ADD
+OS +BL*                              BLACKLIST ADD fallito
+OS +I                                IGNORE ADD/TIME/PERM
+OS +I*                               IGNORE ADD/TIME/PERM fallito
+OS +J                                JUPE ADD
+OS +J*                               JUPE ADD fallito
+OS +O*                               OPER ADD fallito
+OS +R                                RESERVED ADD
+OS +R*                               RESERVED ADD fallito
+OS +SP                               SPAM ADD
+OS +SP*                              SPAM ADD fallito
+OS +S{G|Q}                           SQLINE/SGLINE ADD
+OS +S{G|Q}*                          SQLINE/SGLINE ADD fallito
+OS +T                                TRIGGER ADD
+OS +T*                               TRIGGER ADD fallito
+OS +TE                               TRIGGER EXEMPT ADD
+OS +TE*                              TRIGGER EXAMPT ADD fallito
+OS +TG                               TAGLINE ADD
+OS +TG*                              TAGLINE ADD fallito
+OS +{MST|CDR|SRA|SA|SOP|HOP}         OPER ADD
+OS +{MST|CDR|SRA|SA|SOP|HOP}*        OPER ADD fallito
+OS -A                                AKILL DEL
+OS -A*                               AKILL DEL fallito
+OS -BL                               BLACKLIST DEL
+OS -BL*                              BLACKLIST DEL fallito
+OS -I                                IGNORE DEL
+OS -I*                               IGNORE DEL fallito
+OS -J                                Remove da JUPE
+OS -J*                               Remove da JUPE fallito
+OS -O*                               OPER DEL fallito
+OS -R                                RESERVED DEL
+OS -SP                               SPAM DEL
+OS -SP*                              SPAM DEL fallito
+OS -S{G|Q}                           SGLINE/SQLINE DEL
+OS -S{G|Q}*                          SGLINE/SQLINE DEL fallito
+OS -T                                TRIGGER DEL
+OS -T*                               TRIGGER DEL fallito
+OS -TE                               TRIGGER EXEMPT DEL
+OS -TG                               TAGLINE DEL
+OS -TG*                              TAGLINE DEL fallito
+OS -{MST|CDR|SRA|SA|SOP|HOP}         OPER DEL
+OS A!                                AKILL ENABLE|DISABLE
+OS AD                                AKILL DESC
+OS AR                                AKILL REASON
+OS B                                 BAN
+OS BL                                BLACKLIST ADD (modifica del tipo di un'entry gia' presente)
+OS C                                 MDEOP/MDEHALFOP/MDEVOICE/MUNBAN/MKICK
+OS F                                 FIND
+OS G                                 GLOBAL
+OS Jr                                JUPE ADD (modifica della reason di un'entry gia' presente)
+OS K                                 KICK
+OS M                                 MODE
+OS MA                                MOP/MHALFOP/MVOICE
+OS Mk                                MKILL
+OS R Disable                         RESERVED DISABLE
+OS R Enable                          RESERVED ENABLE
+OS R!                                Match di un'entry in RESERVED list
+OS SP!                               SPAM SET ENABLED|DISABLED
+OS SPT                               SPAM SET TYPE
+OS Se                                SETTINGS
+OS St                                STATS
+OS U                                 UPDATE
+OS Up                                UPTIME
+OS V                                 VERSION
+OS X {MASTERS|CODERS|SRA|SA|SOP|HOP} Expire di un nick in OPER list
+OS {MST|CDR|SRA|SA|SOP|HOP}          OPER SET ENABLED
+
+RootServ
+------------------------------------------------
+RS *B                  BOT fallito
+RS *D CS               CONF SET CSLIMIT fallito
+RS *D NS               CONF SET NSLIMIT fallito
+RS *F                  FLOODRESET fallito
+RS *I                  INJECT fallito
+RS *N                  NOOP fallito
+RS +B                  BOT ADD
+RS +B*                 BOT ADD fallito
+RS +N                  NOOP server ON
+RS +S                  SET option ON
+RS +S*                 SET option ON fallito
+RS +SET SCANV6         SET SCANV6
+RS +SET* SCANV6        SET SCANV6 fallito
+RS +W                  CONF SET WNOTICE
+RS -B                  BOT DEL
+RS -B*                 BOT DEL fallito
+RS -N                  NOOP server OFF
+RS -S                  SET option OFF
+RS -S*                 SET option OFF fallito
+RS -W                  CONF SET WNOTICE NONE
+RS B                   BOT SET
+RS D CS                CONF SET CSLIMIT
+RS D NS                CONF SET NSLIMIT
+RS F                   FLOODRESET
+RS I                   INJECT
+RS K                   CRYPTKEY
+RS M                   MODE
+RS Q                   QUIT
+RS RH                  REHASH
+RS RS                  RESTART
+RS S                   SHUTDOWN
+I restanti comandi sono loggati su #bugs

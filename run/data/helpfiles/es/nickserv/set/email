@@ -1,36 +1,36 @@
 *** NickServ Help - Comando: SET EMAIL ***
-Permite manejar la direcciÚn E-Mail asociada a tu nick.
+Permite manejar la direcci√≤n E-Mail asociada a tu nick.
  
 Sintaxis:
 /ns SET EMAIL nuova-e-mail
 /ns SET EMAIL <HIDE|SHOW|UNDO>
 /ns SET EMAIL AUTH <codigo>
  
-HIDE esconde la direcciÚn E-Mail para los que pidan info por INFO sobre tu nick.
+HIDE esconde la direcci√≤n E-Mail para los que pidan info por INFO sobre tu nick.
  
-SHOW pone la direcciÚn E-Mail visible para los que pidan info por INFO sobre tu nick.
+SHOW pone la direcci√≤n E-Mail visible para los que pidan info por INFO sobre tu nick.
  
-AUTH permite autorizar una pedida de cambio de direcciÚn E-Mail. El codigo
-para enviar se encuentra en el E-Mail enviado a la vieja direcciÚn E-Mail
-en el momento de la pedida de cambio de direcciÚn.
+AUTH permite autorizar una pedida de cambio de direcci√≤n E-Mail. El codigo
+para enviar se encuentra en el E-Mail enviado a la vieja direcci√≤n E-Mail
+en el momento de la pedida de cambio de direcci√≤n.
  
-UNDO permite anular una pedida de cambio de direcciÚn E-Mail ya enviada.
+UNDO permite anular una pedida de cambio de direcci√≤n E-Mail ya enviada.
  
-Especificando una nueva E-Mail es posible pedir un cambio de direcciÚn. Una
-E-Mail con el codigo de registraciÚn se enviar‡ a la vieja direcciÚn y
-tendr‡s que proveer un codigo por medio del comando AUTH para confirmar el
-cambio. En caso de que la vieja direcciÚn no sea valida, o de que estË equivocada,
-el cambio se efectuar‡ automaticamente tras 7 dias en los que va a ser posible
-anular la pedida de cambio de direcciÚn por medio del comando UNDO para impedir
+Especificando una nueva E-Mail es posible pedir un cambio de direcci√≤n. Una
+E-Mail con el codigo de registraci√≤n se enviar√† a la vieja direcci√≤n y
+tendr√†s que proveer un codigo por medio del comando AUTH para confirmar el
+cambio. En caso de que la vieja direcci√≤n no sea valida, o de que est√® equivocada,
+el cambio se efectuar√† automaticamente tras 7 dias en los que va a ser posible
+anular la pedida de cambio de direcci√≤n por medio del comando UNDO para impedir
 el cambio.
  
-ATTENCION: No se efectuan controles de validez para la nueva direcciÚn; es tu propio
-interes poner una direcciÚn E-Mail valida, por si hubiera algun tipo de
-problema con tu nick, o si se te olvidara la contraseÒa, no va a ser posible
-ayudarte de ninguna manera si la direcciÚn E-Mail no es valida.
+ATTENCION: No se efectuan controles de validez para la nueva direcci√≤n; es tu propio
+interes poner una direcci√≤n E-Mail valida, por si hubiera algun tipo de
+problema con tu nick, o si se te olvidara la contrase√±a, no va a ser posible
+ayudarte de ninguna manera si la direcci√≤n E-Mail no es valida.
  
 Ejemplos:
-/ns SET EMAIL irc@azzurra.org
+/ns SET EMAIL irc@azzurra.chat
  
-Para mas informaciÚn, digita /join #IRCHelp
+Para mas informaci√≤n, digita /join #IRCHelp
 *** Fin del Help ***

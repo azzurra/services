@@ -1,12 +1,12 @@
 *** ChanServ Help - Comando: SET DESC ***
-Permite modificar la descripciÚn del canal especificado. Esta descripciÚn es la que
-se le visualizar‡ a cualquier usuario pida informaciÚn sobre el canal por el comando INFO.
+Permite modificar la descripci√≤n del canal especificado. Esta descripci√≤n es la que
+se le visualizar√† a cualquier usuario pida informaci√≤n sobre el canal por el comando INFO.
  
 Sintaxis:
-/cs SET #canal DESC descripciÚn
+/cs SET #canal DESC descripci√≤n
  
 Ejemplo:
-/cs SET #IRCHelp DESC Canal de ayuda ofici‡l de AzzurraNet
+/cs SET #IRCHelp DESC Canal de ayuda ofici√†l de AzzurraNet
  
-Para mas informaciÚn, digita /join #IRCHelp
+Para mas informaci√≤n, digita /join #IRCHelp
 *** Fin del Help ***

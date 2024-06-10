@@ -1,26 +1,26 @@
 *** MemoServ Help ***
 MemoServ est un service qui permet d'envoyer des brefs messages aux autres usagers,
 soit qu'ils soient online ou non au moment de l'envoi. Pour pouvoir exploiter ce service,
-le nick de l'expéditeur et celui du destinataire doivent être enregistrés avec NickServ.
+le nick de l'expÃ©diteur et celui du destinataire doivent Ãªtre enregistrÃ©s avec NickServ.
 Les commandes disponibles sont celles ci-dessous; pour pouvoir les employer
 il faut taper /ms COMMANDE
  
     Commande  Description
  
-    DEL     - Marque un mémo comme "à effacer"
-    FORWARD - Expédie les mémos à un autre nick
-    IGNORE  - Gère la liste mémo Ignore
-    LIST    - Montre tous tes mémos
-    NEWS    - Lit les NEWS du réseau
-    PURGE   - Efface tous les mémos marqués comme "à effacer"
-    READ    - Lit un mémo
-    SEND    - Envoie un mémo à un nick
-    SENDTO  - Envoie un mémo à un canal
+    DEL     - Marque un mÃ©mo comme "Ã  effacer"
+    FORWARD - ExpÃ©die les mÃ©mos Ã  un autre nick
+    IGNORE  - GÃ¨re la liste mÃ©mo Ignore
+    LIST    - Montre tous tes mÃ©mos
+    NEWS    - Lit les NEWS du rÃ©seau
+    PURGE   - Efface tous les mÃ©mos marquÃ©s comme "Ã  effacer"
+    READ    - Lit un mÃ©mo
+    SEND    - Envoie un mÃ©mo Ã  un nick
+    SENDTO  - Envoie un mÃ©mo Ã  un canal
     SET     - Configure les options de MemoServ
-    UNDEL   - Enlève le signe "à effacer" d'un mémo
-    UNSEND  - Récupère un mémo envoyé à un nick
+    UNDEL   - EnlÃ¨ve le signe "Ã  effacer" d'un mÃ©mo
+    UNSEND  - RÃ©cupÃ¨re un mÃ©mo envoyÃ© Ã  un nick
  
-Pour avoir des autres renseignements sur les commandes il faut écrire: /ms HELP commande
+Pour avoir des autres renseignements sur les commandes il faut Ã©crire: /ms HELP commande
  
 Pour tout renseignement, tape /join #IRCHelp
 *** Fin de l'Help ***

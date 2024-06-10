@@ -7,10 +7,10 @@ Comando        Descrizione
  
 ACC        - Muestra el Access level de un nick
 ACCESS     - Maneja el Access List de tu nick
-DROP       - Anula la registraciÚn de un nick
-GHOST      - Desconecta una conecciÚn "fantasma"
-IDENTIFY   - Te identifÏca a tu propio nick, por tu contraseÒa
-INFO       - Visualiza la informaciÚn disponibles sobre un nick registrado
+DROP       - Anula la registraci√≤n de un nick
+GHOST      - Desconecta una conecci√≤n "fantasma"
+IDENTIFY   - Te identif√¨ca a tu propio nick, por tu contrase√±a
+INFO       - Visualiza la informaci√≤n disponibles sobre un nick registrado
 LISTCHANS  - Visualiza los canales a los que tengas acceso con tu nick
 RECOVER    - Permite reapropiarte de un nick
 REGISTER   - Registra un nuevo nick
@@ -19,11 +19,11 @@ Comando        Descrizione
  
 Para recibir mas informaciones sobre los comandos digita /ns HELP nombredelcomando
  
-N.B.: Este servicio est‡ entendido para permitir a los usuarios darse cuenta
-si la persona con la que est‡n chateando es efectivamente la persona que
-conocen. NO est‡ entendido como para apropiarse del mayor numero posible de
+N.B.: Este servicio est√† entendido para permitir a los usuarios darse cuenta
+si la persona con la que est√†n chateando es efectivamente la persona que
+conocen. NO est√† entendido como para apropiarse del mayor numero posible de
 nicks para que no se utilizen por otras personas. Cualquier abuso de este servicio
-implicar‡, minimo, la perdida de todos los nicks y de los canales registrados por ellos.
+implicar√†, minimo, la perdida de todos los nicks y de los canales registrados por ellos.
  
-Para mas informaciÚn, digita /join #IRCHelp
+Para mas informaci√≤n, digita /join #IRCHelp
 *** Fin del Help ***

@@ -10,7 +10,7 @@ La respuesta va a ser un codigo, entre todos los siguentes:
   0 - Nick no registrado
   1 - Registrado pero se encuentra offline
   2 - No identificado
-  3 - Identificado por contraseña
+  3 - Identificado por contraseÃ±a
   4 - Identificado por Access List
   5 - Nick bloqueado
   6 - Nick prohibido
@@ -18,5 +18,5 @@ La respuesta va a ser un codigo, entre todos los siguentes:
 Ejemplo:
 /ns ACC Alexx
  
-Para mas informaciòn, digita /join #IRCHelp
+Para mas informaciÃ²n, digita /join #IRCHelp
 *** Fin del Help ***

@@ -1,5 +1,5 @@
 *** ChanServ Help - Commande: SET TOPIC ***
-Permet que ChanServ change le topic du canal avec le texte spécifié.
+Permet que ChanServ change le topic du canal avec le texte spÃ©cifiÃ©.
  
 Syntaxe:
 /cs SET #canal TOPIC nouveau-topic

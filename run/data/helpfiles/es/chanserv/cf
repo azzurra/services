@@ -13,21 +13,21 @@ Sintaxis:
 /cs CFOUNDER #canal EXPLIST
  
 ADD agrega la mask o el nick especificado en la Co-Founder list del canal. Si el nick o
-la mask ya se encuentran en otra lista, su nivel de acceso se cambiarà con Co-Founder.
+la mask ya se encuentran en otra lista, su nivel de acceso se cambiarÃ  con Co-Founder.
  
 DEL borra la mask o el nick especificado de la Co-Founder list del canal, o el
 numero correspondiente a una mask o nick si especificado.
  
-LIST visualiza la lista completa de los Co-Founder del canal, o en todo caso sòlo 
+LIST visualiza la lista completa de los Co-Founder del canal, o en todo caso sÃ²lo 
 los que tengan la mask especificada.
  
-FIND búsqueda de los elementos que reflejan la mask especificada (en el formato nick!user@host)
+FIND bÃºsqueda de los elementos que reflejan la mask especificada (en el formato nick!user@host)
  
 CLEAN remueve de la Co-Founder list todos los nicks expirados.
  
 EXPLIST muestra los nick caducados presentes en la lista
  
-WIPE vacìa todos los nicks y las masks en la Co-Founder list.
+WIPE vacÃ¬a todos los nicks y las masks en la Co-Founder list.
  
 Ejemplos:
 /cs CFOUNDER #Lamer ADD picci
@@ -35,5 +35,5 @@ Ejemplos:
 /cs CFOUNDER #IRCHelp DEL 3
 /cs CFOUNDER #IRCHelp LIST *pippo*
  
-Para mas informaciòn, digita /join #IRCHelp
+Para mas informaciÃ²n, digita /join #IRCHelp
 *** Fin del Help ***

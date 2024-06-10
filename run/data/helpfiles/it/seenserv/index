@@ -1,0 +1,14 @@
+*** SeenServ Help ***
+SeenServ e' un servizio che permette di sapere quando un certo utente
+si e' collegato per l'ultima volta. I comandi disponibili sono elencati
+qui sotto; per poterli usare bisogna scrivere: /msg SeenServ COMANDO
+ 
+    Comando     Descrizione
+ 
+    SEEN     - Ricerca un nick nel database.
+    SEENNICK - Simile al comando SEEN ma fornisce maggiori dettagli.
+ 
+Per avere maggiori informazioni sui comandi basta scrivere: /msg SeenServ HELP nomedelcomando
+ 
+Per ulteriori chiarimenti, digita /join #IRCHelp
+*** Fine dell'Help ***

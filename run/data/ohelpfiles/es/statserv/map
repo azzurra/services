@@ -1,0 +1,8 @@
+*** StatServ Operator Help - Command: MAP ***
+Lists connected servers and quick stats.
+For more detailed statistics on a specific
+server, use SERVER servername
+ 
+Syntax: MAP
+ 
+*** End of OHelp ***

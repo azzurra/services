@@ -1,26 +1,26 @@
 *********** User Modes ***********
-  a  - (Services Only) Indìca un Services Administrator
-  A  - (IRCop Only) Indìca un Server Administrator
-  b  - (IRCop Only) Abilita la visualizaciòn de mensajes CHATOPS
-  c  - (IRCop Only) Visualiza conecciòn y desconecciòn de clientes
+  a  - (Services Only) IndÃ¬ca un Services Administrator
+  A  - (IRCop Only) IndÃ¬ca un Server Administrator
+  b  - (IRCop Only) Abilita la visualizaciÃ²n de mensajes CHATOPS
+  c  - (IRCop Only) Visualiza conecciÃ²n y desconecciÃ²n de clientes
   d  - (IRCop Only) Permite visualizar los mensajes de Debug
-  e  - (IRCop Only) Permite la visualizaciòn de mensajes DCC no validos
-  f  - (IRCop Only) Permite la visualizaciòn de mensajes de Flood
-  g  - (IRCop Only) Permite la visualizaciòn de mensajes GLOBOPS
-  h  - (Services Only) Indìca un Help Operator
+  e  - (IRCop Only) Permite la visualizaciÃ²n de mensajes DCC no validos
+  f  - (IRCop Only) Permite la visualizaciÃ²n de mensajes de Flood
+  g  - (IRCop Only) Permite la visualizaciÃ²n de mensajes GLOBOPS
+  h  - (Services Only) IndÃ¬ca un Help Operator
   i  - Invisible para los usuarios que utilizen el comando /names o el comando /who
-  j  - Indìca un cliente Java
+  j  - IndÃ¬ca un cliente Java
   k  - (IRCop Only) Permite visualizar los mensajes de Kill
   m  - (IRCop Only) Permite visualizar los mensajes de Spam
   n  - (IRCop Only) Permite visualizar los mensajes de Routing
-  o  - (IRCop Only) Indìca un IRC Operator global
-  O  - (IRCop Only) Indìca un IRC Operator local
-  r  - (Services Only) Indìca un nick registrado por NickServ y identificado
+  o  - (IRCop Only) IndÃ¬ca un IRC Operator global
+  O  - (IRCop Only) IndÃ¬ca un IRC Operator local
+  r  - (Services Only) IndÃ¬ca un nick registrado por NickServ y identificado
   R  - Acepta query unicamente por nicks registrados por NickServ y identificados
   s  - Permite visualizar mensajes del servidor (Kills, etc)
-  S  - Indìca un cliente conectado por SSL (Secure Sockets Layer)
+  S  - IndÃ¬ca un cliente conectado por SSL (Secure Sockets Layer)
   w  - Permette visualizar mensajes WALLOPS
   x  - Cripta parte del host o del IP
-  y  - (IRCop Only) Visualiza la notificaciòn del whois y de los comandos ADMIN, INFO, etc.
-  z  - (Services Only) Indìca un Services Agent
+  y  - (IRCop Only) Visualiza la notificaciÃ²n del whois y de los comandos ADMIN, INFO, etc.
+  z  - (Services Only) IndÃ¬ca un Services Agent
 *** Fin del la Lista ***

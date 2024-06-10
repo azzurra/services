@@ -1,8 +1,8 @@
 *** ChanServ Help - Commande: SET NEVEROP ***
-Quand l'option NEVEROP est active, les AOP et supérieurs
-n'auront pas l'op lorsqu'ils entrent dans le canal, même s'ils
-sont identifiés aux nicks. Pour avoir l'op ils doivent
-nécessairement utiliser la commande OP de ChanServ.
+Quand l'option NEVEROP est active, les AOP et supÃ©rieurs
+n'auront pas l'op lorsqu'ils entrent dans le canal, mÃªme s'ils
+sont identifiÃ©s aux nicks. Pour avoir l'op ils doivent
+nÃ©cessairement utiliser la commande OP de ChanServ.
  
 Syntaxe:
 /cs SET #canal NEVEROP <ON|OFF>

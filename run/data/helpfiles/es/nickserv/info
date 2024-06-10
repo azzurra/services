@@ -1,7 +1,7 @@
 *** NickServ Help - Comando: INFO ***
-Visualiza toda la informaciÚn sobre el nick especificado,
-si est‡ registrado, la fecha de registraciÚn, las opciones
-ajustadas, y la ultima vez que ha efectuado una conecciÚn.
+Visualiza toda la informaci√≤n sobre el nick especificado,
+si est√† registrado, la fecha de registraci√≤n, las opciones
+ajustadas, y la ultima vez que ha efectuado una conecci√≤n.
  
 Sintaxis:
 /ns INFO nick
@@ -9,5 +9,5 @@ Sintaxis:
 Ejemplo:
 /ns INFO crosstar
  
-Para mas informaciÚn, digita /join #IRCHelp
+Para mas informaci√≤n, digita /join #IRCHelp
 *** Fin del Help ***

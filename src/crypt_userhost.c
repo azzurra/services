@@ -290,7 +290,11 @@ STR crypt_userhost(CSTR real, HOST_TYPE htype, short int dotsCount) {
 	// allocazione buffer
 
 	TRACE();
-	len = str_len(real);
+	if (htype == htIPv6) {
+		len = str_len(expand_ipv6(real));
+	} else {
+		len = str_len(real);
+	}
 	virlen = len + CRYPT_NETNAME_LEN + HIDEHOST_CHECKSUM_LEN + 2;
 
 	if (virlen > hidehost_buffer_size) {
@@ -301,7 +305,11 @@ STR crypt_userhost(CSTR real, HOST_TYPE htype, short int dotsCount) {
 
 	// generazione crypt
 
-	hash = crypt_hash_SHA1(real, len, hidehost_crypt_buffer, hidehost_crypt_buffer_size);
+	if (htype == htIPv6) {
+		hash = crypt_hash_SHA1(expand_ipv6(real), len, hidehost_crypt_buffer, hidehost_crypt_buffer_size);
+	} else {
+		hash = crypt_hash_SHA1(real, len, hidehost_crypt_buffer, hidehost_crypt_buffer_size);
+	}
 
 	// creazione stringa "criptata"
 
@@ -323,6 +331,20 @@ STR crypt_userhost(CSTR real, HOST_TYPE htype, short int dotsCount) {
 
 		} else // LOCALHOST
 			snprintf(hidehost_buffer, hidehost_buffer_size, "%s%c%lX", real, (hash < 0 ? c_EQUAL : c_MINUS), (hash < 0 ? -hash : hash));
+
+	} else if (htype == htIPv6) {
+
+		struct in6_addr ip6addr;
+
+		char ip6buffer[INET6_ADDRSTRLEN];
+		strncpy(ip6buffer, expand_ipv6(real), sizeof(ip6buffer));
+
+		memset(ip6buffer, 0, sizeof(ip6buffer));
+		inet_pton(AF_INET6, real, &ip6addr);
+		memset(&(ip6addr.s6_addr[6]), 0, 10);
+		inet_ntop(AF_INET6, &ip6addr, ip6buffer, INET6_ADDRSTRLEN);
+
+		snprintf(hidehost_buffer, hidehost_buffer_size, "%s" CRYPT_NETNAME "%c%lX", ip6buffer, hash < 0 ? c_EQUAL : c_MINUS, hash < 0 ? -hash : hash);
 
 	} else {
 

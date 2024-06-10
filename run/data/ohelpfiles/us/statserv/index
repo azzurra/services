@@ -1,0 +1,16 @@
+StatServ Operator Commands:
+ 
+    CHANSTATS   View statistics for a specific channel
+    MAP         List servers currently connected to the network
+    NETSTATS    View global network statistics
+    RECORDS     Display record breaking times & dates
+    SERVER      View specific server statistics
+ 
+These commands are available to Services Operators:
+ 
+    DELETE      Remove a channel from the database
+    LISTREG     List channels monitored for statistics
+    LIST        Show the channels list, similar to the ircd's /LIST
+    WHO         Show the users list, similar to the ircd's /WHO
+ 
+*** End of OHelp ***

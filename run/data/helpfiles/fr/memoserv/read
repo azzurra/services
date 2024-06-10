@@ -1,10 +1,10 @@
 *** MemoServ Help - Commande: READ ***
-Montre le texte du message corréspondant au
-numéro spécifié. Pour lire le dernier mémo 
-il faut spécifier LAST comme numéro.
+Montre le texte du message corrÃ©spondant au
+numÃ©ro spÃ©cifiÃ©. Pour lire le dernier mÃ©mo 
+il faut spÃ©cifier LAST comme numÃ©ro.
  
 Syntaxe:
-/ms READ <numéro|LAST>
+/ms READ <numÃ©ro|LAST>
  
 Exemples:
 /ms READ 6

@@ -8,7 +8,7 @@ Syntax:
 /cs SET #channel URL url
  
 Example:
-/cs SET #IRCHelp URL http://help.azzurra.org
+/cs SET #IRCHelp URL http://www.azzurra.chat
 /cs SET #italia URL NONE
  
 Type /join #IRCHelp for more information.

@@ -34,6 +34,8 @@
 #include "../inc/crypt_userhost.h"
 #include "../inc/akill.h"
 #include "../inc/reserved.h"
+#include "../inc/seenserv.h"
+#include "../inc/statserv.h"
 
 
 /*********************************************************
@@ -155,7 +157,7 @@ unsigned int		user_online_user_max = 0;
 
 
 static void user_handle_newuserMODE(User *user, char *newmodes, const NickInfo *ni);
-
+static void user_handle_newuserMODE_stats(User *user, char *newmodes, SeenInfo *si);
 
 /*********************************************************
  * Helper                                                *
@@ -292,6 +294,8 @@ static BOOL user_onlinehost_remove(const User *user) {
 
 static void user_change_nick(User *user, CSTR oldNick, CSTR newNick, BOOL equals) {
 
+	SeenInfo *si;
+
 	TRACE_FCLT(FACILITY_USERS_CHANGE_NICK);
 
 	if (IS_NULL(user) || IS_NULL(newNick) || IS_EMPTY_STR(newNick)) {
@@ -311,6 +315,111 @@ static void user_change_nick(User *user, CSTR oldNick, CSTR newNick, BOOL equals
 	LIST_ADD_IPv6_USER(user);
 
 	TRACE();
+
+	si = hash_seeninfo_find(newNick);
+
+	if (equals) {
+
+		if (IS_NOT_NULL(si)) {
+
+			TRACE();
+			mem_free(si->nick);
+			si->nick = str_duplicate(newNick);
+		}
+		else {
+
+			TRACE();
+			LOG_DEBUG_SNOOP("[nickchange] Seen record for %s not found!", newNick);
+		}
+
+		return;
+	}
+
+	TRACE();
+	if (IS_NOT_NULL(si)) {
+
+		if (str_not_equals(newNick, si->nick)) {
+
+			mem_free(si->nick);
+			si->nick = str_duplicate(newNick);
+		}
+
+		if (IS_NOT_NULL(si->username)) {
+
+			if (str_not_equals(si->username, user->username)) {
+
+				TRACE();
+				mem_free(si->username);
+				si->username = str_duplicate(user->username);
+			}
+		}
+		else
+			LOG_DEBUG_SNOOP("si->username for user %s is null!", newNick);
+
+		if (IS_NOT_NULL(si->host)) {
+
+			if (str_not_equals(si->host, user->host)) {
+
+				TRACE();
+				mem_free(si->host);
+				si->host = str_duplicate(user->host);
+			}
+		}
+		else
+			LOG_DEBUG_SNOOP("si->host for user %s is null!", newNick);
+
+		if (IS_NOT_NULL(si->realname)) {
+
+			if (str_not_equals(si->realname, user->realname)) {
+
+				TRACE();
+				mem_free(si->realname);
+				si->realname = str_duplicate(user->realname);
+			}
+		}
+		else
+			LOG_DEBUG_SNOOP("si->realname for user %s is null!", newNick);
+
+		si->type = SEEN_TYPE_NCFR;
+
+		if (IS_NOT_NULL(si->tempnick))
+			mem_free(si->tempnick);
+		si->tempnick = str_duplicate(oldNick);
+
+		if (IS_NOT_NULL(si->quitmsg)) {
+
+			mem_free(si->quitmsg);
+			si->quitmsg = NULL;
+		}
+
+		/* La user_reset_user() ha gia' eliminato +r e ID flags da user->mode e user->flags */
+
+		TRACE();
+		si->mode = user->mode;
+
+		si->last_seen = NOW;
+	}
+	else {
+
+		TRACE();
+		if (IS_NULL(si = seenserv_create_record(user))) {
+
+			TRACE();
+			LOG_DEBUG_SNOOP("Error creating seen record for user %s!", newNick);
+			return;
+		}
+
+		si->type = SEEN_TYPE_NCFR;
+		si->tempnick = str_duplicate(oldNick);
+
+		si->mode = user->mode;
+
+		if (IS_NOT_NULL(si->quitmsg)) {
+
+			mem_free(si->quitmsg);
+			si->quitmsg = NULL;
+		}
+	}
 }
 
 
@@ -348,6 +457,15 @@ static User *user_create_user(CSTR nick, BOOL myClient) {
 	TRACE();
 
 	++user_online_user_count;
+
+	if (user_online_user_count > records.maxusers) {
+
+		records.maxusers = user_online_user_count;
+		records.maxusers_time = NOW;
+	}
+
+	if (user_online_user_count > stats_daily_maxusers)
+		stats_daily_maxusers = user_online_user_count;
 
 	TRACE();
 
@@ -810,6 +928,7 @@ void user_handle_NICK(CSTR source, const int ac, char **av) {
 
 	NickTimeoutData	*ntd;
 
+	SeenInfo	*si;
 
 	TRACE_MAIN_FCLT(FACILITY_USERS_HANDLE_NICK);
 
@@ -824,7 +943,7 @@ void user_handle_NICK(CSTR source, const int ac, char **av) {
 		unsigned long int		ip = 0;
 		char				ip6[sizeof(struct in6_addr)];
 		BOOL				is6 = FALSE;
-
+		
 		TRACE_MAIN();
 
 		/* This is a new user; create a User structure for it. */
@@ -864,6 +983,11 @@ void user_handle_NICK(CSTR source, const int ac, char **av) {
 		}
 
 		TRACE_MAIN();
+
+		++(total.connections);
+		++(monthly.connections);
+		++(weekly.connections);
+		++(daily.connections);
 
 		#ifdef ENABLE_CAPAB_NICKIP
 		if (FlagSet(uplink_capab, CAPAB_NICKIP) && (ac == 10)) {
@@ -951,7 +1075,6 @@ void user_handle_NICK(CSTR source, const int ac, char **av) {
 		user->server = server;
 
 		TRACE_MAIN();
-		++(user->server->userCount);
 
 		htype = host_type(user->host, &dotsCount);
 
@@ -1030,7 +1153,12 @@ void user_handle_NICK(CSTR source, const int ac, char **av) {
 			/* IPv6 host. */
 			AddFlag(user->flags, USER_FLAG_HAS_IPV6);
 			if (is6) {
-				user->maskedHost = expand_ipv6(av[8]);
+				if (strchr(user->host, ':')) {
+					user->maskedHost = str_duplicate(crypt_userhost(av[8], htype, dotsCount));
+				} else {
+					htype = htHostname;
+					user->maskedHost = str_duplicate(crypt_userhost(user->host, htype, dotsCount));
+				}
 				//is 6to4?
 				if (user->ipv6[0] == 0x20 && user->ipv6[1] == 0x02) {
 					memcpy(&user->ip, &user->ipv6[2], sizeof(uint32_t));
@@ -1043,7 +1171,7 @@ void user_handle_NICK(CSTR source, const int ac, char **av) {
 				}
 			}
 			else
-				user->maskedHost = expand_ipv6(user->host);
+				user->maskedHost = user->host;
 		}
 		else
 			user->maskedHost = crypt_userhost(user->host, htype, dotsCount);
@@ -1063,6 +1191,99 @@ void user_handle_NICK(CSTR source, const int ac, char **av) {
 		TRACE_MAIN();
 
 		user->ni = findnick(user->nick);
+
+		TRACE_MAIN();
+
+		if (!is_seen_exempt(user->nick, user->username, user->host, user->ip)) {
+
+			if (IS_NULL(si = hash_seeninfo_find(av[0]))) {
+
+				TRACE_MAIN();
+
+				if (IS_NOT_NULL(si = seenserv_create_record(user))) {
+
+					si->type = SEEN_TYPE_NICK;
+
+					if (IS_NOT_NULL(si->quitmsg)) {
+
+						mem_free(si->quitmsg);
+						si->quitmsg = NULL;
+					}
+
+					if (IS_NOT_NULL(si->tempnick)) {
+
+						mem_free(si->tempnick);
+						si->tempnick = NULL;
+					}
+
+					TRACE_MAIN();
+				}
+				else
+					LOG_DEBUG_SNOOP("Error creating seen record for user %s!", user->nick);
+			}
+			else {
+
+				TRACE_MAIN();
+
+				if (str_not_equals(av[0], si->nick)) {
+
+					mem_free(si->nick);
+					si->nick = str_duplicate(av[0]);
+				}
+
+				if (IS_NOT_NULL(si->username)) {
+
+					mem_free(si->username);
+					si->username = str_duplicate(user->username);
+				}
+				else
+					LOG_DEBUG_SNOOP("si->username for user %s is null!", source);			
+
+				TRACE_MAIN();
+
+				if (IS_NOT_NULL(si->host)) {
+
+					mem_free(si->host);
+					si->host = str_duplicate(user->host);
+				}
+				else
+					LOG_DEBUG_SNOOP("si->host for user %s is null!", source);			
+
+				if (IS_NOT_NULL(si->realname)) {
+
+					mem_free(si->realname);
+					si->realname = str_duplicate(user->realname);
+				}
+				else
+					LOG_DEBUG_SNOOP("si->realname for user %s is null!", source);			
+
+				TRACE_MAIN();
+
+				si->ip = user->ip;
+				si->mode = 0;
+				si->type = SEEN_TYPE_NICK;
+				si->last_seen = NOW;
+
+				TRACE_MAIN();
+
+				if (IS_NOT_NULL(si->quitmsg)) {
+
+					mem_free(si->quitmsg);
+					si->quitmsg = NULL;
+				}
+
+				if (IS_NOT_NULL(si->tempnick)) {
+
+					mem_free(si->tempnick);
+					si->tempnick = NULL;
+				}
+			}
+
+			user_handle_newuserMODE_stats(user, av[3], si);
+		}
+
+		TRACE_MAIN();
+		servers_user_add(user);
 
 		TRACE_MAIN();
 
@@ -1153,6 +1374,13 @@ void user_handle_NICK(CSTR source, const int ac, char **av) {
 			return;
 		}
 
+		++total.nicks;
+		++monthly.nicks;
+		++weekly.nicks;
+		++daily.nicks;
+
+		servers_increase_messages(user);
+
 		TRACE_MAIN();
 
 		if (str_equals_nocase(source, av[0])) {
@@ -1230,6 +1458,35 @@ void user_handle_NICK(CSTR source, const int ac, char **av) {
 			}
 
 			TRACE_MAIN();
+
+			if (IS_NOT_NULL(si = hash_seeninfo_find(source))) {
+
+				if (str_not_equals(si->username, user->username))
+					LOG_DEBUG_SNOOP("[nickchange] username mismatch (%s != %s) for nick %s", si->username, user->username, user->nick);
+
+				if (str_not_equals(si->host, user->host))
+					LOG_DEBUG_SNOOP("[nickchange] host mismatch (%s != %s) for nick %s", si->host, user->host, user->nick);
+
+				if (str_not_equals(si->realname, user->realname))
+					LOG_DEBUG_SNOOP("[nickchange] realname mismatch (%s != %s) for nick %s", si->realname, user->realname, user->nick);
+
+				si->type = SEEN_TYPE_NCTO;
+
+				if (IS_NOT_NULL(si->tempnick))
+					mem_free(si->tempnick);
+				si->tempnick = str_duplicate(av[0]);
+
+				if (IS_NOT_NULL(si->quitmsg)) {
+
+					mem_free(si->quitmsg);
+					si->quitmsg = NULL;
+				}
+
+				/* -2 per far comparire prima il nuovo nick in un seen. */
+				si->last_seen = NOW - 2;
+			}
+			else
+				LOG_DEBUG_SNOOP("[nickchange] No seen record for %s", source);
 
 			RemoveFlag(user->mode, UMODE_r);
 
@@ -1445,6 +1702,7 @@ void user_handle_PART(CSTR source, const int ac, char **av) {
 	char *channel, *ptr;
 	ChanListItem *item;
 
+	ChannelStats *cs;
 
 	TRACE_MAIN_FCLT(FACILITY_USERS_HANDLE_PART);
 
@@ -1485,6 +1743,26 @@ void user_handle_PART(CSTR source, const int ac, char **av) {
 			else
 				user->chans = item->next;
 
+			++total.parts;
+			++monthly.parts;
+			++weekly.parts;
+			++daily.parts;
+
+			if (IS_NOT_NULL(cs = hash_chanstats_find(channel))) {
+
+				++(cs->totalparts);
+				++(cs->monthlyparts);
+				++(cs->weeklyparts);
+				++(cs->dailyparts);
+				cs->last_change = NOW;
+			}
+			else
+				LOG_DEBUG_SNOOP("error: [part] No channel record for %s", channel);
+
+			TRACE_MAIN();
+
+			servers_increase_messages(user);
+
 			TRACE_MAIN();
 			#ifdef	FIX_USE_MPOOL
 			mempool_free(channels_chan_entry_mempool, item);
@@ -1511,6 +1789,8 @@ void user_handle_KICK(CSTR source, const int ac, char **av) {
 	char *nick, *ptr;
 	ChanListItem *item;
 
+	ChannelStats *cs;
+	User *kicker;
 
 	TRACE_MAIN_FCLT(FACILITY_USERS_HANDLE_KICK);
 
@@ -1551,6 +1831,25 @@ void user_handle_KICK(CSTR source, const int ac, char **av) {
 				user->chans = item->next;
 
 			TRACE_MAIN();
+
+			++total.kicks;
+			++monthly.kicks;
+			++weekly.kicks;
+			++daily.kicks;
+
+			if (IS_NOT_NULL(cs = hash_chanstats_find(av[0]))) {
+
+				++(cs->totalkicks);
+				++(cs->monthlykicks);
+				++(cs->weeklykicks);
+				++(cs->dailykicks);
+				cs->last_change = NOW;
+			}
+			else
+				LOG_DEBUG_SNOOP("error: [kick] No channel stats for %s", av[0]);
+
+			if (IS_NOT_NULL(kicker = hash_onlineuser_find(source)))
+				servers_increase_messages(kicker);
 
 			#ifdef	FIX_USE_MPOOL
 			mempool_free(channels_chan_entry_mempool, item);
@@ -1619,9 +1918,155 @@ static void user_handle_newuserMODE(User *user, char *newmodes, const NickInfo *
 	}
 }
 
+/*********************************************************
+ * user_handle_newuserMODE_stats()                       *
+ * Handle user modes for connecting users.               *
+ *********************************************************/
+
+static void user_handle_newuserMODE_stats(User *user, char *newmodes, SeenInfo *si) {
+
+	char *ptr = newmodes;
+
+	TRACE_MAIN_FCLT(FACILITY_USERS_HANDLE_NEWUSERMODE);
+
+	if (IS_NULL(si))
+		LOG_DEBUG_SNOOP("error: [newmode] Seen record for user %s not found!", user->nick);
+
+	while (*ptr) {
+
+		switch (*ptr++) {
+
+			case 'a':
+				AddFlag(user->mode, UMODE_a);
+
+				if (IS_NOT_NULL(si))
+					AddFlag(si->mode, UMODE_a);
+
+				break;
+
+
+			case 'A':
+				AddFlag(user->mode, UMODE_A);
+
+				if (IS_NOT_NULL(si))
+					AddFlag(si->mode, UMODE_A);
+
+				break;
+
+
+			case 'h':
+				AddFlag(user->mode, UMODE_h);
+
+				if (IS_NOT_NULL(si))
+					AddFlag(si->mode, UMODE_h);
+
+				break;
+
+
+			case 'i':
+				AddFlag(user->mode, UMODE_i);
+
+				if (IS_NOT_NULL(si))
+					AddFlag(si->mode, UMODE_i);
+
+				break;
+
+
+			case 'I':
+				AddFlag(user->mode, UMODE_I);
+
+				if (IS_NOT_NULL(si))
+					AddFlag(si->mode, UMODE_I);
+
+				break;
+
+
+			case 'o':
+				/* Global operator. */
+
+				AddFlag(user->mode, UMODE_o);
+				++user_online_operator_count;
+
+				if (IS_NOT_NULL(si))
+					AddFlag(si->mode, UMODE_o);
+
+				servers_oper_add(user);
+
+				if (user_online_operator_count > records.maxopers) {
+
+					records.maxopers = user_online_operator_count;
+					records.maxopers_time = NOW;
+				}
+
+				break;
+
+
+			case 'r':
+				AddFlag(user->mode, UMODE_r);
+
+				if (IS_NOT_NULL(si))
+					AddFlag(si->mode, UMODE_r);
+
+				break;
+
+
+			case 'R':
+				AddFlag(user->mode, UMODE_R);
+
+				if (IS_NOT_NULL(si))
+					AddFlag(si->mode, UMODE_R);
+
+				break;
+
+
+			case 'S':
+				AddFlag(user->mode, UMODE_S);
+
+				if (IS_NOT_NULL(si))
+					AddFlag(si->mode, UMODE_S);
+
+				break;
+
+
+			case 'x':
+				AddFlag(user->mode, UMODE_x);
+
+				if (IS_NOT_NULL(si))
+					AddFlag(si->mode, UMODE_x);
+
+				break;
+
+
+			case 'y':
+				AddFlag(user->mode, UMODE_y);
+
+				if (IS_NOT_NULL(si))
+					AddFlag(si->mode, UMODE_y);
+
+				break;
+
+
+			case 'z':
+				AddFlag(user->mode, UMODE_z);
+
+				if (IS_NOT_NULL(si))
+					AddFlag(si->mode, UMODE_z);
+
+				break;
+		}
+	}
+
+}
+
 /* Handy macro. */
 
 #define MODE(flag) \
+	if (IS_NOT_NULL(si)) \
+		add ? AddFlag(si->mode, (flag)) : RemoveFlag(si->mode, (flag)); \
+	++(total.umodes); \
+	++(monthly.umodes); \
+	++(weekly.umodes); \
+	++(daily.umodes); \
 	if (add) \
 		AddFlag(user->mode, (flag)); \
 	else \
@@ -1642,6 +2087,7 @@ void user_handle_userMODE(CSTR source, const int ac, char **av) {
 	char *ptr;
 	BOOL add = TRUE;
 
+	SeenInfo *si;
 
 	TRACE_MAIN_FCLT(FACILITY_USERS_HANDLE_USERMODE);
 
@@ -1664,6 +2110,11 @@ void user_handle_userMODE(CSTR source, const int ac, char **av) {
 	}
 
 	LOG_DEBUG("users: Changing mode for %s (%s@%s) to %s", source, user->username, user->host, av[1]);
+
+	if (IS_NULL(si = hash_seeninfo_find(source)) && !is_seen_exempt(user->nick, user->username, user->host, user->ip))
+		LOG_DEBUG_SNOOP("error: [mode] Seen record for user %s not found!", source);
+
+	servers_increase_messages(user);
 
 	ptr = av[1];
 
@@ -1703,11 +2154,27 @@ void user_handle_userMODE(CSTR source, const int ac, char **av) {
 
 					AddFlag(user->mode, UMODE_o);
 					++user_online_operator_count;
+
+					if (IS_NOT_NULL(si))
+						AddFlag(si->mode, UMODE_o);
+
+					servers_oper_add(user);
+
+					if (user_online_operator_count > records.maxopers) {
+
+						records.maxopers = user_online_operator_count;
+						records.maxopers_time = NOW;
+					}
 				}
 				else {
 
 					RemoveFlag(user->mode, UMODE_o);
 					--user_online_operator_count;
+
+					servers_oper_remove(user);
+
+					if (IS_NOT_NULL(si))
+						RemoveFlag(si->mode, UMODE_o);
 				}
 
 				break;
@@ -1721,6 +2188,9 @@ void user_handle_userMODE(CSTR source, const int ac, char **av) {
 
 						AddFlag(user->mode, UMODE_r);
 
+						if (IS_NOT_NULL(si))
+							AddFlag(si->mode, UMODE_r);
+
 						if (!user_is_identified_to(user, user->nick)) {
 
 							++(user->idcount);
@@ -1731,9 +2201,13 @@ void user_handle_userMODE(CSTR source, const int ac, char **av) {
 							user->current_lang = EXTRACT_LANG_ID(user->ni->langID);
 						}
 					}
-					else
+					else {
 						RemoveFlag(user->mode, UMODE_r);
+
+						if (IS_NOT_NULL(si))
+							RemoveFlag(si->mode, UMODE_r);
 				}
+			}
 
 				break;
 
@@ -1774,6 +2248,8 @@ void user_handle_QUIT(CSTR source, const int ac, char **av) {
 
 	User		*user;
 
+	SeenInfo	*si;
+	BOOL		isKill = FALSE;
 
 	TRACE_MAIN_FCLT(FACILITY_USERS_HANDLE_QUIT);
 
@@ -1840,6 +2316,113 @@ void user_handle_QUIT(CSTR source, const int ac, char **av) {
 	}
 
 	TRACE_MAIN();
+
+	isKill = str_equals_partial(av[0], "Local kill by ", 14);
+
+	if (isKill) {
+
+		if (IS_NOT_NULL(user->server->stats))
+			servers_update_killcount(user, user);
+		else
+			LOG_DEBUG_SNOOP("user_handle_quit(): Server %s used by %s is without stats", user->server->name, user->nick);
+	}
+
+	if (!is_seen_exempt(user->nick, user->username, user->host, user->ip)) {
+
+		TRACE_MAIN();
+
+		if (IS_NOT_NULL(si = hash_seeninfo_find(source))) {
+
+			if (IS_NOT_NULL(si->tempnick)) {
+
+				mem_free(si->tempnick);
+				si->tempnick = NULL;
+			}
+
+			if (isKill) {
+
+				char *string = &av[0][14];	/* Points to first char of the killer. */
+				char *killer, *reason;
+
+				++(total.kills);
+				++(monthly.kills);
+				++(weekly.kills);
+				++(daily.kills);
+
+				si->type = SEEN_TYPE_KILL;
+
+				killer = strtok(string, s_SPACE);
+
+				if (IS_NOT_NULL(si->tempnick))
+					mem_free(si->tempnick);
+				si->tempnick = str_duplicate(killer);
+
+				/* Free it -- it will be filled below. */
+				if (IS_NOT_NULL(si->quitmsg))
+					mem_free(si->quitmsg);
+
+				reason = strtok(NULL, s_NULL);
+
+				if (IS_NOT_NULL(reason)) {
+
+					/* Skip leading '('. */
+					++reason;
+
+					/* Skip trailing ')'. */
+					reason[str_len(reason) - 1] = '\0';
+
+					if (str_not_equals_nocase(killer, reason))
+						si->quitmsg = str_duplicate(reason);
+					else
+						si->quitmsg = str_duplicate("Nessun motivo specificato.");
+				}
+				else
+					si->quitmsg = str_duplicate("Nessun motivo specificato.");
+
+				si->last_seen = NOW;
+			}
+			else {
+
+				if (IS_NOT_NULL(si->quitmsg))
+					mem_free(si->quitmsg);
+
+				if (str_equals_partial(av[0], "Autokilled: ", 12)) {
+
+					si->type = SEEN_TYPE_AKILL;
+					si->quitmsg = str_duplicate(av[0] + 12);
+				}
+				else if (str_equals_partial(av[0], "K-Lined: ", 9)) {
+
+					si->type = SEEN_TYPE_KLINE;
+					si->quitmsg = str_duplicate(av[0] + 9);
+				}
+				else {
+
+					si->type = SEEN_TYPE_QUIT;
+					si->quitmsg = str_duplicate(av[0]);
+				}
+
+				++(total.quits);
+				++(monthly.quits);
+				++(weekly.quits);
+				++(daily.quits);
+
+				si->last_seen = NOW;
+
+				if (IS_NOT_NULL(si->tempnick)) {
+
+					mem_free(si->tempnick);
+					si->tempnick = NULL;
+				}
+			}
+		}
+		else
+			LOG_DEBUG_SNOOP("[quit] No seen record for user %s!", source);
+	}
+
+	servers_increase_messages(user);
+
+	TRACE_MAIN();
 	user_delete_user(user);
 	TRACE_MAIN();
 }
@@ -1852,6 +2435,7 @@ int user_handle_server_SQUIT(const Server *server) {
 	User	*user, *next;
 	int	idx, count = 0;
 
+	SeenInfo *si;
 
 	TRACE_MAIN_FCLT(FACILITY_USERS_HANDLE_SERVER_SQUIT);
 
@@ -1897,6 +2481,8 @@ int user_handle_server_SQUIT(const Server *server) {
 
 					NickTimeoutData *ntd;
 
+					SeenInfo *si;
+
 					ntd = (NickTimeoutData*) timeout_get_data(toNickServ, TOTYPE_NICKSERV_COUNTDOWN, (unsigned long) user->ni);
 
 					if (IS_NOT_NULL(ntd))
@@ -1913,6 +2499,38 @@ int user_handle_server_SQUIT(const Server *server) {
 				if (*err == '\0')
 					nickserv_guest_free(guestNumber);
 			}
+
+			if (!is_seen_exempt(user->nick, user->username, user->host, user->ip)) {
+
+				TRACE_MAIN();
+
+				if (IS_NOT_NULL(si = hash_seeninfo_find(user->nick))) {
+
+					if (IS_NOT_NULL(si->tempnick)) {
+
+						mem_free(si->tempnick);
+						si->tempnick = NULL;
+					}
+
+					if (IS_NOT_NULL(si->quitmsg)) {
+
+						mem_free(si->quitmsg);
+						si->quitmsg = NULL;
+					}
+
+					++(total.quits);
+					++(monthly.quits);
+					++(weekly.quits);
+					++(daily.quits);
+
+					si->type = SEEN_TYPE_SPLIT;
+					si->last_seen = NOW;
+				}
+				else
+					LOG_DEBUG_SNOOP("[quit] No seen record for user %s!", user->nick);
+			}
+
+			servers_increase_messages(user);
 
 			TRACE_MAIN();
 			user_delete_user(user);
@@ -1937,6 +2555,7 @@ void user_handle_KILL(CSTR source, const int ac, char **av) {
 
 	User *user, *killerUser;
 
+	SeenInfo *si;
 
 	TRACE_MAIN_FCLT(FACILITY_USERS_HANDLE_KILL);
 
@@ -2001,6 +2620,59 @@ void user_handle_KILL(CSTR source, const int ac, char **av) {
 			nickserv_guest_free(guestNumber);
 	}
 
+	if (!is_seen_exempt(user->nick, user->username, user->host, user->ip)) {
+
+		if (IS_NOT_NULL(si = hash_seeninfo_find(av[0]))) {
+
+			char *reason;
+
+
+			si->type = SEEN_TYPE_KILL;
+
+			TRACE_MAIN();
+			if (IS_NOT_NULL(si->quitmsg))
+				mem_free(si->quitmsg);
+
+			reason = strchr(av[1], '(');
+
+			if (IS_NULL(reason) || str_equals(reason, "())"))
+				si->quitmsg = str_duplicate("Nessun motivo specificato.");
+
+			else {
+
+				/* Kill leading '(' and trailing ')' */
+				++reason;
+				reason[str_len(reason) - 1] = '\0';
+
+				si->quitmsg = str_duplicate(reason);
+			}
+
+			if (IS_NOT_NULL(si->tempnick))
+				mem_free(si->tempnick);
+			si->tempnick = str_duplicate(source);
+
+			si->last_seen = NOW;
+		}
+		else
+			LOG_DEBUG_SNOOP("[kill] No seen record for user %s!", av[0]);
+	}
+
+	TRACE_MAIN();
+	if (!strchr(source, '.')) {
+
+		if (IS_NOT_NULL(killerUser = hash_onlineuser_find(source)))
+			servers_increase_messages(killerUser);
+	}
+	else
+		killerUser = NULL;
+
+	servers_update_killcount(user, killerUser);
+
+	++(total.kills);
+	++(monthly.kills);
+	++(weekly.kills);
+	++(daily.kills);
+
 	TRACE_MAIN();
 	user_delete_user(user);
 	TRACE_MAIN();
@@ -2032,6 +2704,9 @@ void introduce_services_agent(CSTR nick) {
 
 		send_NICK(s_NickServ, "+", CONF_SERVICES_USERNAME, CONF_SERVICES_HOST, "Nickname Services");
 		user_add_services_agent(s_NickServ, 0, "Nickname Services");
+
+		if (nick)
+			send_SJOIN(s_NickServ, CONF_SNOOP_CHAN);
 	}
 
 	TRACE();
@@ -2039,6 +2714,9 @@ void introduce_services_agent(CSTR nick) {
 
 		send_NICK(s_ChanServ, "+z", CONF_SERVICES_USERNAME, CONF_SERVICES_HOST, "Channel Services");
 		user_add_services_agent(s_ChanServ, UMODE_z, "Channel Services");
+
+		if (nick)
+			send_SJOIN(s_ChanServ, CONF_SNOOP_CHAN);
 	}
 
 	TRACE();
@@ -2046,6 +2724,9 @@ void introduce_services_agent(CSTR nick) {
 
 		send_NICK(s_HelpServ, "+", CONF_SERVICES_USERNAME, CONF_SERVICES_HOST, "Help Services");
 		user_add_services_agent(s_HelpServ, 0, "Help Services");
+
+		if (nick)
+			send_SJOIN(s_HelpServ, CONF_SNOOP_CHAN);
 	}
 
 	TRACE();
@@ -2053,6 +2734,9 @@ void introduce_services_agent(CSTR nick) {
 
 		send_NICK(s_MemoServ, "+", CONF_SERVICES_USERNAME, CONF_SERVICES_HOST, "Memo Services");
 		user_add_services_agent(s_MemoServ, 0, "Memo Services");
+
+		if (nick)
+			send_SJOIN(s_MemoServ, CONF_SNOOP_CHAN);
 	}
 
 	TRACE();
@@ -2060,6 +2744,9 @@ void introduce_services_agent(CSTR nick) {
 
 		send_NICK(s_OperServ, "+i", CONF_SERVICES_USERNAME, CONF_SERVICES_HOST, "Operator Services");
 		user_add_services_agent(s_OperServ, UMODE_i, "Operator Services");
+
+		if (nick)
+			send_SJOIN(s_OperServ, CONF_SNOOP_CHAN);
 	}
 
 	TRACE();
@@ -2067,6 +2754,29 @@ void introduce_services_agent(CSTR nick) {
 
 		send_NICK(s_RootServ, "+i", CONF_SERVICES_USERNAME, CONF_SERVICES_HOST, "Services Root System");
 		user_add_services_agent(s_RootServ, UMODE_i, "Services Root System");
+
+		if (nick)
+			send_SJOIN(s_RootServ, CONF_SNOOP_CHAN);
+	}
+
+	TRACE();
+	if (IS_NULL(nick) || IS_EMPTY_STR(nick) || str_equals_nocase(nick, s_StatServ)) {
+
+		send_NICK(s_StatServ, "+i", CONF_SERVICES_USERNAME, CONF_SERVICES_HOST, "Statistical Services");
+		user_add_services_agent(s_StatServ, 0, "Statistical Services");
+
+		if (nick)
+			send_SJOIN(s_StatServ, CONF_SNOOP_CHAN);
+	}
+
+	TRACE();
+	if (IS_NULL(nick) || IS_EMPTY_STR(nick) || str_equals_nocase(nick, s_SeenServ)) {
+
+		send_NICK(s_SeenServ, "+", CONF_SERVICES_USERNAME, CONF_SERVICES_HOST, "Seen Services");
+		user_add_services_agent(s_SeenServ, 0, "Seen Services");
+
+		if (nick)
+			send_SJOIN(s_SeenServ, CONF_SNOOP_CHAN);
 	}
 
 	TRACE();
@@ -2152,6 +2862,8 @@ BOOL nick_is_service(CSTR name) {
 		(str_equals_nocase(name, s_OperServ)) ||
 		(str_equals_nocase(name, s_MemoServ)) ||
 		(str_equals_nocase(name, s_RootServ)) ||
+		(str_equals_nocase(name, s_StatServ)) ||
+		(str_equals_nocase(name, s_SeenServ)) ||
 		(str_equals_nocase(name, s_GlobalNoticer)) ||
 		(str_equals_nocase(name, s_DebugServ)))
 

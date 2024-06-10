@@ -1,0 +1,13 @@
+*** NickServ Help - Commande: SET NOCHANMEMO ***
+Ne permet pas de récevoir de mémos envoyés aux canaux,
+sauf si tu es le propriétaire du canal.
+ 
+Syntaxe:
+/ns SET NOCHANMEMO <ON|OFF>
+ 
+Exemples:
+/ns SET NOCHANMEMO ON
+/ns SET NOCHANMEMO OFF
+ 
+Pour tout renseignement, tape /join #IRCHelp
+*** Fin de l'Help ***

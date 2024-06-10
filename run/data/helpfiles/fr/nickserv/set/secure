@@ -1,8 +1,8 @@
 *** NickServ Help - Commande: SET SECURE ***
 Active l'option Secure pour ton nick. Si "Secure"
-est active, NickServ ne tiendra plus compte de ta Liste d'accès;
-tu devras donc t'identifier à ton nick par ton mot de passe chaque
-fois que tu te connecteras à Azzurra.
+est active, NickServ ne tiendra plus compte de ta Liste d'accÃ¨s;
+tu devras donc t'identifier Ã  ton nick par ton mot de passe chaque
+fois que tu te connecteras Ã  Azzurra.
  
 Syntaxe:
 /ns SET SECURE <ON|OFF>

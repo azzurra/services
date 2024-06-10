@@ -1,18 +1,18 @@
 *** ChanServ Help - Comando: SET VERBOSE ***
-Permite especificar cuales comandos de ChanServ envÏen una opnotice al canal
-si ejecutados con exito. El nivËl de default de Verbose es 0.
+Permite especificar cuales comandos de ChanServ env√¨en una opnotice al canal
+si ejecutados con exito. El niv√®l de default de Verbose es 0.
  
-NivËl 0: No se enviar‡ ninguna opnotice al canal.
-NivËl 1: Solamente los comandos DEOP/DEVOICE/MKICK/MDEOP/MDEVOICE/OP/UNBAN/VOICE enviar‡n una opnotice al canal.
-NivËl 2: Tambien cualquier modifica de VOP/HOP/AOP/SOP/CF/AKICK enviar‡ una opnotice al canal.
-NivËl 3: Tambien cualquier modifica hecha por el comando SET enviar‡ una opnotice al canal.
+Niv√®l 0: No se enviar√† ninguna opnotice al canal.
+Niv√®l 1: Solamente los comandos DEOP/DEVOICE/MKICK/MDEOP/MDEVOICE/OP/UNBAN/VOICE enviar√†n una opnotice al canal.
+Niv√®l 2: Tambien cualquier modifica de VOP/HOP/AOP/SOP/CF/AKICK enviar√† una opnotice al canal.
+Niv√®l 3: Tambien cualquier modifica hecha por el comando SET enviar√† una opnotice al canal.
  
 Sintaxis:
-/cs SET #canal VERBOSE nivËl
+/cs SET #canal VERBOSE niv√®l
  
 Ejemplo:
 /cs SET #IRCHelp VERBOSE 3
-/cs SET #EspaÒa VERBOSE 1
+/cs SET #Espa√±a VERBOSE 1
  
-Para mas informaciÚn, digita /join #IRCHelp
+Para mas informaci√≤n, digita /join #IRCHelp
 *** Fin del Help ***

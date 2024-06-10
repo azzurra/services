@@ -1,11 +1,11 @@
 *** ChanServ Help - Commande: SOP ***
-Gère la Super-Op List d'un canal. Les SOP ont automatiquement
-l'op lorsqu'ils entrent dans le canal, et ils peuvent gérer
+GÃ¨re la Super-Op List d'un canal. Les SOP ont automatiquement
+l'op lorsqu'ils entrent dans le canal, et ils peuvent gÃ©rer
 l'AutoKick list, l'AOP list, l'HOP list et la VOP list.
  
 Syntaxe:
 /cs SOP #canal ADD <nick|masque>
-/cs SOP #canal DEL <masque|numéro>
+/cs SOP #canal DEL <masque|numÃ©ro>
 /cs SOP #canal LIST [masque]
 /cs SOP #canal FIND <masque>
 /cs SOP #canal CLEAN
@@ -15,28 +15,28 @@ Syntaxe:
 /cs SOP #canal UNLOCK [nick|masque]
 
  
-ADD ajoute le masque ou le nick spécifié à la Super-Op list du canal. Si le nick
-ou le masque sont déjà dans une autre liste, leur accès sera changé en SOP.
+ADD ajoute le masque ou le nick spÃ©cifiÃ© Ã  la Super-Op list du canal. Si le nick
+ou le masque sont dÃ©jÃ  dans une autre liste, leur accÃ¨s sera changÃ© en SOP.
  
-DEL efface le masque ou le nick spécifié dans la Super-Op list du canal, ou le
-numéro qu'indique un masque ou un nick, si spécifié.
+DEL efface le masque ou le nick spÃ©cifiÃ© dans la Super-Op list du canal, ou le
+numÃ©ro qu'indique un masque ou un nick, si spÃ©cifiÃ©.
  
-LIST montre la liste complète des Super-Ops du canal, ou éventuellement seulement ceux 
-qui contiennent le masque spécifié.
+LIST montre la liste complÃ¨te des Super-Ops du canal, ou Ã©ventuellement seulement ceux 
+qui contiennent le masque spÃ©cifiÃ©.
  
-FIND recheche les éléments qui refléttes la mask spécifiée (dans le format nick!user@host)
+FIND recheche les Ã©lÃ©ments qui reflÃ©ttes la mask spÃ©cifiÃ©e (dans le format nick!user@host)
  
-CLEAN efface de la Super-Op list les nicks expirés.
+CLEAN efface de la Super-Op list les nicks expirÃ©s.
  
-EXPLIST montre les nick périmés preésent dans la liste.
+EXPLIST montre les nick pÃ©rimÃ©s preÃ©sent dans la liste.
  
 WIPE efface toute la Super-Op list.
  
-LOCK bloque la liste, et permet seulement au propriétaire de la manipuler.
-On peut bloquer soulement un masque en le spécifiant dans la commande.
+LOCK bloque la liste, et permet seulement au propriÃ©taire de la manipuler.
+On peut bloquer soulement un masque en le spÃ©cifiant dans la commande.
  
-UNLOCK débloque la liste, dans le cas où elle a été bloquée par la commande LOCK.
-On peut débloquer soulement un masque en le spécifiant dans la commande.
+UNLOCK dÃ©bloque la liste, dans le cas oÃ¹ elle a Ã©tÃ© bloquÃ©e par la commande LOCK.
+On peut dÃ©bloquer soulement un masque en le spÃ©cifiant dans la commande.
  
 Exemples:
 /cs SOP #IRCHelp ADD [^BodyZen

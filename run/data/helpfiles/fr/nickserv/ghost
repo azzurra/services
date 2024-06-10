@@ -1,13 +1,13 @@
 *** NickServ Help - Commande: GHOST ***
-Arrête une session IRC "fantôme" qui utilise votre nick.
-Une session est "fantôme" quand par exemple ton ordinateur
+ArrÃªte une session IRC "fantÃ´me" qui utilise votre nick.
+Une session est "fantÃ´me" quand par exemple ton ordinateur
 plante lorsque tu es sur IRC, et le serveur croit que tu
-est encore connecté.
+est encore connectÃ©.
  
 Si quelqu'un d'autre utilise ton nick, cette N'EST PAS la
-commande correcte à employer. Emploie au contraire RECOVER.
+commande correcte Ã  employer. Emploie au contraire RECOVER.
  
-Si tu veux terminer le faux client connecté par les services 
+Si tu veux terminer le faux client connectÃ© par les services 
 pour garder to nick NE PAS employer cette commande; emploie RELEASE.
  
 Syntaxe:

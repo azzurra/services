@@ -1,18 +1,18 @@
 *** NickServ Help - Commande: ACC ***
-T'informe si l'usager qui utilise le nick spécifié
-est identifié comme propriétaire du nick ou non.
+T'informe si l'usager qui utilise le nick spÃ©cifiÃ©
+est identifiÃ© comme propriÃ©taire du nick ou non.
  
 Syntaxe:
 /ns ACC nick
  
-La réponse contiendra un code, qui est un des suivants:
+La rÃ©ponse contiendra un code, qui est un des suivants:
  
-  0 - Nick pas enregistré
-  1 - Enregistré mais offline
-  2 - Pas identifié
-  3 - Identifié par mot de passe
-  4 - Identifié par Liste d'accès
-  5 - Nick bloqué
+  0 - Nick pas enregistrÃ©
+  1 - EnregistrÃ© mais offline
+  2 - Pas identifiÃ©
+  3 - IdentifiÃ© par mot de passe
+  4 - IdentifiÃ© par Liste d'accÃ¨s
+  5 - Nick bloquÃ©
   6 - Nick interdit
  
 Exemple:

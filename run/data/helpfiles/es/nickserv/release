@@ -1,16 +1,16 @@
 *** NickServ Help - Comando: RELEASE ***
-Implìca que NickServ desconecte el cliente ficticio puesto con tu
-nick por no haber proveido la contraseña de tu nick por tu
-parte o de algun otro usuario en caso de que estè activa la opciòn KILL.
+ImplÃ¬ca que NickServ desconecte el cliente ficticio puesto con tu
+nick por no haber proveido la contraseÃ±a de tu nick por tu
+parte o de algun otro usuario en caso de que estÃ¨ activa la opciÃ²n KILL.
 NickServ desconecta el cliente ficticio tras 1 Minuto de tiempo, pero con
 este comando puedes velocizar el proceso. Para poder utilizar el comando
-es necesario conocer la contraseña del nick especificado.
+es necesario conocer la contraseÃ±a del nick especificado.
  
 Sintaxis:
-/ns RELEASE nick contraseña
+/ns RELEASE nick contraseÃ±a
  
 Ejemplo:
 /ns RELEASE gogeta14 andrea
  
-Para mas informaciòn, digita /join #IRCHelp
+Para mas informaciÃ²n, digita /join #IRCHelp
 *** Fin del Help ***

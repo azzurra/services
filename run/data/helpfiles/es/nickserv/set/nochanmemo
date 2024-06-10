@@ -1,0 +1,13 @@
+*** NickServ Help - Comando: SET NOCHANMEMO ***
+Si está activado, impide que un nick reciba memos por los canales
+excepto aquellos de los cuales tu es el fundador.
+ 
+Sintaxis:
+/ns SET NOCHANMEMO <ON|OFF>
+ 
+Ejemplos:
+/ns SET NOCHANMEMO ON
+/ns SET NOCHANMEMO OFF
+ 
+Para mas informaciòn, digita /join #IRCHelp
+*** Fin del Help ***

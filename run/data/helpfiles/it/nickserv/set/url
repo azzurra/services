@@ -8,7 +8,7 @@ Sintassi:
 /ns SET URL url
  
 Esempi:
-/ns SET URL http://www.azzurra.org
+/ns SET URL http://www.azzurra.chat
 /ns SET URL NONE
  
 Per ulteriori chiarimenti, digita /join #IRCHelp

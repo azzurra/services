@@ -1,0 +1,27 @@
+*** ChanServ Help - Comando: SET BANTYPE ***
+Esta opcion permite de ajustar el tipo de ban que
+se usará cuando la opcion RESTRICT est activa.
+Estan 10 opciones disponibles:
+ 
+  0: Ban nel tipo *!user@host
+  1: Ban nel tipo *!*user@host
+  2: Ban nel tipo *!*@host
+  3: Ban nel tipo *!*user@*.host
+  4: Ban nel tipo *!*@*.host
+  5: Ban nel tipo nick!user@host
+  6: Ban nel tipo nick!*user@host
+  7: Ban nel tipo nick!*@host
+  8: Ban nel tipo nick!*user@*.host
+  9: Ban nel tipo nick!*@*.host
+ 
+El valor inicial de BANTYPE (al registro) es el número 2.
+ 
+Sintaxis:
+/cs SET #canal BANTYPE <valor>
+ 
+Ejemplos:
+/cs SET #IRCHelp BANTYPE 4
+/cs SET #debian BANTYPE 7
+ 
+Para mas informaciòn, digita /join #IRCHelp
+*** Fin del Help ***

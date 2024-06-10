@@ -1,5 +1,5 @@
 *** ChanServ Help - Comando: MDEHALFOP ***
-Implìca que ChanServ quite el HalfOp a todos los operadores en el canal.
+ImplÃ¬ca que ChanServ quite el HalfOp a todos los operadores en el canal.
 Tienes que ser minimo SOP para poder utilizar este comando.
  
 Sintaxis:
@@ -8,5 +8,5 @@ Sintaxis:
 Ejemplo:
 /cs MDEHALFOP #IRCHelp
  
-Para mas informaciòn, digita /join #IRCHelp
+Para mas informaciÃ²n, digita /join #IRCHelp
 *** Fin del Help ***

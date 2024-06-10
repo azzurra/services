@@ -1,7 +1,7 @@
 *** ChanServ Help - Commande: SET PROTECT ***
-L'option PROTECT fait que dans le canal spécifié tous les usagers
-enregistrés dans les listes AOP/SOP/CF auront automatiquement l'op
-de nouveau si quelqu'un l'enlève d'eux.
+L'option PROTECT fait que dans le canal spÃ©cifiÃ© tous les usagers
+enregistrÃ©s dans les listes AOP/SOP/CF auront automatiquement l'op
+de nouveau si quelqu'un l'enlÃ¨ve d'eux.
  
 Syntaxe:
 /cs SET #canal PROTECT <ON|OFF>

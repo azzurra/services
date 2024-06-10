@@ -1,8 +1,8 @@
 *** MemoServ Help - Commande: SEND ***
-Envoie un mémo au nick spécifié. Le nick du
-destinataire doit être enregistré avec NickServ.
-Si le destinataire est connecté, on l'avertira
-automatiquement lorsque le mémo est envoyé.
+Envoie un mÃ©mo au nick spÃ©cifiÃ©. Le nick du
+destinataire doit Ãªtre enregistrÃ© avec NickServ.
+Si le destinataire est connectÃ©, on l'avertira
+automatiquement lorsque le mÃ©mo est envoyÃ©.
  
 Syntaxe:
 /ms SEND nick message

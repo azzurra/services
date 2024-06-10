@@ -52,6 +52,8 @@
 #include "../inc/reserved.h"
 #include "../inc/blacklist.h"
 #include "../inc/tagline.h"
+#include "../inc/seenserv.h"
+#include "../inc/statserv.h"
 
 #ifdef HAVE_SYS_RESOURCE_H
 #include <sys/resource.h>
@@ -107,6 +109,7 @@ static time_t next_database_update;
 /* Next routine check. */
 static time_t next_expire_check;
 static time_t next_timeout_check;
+static time_t next_hour_check;
 
 /*********************************************************
  * Initialization/cleanup routines:                      *
@@ -219,7 +222,6 @@ static BOOL initialize() {
 
 	crypt_init();
 	user_init();
-	message_init();
 
 	fprintf(stderr, "\nAzzurra IRC Services starting...");
 
@@ -294,6 +296,8 @@ static BOOL initialize() {
 	memoserv_init();
 	operserv_init();
 	rootserv_init();
+	statserv_init();
+	seenserv_init();
 	spam_init();
 
 	/* Load up databases */
@@ -325,6 +329,15 @@ static BOOL initialize() {
 	tagline_db_load();
 
 	akill_db_load();
+	TRACE_MAIN();
+
+	statserv_chanstats_db_load();
+	TRACE_MAIN();
+
+	statserv_servstats_db_load();
+	TRACE_MAIN();
+
+	seenserv_db_load();
 	TRACE_MAIN();
 
 	regions_db_load();
@@ -405,6 +418,8 @@ void services_cleanup() {
 	rootserv_terminate();
 	spam_terminate();
 	reserved_terminate();
+	seenserv_terminate();
+	statserv_terminate();
 
 	TRACE_MAIN();
 
@@ -419,7 +434,6 @@ void services_cleanup() {
 	TRACE_MAIN();
 	log_done();
 
-	message_terminate();
 	region_terminate();
 	process_terminate();
 }
@@ -458,6 +472,8 @@ void database_expire(const time_t now) {
 
 	if (CONF_DISPLAY_UPDATES)
 		send_globops(NULL, "Running Database Store & Expire #%d", expire_count);
+	else
+		LOG_SNOOP(s_OperServ, "Running Database Store & Expire #%d", expire_count);
 
 	++expire_count;
 
@@ -469,6 +485,10 @@ void database_expire(const time_t now) {
 	ignore_expire();
 	TRACE_MAIN();
 	expire_memos();
+	TRACE_MAIN();
+	expire_stats();
+	TRACE_MAIN();
+	seenserv_expire_records();
 	TRACE_MAIN();
 	akill_expire();
 }
@@ -511,6 +531,12 @@ void database_store() {
 	tagline_db_save();
 	TRACE_MAIN();
 	akill_db_save();
+	TRACE_MAIN();
+	statserv_servstats_db_save();
+	TRACE_MAIN();
+	statserv_chanstats_db_save();
+	TRACE_MAIN();
+	seenserv_db_save();
 	TRACE_MAIN();
 	oper_db_save();
 
@@ -570,6 +596,7 @@ int main(int ac, char **av, char **envp) {
 	
 	next_database_update = NOW + CONF_DATABASE_UPDATE_FREQUENCY;
 	next_expire_check = NOW + ONE_MINUTE;
+	next_hour_check = NOW + ONE_HOUR;
 
 	TRACE_MAIN();
 
@@ -627,6 +654,14 @@ int main(int ac, char **av, char **envp) {
 
 		TRACE_MAIN();
 
+		if (NOW >= next_hour_check) {
+
+			TRACE_MAIN();
+
+			update_hour();
+			next_hour_check = NOW + ONE_HOUR;
+		}
+
 		#ifdef NEW_SOCK
 		if (NOW >= next_timeout_check) {
 
@@ -642,7 +677,9 @@ int main(int ac, char **av, char **envp) {
 
 			akill_expire();
 			ignore_expire();
-
+			update_server_averages();
+			update_averages();
+			
 			next_expire_check = NOW + ONE_MINUTE;
 		}
 

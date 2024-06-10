@@ -1,8 +1,8 @@
 *** ChanServ Help - Commande: MODE ***
-Permet de changer les modes du canal de l'extérieur
-en employant ChanServ. Il faut être au moins SOP pour
-pouvoir employer cette commande. On peut spécifiér 
-jusqu'à 6 modes (+ ou -) dans une ligne.
+Permet de changer les modes du canal de l'extÃ©rieur
+en employant ChanServ. Il faut Ãªtre au moins SOP pour
+pouvoir employer cette commande. On peut spÃ©cifiÃ©r 
+jusqu'Ã  6 modes (+ ou -) dans une ligne.
  
 Syntaxe:
 /cs MODE #canal mode(s)

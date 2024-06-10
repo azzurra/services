@@ -1,10 +1,10 @@
 *** NickServ Help - Comando: GHOST ***
-Termìna una conecciòn "fantasma" que utiliza tu nick.
-Una sesiòn ghost se ofrece cuando por ejemplo tu
-computadora se traba mientras estès en IRC, y el servidor
+TermÃ¬na una conecciÃ²n "fantasma" que utiliza tu nick.
+Una sesiÃ²n ghost se ofrece cuando por ejemplo tu
+computadora se traba mientras estÃ¨s en IRC, y el servidor
 cree que tu siguas conectado.
  
-En caso de que alguien mas estè utilizando tu propio nick,
+En caso de que alguien mas estÃ¨ utilizando tu propio nick,
 NO tienes que utilizar este comando. Mejor utilizar RECOVER.
  
 Para desconectar el cliente ficticio utilizado por
@@ -12,10 +12,10 @@ los servicios para cuidar tu nick NO tienes que utilizar
 este comando; mejor utilizar RELEASE.
  
 Sintaxis:
-/ns GHOST nick contraseña
+/ns GHOST nick contraseÃ±a
  
 Ejemplo:
 /ns GHOST gogeta14 andrea
  
-Para mas informaciòn, digita /join #IRCHelp
+Para mas informaciÃ²n, digita /join #IRCHelp
 *** Fin del Help ***

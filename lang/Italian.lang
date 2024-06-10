@@ -1,7 +1,7 @@
 BOTTLER_AKILL_REASON
 	L'uso del software Bottler non e' ammesso su questa rete. Usa un client VERO se vuoi chattare su Azzurra.
 CLONES_AKILL_REASON
-	Troppi cloni da questo host. Questa AutoKill e' temporanea e verra' automaticamente rimossa fra %d minuti. Visita http://kline.azzurra.org/ per maggiori informazioni.
+	Troppi cloni da questo host. Questa AutoKill e' temporanea e verra' automaticamente rimossa fra %d minuti. Visita http://www.azzurra.chat/ per maggiori informazioni.
 CSNS_EMAIL_TEXT_ABUSE
 	Se questo messaggio ti e' stato inviato erroneamente ti preghiamo di ignorarlo e segnalare l'accaduto ad %s
 	%s IRC Network
@@ -326,9 +326,9 @@ CS_LEVEL_SOPONLY_KICK_REASON
 CS_LEVEL_SRAONLY_KICK_REASON
 	Solo i Services Roots possono entrare in questo canale.
 CS_LEVEL_SYNTAX_ERROR
-	Syntax: LEVEL #channel [OPERS|SOP|SA|SRA|CODERS|MASTERS|NONE]
+	Syntax: LEVEL #channel [SOP|SA|SRA|CODER|NONE]
 CS_LISTREG_SYNTAX_ERROR
-	Syntax: LISTREG LIST|COUNT|MAIL type pattern
+	Syntax: LISTREG N|D|T|U|NU|R|DR|H|K|F|Z|C pattern [page_number]
 CS_MKICK_SYNTAX_ERROR
 	Sintassi: MKICK #canale [motivo]
 CS_MODE_COMPLETE
@@ -932,7 +932,7 @@ GET_SERVICE_COMMAND_LIST
 GET_SERVICE_COMMAND_LIST_MSG
 	Digita /msg %s HELP per la lista dei comandi disponibili.
 IDENT_AKILL_REASON
-	A causa di ripetuto spam da parte di alcuni utenti di questo Internet Service Provider, tutti i suoi utenti devono abilitare l'ident. Visita http://kline.azzurra.org/ per maggiori informazioni.
+	A causa di ripetuto spam da parte di alcuni utenti di questo Internet Service Provider, tutti i suoi utenti devono abilitare l'ident. Visita http://www.azzurra.chat/ per maggiori informazioni.
 INFO_CURRENT_TIME
 	Ora corrente: %s
 INVALID_PASSWORD_FIRST_WARNING
@@ -944,7 +944,7 @@ JOIN_CHAN_IS_REGISTERED
 LANG_LIST_HEADER
 	Linguaggi disponibili:
 MIRCWORM_AKILL_REASON
-	Hai un worm in mIRC che carica cloni e spamma altri utenti a tua insaputa. Cancella e reinstalla mIRC prima di ricollegarti ad Azzurra. Visita http://kline.azzurra.org/ per maggiori informazioni.
+	Hai un worm in mIRC che carica cloni e spamma altri utenti a tua insaputa. Cancella e reinstalla mIRC prima di ricollegarti ad Azzurra. Visita http://www.azzurra.chat/ per maggiori informazioni.
 MS_DEL_ALL_MEMOS_MARKED_DEL
 	Tutti i memo richiesti sono stati segnati come da cancellare.
 MS_DEL_ERROR_MEMO_ALREADY_DEL
@@ -1345,9 +1345,9 @@ NS_ERROR_MUST_IDENTIFY
 NS_ERROR_NICK_ALREADY_AUTH
 	ERRORE: La registrazione del tuo nick e' gia' stata confermata.
 NS_ERROR_NICK_FORBIDDEN
-	Il nick %s e' vietato e non può essere usato ne' registrato.
+	Il nick %s e' vietato e non puo' essere usato ne' registrato.
 NS_ERROR_NICK_FROZEN
-	Il nick %s e' bloccato e non può essere usato.
+	Il nick %s e' bloccato e non puo' essere usato.
 NS_ERROR_NICK_NOT_IN_USE
 	Nessuno sta usando il nick %s in questo momento.
 NS_FLAG_ERROR_NICK_ALREADY_FLAGGED
@@ -1459,7 +1459,7 @@ NS_LISTCHANS_LIST_ENTRIES
 NS_LISTCHANS_LIST_HEADER
 	Il nick %s ha accesso ai seguenti canali:
 NS_LISTREG_SYNTAX_ERROR
-	Syntax: LISTREG pattern N|M|RN|E|NA|IA|H|K|F|Z [start] [end]
+	Syntax: LISTREG N|M|RN|E|NA|IA|H|K|F|Z pattern [page_number]
 NS_NICK_EXPIRE
 	N.B.: I nicks scadranno dopo %d giorni di inattivita'.
 NS_RECOVER_ERROR_CANT_RECOVER_SELF
@@ -1480,22 +1480,22 @@ NS_REGISTER_EMAIL_TEXT_1
 NS_REGISTER_EMAIL_TEXT_2
 	La registrazione del tuo nick sara' confermata e il tuo nick
 	sara' protetto da eventuali tentativi di abuso o furto.
-	Il sito ufficiale della rete e' http://www.azzurra.org/
+	Il sito ufficiale della rete e' http://www.azzurra.chat/
 	
 NS_REGISTER_EMAIL_TEXT_3
 	I regolamenti della rete e i documenti ufficiali sono
-	disponibili all'indirizzo http://www.azzurra.org/netfiles.php
+	disponibili all'indirizzo http://www.azzurra.chat/netfiles.php
 	
 NS_REGISTER_EMAIL_TEXT_4
 	Per ricevere assistenza sui servizi della rete o su IRC
 	in generale puoi rivolgerti sul canale ufficiale #IRCHelp
-	oppure online all'indirizzo http://help.azzurra.org/
+	oppure online all'indirizzo http://www.azzurra.chat/
 	Sono inoltre disponibili i seguenti servizi:
 	
 NS_REGISTER_EMAIL_TEXT_5
 	- %s IRC Network Forum
 	  Forum di discussione di %s, raggiungibile
-	  all'indirizzo http://www.azzurra.org/forum/
+	  all'indirizzo http://www.azzurra.chat/forum/
 	  Sul forum, oltre a poter esprimere la tua opinione,
 	  potrai informarti sulle novita' e sui nuovi servizi
 	  offerti dalla rete.
@@ -1504,12 +1504,12 @@ NS_REGISTER_EMAIL_TEXT_6
 	- %s Ticket Service
 	  Per richieste di supporto tecnico e' possibile
 	  utilizzare il servizio offerto da %s all'indirizzo
-	  http://ticket.azzurra.org usando il proprio nick
+	  http://www.azzurra.chat usando il proprio nick
 	  e la propria password per l'accesso.
 	
 NS_REGISTER_EMAIL_TEXT_7
 	Per una connessione piu' veloce e sicura e' vivamente
-	consigliato l'utilizzo del seguente server: irc.azzurra.org
+	consigliato l'utilizzo del seguente server: irc.azzurra.chat
 	%s IRC Network
 NS_REGISTER_ERROR_NICK_ALREADY_REG
 	Il nick %s e' gia' registrato!
@@ -1846,10 +1846,72 @@ TIME_REPLY_WEEK
 TIME_REPLY_WEEKS
 	%d settimane
 TROJAN_AKILL_REASON
-	Hai un trojan nel PC, vai su http://www.azzurra.org/forum/viewtopic.php?p=18543#18543 e leggi le istruzioni per rimuoverlo e poi ricollegati. Visita http://kline.azzurra.org/ per maggiori informazioni.
+	Hai un trojan nel PC, vai su http://www.azzurra.chat/forum/viewtopic.php?p=18543#18543 e leggi le istruzioni per rimuoverlo e poi ricollegati. Visita http://www.azzurra.chat/ per maggiori informazioni.
 WARNING_READONLY
 	Attenzione: I servizi sono momentaneamente in modalita' sola lettura. Le modifiche non verranno salvate!
 CS_EXPLIST_HEADER
 	Nick scaduti nella lista %s di %s:
 CS_SENDCODE_SYNTAX_ERROR
 	Syntax: SENDCODE #channel
+REPLY_TYPE_NICK
+	I saw %s connect %s ago.
+REPLY_TYPE_QUIT
+	I saw %s quit %s ago stating: %s
+REPLY_TYPE_NCTO_OPER
+	I saw %s change nick to %s %s ago.
+REPLY_TYPE_NCTO
+	I saw %s change nick %s ago.
+REPLY_TYPE_NCFR_OPER
+	%s was using the nick %s up to %s ago.
+REPLY_TYPE_NCFR
+	Missing: REPLY_TYPE_NCFR
+REPLY_TYPE_KILL
+	I saw %s kill %s %s ago.
+REPLY_TYPE_REASON
+	Reason: %s
+REPLY_TYPE_SPLIT
+	Missing: REPLY_TYPE_SPLIT
+REPLY_TYPE_KLINE
+	I saw %s get K-Lined %s ago.
+REPLY_TYPE_AKILL
+	I saw %s get autokilled %s ago.
+REPLY_TYPE_NOSEEN
+	Missing: REPLY_TYPE_NOSEEN
+SS_SEENNICK_SYNTAX_ERROR
+	Syntax: SEENNICK nick
+REPLY_NICK_IS_ONLINE
+	%s is currently on IRC. Type /whois %s for more information.
+REPLY_NO_SEEN
+	I have not seen %s.
+SS_SEENNICK_HEADER
+	Seen info for %s:
+SS_SEENNICK_REPLY_REALNAME
+	Last seen Real Name: %s
+SS_SEENNICK_REPLY_ADDRESS
+	Last seen address: %s@%s
+SS_SEENNICK_REPLY_ADDRESS_OPER
+	Last seen address: %s@%s [%s]
+SS_SEENNICK_REPLY_IDENTIFIED_ONLINE
+	User is identified to that nick
+SS_SEENNICK_REPLY_IDENTIFIED_OFFLINE
+	User was identified to that nick
+SS_SEENNICK_REPLY_NOTID_ONLINE
+	User does not have access to that nick, or that nick is not registered
+SS_SEENNICK_REPLY_NOTID_OFFLINE
+	User did not have access to that nick, or that nick is not registered
+END_OF_SEEN
+	*** End of Seen ***
+SS_SEENNICK_REPLY_USERMODE
+	Last usermode: %s
+SS_SEEN_SYNTAX_ERROR_OPER
+	Syntax: SEEN [nick!]user@host
+SS_SEEN_REPLY_NOMATCH
+	No matches to your query were found.
+SS_SEEN_REPLY_MANY
+	I found %d matches to your query. Here are the %d most recent (sorted): 
+SS_SEEN_REPLY_ONE
+	I found only one match to your query: 
+SS_SEEN_REPLY_SOME
+	I found %d matches to your query (sorted): 
+SS_SEEN_SYNTAX_ERROR
+	Syntax: SEEN nick

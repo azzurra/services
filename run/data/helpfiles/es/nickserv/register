@@ -1,34 +1,34 @@
 *** NickServ Help - Comando: REGISTER ***
 Registrar un nick permite utilizar de manera completa el servicio NickServ.
-Podr‡s, tras otras cosas, desconectar cualquier usuario estË utilizando
+Podr√†s, tras otras cosas, desconectar cualquier usuario est√® utilizando
 tu nick en cualquier momento, registrar canales, etc.
  
-La contraseÒa tiene que llevar un numero di caractËres entre 5 y 32, 
+La contrase√±a tiene que llevar un numero di caract√®res entre 5 y 32, 
 y no puede ser identico al nick por seguridad. Te sugerimos no utilizar
-tu propio nombre como contraseÒa, por ser demasiado facil para adivinar.
+tu propio nombre como contrase√±a, por ser demasiado facil para adivinar.
  
-En el momento de la registraciÚn recibir‡s por la direcciÚn E-Mail especificada un
-codigo de autorizaciÚn para confirmar la registraciÚn del nick. Hasta que el nick no
-estË autorizado no va a ser posible registrar canales o ser agregados en cualquier
+En el momento de la registraci√≤n recibir√†s por la direcci√≤n E-Mail especificada un
+codigo de autorizaci√≤n para confirmar la registraci√≤n del nick. Hasta que el nick no
+est√® autorizado no va a ser posible registrar canales o ser agregados en cualquier
 lista VOP/HOP/AOP/SOP/CF. Ademas no vas a poder ajustar las opciones del nick mismo.
-Para confirmar la registraciÚn del nick sÚlo sigue las instrucciones reportadas
+Para confirmar la registraci√≤n del nick s√≤lo sigue las instrucciones reportadas
 en el E-Mail.
  
-ATTENCION: Si no completas la registraciÚn dentro de 24 horas, el nick se
-cancelar‡ automaticamente y estar‡ disponible para otros usuarios. Asegurate
-entonces proveer una direcciÚn E-Mail re‡l a la que tengan acceso. Si pones
-una direcciÚn no valida necesitar‡s esperar la expiraciÚn del nick tras 24 horas
+ATTENCION: Si no completas la registraci√≤n dentro de 24 horas, el nick se
+cancelar√† automaticamente y estar√† disponible para otros usuarios. Asegurate
+entonces proveer una direcci√≤n E-Mail re√†l a la que tengan acceso. Si pones
+una direcci√≤n no valida necesitar√†s esperar la expiraci√≤n del nick tras 24 horas
 para poderlo registrar nuevamente.
  
-N.B.: La direcciÚn E-Mail especificada durante la registraciÚn NO es visible para los
+N.B.: La direcci√≤n E-Mail especificada durante la registraci√≤n NO es visible para los
 de mas usuarios por el comando INFO. Si quieres lo puedes poner visible. El staff
-utiliza esta direcciÚn unicamente en caso de cambio de password o de cualquier abuso.
+utiliza esta direcci√≤n unicamente en caso de cambio de password o de cualquier abuso.
  
 Sintaxis:
-/ns REGISTER contraseÒa e-mail
+/ns REGISTER contrase√±a e-mail
  
 Ejemplo:
 /ns REGISTER 4zzUrr4n3T adachi@hotmail.com
  
-Para mas informaciÚn, digita /join #IRCHelp
+Para mas informaci√≤n, digita /join #IRCHelp
 *** Fin del Help ***

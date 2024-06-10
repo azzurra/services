@@ -1,5 +1,5 @@
 *** MemoServ Help - Comando: UNSEND ***
-Recupèra el ultimo memo enviado al nick especificado y lo borra.
+RecupÃ¨ra el ultimo memo enviado al nick especificado y lo borra.
 No es posible recuperar memos ya leydos por el nick de destino.
  
 Sintaxis:
@@ -8,5 +8,5 @@ Sintaxis:
 Ejemplo:
 /ms UNSEND Miki
  
-Para mas informaciòn, digita /join #IRCHelp
+Para mas informaciÃ²n, digita /join #IRCHelp
 *** Fin del Help ***

@@ -707,14 +707,14 @@ void handle_akill(CSTR source, User *callerUser, ServiceCommandData *data) {
 		send_notice_lang_to_user(data->agent->nick, callerUser, GetCallerLang(), OPER_ERROR_ACCESS_DENIED);
 
 	else if (str_equals_nocase(command, "ADD") || str_equals_nocase(command, "PERM")
-		|| str_equals_nocase(command, "TIME") || str_equals_nocase(command, "OVERRIDE")) {
+		|| str_equals_nocase(command, "TIME")) {
 
 		char			akill_nicks[IRCBUFSIZE];
 		char			*expiry = NULL, *username, *host, *reason, *ptr;
 		BOOL			too_many_akill_nicks = FALSE, more_nicks = FALSE, have_CIDR = FALSE;
 		size_t			user_len, host_len;
 		User			*user;
-		int				akillIdx, usercount = 0, valid = 0, expireTime = CONF_DEFAULT_AKILL_EXPIRY;
+		int				akillIdx, usercount = 0, expireTime = CONF_DEFAULT_AKILL_EXPIRY;
 		int				akill_nicks_freespace = 400;
 		float			percent;
 		CIDR_IP			cidr;
@@ -723,11 +723,6 @@ void handle_akill(CSTR source, User *callerUser, ServiceCommandData *data) {
 
 
 		switch (command[0]) {
-
-			case 'O':
-			case 'o':
-				valid += 4;
-				/* Fall... */
 
 			case 'T':
 			case 't':
@@ -811,45 +806,6 @@ void handle_akill(CSTR source, User *callerUser, ServiceCommandData *data) {
 
 		str_compact(username);
 		str_compact(host);
-
-		/* Skip this if in OVERRIDE. */
-		if (valid == 0) {
-
-			unsigned int ptrIdx;
-
-			for (ptrIdx = 0; ptrIdx < user_len; ++ptrIdx) {
-
-				if (!strchr("*?~", host[ptrIdx]))
-					++valid;
-			}
-
-			for (ptrIdx = 0; ptrIdx < host_len; ++ptrIdx) {
-
-				if (!strchr("*?.-:/", host[ptrIdx]))
-					++valid;
-			}
-
-			if (valid < 4) {
-
-				if (data->operMatch) {
-
-					send_globops(data->agent->nick, "\2%s\2 tried to AKILL \2%s@%s\2", source, username, host);
-
-					LOG_SNOOP(data->agent->nick, "%s +A* %s@%s -- by %s (%s@%s) [Lamer]", data->agent->shortNick, username, host, callerUser->nick, callerUser->username, callerUser->host);
-					log_services(LOG_SERVICES_GENERAL, "+A* %s@%s -- by %s (%s@%s) [Lamer]", username, host, callerUser->nick, callerUser->username, callerUser->host);
-				}
-				else {
-
-					send_globops(data->agent->nick, "\2%s\2 (through \2%s\2) tried to AKILL \2%s@%s\2", source, data->operName, username, host);
-
-					LOG_SNOOP(data->agent->nick, "%s +A* %s@%s -- by %s (%s@%s) through %s [Lamer]", data->agent->shortNick, username, host, callerUser->nick, callerUser->username, callerUser->host, data->operName);
-					log_services(LOG_SERVICES_GENERAL, "+A* %s@%s -- by %s (%s@%s) through %s [Lamer]", username, host, callerUser->nick, callerUser->username, callerUser->host, data->operName);
-				}
-
-				send_notice_to_user(data->agent->nick, callerUser, "Hrmmm, what would your admin think of that?");
-				return;
-			}
-		}
 
 		if (is_already_akilled(username, host, expireTime, data->agent->nick, callerUser))
 			return;

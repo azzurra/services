@@ -111,6 +111,8 @@ char s_MemoServ[NICKSIZE] = "";
 char s_HelpServ[NICKSIZE] = "";
 char s_OperServ[NICKSIZE] = "";
 char s_RootServ[NICKSIZE] = "";
+char s_StatServ[NICKSIZE] = "";
+char s_SeenServ[NICKSIZE] = "";
 char s_GlobalNoticer[NICKSIZE] = "";
 char s_NS[3] = "NS";
 char s_CS[3] = "CS";
@@ -118,6 +120,9 @@ char s_MS[3] = "MS";
 char s_HS[3] = "HS";
 char s_OS[3] = "OS";
 char s_RS[3] = "RS";
+char s_ST[3] = "ST";
+char s_SS[3] = "SS";
+
 
 /* Number of seconds to wait for the next timeout check. */
 time_t CONF_TIMEOUT_CHECK = 2;
@@ -137,6 +142,8 @@ int CONF_INVALID_PASSWORD_SECOND_IGNORE = 30;			/* Number of minutes to ignore t
 int CONF_CHANNEL_EXPIRE = 30;		/* Channel expiration time, in days. */
 int CONF_NICK_EXPIRE = 30;			/* Nickname expiration time, in days. */
 int CONF_MEMO_EXPIRE = 30;			/* Memo expiration time, in days. */
+int CONF_STATS_EXPIRE = 30;			/* Channel stats expiration time, in days. */
+int CONF_SEEN_EXPIRE = 30;			/* Seen expiration time, in days. */
 
 /* Send an E-Mail reminder when nicknames or channels are about to expire? */
 int CONF_SEND_REMINDER = 0;		/* Defaults to 0 days (off). */
@@ -512,6 +519,30 @@ static void conf_break(int ac, char **av, BOOL rehash) {
 			else
 				str_copy_checked(av[1], s_RootServ, sizeof(s_RootServ));
 		}
+		else if (str_equals_nocase(av[0], "STATSERV") || str_equals_nocase(av[0], "ST")) {
+
+			if (str_len(av[1]) > NICKMAX || !validate_nick(av[1], FALSE)) {
+
+				if (rehash)
+					send_globops(NULL, "Value %s for STATSERV is not valid", av[1]);
+				else
+					fatal_error(FACILITY_CONF, __LINE__, "Value %s for STATSERV is not valid", av[1]);
+			}
+			else
+				str_copy_checked(av[1], s_StatServ, sizeof(s_StatServ));
+		}
+		else if (str_equals_nocase(av[0], "SEENSERV") || str_equals_nocase(av[0], "SS")) {
+
+			if (str_len(av[1]) > NICKMAX || !validate_nick(av[1], FALSE)) {
+
+				if (rehash)
+					send_globops(NULL, "Value %s for SEENSERV is not valid", av[1]);
+				else
+					fatal_error(FACILITY_CONF, __LINE__, "Value %s for SEENSERV is not valid", av[1]);
+			}
+			else
+				str_copy_checked(av[1], s_SeenServ, sizeof(s_SeenServ));
+		}
 		else if (str_equals_nocase(av[0], "GLOBAL")) {
 
 			if (str_len(av[1]) > NICKMAX || !validate_nick(av[1], FALSE)) {
@@ -542,7 +573,7 @@ static void conf_break(int ac, char **av, BOOL rehash) {
 
 			value = strtol(av[1], &err, 10);
 
-			if ((*err != '\0') || (value <= 0) || (value > 120)) {
+			if ((*err != '\0') || (value <= 0) || (value > 3650)) {
 
 				if (rehash)
 					send_globops(NULL, "Value %s for CHANEXP is not valid", av[1]);
@@ -584,7 +615,7 @@ static void conf_break(int ac, char **av, BOOL rehash) {
 
 			value = strtol(av[1], &err, 10);
 
-			if ((*err != '\0') || (value <= 0) || (value > 120)) {
+			if ((*err != '\0') || (value <= 0) || (value > 3650)) {
 
 				if (rehash)
 					send_globops(NULL, "Value %s for NICKEXP is not valid", av[1]);
@@ -957,6 +988,34 @@ static void conf_break(int ac, char **av, BOOL rehash) {
 			}
 			else
 				CONF_CLONE_SCAN_V6 = value;
+		}
+		else if (str_equals_nocase(av[0], "STATEXP")) {
+
+			value = strtol(av[1], &err, 10);
+
+			if ((*err != '\0') || (value <= 0) || (value > 120)) {
+
+				if (rehash)
+					send_globops(NULL, "Value %s for STATEXP is not valid", av[1]);
+				else
+					fatal_error(FACILITY_CONF, __LINE__, "Value %s for STATEXP is not valid", av[1]);
+			}
+			else
+				CONF_STATS_EXPIRE = value;
+		}
+		else if (str_equals_nocase(av[0], "SEENEXP")) {
+
+			value = strtol(av[1], &err, 10);
+
+			if ((*err != '\0') || (value <= 0) || (value > 120)) {
+
+				if (rehash)
+					send_globops(NULL, "Value %s for SEENEXP is not valid", av[1]);
+				else
+					fatal_error(FACILITY_CONF, __LINE__, "Value %s for SEENEXPSEENEXP is not valid", av[1]);
+			}
+			else
+				CONF_SEEN_EXPIRE = value;
 		}
 		else if (str_equals_nocase(av[0], "PERCENT")) {
 
@@ -1348,7 +1407,7 @@ void init_conf(BOOL rehash) {
 			CONF_DEBUG_CHAN = str_duplicate("#debug");
 
 		if (IS_NULL(CONF_RETURN_EMAIL))
-			CONF_RETURN_EMAIL = str_duplicate("nickserv@azzurra.org");
+			CONF_RETURN_EMAIL = str_duplicate("nickserv@azzurra.chat");
 
 		if (IS_NULL(CONF_SENDMAIL_PATH))
 			CONF_SENDMAIL_PATH = str_duplicate("/usr/sbin/sendmail");
@@ -1370,6 +1429,12 @@ void init_conf(BOOL rehash) {
 
 		if (s_RootServ[0] == c_NULL)
 			str_copy_checked("RootServ", s_RootServ, sizeof(s_RootServ));
+
+		if (s_StatServ[0] == c_NULL)
+			str_copy_checked("StatServ", s_StatServ, sizeof(s_StatServ));
+
+		if (s_SeenServ[0] == c_NULL)
+			str_copy_checked("SeenServ", s_SeenServ, sizeof(s_SeenServ));
 
 		if (s_HelpServ[0] == c_NULL)
 			str_copy_checked("HelpServ", s_HelpServ, sizeof(s_HelpServ));
