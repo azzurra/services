@@ -1,7 +1,7 @@
 *** ChanServ Help - Commande: MKICK ***
 Permet que ChanServ kicke tous les usagers du canal, y compris
 celui qui donne la commande.
-Il faut être au moins SOP pour pouvoir employer cette commande.
+Il faut Ãªtre au moins SOP pour pouvoir employer cette commande.
  
 Syntaxe:
 /cs MKICK #canal [raison]

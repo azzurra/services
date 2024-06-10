@@ -39,9 +39,10 @@
 #include "../inc/memoserv.h"
 #include "../inc/operserv.h"
 #include "../inc/rootserv.h"
+#include "../inc/seenserv.h"
+#include "../inc/statserv.h"
 #include "../inc/helpserv.h"
 #include "../inc/ignore.h"
-#include "../inc/trie.h"
 
 
 /*********************************************************
@@ -57,6 +58,7 @@ unsigned int	uplink_capab = CAPAB_UNKNOWN;
 
 unsigned long int npings = 0;
 
+int nservers = 0;
 
 /*********************************************************
  * msg_update_flood_levels()                             *
@@ -233,6 +235,8 @@ static void m_version(CSTR source, const int ac, char **av) {
 	if (!user_is_ircop(user) && ignore_match(user))
 		return;
 
+	servers_increase_messages(user);
+
 	LOG_SNOOP(s_Snooper, "VERSION requested by \2%s\2", source);
 
 	if (IS_NOT_NULL(source))
@@ -256,6 +260,14 @@ static void m_ping(CSTR source, const int ac, char **av) {
 		LOG_SNOOP(s_Snooper, "Synched to network data.");
 		send_SJOIN(s_DebugServ, CONF_DEBUG_CHAN);
 		send_SJOIN(s_GlobalNoticer, CONF_SNOOP_CHAN);
+		send_SJOIN(s_NickServ, CONF_SNOOP_CHAN);
+		send_SJOIN(s_ChanServ, CONF_SNOOP_CHAN);
+		send_SJOIN(s_HelpServ, CONF_SNOOP_CHAN);
+		send_SJOIN(s_MemoServ, CONF_SNOOP_CHAN);
+		send_SJOIN(s_OperServ, CONF_SNOOP_CHAN);
+		send_SJOIN(s_RootServ, CONF_SNOOP_CHAN);
+		send_SJOIN(s_StatServ, CONF_SNOOP_CHAN);
+		send_SJOIN(s_SeenServ, CONF_SNOOP_CHAN);
 	}
 
 	send_cmd("PONG %s %s", ac > 1 ? av[1] : CONF_SERVICES_NAME, av[0]);
@@ -279,6 +291,15 @@ static void m_burst(CSTR source, const int ac, char **av) {
 		LOG_SNOOP(s_Snooper, "Synched to network data.");
 		send_SJOIN(s_DebugServ, CONF_DEBUG_CHAN);
 		send_SJOIN(s_GlobalNoticer, CONF_SNOOP_CHAN);
+		send_SJOIN(s_NickServ, CONF_SNOOP_CHAN);
+		send_SJOIN(s_ChanServ, CONF_SNOOP_CHAN);
+		send_SJOIN(s_HelpServ, CONF_SNOOP_CHAN);
+		send_SJOIN(s_MemoServ, CONF_SNOOP_CHAN);
+		send_SJOIN(s_OperServ, CONF_SNOOP_CHAN);
+		send_SJOIN(s_RootServ, CONF_SNOOP_CHAN);
+		send_SJOIN(s_StatServ, CONF_SNOOP_CHAN);
+		send_SJOIN(s_SeenServ, CONF_SNOOP_CHAN);
+
 	}
 #endif
 }
@@ -308,6 +329,8 @@ static void m_motd(CSTR source, const int ac, char **av) {
 	/* Check if we should ignore. Operators always get through. */
 	if (!user_is_ircop(user) && ignore_match(user))
 		return;
+
+	servers_increase_messages(user);
 
 	LOG_SNOOP(s_Snooper, "MOTD requested by \2%s\2", source);
 
@@ -368,6 +391,8 @@ static void m_privmsg(CSTR source, const int ac, char **av) {
 	if (!isOper && ignore_match(currentUser))
 		return;
 
+	servers_increase_messages(currentUser);
+
 	if (strchr(av[0], '@')) {
 
 		str_tokenize(av[0], buffer, sizeof(buffer), c_AT);
@@ -396,6 +421,12 @@ static void m_privmsg(CSTR source, const int ac, char **av) {
 
 	else if (str_equals_nocase(nick, s_HelpServ))
 		helpserv(source, currentUser, av[1]);
+
+	else if (str_equals_nocase(nick, s_StatServ))
+		statserv(source, currentUser, av[1]);
+
+	else if (str_equals_nocase(nick, s_SeenServ))
+		seenserv(source, currentUser, av[1]);
 
 	else if (is_services_coder(currentUser) && str_equals_nocase(nick, s_DebugServ))
 		debugserv(source, currentUser, av[1]);
@@ -427,6 +458,8 @@ static void m_stats(CSTR source, const int ac, char **av) {
 	/* Check if we should ignore. Operators always get through. */
 	if (!user_is_ircop(user) && ignore_match(user))
 		return;
+
+	servers_increase_messages(user);
 
 	switch (*av[0]) {
 
@@ -535,6 +568,8 @@ static void m_whois(CSTR source, const int ac, char **av) {
 	if (!user_is_ircop(user) && ignore_match(user))
 		return;
 
+	servers_increase_messages(user);
+
 	if (IS_NULL(localUser = hash_onlineuser_find(av[1])))
 		send_cmd("401 %s %s :No such service.", source, av[1]);
 
@@ -572,10 +607,12 @@ static void m_admin(CSTR source, const int ac, char **av) {
 	if (!user_is_ircop(user) && ignore_match(user))
 		return;
 
+	servers_increase_messages(user);
+
 	send_cmd("256 %s :Administrative info about %s", source, CONF_SERVICES_NAME);
 	send_cmd("257 %s :Azzurra IRC Network IRC Services", source);
 	send_cmd("258 %s :Admin: Azzurra Network Roots", source);
-	send_cmd("259 %s :E-Mail Address: irc@azzurra.org", source);
+	send_cmd("259 %s :E-Mail Address: irc@azzurra.chat", source);
 }
 
 /*********************************************************/
@@ -602,6 +639,8 @@ static void m_time(CSTR source, const int ac, char **av) {
 	/* Check if we should ignore. Operators always get through. */
 	if (!user_is_ircop(user) && ignore_match(user))
 		return;
+
+	servers_increase_messages(user);
 
 	lang_format_localtime(timebuf, sizeof(timebuf), LANG_US, TIME_FORMAT_FULLDATE, NOW);
 
@@ -633,6 +672,8 @@ static void m_info(CSTR source, const int ac, char **av) {
 	/* Check if we should ignore. Operators always get through. */
 	if (!user_is_ircop(user) && ignore_match(user))
 		return;
+
+	servers_increase_messages(user);
 
 	if (IS_NOT_NULL(f = fopen(MOTD_FILENAME, "r"))) {
 
@@ -752,9 +793,9 @@ Message messages[] = {
 	{ "AWAY",		0,	NULL },
 	{ "NOTICE",		0,	NULL },
 	{ "401",		0,	NULL },		/* 401 NickServ nick :No such nick/channel */
-	{ "402",		0,	NULL },		/* 402 services.azzurra.org nick :No such server */
+	{ "402",		0,	NULL },		/* 402 services.azzurra.chat nick :No such server */
 	{ "403",		0,	NULL },		/* 403 ChanServ #channel :No such channel */
-	{ "441",		0,	NULL },		/* 441 services.azzurra.org nick #channel :They aren't on that channel */
+	{ "441",		0,	NULL },		/* 441 services.azzurra.chat nick #channel :They aren't on that channel */
 	{ "443",		0,	NULL },		/* 443 ChanServ nick #channel :is already on channel */
 	{ "503",		0,	NULL },		/* 503 Message could not be delivered to nick */
 	{ "SVSMODE",		0,	m_svsmode },
@@ -796,32 +837,34 @@ Message messages[] = {
 
 /*********************************************************/
 
-static trie *msg_trie;
+static __inline__ int message_str_compare(CSTR string1, CSTR string2) {
 
-/* Initialize message parser */
-void message_init(void)
-{
-    Message *johnny; /* walker (cit.) */
-    msg_trie = trie_create();
+	register const unsigned char	*str1 = (const unsigned char *) string1;
+	register const unsigned char	*str2 = (const unsigned char *) string2;
+	register unsigned char			ch1, ch2;
 
-    /* Walk message array and build the trie */
-    for (johnny = messages; johnny->name; ++johnny)
-    {
-        /* FIXME: abort services startup if trie node allocation fails */
-        trie_add(msg_trie, johnny->name, johnny);
-    }
 
-    /* Cave Johnson, we're done here */
+	if (IS_NULL(str1) || IS_NULL(str2))
+		return (int)(str1 - str2);
+
+	do {
+		ch1 = (unsigned char) *str1++;
+		ch2 = (unsigned char) *str2++;
+	} while ((ch1 != c_NULL) && (ch1 == ch2));
+	return ch1 - ch2;
 }
 
-/* Cleanup message parser */
-void message_terminate(void)
-{
-    trie_destroy(msg_trie);
-}
+/*********************************************************/
 
-/* Lookup message handler in msg_trie, returns NULL on failure */
-Message *find_message(const char *name)
-{
-    return (Message *)trie_find(msg_trie, name);
+Message *find_message(const char *name) {
+
+	Message *m;
+
+	for (m = messages; m->name; ++m) {
+
+		if (message_str_compare(name, m->name) == 0)
+			return m;
+	}
+
+	return NULL;
 }

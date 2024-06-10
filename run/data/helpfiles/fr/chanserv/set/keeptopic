@@ -1,6 +1,6 @@
 *** ChanServ Help - Commande: SET KEEPTOPIC ***
-Active ou désactive l'option Topic Retention pour le canal spécifié.
-Quand elle est active, ChanServ mémorise le topic quand le canal est
+Active ou dÃ©sactive l'option Topic Retention pour le canal spÃ©cifiÃ©.
+Quand elle est active, ChanServ mÃ©morise le topic quand le canal est
 vide, et le restaure lorsqu'un usager entre dans le canal.
  
 Syntaxe:

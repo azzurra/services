@@ -1,5 +1,5 @@
 *** ChanServ Help - Comando: SET PROTECT ***
-La opciòn PROTECT sirve para que en el canal especificado los usuarios
+La opciÃ²n PROTECT sirve para que en el canal especificado los usuarios
 registrados en las listas AOP/SOP/CF reciban automaticamente el OP en
 caso de que alguien se lo quite.
  
@@ -10,5 +10,5 @@ Ejemplos:
 /cs SET #Italia PROTECT ON
 /cs SET #IRCHelp PROTECT OFF
  
-Para mas informaciòn, digita /join #IRCHelp
+Para mas informaciÃ²n, digita /join #IRCHelp
 *** Fin del Help ***

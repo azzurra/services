@@ -165,7 +165,7 @@ static ServiceCommand	operserv_commands_M[] = {
 	{ "MUNBAN",		ULEVEL_SA,				0, handle_masscmds },
 	{ "MVOICE",		ULEVEL_SA,				0, do_mass_op_voice },
 	{ "MKILL",		ULEVEL_SA,				0, do_masskill },
-	{ "MHALFOP",		ULEVEL_SA,				0, do_mass_op_voice },
+	{ "MHALFOP",	ULEVEL_SA,				0, do_mass_op_voice },
 	{ "MDEHALFOP",	ULEVEL_SA,				0, handle_masscmds },
 	{ NULL,			0,						0, NULL }
 };
@@ -188,7 +188,7 @@ static ServiceCommand	operserv_commands_R[] = {
 static ServiceCommand	operserv_commands_S[] = {
 	{ "STATS",		ULEVEL_OPER,			0, do_stats },
 	{ "SETTINGS",	ULEVEL_SA,				0, do_settings },
-	{ "SPAM",		ULEVEL_SA,		0, handle_spam },
+	{ "SPAM",		ULEVEL_SA,				0, handle_spam },
 	{ "SQLINE",		ULEVEL_SA,				0, handle_sxline },
 	{ "SGLINE",		ULEVEL_SA,				0, handle_sxline },
 	{ NULL,			0,						0, NULL }
@@ -824,8 +824,8 @@ static void do_settings(CSTR source, User *callerUser, ServiceCommandData *data)
 	send_notice_to_user(s_OperServ, callerUser, "Nick Release Timeout: \2%ds\2 - ChanServ/NickServ Register Delay: \2%ds\2 - Chan Inhabit: \2%ds\2",
 		CONF_RELEASE_TIMEOUT, CONF_REGISTER_DELAY, CONF_CHANNEL_INHABIT);
 
-	send_notice_to_user(s_OperServ, callerUser, "Expiry Times: Nicks: \2%d\2 - Chans: \2%d\2 - Memos: \2%d\2",
-		CONF_NICK_EXPIRE, CONF_CHANNEL_EXPIRE, CONF_MEMO_EXPIRE);
+	send_notice_to_user(s_OperServ, callerUser, "Expiry Times: Nicks: \2%d\2 - Chans: \2%d\2 - Memos: \2%d\2 - Stats: \2%d\2 - Seens: \2%d\2",
+		CONF_NICK_EXPIRE, CONF_CHANNEL_EXPIRE, CONF_MEMO_EXPIRE, CONF_STATS_EXPIRE, CONF_SEEN_EXPIRE);
 
 	if (CONF_SEND_REMINDER == 0) {
 
@@ -1473,7 +1473,7 @@ static void do_masskill(CSTR source, User *callerUser, ServiceCommandData *data)
 			return;
 		}
 
-		if (user_is_services_client(targetUser) || str_match_wild_nocase("*azzurra.org", targetUser->host)) {
+		if (user_is_services_client(targetUser) || str_equals_nocase("azzurra.chat", targetUser->host) || str_match_wild_nocase("*.azzurra.chat", targetUser->host)) {
 
 			if (data->operMatch) {
 
@@ -1619,11 +1619,9 @@ static void do_masskill(CSTR source, User *callerUser, ServiceCommandData *data)
 	else {
 
 		char defreason[16];
-		int i, count = 0, x = 0, check = 0, valid = 0;
+		int i, count = 0, x = 0, check = 0;
 		float percent;
 		User *matches[512];
-		unsigned char c;
-		char *ptr;
 
 		TRACE_MAIN();
 
@@ -1644,37 +1642,6 @@ static void do_masskill(CSTR source, User *callerUser, ServiceCommandData *data)
 			return;
 		}
 
-		ptr = target;
-
-		while (*ptr) {
-
-			c = *(ptr++);
-
-			if (!strchr("*.?!@", c))
-				++valid;
-		}
-
-		if (valid < 4) {
-
-			if (data->operMatch) {
-
-				send_globops(s_OperServ, "\2%s\2 tried to masskill \2%s\2", source, target);
-
-				LOG_SNOOP(s_OperServ, "OS *Mk %s -- by %s (%s@%s) [Lamer]", target, callerUser->nick, callerUser->username, callerUser->host);
-				log_services(LOG_SERVICES_OPERSERV, "*Mk %s -- by %s (%s@%s) [Lamer]", target, callerUser->nick, callerUser->username, callerUser->host);
-			}
-			else {
-
-				send_globops(s_OperServ, "\2%s\2 (through \2%s\2) tried to masskill \2%s\2", source, data->operName, target);
-
-				LOG_SNOOP(s_OperServ, "OS *Mk %s -- by %s (%s@%s) through %s [Lamer]", target, callerUser->nick, callerUser->username, callerUser->host, data->operName);
-				log_services(LOG_SERVICES_OPERSERV, "*Mk %s -- by %s (%s@%s) through %s [Lamer]", target, callerUser->nick, callerUser->username, callerUser->host, data->operName);
-			}
-
-			send_notice_to_user(s_OperServ, callerUser, "Hrmmm, target would your admin think of that?");
-			return;
-		}
-
 		for (i = 0; i < 512; ++i)
 			matches[i] = NULL;
 
@@ -1686,8 +1653,8 @@ static void do_masskill(CSTR source, User *callerUser, ServiceCommandData *data)
 
 					matches[x] = user;
 
-					if (user_is_services_client(user) || user_is_services_agent(user) ||
-						user_is_ircop(user) || str_match_wild_nocase("*azzurra.org", user->host)) {
+					if (user_is_services_client(user) || user_is_services_agent(user) || user_is_ircop(user) ||
+						str_equals_nocase("azzurra.chat", user->host) || str_match_wild_nocase("*.azzurra.chat", user->host)) {
 
 						check = 1;
 						break;

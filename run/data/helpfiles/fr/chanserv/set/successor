@@ -1,13 +1,13 @@
 *** ChanServ Help - Commande: SET SUCCESSOR ***
 Permet de configurer le successeur d'un canal. Si le nick du
-propriétaire du canal expire ou est effacé, le canal sera géré
-par le successeur, qui deviendra le nouveau propriétaire.
-Le successeur doit être un des Co-Founders du canal.
+propriÃ©taire du canal expire ou est effacÃ©, le canal sera gÃ©rÃ©
+par le successeur, qui deviendra le nouveau propriÃ©taire.
+Le successeur doit Ãªtre un des Co-Founders du canal.
  
-Pour effacer le successeur il faut spécifier NONE comme nick.
+Pour effacer le successeur il faut spÃ©cifier NONE comme nick.
  
-Important: Si un canal n'a pas de successeurs et le nick du propriétaire
-expire ou est effacé, le canal sera effacé tout de suite et on pourra
+Important: Si un canal n'a pas de successeurs et le nick du propriÃ©taire
+expire ou est effacÃ©, le canal sera effacÃ© tout de suite et on pourra
 l'enregistrer de nouveau.
  
 Syntaxe:

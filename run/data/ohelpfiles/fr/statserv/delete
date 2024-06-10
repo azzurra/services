@@ -1,0 +1,7 @@
+*** StatServ Operator Help - Command: DELETE ***
+Deletes a channel from the database.
+N.B.: You may not delete open channels.
+ 
+Syntax: DELETE #channel
+ 
+*** End of OHelp ***

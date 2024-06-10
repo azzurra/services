@@ -627,6 +627,8 @@ void expire_nicks() {
 	TRACE();
 	if (CONF_DISPLAY_UPDATES)
 		send_globops(NULL, "Completed Nick Expire (\2%d\2/\2%d\2/\2%d\2)", xcount, rcount, count);
+	else
+		LOG_SNOOP(s_OperServ, "Completed Nick Expire (\2%d\2/\2%d\2/\2%d\2)", xcount, rcount, count);
 }
 
 /*********************************************************/
@@ -692,7 +694,9 @@ void nickserv_daily_expire() {
 
 	TRACE();
 	if (CONF_DISPLAY_UPDATES)
-		send_globops(s_NickServ, "Completed Nick Daily Expire (\2%d\2/\2%d\2)", xcount, count);
+		send_globops(NULL, "Completed Nick Daily Expire (\2%d\2/\2%d\2)", xcount, count);
+	else
+		LOG_SNOOP(s_OperServ, "Completed Nick Daily Expire (\2%d\2/\2%d\2)", xcount, count);
 }
 
 
@@ -1747,31 +1751,35 @@ static void do_identify(CSTR source, User *callerUser, ServiceCommandData *data)
 					modebuf[modeIdx++] = 'h';
 					AddFlag(callerUser->mode, UMODE_h);
 				}
+				str_copy_checked(lang_msg(GetCallerLang(), NS_IDENTIFY_SOURCE_IS_HELPOP), accessLevel, sizeof(accessLevel));
 
 				if (sameNick && FlagUnset(callerUser->mode, UMODE_r)) {
 
 					modebuf[modeIdx++] = 'r';
 					AddFlag(callerUser->mode, UMODE_r);
 				}
-
-				str_copy_checked(lang_msg(GetCallerLang(), NS_IDENTIFY_SOURCE_IS_HELPOP), accessLevel, sizeof(accessLevel));
 				break;
 
 			case ULEVEL_SOP:
+				if (isOper)
+					str_copy_checked(lang_msg(GetCallerLang(), NS_IDENTIFY_SOURCE_IS_SOP), accessLevel, sizeof(accessLevel));
+
 				if (sameNick && FlagUnset(callerUser->mode, UMODE_r)) {
 
 					modebuf[modeIdx++] = 'r';
 					AddFlag(callerUser->mode, UMODE_r);
 				}
-
-				str_copy_checked(lang_msg(GetCallerLang(), NS_IDENTIFY_SOURCE_IS_SOP), accessLevel, sizeof(accessLevel));
 				break;
 
 			case ULEVEL_SA:
-				if (isOper && FlagUnset(callerUser->mode, UMODE_a)) {
+				if (isOper) {
 
-					modebuf[modeIdx++] = 'a';
-					AddFlag(callerUser->mode, UMODE_a);
+					if (FlagUnset(callerUser->mode, UMODE_a)) {
+
+						modebuf[modeIdx++] = 'a';
+						AddFlag(callerUser->mode, UMODE_a);
+					}
+					str_copy_checked(lang_msg(GetCallerLang(), NS_IDENTIFY_SOURCE_IS_ADMIN), accessLevel, sizeof(accessLevel));
 				}
 
 				if (sameNick && FlagUnset(callerUser->mode, UMODE_r)) {
@@ -1779,15 +1787,17 @@ static void do_identify(CSTR source, User *callerUser, ServiceCommandData *data)
 					modebuf[modeIdx++] = 'r';
 					AddFlag(callerUser->mode, UMODE_r);
 				}
-
-				str_copy_checked(lang_msg(GetCallerLang(), NS_IDENTIFY_SOURCE_IS_ADMIN), accessLevel, sizeof(accessLevel));
 				break;
 
 			case ULEVEL_SRA:
-				if (isOper && FlagUnset(callerUser->mode, UMODE_a)) {
+				if (isOper) {
 
-					modebuf[modeIdx++] = 'a';
-					AddFlag(callerUser->mode, UMODE_a);
+					if (FlagUnset(callerUser->mode, UMODE_a)) {
+
+						modebuf[modeIdx++] = 'a';
+						AddFlag(callerUser->mode, UMODE_a);
+					}
+					str_copy_checked(lang_msg(GetCallerLang(), NS_IDENTIFY_SOURCE_IS_ROOT), accessLevel, sizeof(accessLevel));
 				}
 
 				if (sameNick && FlagUnset(callerUser->mode, UMODE_r)) {
@@ -1795,15 +1805,24 @@ static void do_identify(CSTR source, User *callerUser, ServiceCommandData *data)
 					modebuf[modeIdx++] = 'r';
 					AddFlag(callerUser->mode, UMODE_r);
 				}
-
-				str_copy_checked(lang_msg(GetCallerLang(), NS_IDENTIFY_SOURCE_IS_ROOT), accessLevel, sizeof(accessLevel));
 				break;
 
 			case ULEVEL_CODER:
-				if (isOper && FlagUnset(callerUser->mode, UMODE_a)) {
+				if (isOper) {
 
-					modebuf[modeIdx++] = 'a';
-					AddFlag(callerUser->mode, UMODE_a);
+					if (FlagUnset(callerUser->mode, UMODE_a)) {
+
+						modebuf[modeIdx++] = 'a';
+						AddFlag(callerUser->mode, UMODE_a);
+					}
+					str_copy_checked(lang_msg(GetCallerLang(), NS_IDENTIFY_SOURCE_IS_CODER), accessLevel, sizeof(accessLevel));
+				}
+
+				if (FlagUnset(callerUser->mode, UMODE_o) && str_char_toupper(data->commandName[0]) == 'S') {
+
+					modebuf[modeIdx++] = 'o';
+					AddFlag(callerUser->mode, UMODE_o);
+					str_copy_checked(s_STAR, accessLevel, sizeof(accessLevel));
 				}
 
 				if (sameNick && FlagUnset(callerUser->mode, UMODE_r)) {
@@ -1811,15 +1830,17 @@ static void do_identify(CSTR source, User *callerUser, ServiceCommandData *data)
 					modebuf[modeIdx++] = 'r';
 					AddFlag(callerUser->mode, UMODE_r);
 				}
-
-				str_copy_checked(lang_msg(GetCallerLang(), NS_IDENTIFY_SOURCE_IS_CODER), accessLevel, sizeof(accessLevel));
 				break;
 
 			case ULEVEL_MASTER:
-				if (isOper && FlagUnset(callerUser->mode, UMODE_a)) {
+				if (isOper) {
 
-					modebuf[modeIdx++] = 'a';
-					AddFlag(callerUser->mode, UMODE_a);
+					if (FlagUnset(callerUser->mode, UMODE_a)) {
+
+						modebuf[modeIdx++] = 'a';
+						AddFlag(callerUser->mode, UMODE_a);
+					}
+					str_copy_checked(lang_msg(GetCallerLang(), NS_IDENTIFY_SOURCE_IS_MASTER), accessLevel, sizeof(accessLevel));
 				}
 
 				if (sameNick && FlagUnset(callerUser->mode, UMODE_r)) {
@@ -1827,8 +1848,6 @@ static void do_identify(CSTR source, User *callerUser, ServiceCommandData *data)
 					modebuf[modeIdx++] = 'r';
 					AddFlag(callerUser->mode, UMODE_r);
 				}
-
-				str_copy_checked(lang_msg(GetCallerLang(), NS_IDENTIFY_SOURCE_IS_MASTER), accessLevel, sizeof(accessLevel));
 				break;
 
 			default:
@@ -1837,7 +1856,7 @@ static void do_identify(CSTR source, User *callerUser, ServiceCommandData *data)
 		}
 
 		if (CONF_SET_EXTRASNOOP)
-			LOG_SNOOP(s_OperServ, "NS I %s -- by %s (%s@%s) [%s]", nick, source, callerUser->username, callerUser->host, user_is_ircop(callerUser) ? "OPER-HIDDEN" : pass);
+			LOG_SNOOP(s_OperServ, "NS I %s -- by %s (%s@%s)", nick, source, callerUser->username, callerUser->host);
 
 		log_services(LOG_SERVICES_NICKSERV_ID, "I %s -- by %s (%s@%s) [%s]", nick, source, callerUser->username, callerUser->host, pass);
 
@@ -2138,10 +2157,7 @@ static void do_set_password(User *callerUser, CSTR param) {
 
 					TRACE_MAIN();
 
-					if (CONF_SET_EXTRASNOOP && !user_is_ircop(callerUser))
-						LOG_SNOOP(s_OperServ, "NS P %s -- by %s (%s@%s) [%s -> %s]", callerUser->ni->nick, callerUser->nick, callerUser->username, callerUser->host, callerUser->ni->pass, newpass);
-					else
-						LOG_SNOOP(s_OperServ, "NS P %s -- by %s (%s@%s) [Logged]", callerUser->ni->nick, callerUser->nick, callerUser->username, callerUser->host);
+					LOG_SNOOP(s_OperServ, "NS P %s -- by %s (%s@%s)", callerUser->ni->nick, callerUser->nick, callerUser->username, callerUser->host);
 
 					log_services(LOG_SERVICES_NICKSERV_GENERAL, "P %s -- by %s (%s@%s) [%s -> %s]", callerUser->ni->nick, callerUser->nick, callerUser->username, callerUser->host, callerUser->ni->pass, newpass);
 
@@ -3264,7 +3280,7 @@ static void do_recover(CSTR source, User *callerUser, ServiceCommandData *data) 
 //		send_SVSNICK(source, ni->nick);
 
 		if (CONF_SET_EXTRASNOOP)
-			LOG_SNOOP(s_OperServ, "NS Rc %s -- by %s (%s@%s) [%s]", ni->nick, source, callerUser->username, callerUser->host, pass);
+			LOG_SNOOP(s_OperServ, "NS Rc %s -- by %s (%s@%s)", ni->nick, source, callerUser->username, callerUser->host);
 
 		log_services(LOG_SERVICES_NICKSERV_GENERAL, "Rc %s -- by %s (%s@%s) [%s]", ni->nick, source, callerUser->username, callerUser->host, pass);
 	}
@@ -3275,7 +3291,7 @@ static void do_recover(CSTR source, User *callerUser, ServiceCommandData *data) 
 
 		TRACE_MAIN();
 		if (CONF_SET_EXTRASNOOP)
-			LOG_SNOOP(s_OperServ, "NS *Rc %s -- by %s (%s@%s) [%s]", ni->nick, source, callerUser->username, callerUser->host, pass);
+			LOG_SNOOP(s_OperServ, "NS *Rc %s -- by %s (%s@%s) [%s]", ni->nick, source, callerUser->username, callerUser->host, user_is_ircop(callerUser) ? "OPER-HIDDEN" : pass);
 
 		log_services(LOG_SERVICES_NICKSERV_GENERAL, "*Rc %s -- by %s (%s@%s) [%s]", ni->nick, source, callerUser->username, callerUser->host, pass);
 
@@ -3327,7 +3343,7 @@ static void do_release(CSTR source, User *callerUser, ServiceCommandData *data) 
 		send_notice_lang_to_user(s_NickServ, callerUser, GetCallerLang(), NS_RELEASE_NICK_RELEASED, ni->nick);
 
 		if (CONF_SET_EXTRASNOOP)
-			LOG_SNOOP(s_OperServ, "NS Re %s -- by %s (%s@%s) [%s]", ni->nick, source, callerUser->username, callerUser->host, pass);
+			LOG_SNOOP(s_OperServ, "NS Re %s -- by %s (%s@%s)", ni->nick, source, callerUser->username, callerUser->host);
 
 		log_services(LOG_SERVICES_NICKSERV_GENERAL, "Re %s -- by %s (%s@%s) [%s]", ni->nick, source, callerUser->username, callerUser->host, pass);
 	}
@@ -3338,7 +3354,7 @@ static void do_release(CSTR source, User *callerUser, ServiceCommandData *data) 
 
 		TRACE_MAIN();
 		if (CONF_SET_EXTRASNOOP)
-			LOG_SNOOP(s_OperServ, "NS *Re %s -- by %s (%s@%s) [%s]", ni->nick, source, callerUser->username, callerUser->host, pass);
+			LOG_SNOOP(s_OperServ, "NS *Re %s -- by %s (%s@%s) [%s]", ni->nick, source, callerUser->username, callerUser->host, user_is_ircop(callerUser) ? "OPER-HIDDEN" : pass);
 
 		log_services(LOG_SERVICES_NICKSERV_GENERAL, "*Re %s -- by %s (%s@%s) [%s]", ni->nick, source, callerUser->username, callerUser->host, pass);
 
@@ -3407,7 +3423,7 @@ static void do_ghost(CSTR source, User *callerUser, ServiceCommandData *data) {
 		send_notice_lang_to_user(s_NickServ, callerUser, GetCallerLang(), NS_GHOST_NICK_GHOSTED);
 
 		if (CONF_SET_EXTRASNOOP)
-			LOG_SNOOP(s_OperServ, "NS K %s -- by %s (%s@%s) [%s]", ni->nick, source, callerUser->username, callerUser->host, pass);
+			LOG_SNOOP(s_OperServ, "NS K %s -- by %s (%s@%s)", ni->nick, source, callerUser->username, callerUser->host);
 
 		log_services(LOG_SERVICES_NICKSERV_GENERAL, "K %s -- by %s (%s@%s) [%s]", ni->nick, source, callerUser->username, callerUser->host, pass);
 	}
@@ -4910,8 +4926,7 @@ static void do_listchans(CSTR source, User *callerUser, ServiceCommandData *data
 /*********************************************************/
 
 /*
-NS LISTREG [TYPE [FIRST [LAST]]] pattern
-NS LISTREG TYPE [pattern] [FIRST [LAST]]
+NS LISTREG type pattern [page_number]
 
 TYPE:
 - NICK : nick	N
@@ -5018,211 +5033,131 @@ static BOOL ns_listreg_match_is_frozen(const NickInfo *ni, CSTR pattern) {
 
 static void do_listreg(CSTR source, User *callerUser, ServiceCommandData *data) {
 
-	ns_listreg_match_proc	compare = NULL;
-	NickInfo			*ni;
-	char				*prms[4] = {NULL, NULL, NULL, NULL};
-	char				*type	= NULL;
-	char				*start	= NULL;
-	char				*end	= NULL;
-	char				*search	= NULL;
-	unsigned long int	start_line, end_line, line, idx = 0;
-	BOOL				error = FALSE;
+	NickInfo				*ni;
+	ns_listreg_match_proc	compare;
+	char					*type, *search, *page;
+	int						i;
+	unsigned long int		start_line, end_line, line;
 
 	#define	LR_OUT_STANDARD		0
 	#define	LR_OUT_REALNAME		1
 	#define	LR_OUT_EMAIL		2
-	int					output_type = LR_OUT_STANDARD;
+	int						output_type = LR_OUT_STANDARD;
 
 	TRACE_MAIN_FCLT(FACILITY_NICKSERV_HANDLE_LISTREG);
 
-	while ((idx < 4) && IS_NOT_NULL((prms[idx] = strtok(NULL, s_SPACE))))
-		++idx;
-
-	if (idx < 1)
-		error = TRUE;
-
-	else {
-
-		type = prms[0];
-
-		TRACE_MAIN();
-		/* Tipo */
-
-		if (str_equals_nocase(type, "NICK") || str_equals_nocase(type, "N")) {
-
-			compare = ns_listreg_match_nick;
-			search = prms[1];
-			start = prms[2];
-			end = prms[3];
-
-			if (IS_NOT_NULL(search)) {
-
-				send_notice_lang_to_user(s_NickServ, callerUser, GetCallerLang(), CSNS_LISTREG_LIST_HEADER, "by Nickname: ", search);
-				str_tolower(search);
-			}
-		}
-		else if (str_equals_nocase(type, "MASK") || str_equals_nocase(type, "M")) {
-
-			compare = ns_listreg_match_seenmask;
-			search = prms[1];
-			start = prms[2];
-			end = prms[3];
-
-			if (IS_NOT_NULL(search)) {
-
-				send_notice_lang_to_user(s_NickServ, callerUser, GetCallerLang(), CSNS_LISTREG_LIST_HEADER, "by Mask: ", search);
-				str_tolower(search);
-			}
-		}
-		else if (str_equals_nocase(type, "REALNAME") || str_equals_nocase(type, "RN")) {
-
-			compare = ns_listreg_match_realname;
-			search = prms[1];
-			start = prms[2];
-			end = prms[3];
-			output_type = LR_OUT_REALNAME;
-
-			if (IS_NOT_NULL(search)) {
-
-				send_notice_lang_to_user(s_NickServ, callerUser, GetCallerLang(), CSNS_LISTREG_LIST_HEADER, "by Real Name: ", search);
-				str_tolower(search);
-			}
-		}
-		else if (str_equals_nocase(type, "EMAIL") || str_equals_nocase(type, "E")) {
-
-			compare = ns_listreg_match_email;
-			search = prms[1];
-			start = prms[2];
-			end = prms[3];
-			output_type = LR_OUT_EMAIL;
-
-			if (IS_NOT_NULL(search)) {
-
-				send_notice_lang_to_user(s_NickServ, callerUser, GetCallerLang(), CSNS_LISTREG_LIST_HEADER, "by E-Mail Address: ", search);
-				str_tolower(search);
-			}
-		}
-		else if (str_equals_nocase(type, "NOEMAIL") || str_equals_nocase(type, "NE")) {
-
-			compare = ns_listreg_match_noemail;
-			search = (STR)s_STAR;
-			start = prms[1];
-			end = prms[2];
-
-			send_notice_lang_to_user(s_NickServ, callerUser, GetCallerLang(), CSNS_LISTREG_LIST_HEADER, "\2without\2 E-Mail Address: ", search);
-		}
-		else if (str_equals_nocase(type, "BUGGED") || str_equals_nocase(type, "B")) {
-
-			compare = ns_listreg_match_bugged;
-			search = (STR)s_STAR;
-			start = prms[1];
-			end = prms[2];
-
-			send_notice_lang_to_user(s_NickServ, callerUser, GetCallerLang(), CSNS_LISTREG_LIST_HEADER, "by Bugged Registration: ", search);
-		}
-		else if (str_equals_nocase(type, "NOTAUTH") || str_equals_nocase(type, "NA")) {
-
-			compare = ns_listreg_match_is_not_auth;
-			search = (STR)s_STAR;
-			start = prms[1];
-			end = prms[2];
-
-			send_notice_lang_to_user(s_NickServ, callerUser, GetCallerLang(), CSNS_LISTREG_LIST_HEADER, "\2without\2 authorization: ", s_NULL);
-		}
-		else if (str_equals_nocase(type, "INAUTH") || str_equals_nocase(type, "IA")) {
-
-			compare = ns_listreg_match_is_in_auth;
-			search = (STR)s_STAR;
-			start = prms[1];
-			end = prms[2];
-
-			send_notice_lang_to_user(s_NickServ, callerUser, GetCallerLang(), CSNS_LISTREG_LIST_HEADER, "\2waiting for\2 authorization: ", s_NULL);
-		}
-		else if (str_equals_nocase(type, "HOLD") || str_equals_nocase(type, "H")) {
-
-			compare = ns_listreg_match_is_held;
-			search = (STR)s_STAR;
-			start = prms[1];
-			end = prms[2];
-
-			send_notice_lang_to_user(s_NickServ, callerUser, GetCallerLang(), CSNS_LISTREG_LIST_HEADER, "by HELD flag: ", s_NULL);
-		}
-		else if (str_equals_nocase(type, "MARK") || str_equals_nocase(type, "K")) {
-
-			compare = ns_listreg_match_is_marked;
-			search = (STR)s_STAR;
-			start = prms[1];
-			end = prms[2];
-
-			send_notice_lang_to_user(s_NickServ, callerUser, GetCallerLang(), CSNS_LISTREG_LIST_HEADER, "by MARK flag: ", s_NULL);
-		}
-		else if (str_equals_nocase(type, "FORBID") || str_equals_nocase(type, "F")) {
-
-			compare = ns_listreg_match_is_forbidded;
-			search = (STR)s_STAR;
-			start = prms[1];
-			end = prms[2];
-
-			send_notice_lang_to_user(s_NickServ, callerUser, GetCallerLang(), CSNS_LISTREG_LIST_HEADER, "by FORBID flag: ", s_NULL);
-		}
-		else if (str_equals_nocase(type, "FREEZE") || str_equals_nocase(type, "Z")) {
-
-			compare = ns_listreg_match_is_frozen;
-			search = (STR)s_STAR;
-			start = prms[1];
-			end = prms[2];
-
-			send_notice_lang_to_user(s_NickServ, callerUser, GetCallerLang(), CSNS_LISTREG_LIST_HEADER, "by FREEZE flag: ", s_NULL);
-		}
-		else
-			error = TRUE;
-	}
-
-	/* Convalida parametri */
-	TRACE_MAIN();
-
-	error |= IS_NULL(search);
-
-	if (error) {
+	if (IS_NULL(type = strtok(NULL, " ")) || IS_NULL(search = strtok(NULL, " "))) {
 
 		send_notice_lang_to_user(s_NickServ, callerUser, GetCallerLang(), NS_LISTREG_SYNTAX_ERROR);
 		send_notice_lang_to_user(s_NickServ, callerUser, GetCallerLang(), OPER_GET_MORE_INFO_ON_COMMAND, s_NS, "LISTREG");
 		return;
 	}
 
-	if (IS_NULL(start))
-		start = "0";
+	TRACE_MAIN();
 
-	if (IS_NULL(end))
-		end = "+50";
+	if (str_equals_nocase(type, "NICK") || str_equals_nocase(type, "N")) {
+
+		compare = ns_listreg_match_nick;
+		send_notice_lang_to_user(s_NickServ, callerUser, GetCallerLang(), CSNS_LISTREG_LIST_HEADER, "by Nickname: ", search);
+	}
+	else if (str_equals_nocase(type, "MASK") || str_equals_nocase(type, "M")) {
+
+		compare = ns_listreg_match_seenmask;
+		send_notice_lang_to_user(s_NickServ, callerUser, GetCallerLang(), CSNS_LISTREG_LIST_HEADER, "by Mask: ", search);
+	}
+	else if (str_equals_nocase(type, "REALNAME") || str_equals_nocase(type, "RN")) {
+
+		compare = ns_listreg_match_realname;
+		output_type = LR_OUT_REALNAME;
+		send_notice_lang_to_user(s_NickServ, callerUser, GetCallerLang(), CSNS_LISTREG_LIST_HEADER, "by Real Name: ", search);
+	}
+	else if (str_equals_nocase(type, "EMAIL") || str_equals_nocase(type, "E")) {
+
+		compare = ns_listreg_match_email;
+		output_type = LR_OUT_EMAIL;
+		send_notice_lang_to_user(s_NickServ, callerUser, GetCallerLang(), CSNS_LISTREG_LIST_HEADER, "by E-Mail Address: ", search);
+	}
+	else if (str_equals_nocase(type, "NOEMAIL") || str_equals_nocase(type, "NE")) {
+
+		compare = ns_listreg_match_noemail;
+		send_notice_lang_to_user(s_NickServ, callerUser, GetCallerLang(), CSNS_LISTREG_LIST_HEADER, "\2without\2 E-Mail Address: ", search);
+	}
+	else if (str_equals_nocase(type, "BUGGED") || str_equals_nocase(type, "B")) {
+
+		compare = ns_listreg_match_bugged;
+		send_notice_lang_to_user(s_NickServ, callerUser, GetCallerLang(), CSNS_LISTREG_LIST_HEADER, "by Bugged Registration: ", search);
+	}
+	else if (str_equals_nocase(type, "NOTAUTH") || str_equals_nocase(type, "NA")) {
+
+		compare = ns_listreg_match_is_not_auth;
+		send_notice_lang_to_user(s_NickServ, callerUser, GetCallerLang(), CSNS_LISTREG_LIST_HEADER, "\2without\2 authorization: ", s_NULL);
+	}
+	else if (str_equals_nocase(type, "INAUTH") || str_equals_nocase(type, "IA")) {
+
+		compare = ns_listreg_match_is_in_auth;
+		send_notice_lang_to_user(s_NickServ, callerUser, GetCallerLang(), CSNS_LISTREG_LIST_HEADER, "\2waiting for\2 authorization: ", s_NULL);
+	}
+	else if (str_equals_nocase(type, "HOLD") || str_equals_nocase(type, "H")) {
+
+		compare = ns_listreg_match_is_held;
+		send_notice_lang_to_user(s_NickServ, callerUser, GetCallerLang(), CSNS_LISTREG_LIST_HEADER, "by HELD flag: ", s_NULL);
+	}
+	else if (str_equals_nocase(type, "MARK") || str_equals_nocase(type, "K")) {
+
+		compare = ns_listreg_match_is_marked;
+		send_notice_lang_to_user(s_NickServ, callerUser, GetCallerLang(), CSNS_LISTREG_LIST_HEADER, "by MARK flag: ", s_NULL);
+	}
+	else if (str_equals_nocase(type, "FORBID") || str_equals_nocase(type, "F")) {
+
+		compare = ns_listreg_match_is_forbidded;
+		send_notice_lang_to_user(s_NickServ, callerUser, GetCallerLang(), CSNS_LISTREG_LIST_HEADER, "by FORBID flag: ", s_NULL);
+	}
+	else if (str_equals_nocase(type, "FREEZE") || str_equals_nocase(type, "Z")) {
+
+		compare = ns_listreg_match_is_frozen;
+		send_notice_lang_to_user(s_NickServ, callerUser, GetCallerLang(), CSNS_LISTREG_LIST_HEADER, "by FREEZE flag: ", s_NULL);
+	}
+	else {
+
+		send_notice_lang_to_user(s_NickServ, callerUser, GetCallerLang(), NS_LISTREG_SYNTAX_ERROR);
+		send_notice_lang_to_user(s_NickServ, callerUser, GetCallerLang(), OPER_GET_MORE_INFO_ON_COMMAND, s_NS, "LISTREG");
+		return;
+	}
 
 	TRACE_MAIN();
-	
-	/* Intervallo */
-	start_line = strtoul(start, NULL, 10);
 
-	if (end[0] == c_PLUS)
-		end_line = start_line + strtoul(end + 1, NULL, 10);
+	if (IS_NOT_NULL(page = strtok(NULL, s_SPACE))) {
+
+		unsigned long int page_number = strtoul(page, NULL, 10);
+
+		if (page_number == 0) {
+
+			send_notice_lang_to_user(s_NickServ, callerUser, GetCallerLang(), NS_LISTREG_SYNTAX_ERROR);
+			send_notice_lang_to_user(s_NickServ, callerUser, GetCallerLang(), OPER_GET_MORE_INFO_ON_COMMAND, s_NS, "LISTREG");
+			return;
+		}
+
+		start_line = (page_number - 1) * 50;
+	}
 	else
-		end_line = strtoul(end, NULL, 10);
+		start_line = 0;
 
-	/* Ricerca */
+	end_line = start_line + 50;
 
-	if (end_line == 0)
-		end_line = start_line + 50;
+	str_tolower(search);
 
-	line = 0;
+	// ricerca
 
-	for (idx = 65; idx < 126; ++idx) {
+	for (line = i = 0; i < 256; ++i) {
 
-		for (ni = nicklists[idx]; IS_NOT_NULL(ni); ni = ni->next) {
+		for (ni = nicklists[i]; IS_NOT_NULL(ni); ni = ni->next) {
 
 			if (compare(ni, search)) {
 
 				TRACE_MAIN();
 				++line;
 
-				if ((line < start_line) || (line >= end_line))
+				if (line < start_line)
 					continue;
 
 				switch (output_type) {
@@ -5241,6 +5176,12 @@ static void do_listreg(CSTR source, User *callerUser, ServiceCommandData *data) 
 					case LR_OUT_EMAIL:
 						send_notice_to_user(s_NickServ, callerUser, "%d) \2%s\2 [%s] [E-Mail Address: %s]", line, ni->nick, ni->last_usermask, ni->email);
 						break;
+				}
+
+				if (line >= end_line) {
+
+					send_notice_lang_to_user(s_NickServ, callerUser, GetCallerLang(), END_OF_LIST);
+					return;
 				}
 			}
 		}

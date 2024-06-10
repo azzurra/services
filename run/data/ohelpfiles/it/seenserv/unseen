@@ -1,0 +1,7 @@
+*** SeenServ Operator Help - Command: UNSEEN ***
+Removes an entry from the database.
+N.B.: You may not delete an entry if the corresponding user is online.
+ 
+Syntax: UNSEEN nick
+ 
+*** End of OHelp ***

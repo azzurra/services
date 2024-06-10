@@ -1,9 +1,9 @@
 *** ChanServ Help - Commande: SET AUTOOP ***
 Quand l'option AUTOOP est active, ChanServ donnera automatiquement l'op
-à tous les usagers qui entreront dans le canal.
+Ã  tous les usagers qui entreront dans le canal.
  
-Important: L'op donné par AUTOOP est seulement temporaire, aucun nick
-ne sera ajouté ni supprimé de la liste AOP/SOP/CF.
+Important: L'op donnÃ© par AUTOOP est seulement temporaire, aucun nick
+ne sera ajoutÃ© ni supprimÃ© de la liste AOP/SOP/CF.
  
 Syntaxe:
 /cs SET #canal AUTOOP <ON|OFF>

@@ -1,7 +1,7 @@
 *** ChanServ Help - Commande: INVITE ***
-Demande à ChanServ de t'inviter dans le canal spécifié.
+Demande Ã  ChanServ de t'inviter dans le canal spÃ©cifiÃ©.
 C'est utile dans le cas des canaux +i, +l o +k, et s'il y a un ban sur toi.
-Il faut être au moins VOP pour pouvoir employer cette commande.
+Il faut Ãªtre au moins VOP pour pouvoir employer cette commande.
  
 Syntaxe:
 /cs INVITE #canal

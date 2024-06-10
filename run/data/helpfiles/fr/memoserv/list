@@ -1,9 +1,9 @@
 *** MemoServ Help - Commande: LIST ***
-Montre tous les mémos que tu as. Les mémos pas encore
-lus seront précédés par un "*", tandis que les mémos 
-marqués comme "à effacer" seront précédés par un "D".
-En spécifiant l'option NEW, seulement les nouveaux 
-mémos (pas encore lus) seront montrés.
+Montre tous les mÃ©mos que tu as. Les mÃ©mos pas encore
+lus seront prÃ©cÃ©dÃ©s par un "*", tandis que les mÃ©mos 
+marquÃ©s comme "Ã  effacer" seront prÃ©cÃ©dÃ©s par un "D".
+En spÃ©cifiant l'option NEW, seulement les nouveaux 
+mÃ©mos (pas encore lus) seront montrÃ©s.
  
 Syntaxe:
 /ms LIST [NEW]

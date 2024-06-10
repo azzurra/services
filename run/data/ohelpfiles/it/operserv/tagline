@@ -12,5 +12,5 @@ Syntax: TAGLINE ADD|DEL text
 LIST shows all current taglines, or only those matching a pattern
 if one is given. By default only the first 30 entries will be listed.
  
-This command is limited to Services Administrators.
+This command is limited to Services Operators.
 *** End of OHelp ***

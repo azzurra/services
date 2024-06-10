@@ -13,27 +13,27 @@ Syntax:
 /cs SOP #channel LOCK [nick|mask]
 /cs SOP #channel UNLOCK [nick|mask]
  
-The SOP ADD command adds the given nickname to the Super-Op list. If the nick or
+ADD adds the given nickname to the Super-Op list. If the nick or
 mask is already present on the list, its access level is changed to the SOP level.
  
-The SOP DEL command removes the given nick or mask from the Super-Op list.
+DEL removes the given nick or mask from the Super-Op list.
  
-The SOP LIST command displays the current Super-Op list; if a mask is given,
+LIST displays the current Super-Op list; if a mask is given,
 only those entries matching the mask are displayed.
  
-The AOP FIND command search the entries matching the given mask (in the nick!user@host format)
+FIND search the entries matching the given mask (in the nick!user@host format)
  
-The SOP CLEAN command removes all the expired nicks from the Super-Op list.
+CLEAN removes all the expired nicks from the Super-Op list.
  
-The SOP EXPLIST command displays all the expired nicks in the Super-Op list.
+EXPLIST displays all the expired nicks in the Super-Op list.
  
-The SOP WIPE command removes all nicks and masks from the Super-Op list.
+WIPE removes all nicks and masks from the Super-Op list.
  
-The SOP LOCK command locks the Super-Op list. Only the founder will be able
+LOCK locks the Super-Op list. Only the founder will be able
 to maintain it if it's locked. If a single entry is specified, only that one
 will be locked.
  
-The SOP UNLOCK command unlocks the Super-Op list if it was previously locked.
+UNLOCK unlocks the Super-Op list if it was previously locked.
 If a single entry is specified, only that one will be unlocked.
  
 Examples:

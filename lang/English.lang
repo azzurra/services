@@ -1,7 +1,7 @@
 BOTTLER_AKILL_REASON
-	Bottler is not welcome on this network. Please remove any *.azzurra.org servers from your list. Load a REAL client if you want to stay here.
+	Bottler is not welcome on this network. Please remove any *.azzurra.chat servers from your list. Load a REAL client if you want to stay here.
 CLONES_AKILL_REASON
-	Too many clones from this host. This AutoKill will be automatically removed in %d minutes. Please visit http://kline.azzurra.org/ for more information.
+	Too many clones from this host. This AutoKill will be automatically removed in %d minutes. Please visit http://www.azzurra.chat/ for more information.
 CSNS_EMAIL_TEXT_ABUSE
 	If you did not request this E-Mail to be sent, please ignore it and report it to %s
 	%s IRC Network
@@ -325,9 +325,9 @@ CS_LEVEL_SOPONLY_KICK_REASON
 CS_LEVEL_SRAONLY_KICK_REASON
 	Only Services Roots are allowed to use this channel.
 CS_LEVEL_SYNTAX_ERROR
-	Syntax: LEVEL #channel [OPERS|SOP|SA|SRA|MASTERS|NONE]
+	Syntax: LEVEL #channel [SOP|SA|SRA|CODER|NONE]
 CS_LISTREG_SYNTAX_ERROR
-	Syntax: LISTREG LIST|COUNT|MAIL type pattern
+	Syntax: LISTREG N|D|T|U|NU|R|DR|H|K|F|Z|C pattern [page_number]
 CS_MKICK_SYNTAX_ERROR
 	Syntax: MKICK #channel [reason]
 CS_MODE_COMPLETE
@@ -931,7 +931,7 @@ GET_SERVICE_COMMAND_LIST
 GET_SERVICE_COMMAND_LIST_MSG
 	Type /msg %s HELP for a listing of available commands.
 IDENT_AKILL_REASON
-	Due to repeated spam from this Internet Service Provider, all its users are now required to enable ident. Please visit http://kline.azzurra.org for more information.
+	Due to repeated spam from this Internet Service Provider, all its users are now required to enable ident. Please visit http://www.azzurra.chat for more information.
 INFO_CURRENT_TIME
 	Time now: %s
 INVALID_PASSWORD_FIRST_WARNING
@@ -943,7 +943,7 @@ JOIN_CHAN_IS_REGISTERED
 LANG_LIST_HEADER
 	Available languages list:
 MIRCWORM_AKILL_REASON
-	Your copy of mIRC is infected with a worm that loads up clones to spam other users. Delete ad reinstall your copy of mIRC before reconnecting. Please visit http://kline.azzurra.org for more information.
+	Your copy of mIRC is infected with a worm that loads up clones to spam other users. Delete ad reinstall your copy of mIRC before reconnecting. Please visit http://www.azzurra.chat for more information.
 MS_DEL_ALL_MEMOS_MARKED_DEL
 	All requested memos have been marked as deleted.
 MS_DEL_ERROR_MEMO_ALREADY_DEL
@@ -1458,7 +1458,7 @@ NS_LISTCHANS_LIST_ENTRIES
 NS_LISTCHANS_LIST_HEADER
 	Nickname %s has access to the following channels:
 NS_LISTREG_SYNTAX_ERROR
-	Syntax: LISTREG pattern N|M|RN|E|NA|IA|H|K|F|Z [start] [end]
+	Syntax: LISTREG N|M|RN|E|NA|IA|H|K|F|Z pattern [page_number]
 NS_NICK_EXPIRE
 	Note: Nicknames will expire after %d days of inactivity.
 NS_RECOVER_ERROR_CANT_RECOVER_SELF
@@ -1478,33 +1478,33 @@ NS_REGISTER_EMAIL_TEXT_1
 	
 NS_REGISTER_EMAIL_TEXT_2
 	Registration will then be complete and your nickname will be safe.
-	Our official website can be found at http://www.azzurra.org/
+	Our official website can be found at http://www.azzurra.chat/
 	
 NS_REGISTER_EMAIL_TEXT_3
 	Network rules and official documents are at your disposal
-	here: http://www.azzurra.org/netfiles.php
+	here: http://www.azzurra.chat/netfiles.php
 	
 NS_REGISTER_EMAIL_TEXT_4
 	Should you require assistance on IRC in general or on our services
 	in particular, feel free to ask for help in the official help channel, #IRCHelp.
-	Online help documents are also available at http://help.azzurra.org/
+	Online help documents are also available at http://www.azzurra.chat/
 	Furthermore we offer the following services:
 	
 NS_REGISTER_EMAIL_TEXT_5
 	- %s IRC Network Forum
-	  Official %s IRC Network discussion forum, online at http://www.azzurra.org/forum/
+	  Official %s IRC Network discussion forum, online at http://www.azzurra.chat/forum/
 	  If you want to let us know what you think about our network and services,
 	  or want to be up to date with the latest news, this is the place for you.
 	
 NS_REGISTER_EMAIL_TEXT_6
 	- %s Ticket Service 
 	  To request on-line support you may use the service
-	  offered by %s at http://ticket.azzurra.org
+	  offered by %s at http://www.azzurra.chat
 	  using your nick and your password to login.
 	
 NS_REGISTER_EMAIL_TEXT_7
 	For a faster and stabler connection to our network, we highly
-	recommend connecting to our round-robin: irc.azzurra.org
+	recommend connecting to our round-robin: irc.azzurra.chat
 	%s IRC Network
 NS_REGISTER_ERROR_NICK_ALREADY_REG
 	Nickname %s is already registered.
@@ -1842,10 +1842,72 @@ TIME_REPLY_WEEK
 TIME_REPLY_WEEKS
 	%d weeks
 TROJAN_AKILL_REASON
-	You match the pattern of a known trojan. Scan your computer with an up-to-date antivirus. Please visit http://kline.azzurra.org for more information.
+	You match the pattern of a known trojan. Scan your computer with an up-to-date antivirus. Please visit http://www.azzurra.chat for more information.
 WARNING_READONLY
 	Warning: Services is in read-only mode. Changes will not be saved!
 CS_EXPLIST_HEADER
 	Expired nicks in the %s list of %s:
 CS_SENDCODE_SYNTAX_ERROR
 	Syntax: SENDCODE #channel
+REPLY_TYPE_NICK
+	I saw %s connect %s ago.
+REPLY_TYPE_QUIT
+	I saw %s quit %s ago stating: %s
+REPLY_TYPE_NCTO_OPER
+	I saw %s change nick to %s %s ago.
+REPLY_TYPE_NCTO
+	I saw %s change nick %s ago.
+REPLY_TYPE_NCFR_OPER
+	%s was using the nick %s up to %s ago.
+REPLY_TYPE_NCFR
+	Missing: REPLY_TYPE_NCFR
+REPLY_TYPE_KILL
+	I saw %s kill %s %s ago.
+REPLY_TYPE_REASON
+	Reason: %s
+REPLY_TYPE_SPLIT
+	Missing: REPLY_TYPE_SPLIT
+REPLY_TYPE_KLINE
+	I saw %s get K-Lined %s ago.
+REPLY_TYPE_AKILL
+	I saw %s get autokilled %s ago.
+REPLY_TYPE_NOSEEN
+	Missing: REPLY_TYPE_NOSEEN
+SS_SEENNICK_SYNTAX_ERROR
+	Syntax: SEENNICK nick
+REPLY_NICK_IS_ONLINE
+	%s is currently on IRC. Type /whois %s for more information.
+REPLY_NO_SEEN
+	I have not seen %s.
+SS_SEENNICK_HEADER
+	Seen info for %s:
+SS_SEENNICK_REPLY_REALNAME
+	Last seen Real Name: %s
+SS_SEENNICK_REPLY_ADDRESS
+	Last seen address: %s@%s
+SS_SEENNICK_REPLY_ADDRESS_OPER
+	Last seen address: %s@%s [%s]
+SS_SEENNICK_REPLY_IDENTIFIED_ONLINE
+	User is identified to that nick
+SS_SEENNICK_REPLY_IDENTIFIED_OFFLINE
+	User was identified to that nick
+SS_SEENNICK_REPLY_NOTID_ONLINE
+	User does not have access to that nick, or that nick is not registered
+SS_SEENNICK_REPLY_NOTID_OFFLINE
+	User did not have access to that nick, or that nick is not registered
+END_OF_SEEN
+	*** End of Seen ***
+SS_SEENNICK_REPLY_USERMODE
+	Last usermode: %s
+SS_SEEN_SYNTAX_ERROR_OPER
+	Syntax: SEEN [nick!]user@host
+SS_SEEN_REPLY_NOMATCH
+	No matches to your query were found.
+SS_SEEN_REPLY_MANY
+	I found %d matches to your query. Here are the %d most recent (sorted): 
+SS_SEEN_REPLY_ONE
+	I found only one match to your query: 
+SS_SEEN_REPLY_SOME
+	I found %d matches to your query (sorted): 
+SS_SEEN_SYNTAX_ERROR
+	Syntax: SEEN nick

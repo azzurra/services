@@ -1,8 +1,8 @@
 *** ChanServ Help - Comando: SET AUTOOP ***
-Cuando la opciÚn AUTOOP est‡ en ON, ChanServ dar‡ el OP automaticamente
-a todos los que entren en el canal, sin distinciÚn.
+Cuando la opci√≤n AUTOOP est√† en ON, ChanServ dar√† el OP automaticamente
+a todos los que entren en el canal, sin distinci√≤n.
  
-N.B.: El Op recibido por AUTOOP sÚlo es temporaneo, ningun nick
+N.B.: El Op recibido por AUTOOP s√≤lo es temporaneo, ningun nick
 va a ser agregado o removido de las listas AOP/SOP/CF.
  
 Sintaxis:
@@ -12,5 +12,5 @@ Ejemplos:
 /cs SET #IRCHelp AUTOOP OFF
 /cs SET #debian AUTOOP ON
  
-Para mas informaciÚn, digita /join #IRCHelp
+Para mas informaci√≤n, digita /join #IRCHelp
 *** Fin del Help ***

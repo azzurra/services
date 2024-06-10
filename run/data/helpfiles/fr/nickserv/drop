@@ -1,10 +1,10 @@
 *** NickServ Help - Commande: DROP ***
-Efface l'enregistrement du nick spécifié. Ce commande peut être employé
-seulement par le propriétaire du nick, qui doit être identifié au nick par la
-commande IDENTIFY. L'enregistrement sera effacé au moment de l'autorisation
-par le code qui sera envoyé par E-Mail à l'adresse associée au nick.
-Tu as 1 jour de temps pour autoriser la demande de drop, après lequel elle
-sera effacée e le nick restera enregistré.
+Efface l'enregistrement du nick spÃ©cifiÃ©. Ce commande peut Ãªtre employÃ©
+seulement par le propriÃ©taire du nick, qui doit Ãªtre identifiÃ© au nick par la
+commande IDENTIFY. L'enregistrement sera effacÃ© au moment de l'autorisation
+par le code qui sera envoyÃ© par E-Mail Ã  l'adresse associÃ©e au nick.
+Tu as 1 jour de temps pour autoriser la demande de drop, aprÃ¨s lequel elle
+sera effacÃ©e e le nick restera enregistrÃ©.
  
 Important: Il est possible d'employer cette commande seulement une fois par jour.
  

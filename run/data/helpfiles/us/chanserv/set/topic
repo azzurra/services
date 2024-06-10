@@ -6,7 +6,7 @@ Syntax:
 /cs SET #channel TOPIC new-topic
  
 Example:
-/cs SET #IRCHelp TOPIC Read the channel rules at http://help.azzurra.org
+/cs SET #IRCHelp TOPIC Read the channel rules at http://www.azzurra.chat
  
 Type /join #IRCHelp for more information.
 *** End of Help ***

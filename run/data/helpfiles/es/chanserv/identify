@@ -1,12 +1,12 @@
 *** ChanServ Help - Comando: IDENTIFY ***
-Te identifìca fundador del canal especificado. Unos comandos de ChanServ 
-necesitan la identificaciòn antes de utilizarse.
+Te identifÃ¬ca fundador del canal especificado. Unos comandos de ChanServ 
+necesitan la identificaciÃ²n antes de utilizarse.
  
 Sintaxis:
-/cs IDENTIFY #canal contraseña
+/cs IDENTIFY #canal contraseÃ±a
  
 Ejemplo:
 /cs IDENTIFY #lamer SoyUnLamah
  
-Para mas informaciòn, digita /join #IRCHelp
+Para mas informaciÃ²n, digita /join #IRCHelp
 *** Fin del Help ***

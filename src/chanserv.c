@@ -1508,6 +1508,8 @@ void expire_chans() {
 	TRACE();
 	if (CONF_DISPLAY_UPDATES)
 		send_globops(NULL, "Completed Channel Expire (\2%d\2/\2%d\2/\2%d\2)", xcount, rcount, count);
+	else
+		LOG_SNOOP(s_OperServ, "Completed Channel Expire (\2%d\2/\2%d\2/\2%d\2)", xcount, rcount, count);
 }
 
 /*********************************************************/
@@ -1562,6 +1564,8 @@ void chanserv_daily_expire() {
 	TRACE();
 	if (CONF_DISPLAY_UPDATES)
 		send_globops(NULL, "Completed Daily Channel Expire (Channels in database: \2%d\2)", count);
+	else
+		LOG_SNOOP(s_OperServ, "Completed Daily Channel Expire (Channels in database: \2%d\2)", count);
 }
 
 
@@ -3330,7 +3334,7 @@ static void do_identify(CSTR source, User *callerUser, ServiceCommandData *data)
 				RemoveFlag(ci->flags, CI_REMIND);
 
 			if (CONF_SET_EXTRASNOOP)
-				LOG_SNOOP(s_OperServ, "CS I %s -- by %s (%s@%s) [%s]", ci->name, callerUser->nick, callerUser->username, callerUser->host, pass);
+				LOG_SNOOP(s_OperServ, "CS I %s -- by %s (%s@%s)", ci->name, callerUser->nick, callerUser->username, callerUser->host);
 
 			log_services(LOG_SERVICES_CHANSERV_ID, "I %s -- by %s (%s@%s) [%s]", ci->name, callerUser->nick, callerUser->username, callerUser->host, pass);
 
@@ -4076,7 +4080,7 @@ static void do_set_founder(User *callerUser, ChannelInfo *ci, CSTR param, CSTR a
 				anAccess->flags = 0;
 				anAccess->creationTime = 0;
 
- 				/* E' possibile chiamarla direttamente qua poiché il for() termina al successivo break. */
+ 				/* E' possibile chiamarla direttamente qua poichÃ© il for() termina al successivo break. */
 				compact_chan_access_list(ci, 1);
 
 				TRACE_MAIN();
@@ -4135,11 +4139,8 @@ static void do_set_password(User *callerUser, ChannelInfo *ci, CSTR param, CSTR 
 				if (str_not_equals(param, newpass)) {
 
 					TRACE_MAIN();
-					if (CONF_SET_EXTRASNOOP)
-						LOG_SNOOP(s_OperServ, "CS P %s -- by %s (%s@%s) [%s -> %s]", ci->name, callerUser->nick, callerUser->username, callerUser->host, ci->founderpass, newpass);
-					else
-						LOG_SNOOP(s_OperServ, "CS P %s -- by %s (%s@%s) [Logged]", ci->name, callerUser->nick, callerUser->username, callerUser->host);
 
+					LOG_SNOOP(s_OperServ, "CS P %s -- by %s (%s@%s)", ci->name, callerUser->nick, callerUser->username, callerUser->host);
 					log_services(LOG_SERVICES_CHANSERV_GENERAL, "P %s -- by %s (%s@%s) [%s -> %s]", ci->name, callerUser->nick, callerUser->username, callerUser->host, ci->founderpass, newpass);
 					send_notice_lang_to_user(s_ChanServ, callerUser, GetCallerLang(), CS_SET_PASSWD_PASSWORD_CHANGED, ci->name, newpass);
 
@@ -8500,7 +8501,7 @@ static void do_chan_access_DEL(const int listLevel, CSTR source, const User *cal
 
 	else if ((accessLevel != CS_ACCESS_FOUNDER) && (ci->settings & get_chan_list_lock_flag(listLevel))) {
 
-		/* La lista è bloccata e il chiamante non è identificato come founder del canale. */
+		/* La lista Ã¨ bloccata e il chiamante non Ã¨ identificato come founder del canale. */
 		send_notice_lang_to_user(s_ChanServ, callerUser, GetCallerLang(), CS_XOP_ERROR_LIST_LOCKED, listName, ci->name);
 	}
 	else {
@@ -8651,7 +8652,7 @@ static void do_chan_access_CLEAN(const int listLevel, CSTR source, const User *c
 
 	else if ((accessLevel != CS_ACCESS_FOUNDER) && (ci->settings & get_chan_list_lock_flag(listLevel))) {
 
-		/* La lista e' bloccata e il chiamante non e' identificato come founder del canale. */
+		/* La lista Ã¨ bloccata e il chiamante non Ã¨ identificato come founder del canale. */
 		send_notice_lang_to_user(s_ChanServ, callerUser, GetCallerLang(), CS_XOP_ERROR_LIST_LOCKED, listName, ci->name);
 	}
 	else {
@@ -8733,7 +8734,7 @@ static void do_chan_access_WIPE(const int listLevel, CSTR source, const User *ca
 
 	else if ((accessLevel != CS_ACCESS_FOUNDER) && (ci->settings & get_chan_list_lock_flag(listLevel))) {
 
-		/* La lista è bloccata e il chiamante non è identificato come founder del canale. */
+		/* La lista Ã¨ bloccata e il chiamante non Ã¨ identificato come founder del canale. */
 		send_notice_lang_to_user(s_ChanServ, callerUser, GetCallerLang(), CS_XOP_ERROR_LIST_LOCKED, listName, ci->name);
 	}
 	else {
@@ -10199,17 +10200,17 @@ static void do_level(CSTR source, User *callerUser, ServiceCommandData *data) {
 
 		if (data->operMatch) {
 
-			LOG_SNOOP(s_OperServ, "CS +L %s -- by %s (%s@%s) [MASTERS]", ci->name, callerUser->nick, callerUser->username, callerUser->host);
-			log_services(LOG_SERVICES_CHANSERV_GENERAL, "+L %s -- by %s (%s@%s) [MASTERS]", ci->name, callerUser->nick, callerUser->username, callerUser->host);
+			LOG_SNOOP(s_OperServ, "CS +L %s -- by %s (%s@%s) [CODER]", ci->name, callerUser->nick, callerUser->username, callerUser->host);
+			log_services(LOG_SERVICES_CHANSERV_GENERAL, "+L %s -- by %s (%s@%s) [CODER]", ci->name, callerUser->nick, callerUser->username, callerUser->host);
 
-			send_globops(s_ChanServ, "\2%s\2 set LEVEL for \2%s\2 to: \2CODERS\2", source, ci->name);
+			send_globops(s_ChanServ, "\2%s\2 set LEVEL for \2%s\2 to: \2CODER\2", source, ci->name);
 		}
 		else {
 
-			LOG_SNOOP(s_OperServ, "CS +L %s -- by %s (%s@%s) through %s [MASTERS]", ci->name, callerUser->nick, callerUser->username, callerUser->host, data->operName);
-			log_services(LOG_SERVICES_CHANSERV_GENERAL, "+L %s -- by %s (%s@%s) through %s [MASTERS]", ci->name, callerUser->nick, callerUser->username, callerUser->host, data->operName);
+			LOG_SNOOP(s_OperServ, "CS +L %s -- by %s (%s@%s) through %s [CODER]", ci->name, callerUser->nick, callerUser->username, callerUser->host, data->operName);
+			log_services(LOG_SERVICES_CHANSERV_GENERAL, "+L %s -- by %s (%s@%s) through %s [CODER]", ci->name, callerUser->nick, callerUser->username, callerUser->host, data->operName);
 
-			send_globops(s_ChanServ, "\2%s\2 (through \2%s\2) set LEVEL for \2%s\2 to: \2CODERS\2", source, data->operName, ci->name);
+			send_globops(s_ChanServ, "\2%s\2 (through \2%s\2) set LEVEL for \2%s\2 to: \2CODER\2", source, data->operName, ci->name);
 		}
 
 		send_notice_lang_to_user(s_ChanServ, callerUser, GetCallerLang(), CS_LEVEL_LEVEL_CHANGED, ci->name, "Masters");
@@ -11274,9 +11275,7 @@ static BOOL cs_listreg_match_is_closed(const ChannelInfo *ci, CSTR pattern) {
 
 
 /*
-CS LISTREG LIST type pattern page_number
-CS LISTREG COUNT type pattern 
-CS LISTREG MAIL type pattern
+CS LISTREG type pattern [page_number]
 
 TYPE:
 

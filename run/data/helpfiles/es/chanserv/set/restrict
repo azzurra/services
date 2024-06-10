@@ -1,8 +1,8 @@
 *** ChanServ Help - Comando: SET RESTRICT ***
-Activa o desactiva la opciÚn Restricted Access para el canal especificado.
-Cuando esta opciÚn est‡ activada, unicamente los nicks registrados en las listas
+Activa o desactiva la opci√≤n Restricted Access para el canal especificado.
+Cuando esta opci√≤n est√† activada, unicamente los nicks registrados en las listas
 VOP/HOP/AOP/SOP/CF tras el fundador podran acceder al canal, todos los de mas
-recibir‡n un kick/ban por Chanserv.
+recibir√†n un kick/ban por Chanserv.
  
 Sintaxis:
 /cs SET #canal RESTRICT <ON|OFF>
@@ -11,5 +11,5 @@ Ejemplos:
 /cs SET #amigos RESTRICT ON
 /cs SET #IRCHelp RESTRICT OFF
  
-Para mas informaciÚn, digita /join #IRCHelp
+Para mas informaci√≤n, digita /join #IRCHelp
 *** Fin del Help ***

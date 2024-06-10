@@ -2,24 +2,24 @@
 HelpServ est un service qui donne des renseignements
 sur IRC e sur les commandes des autres services. Pour 
 obtenir plus efficacement les renseignements, il est conseillable
-d'employer la commande HELP relative à chaque service:
+d'employer la commande HELP relative Ã  chaque service:
  
-Pour avoir des renseignements sur l'enregistrement et le contrôle du nick, tape /msg NickServ HELP
+Pour avoir des renseignements sur l'enregistrement et le contrÃ´le du nick, tape /msg NickServ HELP
  
-Pour avoir des renseignements sur l'enregistrement et le contrôle des canaux, tape /msg ChanServ HELP
+Pour avoir des renseignements sur l'enregistrement et le contrÃ´le des canaux, tape /msg ChanServ HELP
  
-Pour avoir des renseignements sur le service d'envoi des messages aux usagers déconnectés, tape /msg MemoServ HELP
+Pour avoir des renseignements sur le service d'envoi des messages aux usagers dÃ©connectÃ©s, tape /msg MemoServ HELP
 
-Pour avoir des renseignements sur le service de recherche des usagers déconnectés, tape /msg SeenServ HELP
+Pour avoir des renseignements sur le service de recherche des usagers dÃ©connectÃ©s, tape /msg SeenServ HELP
  
 Les commandes suivantes, accessibles en tapant /msg HelpServ commande, sont aussi disponibles:
  
-          UMODE - Montre les User Modes disponibles dans ce réseau
-          CMODE - Montre les Channel Modes disponibles dans ce réseau
+          UMODE - Montre les User Modes disponibles dans ce rÃ©seau
+          CMODE - Montre les Channel Modes disponibles dans ce rÃ©seau
  
-Nous rappelons enfin qu'il est possible d'abréger les commandes /msg NickServ, /msg ChanServ,
+Nous rappelons enfin qu'il est possible d'abrÃ©ger les commandes /msg NickServ, /msg ChanServ,
 /msg MemoServ, /msg SeenServ avec les commandes /nickserv, /chanserv, /memoserv , /seenserv ou avec les
-commandes /ns, /cs, /ms, /ss respectivement, en ayant le même résultat.
+commandes /ns, /cs, /ms, /ss respectivement, en ayant le mÃªme rÃ©sultat.
  
 Pour tout renseignement, tape /join #IRCHelp
 *** Fin de l'Help ***

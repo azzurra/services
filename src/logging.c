@@ -69,7 +69,9 @@ LOG_FILE	log_files[] = {
 	/* LOG_SERVICES_CHANSERV_ACCESS		*/	{"chanserv_access",	"ChanServ (ACC)",	NULL},
 	/* LOG_SERVICES_MEMOSERV		*/	{"memoserv",		"MemoServ",		NULL},
 	/* LOG_SERVICES_OPERSERV		*/	{"operserv",		"OperServ",		NULL},
-	/* LOG_SERVICES_ROOTSERV		*/	{"rootserv",		"RootServ",		NULL}
+	/* LOG_SERVICES_ROOTSERV		*/	{"rootserv",		"RootServ",		NULL},
+	/* LOG_SERVICES_SEENSERV			*/	{"seenserv",		"SeenServ",			NULL},
+	/* LOG_SERVICES_STATSERV			*/	{"statserv",		"StatServ",			NULL}
 };
 #define log_files_count	(sizeof(log_files) / sizeof(LOG_FILE))
 
@@ -501,6 +503,12 @@ int logid_from_agentid(agentid_t agentID) {
 		case AGENTID_ROOTSERV:
 			return LOG_SERVICES_ROOTSERV;
 
+		case AGENTID_STATSERV:
+			return LOG_SERVICES_STATSERV;
+
+		case AGENTID_SEENSERV:
+			return LOG_SERVICES_SEENSERV;
+
 		case AGENTID_GNOTICER:
 		case AGENTID_HELPSERV:
 		case AGENTID_DEBUGSERV:
@@ -512,7 +520,7 @@ int logid_from_agentid(agentid_t agentID) {
 void log_services(int services, CSTR fmt, ...) {
 
 	if (IS_NOT_NULL(fmt) &&
-		(services >= LOG_SERVICES_NICKSERV_GENERAL && services <= LOG_SERVICES_ROOTSERV)
+		(services >= LOG_SERVICES_NICKSERV_GENERAL && services <= LOG_SERVICES_SEENSERV)
 		&& !log_rotation_started
 		) {
 
@@ -892,9 +900,9 @@ static BOOL log_search_file(CSTR agentNickname, const User *callerUser, int logT
 static void log_handle_search_syntax(const User *callerUser, CSTR agentNickname, BOOL full) {
 
 	if (full)
-		send_notice_to_user(agentNickname, callerUser, "Syntax: \2LOG\2 SEARCH [TODAY|AAAA-MM-GG[>TODAY|AAAA-MM-GG] [NS|NSI|NSA|CS|CSI|CSA|MS|OS|RS|ERR|\2DEB\2|PANIC [start [[+]end]]]]] *text*");
+		send_notice_to_user(agentNickname, callerUser, "Syntax: \2LOG\2 SEARCH [TODAY|AAAA-MM-GG[>TODAY|AAAA-MM-GG] [NS|NSI|NSA|CS|CSI|CSA|MS|OS|RS|ST|SS|ERR|\2DEB\2|PANIC [start [[+]end]]]]] *text*");
 	else
-		send_notice_to_user(agentNickname, callerUser, "Syntax: \2LOG\2 SEARCH [TODAY|AAAA-MM-GG[>TODAY|AAAA-MM-GG] [\2NS\2|NSI|NSA|CS|CSI|CSA|MS|OS|RS [start [[+]end]]]]] *text*");
+		send_notice_to_user(agentNickname, callerUser, "Syntax: \2LOG\2 SEARCH [TODAY|AAAA-MM-GG[>TODAY|AAAA-MM-GG] [\2NS\2|NSI|NSA|CS|CSI|CSA|MS|OS|RS|ST|SS [start [[+]end]]]]] *text*");
 }
 
 void handle_search(CSTR source, User *callerUser, ServiceCommandData *data) {
@@ -1026,6 +1034,12 @@ void handle_search(CSTR source, User *callerUser, ServiceCommandData *data) {
 
 		else if (str_equals_nocase(type, "RS"))
 			log_type = LOG_SERVICES_ROOTSERV;
+
+		else if (str_equals_nocase(type, "SS"))
+			log_type = LOG_SERVICES_SEENSERV;
+
+		else if (str_equals_nocase(type, "ST"))
+			log_type = LOG_SERVICES_STATSERV;
 	}
 	
 	if (log_type == -1) {

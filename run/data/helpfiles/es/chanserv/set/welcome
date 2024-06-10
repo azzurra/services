@@ -1,13 +1,13 @@
 *** ChanServ Help - Comando: SET WELCOME ***
-EspecifÏca un mensaje que ChanServ enviar‡ como notice a todos los que entren en el canal
+Especif√¨ca un mensaje que ChanServ enviar√† como notice a todos los que entren en el canal
 especificado. Para remover el greeting actual necesitas especificar NONE como mensaje.
  
 Sintaxis:
 /cs SET #canal WELCOME mensaje
  
 Ejemplos:
-/cs SET #mp3.it WELCOME Bienvenidos en el canal de los mp3 espaÒoles!
+/cs SET #mp3.it WELCOME Bienvenidos en el canal de los mp3 espa√±oles!
 /cs SET #IRCHelp WELCOME NONE
  
-Para mas informaciÚn, digita /join #IRCHelp
+Para mas informaci√≤n, digita /join #IRCHelp
 *** Fin del Help ***

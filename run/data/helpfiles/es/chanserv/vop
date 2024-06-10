@@ -1,7 +1,7 @@
 *** ChanServ Help - Comando: VOP ***
-Maneja la Voice-Op list de un canal. Esta lista especifÏca cuales usuarios se
+Maneja la Voice-Op list de un canal. Esta lista especif√¨ca cuales usuarios se
 ponen automaticamente +v cuando acceden al canal especificado. Los VOPs tambien
-pueden pedir invitaciÚn a ChanServ en un canal si este est‡ puesto en +k, +i o +l.
+pueden pedir invitaci√≤n a ChanServ en un canal si este est√† puesto en +k, +i o +l.
  
 Sintaxis:
  
@@ -16,15 +16,15 @@ Sintaxis:
 /cs VOP #canal UNLOCK
  
 ADD agrega la mask o el nick especificado en la Voice-Op list del canal. Si el nick
-o la mask ya se encuentran en otra lista, su nivËl de acceso se cambiar‡ en VOP.
+o la mask ya se encuentran en otra lista, su niv√®l de acceso se cambiar√† en VOP.
  
 DEL remueve la mask o el nick especificado de la Voice-Op list del canal, o el
 numero correspondiente de una mask o un nick si especificado.
  
-LIST visualiza la lista completa de los Voice-Op del canal, o en todo caso sÚlo 
+LIST visualiza la lista completa de los Voice-Op del canal, o en todo caso s√≤lo 
 los que tengan la mask especificada.
  
-FIND b˙squeda de los elementos que reflejan la mask especificada (en el formato nick!user@host)
+FIND b√∫squeda de los elementos que reflejan la mask especificada (en el formato nick!user@host)
  
 CLEAN vacia de la Voice-Op list todos los nicks expirados.
  
@@ -42,5 +42,5 @@ Ejemplos:
 /cs VOP #IRCHelp DEL 4
 /cs VOP #IRCHelp LIST pippo*
  
-Para mas informaciÚn, digita /join #IRCHelp
+Para mas informaci√≤n, digita /join #IRCHelp
 *** Fin del Help ***

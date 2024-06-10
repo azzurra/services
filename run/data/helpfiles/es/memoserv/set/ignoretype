@@ -2,16 +2,16 @@
 Permite escojer la modalidad de utilizo de la Memo Ignore List.
  
 Sintaxis:
-/ms SET IGNORETYPE par‡metro
+/ms SET IGNORETYPE par√†metro
  
-Los par‡metros disponibles son:
+Los par√†metros disponibles son:
  
-    1  -  Ignorar todos los memos enviados por nicks que estËen en tu Memo Ignore List.
-    2  -  Ignorar todos los memos enviados por cualquier nick menos los que estËn en tu Memo Ignore List.
+    1  -  Ignorar todos los memos enviados por nicks que est√®en en tu Memo Ignore List.
+    2  -  Ignorar todos los memos enviados por cualquier nick menos los que est√®n en tu Memo Ignore List.
  
 Ejemplos:
 /ms SET IGNORETYPE 1
 /ms SET IGNORETYPE 2
  
-Para mas informaciÚn, digita /join #IRCHelp
+Para mas informaci√≤n, digita /join #IRCHelp
 *** Fin del Help ***

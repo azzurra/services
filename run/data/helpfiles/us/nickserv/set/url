@@ -10,7 +10,7 @@ Syntax:
 /ns SET URL url
  
 Examples:
-/ns SET URL http://www.azzurra.org
+/ns SET URL http://www.azzurra.chat
 /ns SET URL NONE
  
 Type /join #IRCHelp for more information.

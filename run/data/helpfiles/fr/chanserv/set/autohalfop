@@ -1,0 +1,16 @@
+*** ChanServ Help - Commande: SET AUTOHALFOP ***
+Quand l'option AUTOHALFOP est active, ChanServ donnera automatiquement le halfop
+à tous les usagers qui entreront dans le canal.
+ 
+Important: Le halfop donné par AUTOHALFOP est seulement temporaire, aucun nick
+ne sera ajouté ni supprimé de la liste HOP.
+ 
+Syntaxe:
+/cs SET #canal AUTOHALFOP <ON|OFF>
+ 
+Exemples:
+/cs SET #IRCHelp AUTOHALFOP OFF
+/cs SET #debian AUTOHALFOP ON
+ 
+Pour tout renseignement, tape /join #IRCHelp
+*** Fin de l'Help ***

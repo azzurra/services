@@ -1,5 +1,5 @@
 *** ChanServ Help - Comando: AOP ***
-Maneja la Auto-HalfOp list de un canal.  Esta lista especifìca cuales usuarios
+Maneja la Auto-HalfOp list de un canal.  Esta lista especifÃ¬ca cuales usuarios
 tienen halfop automatico entrando en el canal especificado.
  
 Sintaxis:
@@ -14,17 +14,17 @@ Sintaxis:
 /cs HOP #canal UNLOCK
  
 ADD agrega la mask o el nick especificado en la Auto-HalfOp list del canal. Si el nick
-o la mask ya se encuentran en otra lista, su acceso se cambiarà en HOP.
+o la mask ya se encuentran en otra lista, su acceso se cambiarÃ  en HOP.
  
 DEL remueve la mask o el nick especificado de la Auto-HalfOp list del canal, o el
 numero correspondiente a una mask o nick si especificado.
  
-LIST visualiza la lista completa de los Auto-HalfOp del canal, o en todo caso sòlo 
+LIST visualiza la lista completa de los Auto-HalfOp del canal, o en todo caso sÃ²lo 
 los que tengan la mask especificada.
  
-FIND búsqueda de los elementos que reflejan la mask especificada (en el formato nick!user@host)
+FIND bÃºsqueda de los elementos que reflejan la mask especificada (en el formato nick!user@host)
  
-CLEAN remueve de la Auto-HalfOp list todos los nicks que estèn expirados.
+CLEAN remueve de la Auto-HalfOp list todos los nicks que estÃ¨n expirados.
  
 EXPLIST muestra los nick caducados presentes en la lista
  
@@ -32,13 +32,13 @@ los que tengan la mask especificada.
  
 LOCK bloquea la lista, permitiendo unicamente al fundador modificarla.
  
-UNLOCK desbloquea la lista, en caso de que estè bloqueada por el comando LOCK.
+UNLOCK desbloquea la lista, en caso de que estÃ¨ bloqueada por el comando LOCK.
  
 Ejemplos:
 /cs HOP #IRCHelp ADD Gastaman
-/cs HOP #IRCHelp ADD *!*gastaman@*.azzurranet.org
+/cs HOP #IRCHelp ADD *!*gastaman@*.azzurra.chat
 /cs HOP #IRCHelp DEL 2
 /cs HOP #IRCHelp LIST *.it
  
-Para mas informaciòn, digita /join #IRCHelp
+Para mas informaciÃ²n, digita /join #IRCHelp
 *** Fin del Help ***

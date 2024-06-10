@@ -1,7 +1,7 @@
 *** MemoServ Help - Commande: IGNORE ***
 Montre et permet de modifier la Memo Ignore List
-de ton nick. Tous les mémos envoyés par les nicks
-de cette liste seront ignorés.
+de ton nick. Tous les mÃ©mos envoyÃ©s par les nicks
+de cette liste seront ignorÃ©s.
  
 Syntaxe:
 /ms IGNORE ADD nick
@@ -9,7 +9,7 @@ Syntaxe:
 /ms IGNORE LIST
 /ms IGNORE WIPE
  
-ADD ajoute un nick enregistré à ta Memo Ignore List.
+ADD ajoute un nick enregistrÃ© Ã  ta Memo Ignore List.
  
 DEL efface un nick de ta Memo Ignore List.
  

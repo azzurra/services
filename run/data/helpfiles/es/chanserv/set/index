@@ -4,34 +4,36 @@ opciones del canal mismo. Para poder utilizar este comando necesitas
 estar identificado con el nick del fundador.
  
 Sintaxis del comando SET:
-/cs SET #canal OPCION par‡metros
+/cs SET #canal OPCION par√†metros
  
 Las opciones disponibles son:
  
     AUTOOP    - Op automatico para todos los que entren en el canal
     AUTOHALFOP- HalfOp automatico para todos los que entren en el canal
     AUTOVOICE - Voice automatico para todos los que entren en el canal
-    DESC      - ModifÏca la descripciÚn del canal
+	BANTYPE   - Ajusta el tipo de ban que se usar√° con la opcion RESTRICT
+    DESC      - Modif√¨ca la descripci√≤n del canal
     EMAIL     - Asocia una E-mail al canal
-    FOUNDER   - EspecifÏca el fundador del canal
+    FOUNDER   - Especif√¨ca el fundador del canal
     IDENT     - Op unicamente para nicks identificados
-    KEEPTOPIC - Deja el topic aun nadie estË en el canal
+    KEEPTOPIC - Deja el topic aun nadie est√® en el canal
     LANG      - Ajusta el idioma del canal
-    MEMOLEVEL - Ajusta el nivËl minimo para enviar memos al canal
+    MEMOLEVEL - Ajusta el niv√®l minimo para enviar memos al canal
     MLOCK     - Bloquea los modes del canal
+	NEVEROP   - Desabilita el OP automatico para todos los AOP y superiores que entren en el canal
     NOMKICK   - Desabilita el comando MKICK de ChanServ para un canal
     OPGUARD   - No deja que los usuarios normales reciban Op
-    PASSWD    - Ajusta la contraseÒa del canal
+    PASSWD    - Ajusta la contrase√±a del canal
     PROTECT   - Proteje los operadores registrados en las listas
     RESTRICT  - Permite el acceso en el canal nada mas a los usuarios registrados en las listas
-    SUCCESSOR - EspecifÏca un Successor para el canal
+    SUCCESSOR - Especif√¨ca un Successor para el canal
     TOPIC     - Cambia el topic del canal
-    TOPICLOCK - El topic sÚlo se puede cambiar por medio del comando SET TOPIC
+    TOPICLOCK - El topic s√≤lo se puede cambiar por medio del comando SET TOPIC
     URL       - Asocia un URL al canal
     VERBOSE   - Permite seleccionar los opnotices para recibir
-    WELCOME   - EspecifÏca un mensaje de bienvenido
+    WELCOME   - Especif√¨ca un mensaje de bienvenido
  
-Para mas informaciÚn sobre estos comandos sÚlo digita: /cs HELP SET opciÚn
+Para mas informaci√≤n sobre estos comandos s√≤lo digita: /cs HELP SET opci√≤n
  
-Para mas informaciÚn, digita /join #IRCHelp
+Para mas informaci√≤n, digita /join #IRCHelp
 *** Fin del Help ***

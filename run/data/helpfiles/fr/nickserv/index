@@ -1,29 +1,29 @@
 *** NickServ Help ***
 NickServ est un service qui te permet d'enregistrer ton nick, et ne permet pas
-aux autres de l'employer. Les commandes disponibles sont énumérées ci-dessous; pour
+aux autres de l'employer. Les commandes disponibles sont Ã©numÃ©rÃ©es ci-dessous; pour
 pouvoir les utiliser il faut taper: /ns nom-de-la-commande
  
 Commande     Description
  
-ACC        - Montre le niveau d'accès d'un nick
-ACCESS     - Gère la liste d'accès de ton nick
+ACC        - Montre le niveau d'accÃ¨s d'un nick
+ACCESS     - GÃ¨re la liste d'accÃ¨s de ton nick
 DROP       - Efface un nick
-GHOST      - Déconnecte une session "fantôme"
-IDENTIFY   - T'identifie à ton nick, par ton mot de passe
-INFO       - Montre les renseignements disponibles pour un nick enregistré
-LISTCHANS  - Montre les canaux auxquels tu as accès
+GHOST      - DÃ©connecte une session "fantÃ´me"
+IDENTIFY   - T'identifie Ã  ton nick, par ton mot de passe
+INFO       - Montre les renseignements disponibles pour un nick enregistrÃ©
+LISTCHANS  - Montre les canaux auxquels tu as accÃ¨s
 RECOVER    - Te permet de reprendre ton nick
 REGISTER   - Enregistre un nick
-RELEASE    - Déconnecte le faux client connecté par les Services pour garder ton nick
+RELEASE    - DÃ©connecte le faux client connectÃ© par les Services pour garder ton nick
 SET        - Te permet de configurer les options du nick
  
-Pour autres renseignements sur les commandes il faut écrire /ns HELP nom-de-la-commande
+Pour autres renseignements sur les commandes il faut Ã©crire /ns HELP nom-de-la-commande
  
-Important: Ce service est visant à permettre aux usagers de reconnaître si la
+Important: Ce service est visant Ã  permettre aux usagers de reconnaÃ®tre si la
 personne avec laquelle ils parlent est vraiment celle qu'ils connaissent.
-Il N'EST PAS à permettre d'accaparer le maximum nombre possibile de nicks pour
+Il N'EST PAS Ã  permettre d'accaparer le maximum nombre possibile de nicks pour
 ne pas permettere aux autres de les employer. N'importe quel abus de ce service 
-entraînera, au moins, l'effacement de tous les nicks enregistrés.
+entraÃ®nera, au moins, l'effacement de tous les nicks enregistrÃ©s.
  
 Pour tout renseignement, tape /join #IRCHelp
 *** Fin de l'Help ***

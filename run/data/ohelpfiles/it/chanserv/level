@@ -1,7 +1,7 @@
 *** ChanServ Operator Help - Command: LEVEL ***
 Only allow a certain rank of people in the given channel.
  
-Syntax: LEVEL #channel [OPERS|SOP|SA|SRA|MASTERS|NONE]
+Syntax: LEVEL #channel [SOP|SA|SRA|CODER|NONE]
  
 This command is limited to Services Operators.
 *** End of OHelp ***

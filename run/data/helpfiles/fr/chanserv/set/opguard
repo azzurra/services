@@ -1,7 +1,7 @@
 *** ChanServ Help - Commande: SET OPGUARD ***
 Quand l'option OPGUARD est active, seulement qui est
-enregistré dans une des listes AOP/SOP/CF et le
-propriétaire peut être avoir l'op.
+enregistrÃ© dans une des listes AOP/SOP/CF et le
+propriÃ©taire peut Ãªtre avoir l'op.
  
 Syntaxe:
 /cs SET #canal OPGUARD <ON|OFF>

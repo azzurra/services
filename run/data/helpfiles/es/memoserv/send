@@ -1,7 +1,7 @@
 *** MemoServ Help - Comando: SEND ***
-EnvÏa un memo al nick especificado. El nick de destino tiene que
-ser registrado por NickServ. El nick de destino recibir‡ una
-notificaciÚn al llegar el mensaje enviado, si est‡ online.
+Env√¨a un memo al nick especificado. El nick de destino tiene que
+ser registrado por NickServ. El nick de destino recibir√† una
+notificaci√≤n al llegar el mensaje enviado, si est√† online.
  
 Sintaxis:
 /ms SEND nick mensaje
@@ -9,5 +9,5 @@ Sintaxis:
 Ejemplo:
 /ms SEND Miki Nos vemos en la noche en #adachi
  
-Para mas informaciÚn, digita /join #IRCHelp
+Para mas informaci√≤n, digita /join #IRCHelp
 *** Fin del Help ***

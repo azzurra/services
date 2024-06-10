@@ -1,0 +1,8 @@
+SeenServ Operator Commands:
+ 
+These commands are available to Services Operators:
+ 
+SEENSTATS     Shows SeenServ Statistics
+UNSEEN        Removes a Seen record from the database
+ 
+*** End of OHelp ***

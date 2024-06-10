@@ -10,7 +10,6 @@ These commands are available to Services Operators:
 AKILL         Manipulates the AKILL list
 BAN           Kickbans an user from a channel
 BLACKLIST     Manipulates the E-Mail blacklist
-GLOBAL        Sends a message to all users
 IGNORE        Manipulates the IGNORE list
 KICK          Kicks an user from a channel
 SETTINGS      Shows Services settings
@@ -20,6 +19,7 @@ These commands are available to Services Operators:
  
 These commands are available to Services Admins:
  
+GLOBAL        Sends a message to all users
 JUPE          Jupes a server
 MDEOP         Removes +o mode from all channel operators
 MDEVOICE      Removes +v mode from all channel voices

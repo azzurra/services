@@ -1,6 +1,6 @@
 *** NickServ Help - Comando: SET LANG ***
 Cambia el idioma utilizado por ChanServ para enviar mensajes
-a tu canal, en caso de que la opciòn VERBOSE estè activada.
+a tu canal, en caso de que la opciÃ²n VERBOSE estÃ¨ activada.
  
 Utilizar LIST como numero para la lista de los idiomas disponibles.
  
@@ -11,5 +11,5 @@ Ejemplos:
 /cs SET #IRCHelp LANG 1
 /cs SET #IRCHelp LANG LIST
  
-Digita /join #IRCHelp para mas informaciòn.
+Digita /join #IRCHelp para mas informaciÃ²n.
 *** Fin del Help ***

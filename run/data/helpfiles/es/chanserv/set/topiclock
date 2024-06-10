@@ -1,17 +1,17 @@
 *** ChanServ Help - Comando: SET TOPICLOCK ***
-Activa o desactiva la opciÚn Topic Lock para el canal especificado. Cuando
-estË activada, unicamente los que tengan el nivËl de acceso requerido tendr‡n
+Activa o desactiva la opci√≤n Topic Lock para el canal especificado. Cuando
+est√® activada, unicamente los que tengan el niv√®l de acceso requerido tendr√†n
 la posibilidad de cambiar el topic del canal.
-nivËl puede ser cualquier valor entre VOP/HOP/AOP/SOP/CFOUNDER/FOUNDER. 
-Para desactivar esta opciÚn necesitas especificar OFF como nivËl.
+niv√®l puede ser cualquier valor entre VOP/HOP/AOP/SOP/CFOUNDER/FOUNDER. 
+Para desactivar esta opci√≤n necesitas especificar OFF como niv√®l.
  
 Sintaxis:
-/cs SET #canal TOPICLOCK nivËl
+/cs SET #canal TOPICLOCK niv√®l
  
 Ejemplo:
 /cs SET #IRCHelp TOPICLOCK AOP
-/cs SET #EspaÒa TOPICLOCK FOUNDER
+/cs SET #Espa√±a TOPICLOCK FOUNDER
 /cs SET #SolyLuna TOPICLOCK OFF
  
-Para mas informaciÚn, digita /join #IRCHelp
+Para mas informaci√≤n, digita /join #IRCHelp
 *** Fin del Help ***

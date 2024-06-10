@@ -142,6 +142,8 @@ extern void synch_topics();
 extern void handle_masscmds(CSTR source, User *callerUser, ServiceCommandData *data);
 extern void handle_mode(CSTR source, User *callerUser, ServiceCommandData *data);
 
+extern void handle_list(CSTR source, User *callerUser, ServiceCommandData *data);
+
 extern char *get_channel_mode(const long int modeOn, const long int modeOff);
 extern unsigned int stats_open_channels_count;
 

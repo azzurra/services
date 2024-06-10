@@ -1,13 +1,13 @@
 *** MemoServ Help - Commande: SET IGNORETYPE ***
-Définit la façon d'emploi de la Memo Ignore List.
+DÃ©finit la faÃ§on d'emploi de la Memo Ignore List.
  
 Syntaxe:
-/ms SET IGNORETYPE paramètre
+/ms SET IGNORETYPE paramÃ¨tre
  
-Les paramètres disponibles sont:
+Les paramÃ¨tres disponibles sont:
  
-    1  -  Tu ignoreras les mémos envoyés par les nicks présents dans ta Memo Ignore List.
-    2  -  Tu ignoreras tous les mémos sauf ceux envoyés par les nicks présents dans ta Memo Ignore List.
+    1  -  Tu ignoreras les mÃ©mos envoyÃ©s par les nicks prÃ©sents dans ta Memo Ignore List.
+    2  -  Tu ignoreras tous les mÃ©mos sauf ceux envoyÃ©s par les nicks prÃ©sents dans ta Memo Ignore List.
  
 Exemples:
 /ms SET IGNORETYPE 1

@@ -76,7 +76,9 @@ typedef	int	agentid_t;
 #define LANGMATCH_DB		"langmatch.db"
 #define SUSPEND_DB		"suspend.db"
 #define EXEMPT_DB		"exempt.db"
-
+#define STATSERV_DB		"statserv.db"
+#define SERVSTATS_DB	"servstats.db"
+#define SEENSERV_DB		"seenserv.db"
 #define AKILL_DB		"akill.db"
 
 /******* OperServ configuration *******/
@@ -129,8 +131,8 @@ typedef	int	agentid_t;
 #define IRCD_MAX_BANS		100
 
 /* E-Mail defines */
-#define MAIL_KLINE 		"kline@azzurra.org"
-#define MAIL_ABUSE		"abuse@azzurra.org"
+#define MAIL_KLINE 		"irc@azzurra.chat"
+#define MAIL_ABUSE		"irc@azzurra.chat"
 
 /* For SeenServ */
 #define WILDSEEN		5

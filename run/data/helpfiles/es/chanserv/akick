@@ -3,7 +3,7 @@ Maneja la AutoKick list para un canal. Si alguien en la AKICK list entra
 en el canal, va a recibir un kick/ban de una vez por ChanServ.
  
 Sintaxis:
-/cs AKICK #canal ADD mask [razÚn]
+/cs AKICK #canal ADD mask [raz√≤n]
 /cs AKICK #canal DEL mask
 /cs AKICK #canal LIST [mask]
 /cs AKICK #canal WIPE
@@ -11,8 +11,8 @@ Sintaxis:
 /cs AKICK #canal UNLOCK
  
 ADD agrega la mask o el nick especificado en la AutoKick list. Si se 
-especifica una razÚn, esta va a ser la razÚn en el momento del kick mismo, 
-sino se va a utilizar la razon de default: "Est‡s baneado de este canal"
+especifica una raz√≤n, esta va a ser la raz√≤n en el momento del kick mismo, 
+sino se va a utilizar la razon de default: "Est√†s baneado de este canal"
  
 DEL remueve la mask especificada o el nick de la Autokick list. No quita 
 ningun AutoKick puesto por Chanserv en epoca anterior; estos mismos 
@@ -21,7 +21,7 @@ se van a tener que quitar manualmente.
 LIST visualiza la lista completa de la AutoKick list del canal, o en todo caso 
 las que tienen la mask especificada.
  
-WIPE remueve todas las masks o nicks que est‡n en la Akick list del canal.
+WIPE remueve todas las masks o nicks que est√†n en la Akick list del canal.
  
 LOCK bloquea la lista, permetiendo nada mas al fundador de modificarla.
  
@@ -34,5 +34,5 @@ Ejemplos:
 /cs AKICK #IRCHelp LIST *picci*
 /cs AKICK #IRCHelp WIPE
  
-Para mas informaciÚn, digita /join #IRCHelp
+Para mas informaci√≤n, digita /join #IRCHelp
 *** Fin del Help ***

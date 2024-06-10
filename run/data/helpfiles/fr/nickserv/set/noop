@@ -1,7 +1,7 @@
 *** NickServ Help - Commande: SET NOOP ***
-Ne permet pas à d'autres usagers de t'ajouter aux listes VOP/AOP/SOP/CF
+Ne permet pas Ã  d'autres usagers de t'ajouter aux listes VOP/AOP/SOP/CF
 d'aucun canal. Cette commande ne t'efface pas des listes auxquelles tu
-as déjà été ajouté précédemment.
+as dÃ©jÃ  Ã©tÃ© ajoutÃ© prÃ©cÃ©demment.
  
 Syntaxe:
 /ns SET NOOP <ON|OFF>

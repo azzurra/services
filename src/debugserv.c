@@ -43,6 +43,9 @@
 #include "../inc/memoserv.h"
 #include "../inc/operserv.h"
 #include "../inc/rootserv.h"
+#include "../inc/seenserv.h"
+#include "../inc/statserv.h"
+#include "../inc/helpserv.h"
 #include "../inc/trigger.h"
 #include "../inc/ignore.h"
 #include "../inc/sxline.h"
@@ -50,7 +53,6 @@
 #include "../inc/blacklist.h"
 #include "../inc/tagline.h"
 #include "../inc/jupe.h"
-
 
 /*********************************************************
  * Local strings                                         *
@@ -132,6 +134,10 @@ static ServiceCommand	debugserv_commands_M[] = {
 };
 // 'N' (78 / 13)
 // 'O' (79 / 14)
+static ServiceCommand	debugserv_commands_O[] = {
+	{ "OHELP",		CMDLEVEL_CODER,		0, handle_help },
+	{ NULL,			0,					0, NULL }
+};
 // 'P' (80 / 15)
 // 'Q' (81 / 16)
 // 'R' (82 / 17)
@@ -160,7 +166,7 @@ ServiceCommand	*debugserv_commands[26] = {
 	debugserv_commands_I,	NULL,
 	debugserv_commands_K,	debugserv_commands_L,
 	debugserv_commands_M,	NULL,
-	NULL,					NULL,
+	debugserv_commands_O,	NULL,
 	NULL,					NULL,
 	debugserv_commands_S,	NULL,
 	NULL,					NULL,
@@ -171,12 +177,20 @@ ServiceCommand	*debugserv_commands[26] = {
 
 void debugserv(const char *source, User *callerUser, char *buf) {
 
-	char *cmd = strtok(buf, " ");
+	char *cmd;
 
 	TRACE_MAIN_FCLT(FACILITY_DEBUGSERV);
 
-	if (!cmd)
+	if (IS_NULL(callerUser->oper) || (callerUser->oper->level < ULEVEL_CODER)) {
+
+		LOG_SNOOP(s_DebugServ, "\2%s\2 tried sending the following command: %s", source, buf);
 		return;
+	}
+
+	cmd = strtok(buf, " ");
+
+	if (IS_NULL(cmd))
+		send_notice_to_user(s_DebugServ, callerUser, "Type \2/ds OHELP\2 for a listing of DebugServ commands.");
 
 	else if (cmd[0] == '\001') {
 
@@ -261,6 +275,8 @@ static void do_mem(const char *source, User *callerUser, ServiceCommandData *dat
 		total_memory += blacklist_mem_report(s_DebugServ, callerUser);
 		total_memory += tagline_mem_report(s_DebugServ, callerUser);
 		total_memory += jupe_mem_report(s_DebugServ, callerUser);
+		total_memory += seenserv_mem_report(s_DebugServ, callerUser);
+		total_memory += statserv_mem_report(s_DebugServ, callerUser);
 		total_memory += akill_mem_report(s_DebugServ, callerUser);
 	}
 	else if (str_equals_nocase(param, "USERS"))
@@ -317,8 +333,14 @@ static void do_mem(const char *source, User *callerUser, ServiceCommandData *dat
 	else if (str_equals_nocase(param, "JUPE"))
 		total_memory = jupe_mem_report(s_DebugServ, callerUser);
 
+	else if (str_equals_nocase(param, "STATSERV"))
+		total_memory = statserv_mem_report(s_DebugServ, callerUser);
+
+	else if (str_equals_nocase(param, "SEENSERV"))
+		total_memory = seenserv_mem_report(s_DebugServ, callerUser);
+
 	else {
-		send_notice_to_user(s_DebugServ, callerUser, "Syntax: MEM [CHANNELS|CHANSERV|LANG|MEMOSERV|NICKSERV|OPERSERV|ROOTSERV|USERS]");
+		send_notice_to_user(s_DebugServ, callerUser, "Syntax: MEM [CHANNELS|CHANSERV|LANG|MEMOSERV|NICKSERV|OPERSERV|ROOTSERV|SEENSERV|STATSERV|USERS]");
 		return;
 	}
 
@@ -602,6 +624,8 @@ static DS_DUMP_ITEM dump_handler_table[] = {
 	{ "SGLINES", sxline_ds_dump },
 	{ "SQLINES", sxline_ds_dump },
 	{ "RESERVED", reserved_ds_dump },
+	{ "STATSERV", statserv_ds_dump },
+	{ "SEENSERV", seenserv_ds_dump },
 	{ "AKILL", akill_ds_dump },
 
 	{ NULL, NULL }
@@ -627,7 +651,7 @@ static void do_dump(const char *source, User *callerUser, ServiceCommandData *da
 
 		send_notice_to_user(s_DebugServ, callerUser, "DUMP - facility is one of:");
 
-		send_notice_to_user(s_DebugServ, callerUser, "CONF USER CHAN LANG NICKSERV CHANSERV MEMOSERV OPERSERV ROOTSERV TRIGGERS IGNORES SGLINES SQLINES RESERVED"); // altri?
+		send_notice_to_user(s_DebugServ, callerUser, "CONF USER CHAN LANG NICKSERV CHANSERV MEMOSERV OPERSERV ROOTSERV TRIGGERS IGNORES SGLINES SQLINES RESERVED STATSERV SEENSERV"); // altri?
 
 	} else {
 
@@ -1120,6 +1144,9 @@ static void do_sysinfo(const char *source, User *callerUser, ServiceCommandData 
 		CONF_SET_READONLY ? s_ENABLED : s_DISABLED, CONF_SET_NOEXPIRE ? s_ENABLED : s_DISABLED, CONF_DATABASE_BACKUP_FREQUENCY ? s_ENABLED : s_DISABLED, CONF_DATABASE_UPDATE_FREQUENCY);
 
 	stg_report_sysinfo(s_DebugServ, callerUser->nick);
+
+	// Stats stuff
+	send_notice_to_user(s_DebugServ, callerUser, "StatServ write \2%d\2 / read \2%s\2 - SeenServ write \2%d\2 / read \2%s\2", STATSERV_DB_CURRENT_VERSION, STATSERV_DB_SUPPORTED_VERSION, SEENSERV_DB_CURRENT_VERSION, SEENSERV_DB_SUPPORTED_VERSION);
 
 	// logging options
 	send_notice_to_user(s_DebugServ, callerUser, "Logging options: Snoop \2%s\2 - Extra snoop \2%s\2 - Snoop chan: \2%s\2",
