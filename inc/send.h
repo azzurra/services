@@ -26,7 +26,7 @@
  * Global variables                                      *
  *********************************************************/
 
-unsigned long int total_sendM;
+extern unsigned long int total_sendM;
 
 
 /*********************************************************

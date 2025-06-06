@@ -333,16 +333,16 @@ STG_RESULT stg_close(STGHANDLE handle, const char *path) {
 }
 
 
-__inline__ STGVERSION stg_data_version(STGHANDLE handle) {
+STGVERSION stg_data_version(STGHANDLE handle) {
 	return (handle != 0) ? ((StorageDescriptor *)handle)->header.data_version : STG_INVALID_VERSION;
 }
 
 
-__inline__ STG_RESULT stg_start_section(STGHANDLE handle) {
+STG_RESULT stg_start_section(STGHANDLE handle) {
 	return stg_last_error = stg_write_section(handle, TRUE);
 }
 
-__inline__ STG_RESULT stg_end_section(STGHANDLE handle) {
+STG_RESULT stg_end_section(STGHANDLE handle) {
 	return stg_last_error = stg_write_section(handle, FALSE);
 }
 
@@ -513,7 +513,7 @@ STG_RESULT stg_read_string(STGHANDLE handle, char **string, size_t *length) {
 	return stg_last_error = result;
 }
 
-__inline__ STG_RESULT stg_write_string(STGHANDLE handle, char *string) {
+STG_RESULT stg_write_string(STGHANDLE handle, char *string) {
 
 	return stg_write_record(handle, (PBYTE)string, str_len(string) + 1);
 }

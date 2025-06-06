@@ -50,7 +50,7 @@ typedef enum _STG_RESULT	STG_RESULT;
  * Global variables                                      *
  *********************************************************/
 
-STG_RESULT	stg_last_error;
+extern STG_RESULT	stg_last_error;
 
 
 /*********************************************************
