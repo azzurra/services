@@ -77,6 +77,8 @@ test_function () {
 		TEST="return 0;"
 	fi
 	cat >tmp/test.c <<EOT
+    #include <stdio.h>
+    #include <string.h>
 	int main() {
 		extern int $func$proto;
 		$TEST
@@ -379,7 +381,8 @@ fi
 echo2 "Looking for other routines we want that you don't have... "
 
 MODE="check_snprintf  "
-TEST='char buf[16];
+TEST='
+    char buf[16];
 	int res;
 	buf[0] = 0;
 	res = snprintf(buf, 8, "%d", 123456789);
@@ -391,7 +394,7 @@ TEST='char buf[16];
 	}
 
 	return 0;'
-if test_function int snprintf "(char *, int, const char *, ...)" ; then : ; else
+if test_function int snprintf "(char *, long unsigned int, const char *, ...)" ; then : ; else
 	echo2 "snprintf "
 	echo ""
 	echo "Your snprintf() is not compatible with services' needs."

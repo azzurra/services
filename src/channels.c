@@ -33,8 +33,8 @@ static void chan_sjoin_add_user(User *user, Channel *chan);
 static void chan_sjoin_ops_check(Channel *chan, User **checklist, int count);
 
 /* From chanserv.c, because extern.h doesn't like Timeout */
-extern __inline__ void timeout_leave(Timeout *to);
-extern __inline__ void timeout_unban(Timeout *to);
+extern void timeout_leave(Timeout *to);
+extern void timeout_unban(Timeout *to);
 
 /*********************************************************
  * Variabili globali                                     *

@@ -1818,7 +1818,7 @@ static __inline__ void link_channel(User *user, ChannelInfo *ci) {
 /*********************************************************/
 
 /* Tiny helper routine to get ChanServ out of a channel after it went in. */
-__inline__ void timeout_leave(Timeout *to) {
+void timeout_leave(Timeout *to) {
 
 	ChannelTimeoutData	*data;
 
@@ -1846,7 +1846,7 @@ __inline__ void timeout_leave(Timeout *to) {
 
 /*********************************************************/
 
-__inline__ void timeout_unban(Timeout *to) {
+void timeout_unban(Timeout *to) {
 
 	ChannelTimeoutData	*data;
 

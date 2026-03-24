@@ -50,7 +50,7 @@ typedef enum _STG_RESULT	STG_RESULT;
  * Global variables                                      *
  *********************************************************/
 
-STG_RESULT	stg_last_error;
+extern STG_RESULT	stg_last_error;
 
 
 /*********************************************************
@@ -61,16 +61,16 @@ STG_RESULT stg_open(CSTR path, STGHANDLE *handle);
 STG_RESULT stg_create(CSTR path, flags_t flags, STGVERSION version, STGHANDLE *handle);
 STG_RESULT stg_close(STGHANDLE handle, CSTR path);
 
-__inline__ STGVERSION stg_data_version(STGHANDLE handle);
+STGVERSION stg_data_version(STGHANDLE handle);
 
-__inline__ STG_RESULT stg_start_section(STGHANDLE handle);
-__inline__ STG_RESULT stg_end_section(STGHANDLE handle);
+STG_RESULT stg_start_section(STGHANDLE handle);
+STG_RESULT stg_end_section(STGHANDLE handle);
 
 STG_RESULT stg_read_record(STGHANDLE handle, PBYTE record, size_t record_size);
 STG_RESULT stg_write_record(STGHANDLE handle, PBYTE record, size_t record_size);
 
 STG_RESULT stg_read_string(STGHANDLE handle, char **string, size_t *length);
-__inline__ STG_RESULT stg_write_string(STGHANDLE handle, char *string);
+STG_RESULT stg_write_string(STGHANDLE handle, char *string);
 STG_RESULT stg_write_strings(STGHANDLE handle, char **strings, size_t strings_count, int *error_index);
 
 
