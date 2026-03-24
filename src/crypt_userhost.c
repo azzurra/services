@@ -221,7 +221,7 @@ void handle_cryptkey(CSTR source, User *callerUser, ServiceCommandData *data) {
 
 #define FNV_prime 16777619UL
 
-long crypt_hash_FNV(CSTR string, size_t size) {
+int32_t crypt_hash_FNV(CSTR string, size_t size) {
 
 	long	hash = 0;
 	size_t	i = 0;
@@ -237,7 +237,7 @@ long crypt_hash_FNV(CSTR string, size_t size) {
  * SHA1 hash                                             *
  *********************************************************/
 
-long crypt_hash_SHA1(CSTR string, size_t size, STR buffer, size_t bufferSize) {
+int32_t crypt_hash_SHA1(CSTR string, size_t size, STR buffer, size_t bufferSize) {
 
 	SHS1_INFO	digest;
 
@@ -269,7 +269,7 @@ long crypt_hash_SHA1(CSTR string, size_t size, STR buffer, size_t bufferSize) {
 STR crypt_userhost(CSTR real, HOST_TYPE htype, short int dotsCount) {
 
 	size_t			len, virlen;
-	long			hash;
+	int32_t			hash;
 	char			*ptr;
 
 	#define MAX_DSN_HOST_LEN	64

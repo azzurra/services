@@ -25,7 +25,7 @@ typedef unsigned char*		PBYTE;
 
 #ifndef HAVE_ULONG
 #define HAVE_ULONG
-typedef unsigned long int  ULONG;
+typedef uint32_t  ULONG;
 #endif
 
 typedef unsigned long int		flags_t;

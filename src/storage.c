@@ -51,8 +51,8 @@ typedef struct _RecordDescriptor {
 
 	unsigned char		signature;
 	tiny_flags_t		flags; // SRF_*
-	unsigned short int	size;
-	unsigned long int	crc;
+	uint16_t		size;
+	uint32_t		crc;
 
 } RecordDescriptor;
 
@@ -93,10 +93,10 @@ STG_RESULT	stg_last_error = stgSuccess;
  * Local variables                                       *
  *********************************************************/
 
-#define stgVersionToSignature(v) (unsigned long int)((v << 24) | ((v & 0x0000FF00) << 8) | ((v & 0x00FF0000) >> 8) | ((v & 0xFF000000) >> 24))
+#define stgVersionToSignature(v) (uint32_t)((v << 24) | ((v & 0x0000FF00) << 8) | ((v & 0x00FF0000) >> 8) | ((v & 0xFF000000) >> 24))
 
-static unsigned long int	stgCurrentVersionSignature = stgVersionToSignature(STORAGE_CURRENT_VERSION);
-static unsigned long int	stgCompatibilityVersionSignature = stgVersionToSignature(STORAGE_COMPATIBILITY_VERSION);
+static uint32_t			stgCurrentVersionSignature = stgVersionToSignature(STORAGE_CURRENT_VERSION);
+static uint32_t	stgCompatibilityVersionSignature = stgVersionToSignature(STORAGE_COMPATIBILITY_VERSION);
 
 
 
@@ -144,7 +144,7 @@ STG_RESULT stg_open(const char *path, STGHANDLE *handle) {
 
 		if (IS_NOT_NULL(sd->fd)) {
 
-			unsigned long int	storage_version;
+			uint32_t	storage_version;
 
 			// storage version
 			if (fread(&storage_version, sizeof(storage_version), 1, sd->fd) == 1) {
@@ -392,7 +392,7 @@ STG_RESULT stg_read_record(STGHANDLE handle, PBYTE record, size_t record_size) {
 
 										if (FlagSet(rd.flags, RDF_CRC_CHECK)) {
 
-											unsigned long int	crc = CRC32_INITIAL_VALUE;
+											uint32_t	crc = CRC32_INITIAL_VALUE;
 
 											crc32(record, record_size, &crc);
 											result = (crc == rd.crc) ? stgSuccess : stgCRCError;	// done
@@ -494,7 +494,7 @@ STG_RESULT stg_read_string(STGHANDLE handle, char **string, size_t *length) {
 
 				if (FlagSet(sd->flags, SF_CRC_CHECK)) {
 
-					unsigned long int	crc = CRC32_INITIAL_VALUE;
+					uint32_t	crc = CRC32_INITIAL_VALUE;
 
 					crc32((PBYTE)data, rd.size, &crc);
 					result = (crc == rd.crc) ? stgSuccess : stgCRCError;	// done

@@ -2603,7 +2603,7 @@ unsigned long int aton(CSTR ipaddr) {
  *********************************************************/
 
 // Static CRC table
-static unsigned long crc32_table[256] = {
+static uint32_t crc32_table[256] = {
 
 	0x00000000, 0x77073096, 0xEE0E612C, 0x990951BA,
 	0x076DC419, 0x706AF48F, 0xE963A535, 0x9E6495A3,
@@ -2675,13 +2675,13 @@ static unsigned long crc32_table[256] = {
 };
 
 
-static void compute_crc32(const BYTE byte, unsigned long int *crc) {
+static void compute_crc32(const BYTE byte, uint32_t *crc) {
 
 	*crc = ((*crc) >> 8) ^ crc32_table[(byte) ^ ((*crc) & 0x000000FF)];
 }
 
 
-void crc32(PBYTE data, size_t size, unsigned long int *crc) {
+void crc32(PBYTE data, size_t size, uint32_t *crc) {
 
 	size_t		idx;
 

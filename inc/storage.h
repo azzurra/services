@@ -18,7 +18,7 @@
  * Data types                                            *
  *********************************************************/
 
-typedef int						STGHANDLE;
+typedef long				STGHANDLE;
 typedef unsigned short int		STGVERSION;
 
 
