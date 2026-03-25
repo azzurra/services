@@ -21,8 +21,8 @@
 
 struct _CIDR_IP {
 
-	unsigned int ip;
-	unsigned int mask;
+	uint32_t ip;
+	uint32_t mask;
 };
 
 typedef struct _CIDR_IP	CIDR_IP;

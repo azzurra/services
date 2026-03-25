@@ -39,7 +39,7 @@ typedef enum _STG_RESULT	STG_RESULT;
 #define SF_READ_ACCESS		0x00000001
 #define SF_WRITE_ACCESS		0x00000002
 #define SF_CRC_CHECK		0x00000010
-
+#define SF_64BIT_RECORDS	0x00000020
 
 #define	STG_INVALID_VERSION	((STGVERSION) 0)
 
@@ -62,7 +62,9 @@ STG_RESULT stg_create(CSTR path, flags_t flags, STGVERSION version, STGHANDLE *h
 STG_RESULT stg_close(STGHANDLE handle, CSTR path);
 
 STGVERSION stg_data_version(STGHANDLE handle);
-
+#ifdef OS_64BIT
+BOOL stg_is64bit(STGHANDLE handle);
+#endif
 STG_RESULT stg_start_section(STGHANDLE handle);
 STG_RESULT stg_end_section(STGHANDLE handle);
 

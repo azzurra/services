@@ -50,7 +50,33 @@ struct _AutoKill_V10 {
 
 // Current structs version
 typedef	AutoKill_V10		AutoKill;
+#define OS_64BIT
+#ifdef OS_64BIT
+typedef struct _AutoKill_V10_32		AutoKill_V10_32;
+struct __attribute__((packed)) _AutoKill_V10_32 {
 
+	int32_t						prev, next;
+
+	int32_t username;			/* User part of the AKILL */
+	int32_t host;				/* Host part of the AKILL */
+	int32_t reason;			/* Why they got akilled */
+	int32_t desc;				/* Description available to opers on LIST */
+
+	CIDR_IP cidr;			/* CIDR data, if available (flagged WITHCIDR) */
+
+	Creator32 creator;		/* Who created it, and when */
+
+	int32_t expireTime;		/* When it expires */
+	int32_t lastUsed;
+
+	uint32_t id;			/* Autokill unique ID number */
+	uint32_t type;			/* AKILL_TYPE_* defined below */
+};
+
+
+// Current structs version
+typedef	AutoKill_V10_32		AutoKill32;
+#endif
 
 /*********************************************************
  * Constants                                             *

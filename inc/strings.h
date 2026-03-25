@@ -37,7 +37,13 @@ typedef struct _Creator {
 	time_t		time;
 
 } Creator;
-
+#define OS_64BIT
+#ifdef OS_64BIT
+typedef struct _Creator_32 {
+	uint32_t	name;
+	uint32_t	time;
+} Creator32;
+#endif
 
 typedef struct _CreationInfo {
 
@@ -45,6 +51,13 @@ typedef struct _CreationInfo {
 	STR			reason;
 
 } CreationInfo;
+
+#ifdef OS_64BIT
+typedef struct _CreationInfo_32 {
+	Creator32	creator;
+	uint32_t	reason;
+} CreationInfo32;
+#endif
 
 
 typedef struct	_SettingsInfo	SettingsInfo;
