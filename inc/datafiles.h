@@ -16,12 +16,16 @@
 #ifndef SRV_DATAFILES_H
 #define SRV_DATAFILES_H
 
-
+#ifdef OS_64BIT
+#define DATAFILE64 0x80
+#else
+#define DATAFILE64 0
+#endif
 /*********************************************************
  * Public code                                           *
  *********************************************************/
 
-extern int get_file_version(FILE *f, const char *filename);
+extern int get_file_version(FILE *f, const char *filename, uint8_t *flags);
 extern int write_file_version(FILE *f, const char *filename, int version);
 extern FILE *open_db_read(const char *service, const char *filename);
 extern FILE *open_db_write(const char *service, const char *filename, int version);

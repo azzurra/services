@@ -52,19 +52,21 @@ typedef struct {
 
 } ChanAccess_V7;
 
-typedef struct _ChanAccess_V10	ChanAccess_V10;
-struct _ChanAccess_V10 {
+#ifdef OS_64BIT
+typedef struct _ChanAccess_V7_32 {
+		short	level;
+		short	status:4; /* See ACCESS_ENTRY_* below */
 
-	ChanAccess_V10	*next, *prev;
+		short   flags:12;
 
-	char			*name;
-    short			level;
-	short			status; /* See ACCESS_ENTRY_* below */
+		uint32_t	name;
+		uint32_t	creator;
 
-    time_t			last_used;
-	CreationInfo	info;
-};
+		uint32_t	creationTime;
 
+} ChanAccess_V7_32;
+typedef ChanAccess_V7_32 ChanAccess32;
+#endif
 // Current structs version
 typedef	ChanAccess_V7	ChanAccess;
 
@@ -87,17 +89,22 @@ struct _AutoKick_V7 {
 	time_t			creationTime;
 };
 
-typedef struct _AutoKick_V10	AutoKick_V10;
-struct _AutoKick_V10 {
+#ifdef OS_64BIT
+typedef struct _AutoKick_V7_32		AutoKick_V7_32;
+struct _AutoKick_V7_32 {
+	unsigned short	isNick:1;
+	short			flags:15;
 
-	AutoKick_V10	*next, *prev;
+	short			banType;
 
-    char			*name;
-    short			is_nick;
-    time_t			last_used;
-	CreationInfo	info;
+	uint32_t			name;
+	uint32_t			reason;
+	uint32_t			creator;
 
+	uint32_t			creationTime;
 };
+typedef	AutoKick_V7_32		AutoKick32;
+#endif
 
 // Current structs version
 typedef	AutoKick_V7		AutoKick;
@@ -105,46 +112,6 @@ typedef	AutoKick_V7		AutoKick;
 
 
 // a registered channel
-typedef struct _ChannelInfo_V7		ChannelInfo_V7;
-struct _ChannelInfo_V7 {
-
-    ChannelInfo_V7	*next, *prev;
-    char			name[CHANMAX];
-    char			founder[NICKMAX];				/* Always a reg'd nick */
-    char			founderpass[PASSMAX];
-    char			*desc;
-    time_t			time_registered;
-    time_t			last_used;
-    long			accesscount;
-    ChanAccess_V7	*access;					/* List of authorized users */
-    long			akickcount;
-    AutoKick_V7		*akick;
-    short			mlock_on, mlock_off;			/* See channel modes below */
-    long			mlock_limit;					/* 0 if no limit */
-    char			*mlock_key;					/* NULL if no key */
-    char			*last_topic;					/* Last topic on the channel */
-    char			last_topic_setter[NICKMAX];	/* Who set the last topic */
-    time_t			last_topic_time;				/* When the last topic was set */
-    long			flags;							/* CI_* */
-    char			*successor;					
-    char			*url;
-    char			*email;
-    char			*welcome;
-    char			*hold;       /*  }                                         */
-    char			*mark;       /*  }   --   Identities (what admin did it?)  */
-    char			*freeze;     /*  }   --                                    */
-    char			*forbid;     /*  }                                         */
-    int				topic_allow;					/* Who's allowed to change topic */
-    unsigned long	auth;
-    long			settings;
-    char			*real_founder;
-	time_t			last_drop_request;
-	NICK_LANG_ID	langID;
-    unsigned char	banType;					/* For future expansion -- decrease! */
-    unsigned char	reserved[2];					/* For future expansion -- decrease! */
-
-};
-
 typedef struct _ChannelInfo_V8		ChannelInfo_V8;
 struct _ChannelInfo_V8 {
 
@@ -185,58 +152,53 @@ struct _ChannelInfo_V8 {
 
 };
 
-typedef struct _ChannelInfo_V10		ChannelInfo_V10;
-struct _ChannelInfo_V10 {
+// Current structs version
+typedef	ChannelInfo_V8	ChannelInfo;
 
-	ChannelInfo_V10		*next, *prev;
+#ifdef OS_64BIT
+typedef struct _ChannelInfo_V8_32		ChannelInfo_V8_32;
+struct _ChannelInfo_V8_32 {
 
-	char				*name;
+	uint32_t		next, prev;
+	char			name[CHANMAX];
+	char			founder[NICKMAX];				/* Always a reg'd nick */
+	char			founderpass[PASSMAX];
+	uint32_t		desc;
+	int32_t			time_registered;
+	int32_t			last_used;
+	int32_t			accesscount;
+	int32_t			access;					/* List of authorized users */
+	int32_t			akickcount;
+	int32_t			akick;
+	uint32_t		mlock_on, mlock_off;			/* See channel modes below */
+	int32_t			mlock_limit;					/* 0 if no limit */
+	uint32_t		mlock_key;					/* NULL if no key */
+	uint32_t		last_topic;					/* Last topic on the channel */
+	char			last_topic_setter[NICKMAX];	/* Who set the last topic */
+	int32_t			last_topic_time;				/* When the last topic was set */
+	uint32_t		flags;							/* CI_* */
+	int32_t 		successor;
+	int32_t 		url;
+	int32_t 		email;
+	int32_t 		welcome;
+	int32_t 		hold;       /*  }                                         */
+	int32_t 		mark;       /*  }   --   Identities (what admin did it?)  */
+	int32_t 		freeze;     /*  }   --                                    */
+	int32_t 		forbid;     /*  }                                         */
+	int				topic_allow;					/* Who's allowed to change topic */
+	uint32_t	auth;
+	int32_t			settings;
+	int32_t			real_founder;
+	int32_t			last_drop_request;
+	NICK_LANG_ID	langID;
+	unsigned char	banType;					/* For future expansion -- decrease! */
+	unsigned char	reserved[2];					/* For future expansion -- decrease! */
 
-	char				*founder;
-	char				*password;
-	char				*real_founder;
-	char				*successor;
-
-	char				*desc;
-	char				*url;
-	char				*email;
-	char				*welcome;
-
-	time_t				time_registered;
-	time_t				last_used;
-	time_t				last_drop_request;
-
-	unsigned short int	accesscount;
-	ChanAccess			*access;
-
-	unsigned short int	akickcount;
-	AutoKick			*akick;
-
-	NICK_LANG_ID		langID;
-	flags_t				flags;
-
-	unsigned short int	topicAllow:3;		/* 2^3 = 8 values allowed. NONE/VOP/AOP/SOP/CF/F */
-	unsigned short int	banType:4;			/* 2^4 = 16 values allowed. 0 to 9 needed. */
-	unsigned short int	memoLevel:3;		/* 2^3 = 8 values allowed. NONE/VOP/AOP/SOP/CF */
-	unsigned short int	entryLevel:3;		/* 2^3 = 8 values allowed. NONE/HOP/SOP/SA/SRA/CODER */
-	unsigned short int	pad:3;				/* 2^3 = 8 values allowed. Currently unused. */
-
-	SettingsInfo		*info;
-
-	unsigned long int	mlock_on;
-	unsigned long int	mlock_off;
-	unsigned short int	mlock_limit;
-	char				*mlock_key;
-
-	char				*last_topic;
-	char				*last_topic_setter;
-	time_t				last_topic_time;
-
-	unsigned long int	auth;
 };
 
 // Current structs version
-typedef	ChannelInfo_V8	ChannelInfo;
+typedef	ChannelInfo_V8_32	ChannelInfo32;
+#endif
 
 
 

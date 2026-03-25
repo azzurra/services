@@ -73,6 +73,10 @@ static Agent a_NickServ;
 
 unsigned char	*nickserv_used_guest_list = NULL;
 
+#ifdef OS_64BIT
+static void nickinfo32_to64(NickInfo32 * ni32, NickInfo * ni);
+#endif
+
 static void timeout_start_collide(NickInfo *ni, int type);
 static void timeout_collide_countdown(Timeout *t);
 static void timeout_release(Timeout *to);
@@ -322,6 +326,39 @@ void nickserv(CSTR source, User *callerUser, char *buf) {
 }
 
 /*********************************************************/
+#ifdef OS_64BIT
+static void nickinfo32_to64(NickInfo32 * ni32, NickInfo *ni) {
+	//we don't care about valid pointer, we just make sure NULL stays NULL and not NULL stays NOT NULL
+	//eventually they will get overwritten with a valid pointer later
+
+	ni->next = NULL;
+	ni->prev = NULL;
+	memcpy(ni->nick, ni32->nick, NICKMAX);
+	memcpy(ni->pass, ni32->pass, PASSMAX);
+	ni->last_usermask = (char *)ni32->last_usermask;
+	ni->last_realname = (char *)ni32->last_realname;
+	ni->time_registered = ni32->time_registered;
+	ni->last_seen = ni32->last_seen;
+	ni->accesscount = ni32->accesscount;
+	ni->access = (char **)ni32->access;
+	ni->flags = ni32->flags;
+	ni->last_drop_request = ni32->last_drop_request;
+	ni->channelcount = ni32->channelcount;
+	ni->url = (char *)ni32->url;
+	ni->email = (char *)ni32->email;
+	ni->forward = (char *)ni32->forward;
+	ni->hold = (char *)ni32->hold;
+	ni->mark = (char *)ni32->mark;
+	ni->forbid = (char *)ni32->forbid;
+	ni->news = ni32->news;
+	ni->regemail = (char *)ni32->regemail;
+	ni->last_email_request = ni32->last_email_request;
+	ni->auth = ni32->auth;
+	ni->freeze = (char *)ni32->freeze;
+	ni->langID = ni32->langID;
+	memset(ni->reserved, 0, sizeof(ni->reserved));
+}
+#endif
 
 /* Load/save data files. */
 void load_ns_dbase(void) {
@@ -342,9 +379,17 @@ void load_ns_dbase(void) {
 	ns_regCount = 0;
 
 	TRACE();
-	switch (ver = get_file_version(f, NICKSERV_DB)) {
+	uint8_t flags;
+	switch (ver = get_file_version(f, NICKSERV_DB, &flags)) {
 
 		case NICKSERV_DB_CURRENT_VERSION:
+			if (flags & DATAFILE64) {
+#ifndef OS_64BIT
+			fatal_error(FACILITY_NICKSERV_LOAD_NS_DB, __LINE__, "Unsupported 64bit datafile: %s", NICKSERV_DB);
+			break;
+#endif
+
+			}
 
 			for (i = 65; i < 126; ++i) {
 
@@ -361,10 +406,23 @@ void load_ns_dbase(void) {
 					#else
 					ni = mem_malloc(sizeof(NickInfo));
 					#endif
-
+#ifdef OS_64BIT
+					if (flags & DATAFILE64) {
+						//64bit datafile on a 64bit machine, nothing to do
+						if (fread(ni, sizeof(NickInfo), 1, f) != 1)
+							fatal_error(FACILITY_NICKSERV_LOAD_NS_DB, __LINE__, "Read error on %s", NICKSERV_DB);
+					} else {
+						//32bit datafile on a 64bit machine
+						NickInfo32 *ni32 = mem_malloc(sizeof(NickInfo32));
+						if (fread(ni32, sizeof(NickInfo32), 1, f) != 1)
+							fatal_error(FACILITY_NICKSERV_LOAD_NS_DB, __LINE__, "Read error on %s", NICKSERV_DB);
+						nickinfo32_to64(ni32, ni);
+						mem_free(ni32);
+					}
+#else
 					if (fread(ni, sizeof(NickInfo), 1, f) != 1)
 						fatal_error(FACILITY_NICKSERV_LOAD_NS_DB, __LINE__, "Read error on %s", NICKSERV_DB);
-
+#endif
 					TRACE();
 					// crashfix
 					if (ni->langID == LANG_DE)

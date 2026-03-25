@@ -26,7 +26,7 @@ typedef unsigned short int	LANG_MSG_SIZE;
 typedef LANG_MSG *			LANG_TABLE;
 
 
-typedef unsigned char	NICK_LANG_ID;
+typedef uint8_t	NICK_LANG_ID;
 
 
 typedef struct lang_item {

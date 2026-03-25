@@ -42,20 +42,6 @@ struct _Memo_V7 {
     long		reserved[3];   /* For future expansion -- set to 0 */
 };
 
-typedef struct _Memo_V10	Memo_V10;
-struct _Memo_V10 {
-
-	Memo_V10	*next, *prev;
-
-	char			*sender;
-    char			*text;
-    char			*chan;
-    time_t			time;
-
-	unsigned short	flags:11;
-	unsigned short	level:5;
-};
-
 // Current structs version
 typedef	Memo_V7		Memo;
 
@@ -68,15 +54,6 @@ struct _MemoIgnore_V7 {
 	time_t			creationTime;
 	STR				ignoredNick;
 	MemoIgnore_V7	*next, *prev;
-};
-
-typedef struct _MemoIgnore_V10	MemoIgnore_V10;
-struct _MemoIgnore_V10 {
-
-	MemoIgnore_V10	*next, *prev;
-
-	STR				ignoredNick;
-	time_t			creationTime;
 };
 
 // Current structs version
@@ -100,24 +77,57 @@ struct _MemoList_V7 {
 };
 
 
-typedef struct _MemoList_V10	MemoList_V10;
-struct _MemoList_V10 {
+// Current structs version
+typedef	MemoList_V7		MemoList;
+#ifdef OS_64BIT
+// a single memo
+typedef struct _Memo_V7_32		Memo_V7_32;
+struct _Memo_V7_32 {
 
-
-    MemoList_V10		*next, *prev;
-    
-	char				*nick;
-
-	unsigned char		n_memos;
-    Memo_V10			*memos;
-
-    unsigned char		n_ignores;
-    MemoIgnore_V10		*ignores;
+	char		sender[NICKMAX];
+	uint32_t	unused;	/* Was index number */
+	uint32_t	time;	/* When it was sent */
+	uint32_t	text;
+	uint32_t	chan;
+	short		flags;	/* MF_* */
+	short		level;	/* If it is a channel memo, this is CS_ACCESS_*, 0 otherwise. */
+	uint32_t	reserved[3];   /* For future expansion -- set to 0 */
 };
 
 // Current structs version
-typedef	MemoList_V7		MemoList;
+typedef	Memo_V7_32		Memo32;
 
+
+
+// Ignore-list
+typedef struct _MemoIgnore_V7_32	MemoIgnore_V7_32;
+struct _MemoIgnore_V7_32 {
+
+	uint32_t			creationTime;
+	uint32_t			ignoredNick;
+	uint32_t			next, prev;
+};
+
+// Current structs version
+typedef	MemoIgnore_V7_32	MemoIgnore32;
+
+
+// a nickname memo-list
+typedef struct _MemoList_V7_32		MemoList_V7_32;
+struct _MemoList_V7_32 {
+
+	uint32_t			next, prev;
+	char				nick[NICKMAX];		/* Owner of the memos */
+	uint32_t			n_memos;			/* Number of memos */
+	uint32_t			memos;				/* The memos themselves */
+
+	uint32_t			n_ignores;			/* Number of ignores */
+	uint32_t			ignores;			/* Ignore-list */
+
+	uint32_t reserved[2];					/* For future expansion - set to 0 */
+};
+typedef	MemoList_V7_32		MemoList32;
+#endif
 
 
 /*********************************************************

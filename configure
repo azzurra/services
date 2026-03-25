@@ -465,6 +465,7 @@ fi
 echo "done."
 
 echo2 "Creating Makefile.inc... "
+LBIT=$(getconf LONG_BIT)
 cat >Makefile.inc <<EOT
 # This file is generated automatically by "configure".  Any changes made
 # to it will be erased next time "configure" is run.
@@ -477,6 +478,8 @@ LIBS=$CC_LIBS
 PROGRAM=services
 BINDEST=$BINDEST
 DATDEST=$DATDEST
+LBIT=$LBIT
+CFLAGS += -DOS_${LBIT}BIT
 
 EOT
 echo "done."

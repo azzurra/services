@@ -31,11 +31,13 @@
 /* Return the version number on the file. Panic if there is no version
 * number or the number doesn't make sense (i.e. less than 1 or greater
 * than FILE_VERSION).
+* first byte will be used for flags, we don't need 4byte for a version --Sonic
 */
 
-int get_file_version(FILE *f, const char *filename) {
+int get_file_version(FILE *f, const char *filename, uint8_t *flags) {
 
-	int version = fgetc(f)<<24 | fgetc(f)<<16 | fgetc(f)<<8 | fgetc(f);
+	*flags = fgetc(f);
+	int version = fgetc(f)<<16 | fgetc(f)<<8 | fgetc(f);
 
 	if (ferror(f))
 		fatal_error(FACILITY_DATABASE, __LINE__, "Error reading version number on %s", filename);
@@ -57,7 +59,10 @@ int write_file_version(FILE *f, const char *filename, int version) {
 
 		return 0;
 	}
-	if (fputc(version>>24 & 0xFF, f) < 0 || fputc(version>>16 & 0xFF, f) < 0 ||
+
+
+
+	if (fputc(DATAFILE64, f) < 0 || fputc(version>>16 & 0xFF, f) < 0 ||
 		fputc(version>> 8 & 0xFF, f) < 0 || fputc(version & 0xFF, f) < 0) {
 
 		log_stderr("Error writing version number on %s", filename);
