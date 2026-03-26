@@ -175,8 +175,28 @@ BOOL ignore_db_load(void) {
 						while (in_section) {
 
 							anIgnore = mem_malloc(sizeof(Ignore_V10));
-
+#ifdef OS_64BIT
+							Ignore_V10_32 ignore32;
+							BOOL is64Bit = stg_is64bit(stg);
+							if (is64Bit)
+								result = stg_read_record(stg, (PBYTE)anIgnore, sizeof(Ignore_V10));
+							else {
+								result = stg_read_record(stg, (PBYTE)&ignore32, sizeof(Ignore_V10_32));
+								anIgnore->nick = (STR) ignore32.nick;
+								anIgnore->username = (STR) ignore32.username;
+								anIgnore->host = (STR) ignore32.host;
+								memcpy(&anIgnore->cidr, &ignore32.cidr, sizeof(CIDR_IP));
+								anIgnore->info.creator.name = (STR) ignore32.info.creator.name;
+								anIgnore->info.creator.time = ignore32.info.creator.time;
+								anIgnore->info.reason = (STR) ignore32.info.reason;
+								anIgnore->expireTime = ignore32.expireTime;
+								anIgnore->lastUsed = ignore32.lastUsed;
+								anIgnore->flags = ignore32.flags;
+							}
+#else
 							result = stg_read_record(stg, (PBYTE)anIgnore, sizeof(Ignore_V10));
+#endif
+
 
 							switch (result) {
 

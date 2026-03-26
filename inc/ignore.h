@@ -48,6 +48,29 @@ struct _ignore_V10 {
 
 // Current struct version
 typedef	Ignore_V10		Ignore;
+#ifdef OS_64BIT
+typedef struct _ignore_V10_32		Ignore_V10_32;
+struct _ignore_V10_32 {
+
+	int32_t		prev, next;
+
+	int32_t		nick;
+	int32_t		username;
+	int32_t		host;
+
+	CIDR_IP cidr;
+
+	CreationInfo32 info;
+
+	int32_t expireTime;
+	int32_t lastUsed;
+
+	tiny_flags_t flags;
+};
+
+// Current struct version
+typedef	Ignore_V10		Ignore;
+#endif
 
 
 /*********************************************************
