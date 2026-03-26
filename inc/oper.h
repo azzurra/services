@@ -87,6 +87,22 @@ struct _Oper_V11 {
 	flags_t			flags;					/* OPER_* defined below. */
 	int				level;					/* Oper's access level to services (ULEVEL_*) */
 };
+#ifdef OS_64BIT
+typedef struct _Oper_V11_32	Oper_V11_32;
+struct _Oper_V11_32 {
+
+	int32_t				prev, next;
+
+	int32_t				nick;
+
+	Creator32			creator;
+	int32_t				lastUpdate;
+
+	uint32_t			flags;					/* OPER_* defined below. */
+	int32_t				level;					/* Oper's access level to services (ULEVEL_*) */
+};
+typedef Oper_V11_32 Oper32;
+#endif
 
 // Current structs version
 #define	Oper	Oper_V11
