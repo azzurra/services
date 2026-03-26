@@ -85,7 +85,9 @@ BOOL blacklist_db_load(void) {
 				case BLACKLIST_DB_CURRENT_VERSION: {
 
 					BlackList_V10	*anAddress;
-
+#ifdef OS_64BIT
+					BlackList32		bl32;
+#endif
 
 					// start-of-section marker
 					result = stg_read_record(stg, NULL, 0);
@@ -97,8 +99,22 @@ BOOL blacklist_db_load(void) {
 						while (in_section) {
 
 							anAddress = mem_malloc(sizeof(BlackList_V10));
-
+#ifdef OS_64BIT
+							BOOL is64Bit = stg_is64bit(stg);
+							if (is64Bit) {
+								result = stg_read_record(stg, (PBYTE)anAddress, sizeof(BlackList_V10));
+							} else {
+								result = stg_read_record(stg, (PBYTE)&bl32, sizeof(BlackList32));
+								anAddress->address = (char*)bl32.address;
+								anAddress->flags = bl32.flags;
+								anAddress->lastUsed = bl32.lastUsed;
+								anAddress->info.creator.name = (char*)bl32.info.creator.name;
+								anAddress->info.creator.time = bl32.info.creator.time;
+								anAddress->info.reason = (char*)bl32.info.reason;
+							}
+#else
 							result = stg_read_record(stg, (PBYTE)anAddress, sizeof(BlackList_V10));
+#endif
 
 							switch (result) {
 

@@ -40,9 +40,24 @@ struct _blacklist_V10 {
 	short			pad;
 };
 
-
 // Current struct version
 typedef	BlackList_V10		BlackList;
+
+#ifdef OS_64BIT
+typedef struct _BlackList_V10_32		BlackList_V10_32;
+struct _BlackList_V10_32 {
+	int32_t			prev, next;
+
+	int32_t			address;
+
+	CreationInfo32	info;
+	int32_t			lastUsed;
+
+	tiny_flags_t	flags;
+	uint16_t		pad;
+};
+typedef	BlackList_V10_32		BlackList32;
+#endif
 
 
 /*********************************************************
