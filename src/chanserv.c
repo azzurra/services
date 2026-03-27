@@ -48,7 +48,18 @@ struct _channelsuspenddata {
 	time_t expires;
 };
 
+#ifdef OS_64BIT
+typedef struct _channelsuspenddata_32 ChannelSuspendData32;
 
+struct _channelsuspenddata_32 {
+
+	uint32_t next;
+
+	char name[CHANMAX];
+	char who[NICKMAX];
+	uint32_t expires;
+};
+#endif
 /*********************************************************
  * Global variables                                      *
  *********************************************************/
@@ -1004,9 +1015,24 @@ void load_suspend_db(void) {
 		name = mem_malloc(sizeof(ChannelSuspendData));
 
 		TRACE();
-		if (fread(name, sizeof(ChannelSuspendData), 1, f) != 1)
-			fatal_error(FACILITY_CHANSERV_LOAD_SUSPEND_DB, __LINE__, "Read error on %s at entry %d", SUSPEND_DB, i);
+#ifdef OS_64BIT
+		if (flags & DATAFILE64) {
+			if (fread(name, sizeof(ChannelSuspendData), 1, f) != 1)
+				fatal_error(FACILITY_CHANSERV_LOAD_SUSPEND_DB, __LINE__, "Read error on %s at entry %d", SUSPEND_DB, i);
+		} else {
+			ChannelSuspendData32 name32;
+			if (fread(&name32, sizeof(ChannelSuspendData32), 1, f) != 1)
+				fatal_error(FACILITY_CHANSERV_LOAD_SUSPEND_DB, __LINE__, "Read error on %s at entry %d", SUSPEND_DB, i);
 
+			name->expires = name32.expires;
+			memcpy(name->name, name32.name, CHANMAX);
+			memcpy(name->who, name32.who, NICKMAX);
+		}
+#else
+		if (fread(name, sizeof(ChannelSuspendData), 1, f) != 1)
+			fatal_error(FACILITY_CHANSERV_LOAD_SUSPEND_DB, __LINE__, "Read error on %s at entry %d", SUSPEND_DB, i);ù
+
+#endif
 		TRACE();
 		name->next = ChannelSuspendList;
 		ChannelSuspendList = name;
