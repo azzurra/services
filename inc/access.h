@@ -62,6 +62,37 @@ struct _access_V10 {
 
 #define Access Access_V10
 
+#ifdef OS_64BIT
+typedef struct _access_V10_32 Access_V10_32;
+
+struct _access_V10_32 {
+	int32_t next;
+
+	int32_t nick;
+	int32_t user;
+	int32_t user2;
+	int32_t user3;
+	int32_t host;
+	int32_t host2;
+	int32_t host3;
+	int32_t server;
+	int32_t server2;
+	int32_t server3;
+
+	int32_t flags; /* AC_* defined below. */
+
+	int32_t modes_on; /* Modes added on connect. */
+	int32_t modes_off; /* Modes removed on connect. */
+
+	Creator32 creator;
+
+	int32_t lastUpdate;
+};
+
+
+typedef Access_V10_32 Access32;
+#endif
+
 
 /*********************************************************
  * Constants                                             *
