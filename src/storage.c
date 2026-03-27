@@ -38,6 +38,7 @@ typedef struct _StorageHeader {
 } StorageHeader;
 
 #ifdef OS_64BIT
+#pragma pack(push, 4)
 typedef struct _StorageHeader32 {
 
 	char				signature[STF_HEADER_SIGNATURE_SIZE];	/* STORAGE_SIGNATURE */
@@ -47,6 +48,7 @@ typedef struct _StorageHeader32 {
 	int32_t				last_save;
 
 } StorageHeader32;
+#pragma pack(pop)
 #endif
 
 

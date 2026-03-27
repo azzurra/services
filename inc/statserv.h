@@ -49,26 +49,62 @@ struct _ChannelStats_V10 {
 	time_t				time_added;
 	time_t				last_change;	/* when the last stat changed */
 
-	unsigned long int	totaljoins, totalparts, totalkicks, totalbans, totaloppings, totaldeoppings, totalhalfoppings, totaldehalfoppings, totalvoicings, totaldevoicings, totaltopics, totaldelcmodes, totaladdcmodes;
-	unsigned int		totalpeak, monthlypeak, weeklypeak, dailypeak;
-	unsigned int		monthlyjoins, weeklyjoins, dailyjoins;
-	unsigned int		monthlyparts, weeklyparts, dailyparts;
-	unsigned int		monthlykicks, weeklykicks, dailykicks;
-	unsigned int		monthlybans, weeklybans, dailybans;
-	unsigned int		monthlyoppings, weeklyoppings, dailyoppings;
-	unsigned int		monthlydeoppings, weeklydeoppings, dailydeoppings;
-	unsigned int		monthlyhalfoppings, weeklyhalfoppings, dailyhalfoppings;
-	unsigned int		monthlydehalfoppings, weeklydehalfoppings, dailydehalfoppings;
-	unsigned int		monthlyvoicings, weeklyvoicings, dailyvoicings;
-	unsigned int		monthlydevoicings, weeklydevoicings, dailydevoicings;
-	unsigned int		monthlytopics, weeklytopics, dailytopics;
-	unsigned int		monthlydelcmodes, weeklydelcmodes, dailydelcmodes;
-	unsigned int		monthlyaddcmodes, weeklyaddcmodes, dailyaddcmodes;
+	uint64_t	totaljoins, totalparts, totalkicks, totalbans, totaloppings, totaldeoppings, totalhalfoppings,
+				totaldehalfoppings, totalvoicings, totaldevoicings, totaltopics, totaldelcmodes, totaladdcmodes;
+	uint64_t	totalpeak, monthlypeak, weeklypeak, dailypeak;
+	uint64_t	monthlyjoins, weeklyjoins, dailyjoins;
+	uint64_t	monthlyparts, weeklyparts, dailyparts;
+	uint64_t	monthlykicks, weeklykicks, dailykicks;
+	uint64_t	monthlybans, weeklybans, dailybans;
+	uint64_t	monthlyoppings, weeklyoppings, dailyoppings;
+	uint64_t	monthlydeoppings, weeklydeoppings, dailydeoppings;
+	uint64_t	monthlyhalfoppings, weeklyhalfoppings, dailyhalfoppings;
+	uint64_t	monthlydehalfoppings, weeklydehalfoppings, dailydehalfoppings;
+	uint64_t	monthlyvoicings, weeklyvoicings, dailyvoicings;
+	uint64_t	monthlydevoicings, weeklydevoicings, dailydevoicings;
+	uint64_t	monthlytopics, weeklytopics, dailytopics;
+	uint64_t	monthlydelcmodes, weeklydelcmodes, dailydelcmodes;
+	uint64_t	monthlyaddcmodes, weeklyaddcmodes, dailyaddcmodes;
 };
 
 // Current struct version
 typedef ChannelStats_V10	ChannelStats;
 
+#ifdef OS_64BIT
+#pragma pack(push, 4) // just tell the compiler we want a 4byte alignment to be sure
+typedef struct _ChannelStats_V10_32	ChannelStats_V10_32;
+struct _ChannelStats_V10_32 {
+
+	int32_t	next, prev;
+
+#ifdef FIX_USE_MPOOL
+	int32_t		mblock_id;
+#endif
+
+	int32_t		name;
+	int32_t		time_added;
+	int32_t		last_change;	/* when the last stat changed */
+
+	uint32_t	totaljoins, totalparts, totalkicks, totalbans, totaloppings, totaldeoppings, totalhalfoppings, totaldehalfoppings, totalvoicings, totaldevoicings, totaltopics, totaldelcmodes, totaladdcmodes;
+	uint32_t	totalpeak, monthlypeak, weeklypeak, dailypeak;
+	uint32_t	monthlyjoins, weeklyjoins, dailyjoins;
+	uint32_t	monthlyparts, weeklyparts, dailyparts;
+	uint32_t	monthlykicks, weeklykicks, dailykicks;
+	uint32_t	monthlybans, weeklybans, dailybans;
+	uint32_t	monthlyoppings, weeklyoppings, dailyoppings;
+	uint32_t	monthlydeoppings, weeklydeoppings, dailydeoppings;
+	uint32_t	monthlyhalfoppings, weeklyhalfoppings, dailyhalfoppings;
+	uint32_t	monthlydehalfoppings, weeklydehalfoppings, dailydehalfoppings;
+	uint32_t	monthlyvoicings, weeklyvoicings, dailyvoicings;
+	uint32_t	monthlydevoicings, weeklydevoicings, dailydevoicings;
+	uint32_t	monthlytopics, weeklytopics, dailytopics;
+	uint32_t	monthlydelcmodes, weeklydelcmodes, dailydelcmodes;
+	uint32_t	monthlyaddcmodes, weeklyaddcmodes, dailyaddcmodes;
+};
+#pragma pack(pop)
+// Current struct version
+typedef ChannelStats_V10_32	ChannelStats32;
+#endif
 
 
 // servers statistics
@@ -115,29 +151,82 @@ typedef ServerStats_V10		ServerStats;
 
 
 // current records
+#ifdef OS_64BIT
+/*We are not saving any memory using short or char followed by time_t that is 64bit today, just go with uint64_t*/
+typedef struct _RecordStats_V10 {
+
+	time_t				started;
+
+	uint64_t			maxusers;
+	time_t				maxusers_time;
+
+	uint64_t			maxchannels;
+	time_t				maxchannels_time;
+
+	uint64_t			maxopers;
+	time_t				maxopers_time;
+	
+	uint64_t			maxservers;
+	time_t				maxservers_time;
+	
+	uint64_t			maxconn;
+	time_t				maxconn_time;
+
+} RecordStats_V10;
+#else
 typedef struct _RecordStats_V10 {
 
 	time_t			started;
 
 	unsigned short int	maxusers;
 	time_t				maxusers_time;
-	
+
 	unsigned short int	maxchannels;
 	time_t				maxchannels_time;
 
 	unsigned char		maxopers;
 	time_t				maxopers_time;
-	
+
 	unsigned char		maxservers;
 	time_t				maxservers_time;
-	
+
 	unsigned long int	maxconn;
 	time_t				maxconn_time;
 
 } RecordStats_V10;
+#endif
 
 // Current structs version
 typedef RecordStats_V10		RecordStats;
+
+#ifdef OS_64BIT
+/*Fuck who ever wrote this...this is was fucking padding nightmare!
+ Like the 25% of the space is wasted in padding. --Sonic
+ */
+#pragma pack(push, 4)
+typedef struct _RecordStats_V10_32 {
+
+	uint32_t			started;
+
+	uint16_t			maxusers;
+	uint32_t			maxusers_time;
+
+	uint16_t			maxchannels;
+	uint32_t			maxchannels_time;
+	uint8_t 			maxopers;
+	uint32_t			maxopers_time;
+
+	uint8_t				maxservers;
+	uint32_t			maxservers_time;
+
+	uint32_t			maxconn;
+	uint32_t			maxconn_time;
+
+} RecordStats_V10_32;
+#pragma pack(pop)
+// Current structs version
+typedef RecordStats_V10_32		RecordStats32;
+#endif
 
 
 // Global stats
@@ -170,6 +259,34 @@ typedef struct _GlobalStats_V10 {
 // Current structs version
 typedef GlobalStats_V10		GlobalStats;
 
+#ifdef OS_64BIT
+typedef struct _GlobalStats_V10_32 {
+
+	int32_t				last_update;
+
+	uint32_t	nicks;
+	uint32_t	kills;
+	uint32_t	skills;
+	uint32_t	joins;
+	uint32_t	parts;
+	uint32_t	quits;
+	uint32_t	kicks;
+	uint32_t	bans;
+	uint32_t	addcmodes;
+	uint32_t	delcmodes;
+	uint32_t	umodes;
+	uint32_t	connections;
+	uint32_t	oppings;
+	uint32_t	deoppings;
+	uint32_t	halfoppings;
+	uint32_t	dehalfoppings;
+	uint32_t	voicings;
+	uint32_t	devoicings;
+	uint32_t	topics;
+
+} GlobalStats_V10_32;
+typedef GlobalStats_V10_32		GlobalStats32;
+#endif
 
 /*********************************************************
  * Constants                                             *
