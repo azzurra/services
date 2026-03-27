@@ -132,8 +132,27 @@ BOOL trigger_db_load(void) {
 						while (in_section) {
 
 							aTrigger = mem_malloc(sizeof(Trigger_V10));
-
+#ifdef OS_64BIT
+							BOOL is64Bit = stg_is64bit(stg);
+							if (is64Bit)
+								result = stg_read_record(stg, (PBYTE)aTrigger, sizeof(Trigger_V10));
+							else {
+								Trigger32 tr;
+								result = stg_read_record(stg, (PBYTE)&tr, sizeof(Trigger32));
+								aTrigger->value = tr.value;
+								aTrigger->cidr = tr.cidr;
+								aTrigger->flags = tr.flags;
+								aTrigger->lastUsed = tr.lastUsed;
+								aTrigger->username = (STR)tr.username;
+								aTrigger->host = (STR)tr.host;
+								aTrigger->info.creator.name = (STR)tr.info.creator.name;
+								aTrigger->info.creator.time = tr.info.creator.time;
+								aTrigger->info.reason = (STR)tr.info.reason;
+								aTrigger->pad = tr.pad;
+							}
+#else
 							result = stg_read_record(stg, (PBYTE)aTrigger, sizeof(Trigger_V10));
+#endif
 
 							switch (result) {
 
