@@ -605,8 +605,40 @@ BOOL statserv_servstats_db_load(void) {
 							
 							ss = mem_malloc(sizeof(ServerStats_V10));
 
-							if (stg_read_record(stg, (PBYTE)ss, sizeof(ServerStats_V10)) == stgSuccess) {
-
+#ifdef OS_64BIT
+							BOOL is64bit = stg_is64bit(stg);
+							STG_RESULT result;
+							if (is64bit)
+								result = stg_read_record(stg, (PBYTE)ss, sizeof(ServerStats_V10));
+							else {
+								ServerStats32 ss32;
+								result = stg_read_record(stg, (PBYTE)&ss32, sizeof(ServerStats32));
+								ss->name = (STR) ss32.name;
+								ss->time_added = ss32.time_added;
+								ss->clients = ss32.clients;
+								ss->maxclients = ss32.maxclients;
+								ss->maxclients_time = ss32.maxclients_time;
+								ss->opers = ss32.opers;
+								ss->maxopers = ss32.maxopers;
+								ss->maxopers_time = ss32.maxopers_time;
+								ss->operkills = ss32.operkills;
+								ss->servkills = ss32.servkills;
+								ss->connect = ss32.connect;
+								ss->squit = ss32.squit;
+								ss->hits = ss32.hits;
+								ss->msgs = ss32.msgs;
+								ss->users_average = ss32.users_average;
+								ss->opers_average = ss32.opers_average;
+								ss->dailysplits = ss32.dailysplits;
+								ss->weeklysplits = ss32.weeklysplits;
+								ss->monthlysplits = ss32.monthlysplits;
+								ss->totalsplits = ss32.totalsplits;
+								ss->flags = ss32.flags;
+							}
+#else
+							STG_RESULT result = stg_read_record(stg, (PBYTE)ss, sizeof(ServerStats_V10));
+#endif
+							if (result == stgSuccess) {
 								if (IS_NOT_NULL(ss->name) && (stg_read_string(stg, &(ss->name), NULL) != stgSuccess))
 									fatal_error(FACILITY_STATSERV_SERVSTATS_DB_LOAD, __LINE__, "Read error on %s (2) - %s", SEENSERV_DB, stg_result_to_string(result));
 

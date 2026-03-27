@@ -148,6 +148,48 @@ struct _ServerStats_V10 {
 // Current struct version
 typedef ServerStats_V10		ServerStats;
 
+#ifdef OS_64BIT
+
+typedef struct _ServerStats_V10_32		ServerStats_V10_32;
+struct _ServerStats_V10_32 {
+
+	int32_t				next, prev;
+
+	int32_t				name;
+	int32_t				time_added;
+
+	int16_t				clients;
+	int16_t				maxclients;
+	int32_t				maxclients_time;
+
+	int8_t				opers;
+	int8_t				maxopers;
+	int32_t				maxopers_time;
+
+	int16_t				operkills;
+	int16_t				servkills;
+
+	int32_t				connect;
+	int32_t				squit;
+
+	int32_t				hits;
+	int32_t				msgs;
+
+	float				users_average;
+	float				opers_average;
+
+	int8_t				dailysplits;
+	int8_t				weeklysplits;
+	int8_t				monthlysplits;
+	int16_t	totalsplits;
+
+	short_flags_t		flags;
+};
+
+// Current struct version
+typedef ServerStats_V10_32		ServerStats32;
+#endif
+
 
 
 // current records
@@ -200,7 +242,7 @@ typedef struct _RecordStats_V10 {
 typedef RecordStats_V10		RecordStats;
 
 #ifdef OS_64BIT
-/*Fuck who ever wrote this...this is was fucking padding nightmare!
+/*Fuck who ever wrote this...this is a fucking padding nightmare!
  Like the 25% of the space is wasted in padding. --Sonic
  */
 #pragma pack(push, 4)
