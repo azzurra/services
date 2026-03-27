@@ -109,10 +109,10 @@ BOOL sxline_db_load(const int type) {
 							else {
 								SXLine32 sxl32;
 								result = stg_read_record(stg, (PBYTE)&sxl32, sizeof(SXLine32));
-								aSXLine->name = (STR)sxl32.name;
-								aSXLine->info.creator.name = (STR)sxl32.info.creator.name;
+								aSXLine->name = (STR)(uintptr_t)sxl32.name;
+								aSXLine->info.creator.name = (STR)(uintptr_t)sxl32.info.creator.name;
 								aSXLine->info.creator.time = sxl32.info.creator.time;
-								aSXLine->info.reason = (STR)sxl32.info.reason;
+								aSXLine->info.reason = (STR)(uintptr_t)sxl32.info.reason;
 								aSXLine->lastUsed = sxl32.lastUsed;
 							}
 #else

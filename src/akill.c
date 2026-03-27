@@ -148,12 +148,12 @@ BOOL akill_db_load(void) {
 
 								case stgSuccess: // a valid record
 									if (!is64Bit) {
-										akill->creator.name = (STR) akill32.creator.name;
+										akill->creator.name = (STR)(uintptr_t) akill32.creator.name;
 										akill->creator.time = akill32.creator.time;
-										akill->username = (STR) akill32.username;
-										akill->host = (STR) akill32.host;
-										akill->reason = (STR) akill32.reason;
-										akill->desc = (STR) akill32.desc;
+										akill->username = (STR)(uintptr_t) akill32.username;
+										akill->host = (STR)(uintptr_t) akill32.host;
+										akill->reason = (STR)(uintptr_t) akill32.reason;
+										akill->desc = (STR)(uintptr_t) akill32.desc;
 										memcpy(&akill->cidr, &akill32.cidr, sizeof(CIDR_IP));
 										akill->expireTime = akill32.expireTime;
 										akill->lastUsed = akill32.lastUsed;

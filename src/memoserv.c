@@ -282,12 +282,12 @@ void load_ms_dbase(void) {
 						if (fread(&memoList32, sizeof(MemoList32), 1, f) != 1)
 							fatal_error(FACILITY_MEMOSERV_LOAD_MS_DB, __LINE__, "Read error (1) on %s", MEMOSERV_DB);
 						memcpy(ml->nick, memoList32.nick, NICKMAX);
-						ml->ignores = (void * )memoList32.ignores;
+						ml->ignores = (void *)(uintptr_t)memoList32.ignores;
 						ml->n_ignores = memoList32.n_ignores;
 						ml->n_memos = memoList32.n_memos;
-						ml->memos = (void * )memoList32.memos;
-						ml->next = (void * )memoList32.next;
-						ml->prev = (void * )memoList32.prev;
+						ml->memos = (void *)(uintptr_t)memoList32.memos;
+						ml->next = (void *)(uintptr_t)memoList32.next;
+						ml->prev = (void *)(uintptr_t)memoList32.prev;
 						memset(ml->reserved, 0, sizeof(ml->reserved));
 					}
 #else
@@ -315,8 +315,8 @@ void load_ms_dbase(void) {
 								memcpy(ml->memos[memoIdx].sender, memos32[memoIdx].sender, NICKMAX);
 								ml->memos[memoIdx].unused = memos32[memoIdx].unused;
 								ml->memos[memoIdx].time = memos32[memoIdx].time;
-								ml->memos[memoIdx].text = (void * )memos32[memoIdx].text;
-								ml->memos[memoIdx].chan = (void * )memos32[memoIdx].chan;
+								ml->memos[memoIdx].text = (void *)(uintptr_t)memos32[memoIdx].text;
+								ml->memos[memoIdx].chan = (void *)(uintptr_t)memos32[memoIdx].chan;
 								ml->memos[memoIdx].flags = memos32[memoIdx].flags;
 								ml->memos[memoIdx].level = memos32[memoIdx].level;
 								memset(ml->memos[memoIdx].reserved, 0, sizeof(ml->memos[memoIdx].reserved));
@@ -356,7 +356,7 @@ void load_ms_dbase(void) {
 								if (fread(&ignore32, sizeof(MemoIgnore32), 1, f) != 1)
 									fatal_error(FACILITY_MEMOSERV_LOAD_MS_DB, __LINE__, "Read error (3) on %s", MEMOSERV_DB);
 								ignore->creationTime = ignore32.creationTime;
-								ignore->ignoredNick = (void * )ignore32.ignoredNick;
+								ignore->ignoredNick = (void *)(uintptr_t)ignore32.ignoredNick;
 							}
 #else
 							TRACE();
@@ -1100,7 +1100,6 @@ void send_memo_internal(NickInfo *ni, CSTR message) {
 	Memo *memo;
 	User *user;
 	MemoList *ml;
-	char *forwarded = NULL;
 
 
 	if (IS_NULL(ni) || IS_NULL(message)) {
@@ -1117,7 +1116,6 @@ void send_memo_internal(NickInfo *ni, CSTR message) {
 
 		if (IS_NOT_NULL(nif = findnick(ni->forward))) {
 
-			forwarded = ni->nick;
 			ni = nif;
 		}
 		else {

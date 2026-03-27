@@ -368,7 +368,7 @@ static STG_RESULT  read_record_stats32(STGHANDLE stg, RecordStats * dst) {
 }
 
 void convert_channelstats_32to64(ChannelStats_V10 * dst, ChannelStats32 * src) {
-	dst->name = (STR)src->name;
+	dst->name = (STR)(uintptr_t)src->name;
 	dst->time_added = src->time_added;
 	dst->last_change = src->last_change;
 #define M_CS(f) dst->f = (uint64_t)src->f
@@ -607,13 +607,12 @@ BOOL statserv_servstats_db_load(void) {
 
 #ifdef OS_64BIT
 							BOOL is64bit = stg_is64bit(stg);
-							STG_RESULT result;
 							if (is64bit)
 								result = stg_read_record(stg, (PBYTE)ss, sizeof(ServerStats_V10));
 							else {
 								ServerStats32 ss32;
 								result = stg_read_record(stg, (PBYTE)&ss32, sizeof(ServerStats32));
-								ss->name = (STR) ss32.name;
+								ss->name = (STR)(uintptr_t) ss32.name;
 								ss->time_added = ss32.time_added;
 								ss->clients = ss32.clients;
 								ss->maxclients = ss32.maxclients;
@@ -636,7 +635,7 @@ BOOL statserv_servstats_db_load(void) {
 								ss->flags = ss32.flags;
 							}
 #else
-							STG_RESULT result = stg_read_record(stg, (PBYTE)ss, sizeof(ServerStats_V10));
+							result = stg_read_record(stg, (PBYTE)ss, sizeof(ServerStats_V10));
 #endif
 							if (result == stgSuccess) {
 								if (IS_NOT_NULL(ss->name) && (stg_read_string(stg, &(ss->name), NULL) != stgSuccess))

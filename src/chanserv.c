@@ -602,11 +602,11 @@ void load_cs_dbase(void) {
 						if ((signed)fread(access32, sizeof(ChanAccess32), ci->accesscount, f) != ci->accesscount)
 							fatal_error(FACILITY_CHANSERV_LOAD_CS_DB, __LINE__, "Read error on %s", CHANSERV_DB);
 						for (accessIdx = 0; accessIdx < ci->accesscount; ++accessIdx) {
-							anAccess[accessIdx].name = (char *) access32[accessIdx].name;
+							anAccess[accessIdx].name = (char *)(uintptr_t) access32[accessIdx].name;
 							anAccess[accessIdx].level = access32[accessIdx].level;
 							anAccess[accessIdx].status = access32[accessIdx].status;
 							anAccess[accessIdx].flags = access32[accessIdx].flags;
-							anAccess[accessIdx].creator = (char *) access32[accessIdx].creator;
+							anAccess[accessIdx].creator = (char *)(uintptr_t) access32[accessIdx].creator;
 							anAccess[accessIdx].creationTime = access32[accessIdx].creationTime;
 						}
 						free(access32);
@@ -727,9 +727,9 @@ void load_cs_dbase(void) {
 						for (akickIdx = 0; akickIdx < ci->akickcount; ++akickIdx) {
 							anAkick[akickIdx].isNick = anAkick32[akickIdx].isNick;
 							anAkick[akickIdx].flags = anAkick32[akickIdx].flags;
-							anAkick[akickIdx].name = (char *) anAkick32[akickIdx].name;
-							anAkick[akickIdx].reason = (char *) anAkick32[akickIdx].reason;
-							anAkick[akickIdx].creator = (char *) anAkick32[akickIdx].creator;
+							anAkick[akickIdx].name = (char *)(uintptr_t) anAkick32[akickIdx].name;
+							anAkick[akickIdx].reason = (char *)(uintptr_t) anAkick32[akickIdx].reason;
+							anAkick[akickIdx].creator = (char *)(uintptr_t) anAkick32[akickIdx].creator;
 							anAkick[akickIdx].banType = anAkick32[akickIdx].banType;
 							anAkick[akickIdx].creationTime = anAkick32[akickIdx].creationTime;
 						}
@@ -817,38 +817,38 @@ void load_cs_dbase(void) {
 
 #ifdef OS_64BIT
 static void channelinfo32_to64(ChannelInfo32 *ci32, ChannelInfo *ci) {
-	ci->next = (ChannelInfo*)ci32->next;
-	ci->prev = (ChannelInfo*)ci32->prev;
+	ci->next = (ChannelInfo *)(uintptr_t)ci32->next;
+	ci->prev = (ChannelInfo *)(uintptr_t)ci32->prev;
 	memcpy(ci->name, ci32->name, CHANMAX);
 	memcpy(ci->founder, ci32->founder, NICKMAX);
 	memcpy(ci->founderpass, ci32->founderpass, PASSMAX);
-	ci->desc = (char *) ci32->desc;
+	ci->desc = (char *)(uintptr_t) ci32->desc;
 	ci->time_registered = ci32->time_registered;
 	ci->last_used = ci32->last_used;
 	ci->accesscount = ci32->accesscount;
-	ci->access = (ChanAccess_V7 *) ci32->access;
+	ci->access = (ChanAccess_V7 *)(uintptr_t) ci32->access;
 	ci->akickcount = ci32->akickcount;
-	ci->akick = (AutoKick_V7 *) ci32->akick;
+	ci->akick = (AutoKick_V7 *)(uintptr_t) ci32->akick;
 	ci->mlock_on = ci32->mlock_on;
 	ci->mlock_off = ci32->mlock_off;
 	ci->mlock_limit = ci32->mlock_limit;
-	ci->mlock_key = (char *) ci32->mlock_key;
-	ci->last_topic = (char *) ci32->last_topic;
+	ci->mlock_key = (char *)(uintptr_t) ci32->mlock_key;
+	ci->last_topic = (char *)(uintptr_t) ci32->last_topic;
 	memcpy(ci->last_topic_setter, ci32->last_topic_setter, NICKMAX);
 	ci->last_topic_time = ci32->last_topic_time;
 	ci->flags = ci32->flags;
-	ci->successor = (char *) ci32->successor;
-	ci->url = (char *) ci32->url;
-	ci->email = (char *) ci32->email;
-	ci->welcome = (char *) ci32->welcome;
-	ci->hold = (char *) ci32->hold;
-	ci->mark = (char *) ci32->mark;
-	ci->freeze = (char *) ci32->freeze;
-	ci->forbid = (char *) ci32->forbid;
+	ci->successor = (char *)(uintptr_t) ci32->successor;
+	ci->url = (char *)(uintptr_t) ci32->url;
+	ci->email = (char *)(uintptr_t) ci32->email;
+	ci->welcome = (char *)(uintptr_t) ci32->welcome;
+	ci->hold = (char *)(uintptr_t) ci32->hold;
+	ci->mark = (char *)(uintptr_t) ci32->mark;
+	ci->freeze = (char *)(uintptr_t) ci32->freeze;
+	ci->forbid = (char *)(uintptr_t) ci32->forbid;
 	ci->topic_allow = ci32->topic_allow;
 	ci->auth = ci32->auth;
 	ci->settings = ci32->settings;
-	ci->real_founder = (char *) ci32->real_founder;
+	ci->real_founder = (char *)(uintptr_t) ci32->real_founder;
 	ci->last_drop_request = ci32->last_drop_request;
 	ci->langID = ci32->langID;
 	ci->banType = ci32->banType;
@@ -4864,7 +4864,7 @@ static void do_set_topiclock(User *callerUser, ChannelInfo *ci, CSTR param, cons
 	}
 	else if (str_equals_nocase(param, "FOUNDER")) {
 
-		if (access == 0) {
+		if (accessLevel != CS_ACCESS_FOUNDER) {
 
 			send_notice_lang_to_user(s_ChanServ, callerUser, GetCallerLang(), CS_ERROR_VALUE_FOUNDER_ONLY);
 			return;
@@ -9805,7 +9805,7 @@ static void do_level(CSTR source, User *callerUser, ServiceCommandData *data) {
 	const char *who = strtok(NULL, " ");
 	ChannelInfo *ci;
 
-	int channelLevel, canChange;
+	int canChange;
 
 	TRACE_MAIN_FCLT(FACILITY_CHANSERV_HANDLE_LEVEL);
 
@@ -9842,31 +9842,16 @@ static void do_level(CSTR source, User *callerUser, ServiceCommandData *data) {
 
 	TRACE_MAIN();
 
-	if (FlagSet(ci->flags, CI_SOPONLY)) {
-
-		channelLevel = CI_SOPONLY;
+	if (FlagSet(ci->flags, CI_SOPONLY))
 		canChange = CheckOperAccess(data->userLevel, CMDLEVEL_SOP);
-	}
-	else if (FlagSet(ci->flags, CI_SAONLY)) {
-
-		channelLevel = CI_SAONLY;
+	else if (FlagSet(ci->flags, CI_SAONLY))
 		canChange = CheckOperAccess(data->userLevel, CMDLEVEL_SA);
-	}
-	else if (FlagSet(ci->flags, CI_SRAONLY)) {
-
-		channelLevel = CI_SRAONLY;
+	else if (FlagSet(ci->flags, CI_SRAONLY))
 		canChange = CheckOperAccess(data->userLevel, CMDLEVEL_SRA);
-	}
-	else if (FlagSet(ci->flags, CI_CODERONLY)) {
-
-		channelLevel = CI_CODERONLY;
+	else if (FlagSet(ci->flags, CI_CODERONLY))
 		canChange = CheckOperAccess(data->userLevel, CMDLEVEL_CODER);
-	}
-	else {
-
-		channelLevel = 0;
+	else
 		canChange = 1;
-	}
 
 	TRACE_MAIN();
 	if (!canChange) {

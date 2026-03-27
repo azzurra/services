@@ -143,11 +143,11 @@ BOOL trigger_db_load(void) {
 								aTrigger->cidr = tr.cidr;
 								aTrigger->flags = tr.flags;
 								aTrigger->lastUsed = tr.lastUsed;
-								aTrigger->username = (STR)tr.username;
-								aTrigger->host = (STR)tr.host;
-								aTrigger->info.creator.name = (STR)tr.info.creator.name;
+								aTrigger->username = (STR)(uintptr_t)tr.username;
+								aTrigger->host = (STR)(uintptr_t)tr.host;
+								aTrigger->info.creator.name = (STR)(uintptr_t)tr.info.creator.name;
 								aTrigger->info.creator.time = tr.info.creator.time;
-								aTrigger->info.reason = (STR)tr.info.reason;
+								aTrigger->info.reason = (STR)(uintptr_t)tr.info.reason;
 								aTrigger->pad = tr.pad;
 							}
 #else

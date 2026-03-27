@@ -271,12 +271,12 @@ BOOL spam_db_load(void) {
 						else {
 							SpamItem32 si32;
 							result = stg_read_record(stg, (PBYTE)&si32, sizeof(SpamItem32));
-							spam->text = (STR)si32.text;
+							spam->text = (STR)(uintptr_t)si32.text;
 							spam->flags = si32.flags;
 							spam->type = si32.type;
-							spam->creator.name = (STR)si32.creator.name;
+							spam->creator.name = (STR)(uintptr_t)si32.creator.name;
 							spam->creator.time = si32.creator.time;
-							spam->reason = (STR)si32.reason;
+							spam->reason = (STR)(uintptr_t)si32.reason;
 							spam->pad = si32.pad;
 						}
 #else

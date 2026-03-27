@@ -158,11 +158,11 @@ BOOL reserved_db_load(void) {
 							else {
 								reservedName32 rsv32;
 								result = stg_read_record(stg, (PBYTE)&rsv32, sizeof(reservedName_V10_32));
-								aName->name = (STR)rsv32.name;
+								aName->name = (STR)(uintptr_t)rsv32.name;
 								aName->flags = rsv32.flags;
-								aName->info.creator.name = (STR)rsv32.info.creator.name;
+								aName->info.creator.name = (STR)(uintptr_t)rsv32.info.creator.name;
 								aName->info.creator.time = rsv32.info.creator.time;
-								aName->info.reason = (STR)rsv32.info.reason;
+								aName->info.reason = (STR)(uintptr_t)rsv32.info.reason;
 								aName->lastUpdate = rsv32.lastUpdate;
 							}
 #else

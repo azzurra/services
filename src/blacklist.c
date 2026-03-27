@@ -105,12 +105,12 @@ BOOL blacklist_db_load(void) {
 								result = stg_read_record(stg, (PBYTE)anAddress, sizeof(BlackList_V10));
 							} else {
 								result = stg_read_record(stg, (PBYTE)&bl32, sizeof(BlackList32));
-								anAddress->address = (char*)bl32.address;
+								anAddress->address = (char*)(uintptr_t)bl32.address;
 								anAddress->flags = bl32.flags;
 								anAddress->lastUsed = bl32.lastUsed;
-								anAddress->info.creator.name = (char*)bl32.info.creator.name;
+								anAddress->info.creator.name = (char*)(uintptr_t)bl32.info.creator.name;
 								anAddress->info.creator.time = bl32.info.creator.time;
-								anAddress->info.reason = (char*)bl32.info.reason;
+								anAddress->info.reason = (char*)(uintptr_t)bl32.info.reason;
 							}
 #else
 							result = stg_read_record(stg, (PBYTE)anAddress, sizeof(BlackList_V10));

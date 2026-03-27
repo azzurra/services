@@ -255,7 +255,7 @@ int32_t crypt_hash_SHA1(CSTR string, size_t size, STR buffer, size_t bufferSize)
 	SHS1COUNT(&digest, (ULONG) hidehost_key_size + size);
 	shs1Final(&digest);
 
-	snprintf(buffer, bufferSize, "%08lx%08lx%08lx%08lx%08lx", digest.digest[0], digest.digest[1], digest.digest[2], digest.digest[3], digest.digest[4]);
+	snprintf(buffer, bufferSize, "%08x%08x%08x%08x%08x", digest.digest[0], digest.digest[1], digest.digest[2], digest.digest[3], digest.digest[4]);
 
 	/* Note: strlen(buffer) == CRYPT_SHA1_DIGEST_LEN */
 	return crypt_hash_FNV(buffer, CRYPT_SHA1_DIGEST_LEN);
@@ -318,7 +318,7 @@ STR crypt_userhost(CSTR real, HOST_TYPE htype, short int dotsCount) {
 	if (htype == htHostname) {
 
 		if (dotsCount == 1)
-			snprintf(hidehost_buffer, hidehost_buffer_size, CRYPT_NETNAME "%c%lX.%s", (hash < 0 ? c_EQUAL : c_MINUS), (hash < 0 ? -hash : hash), real);
+			snprintf(hidehost_buffer, hidehost_buffer_size, CRYPT_NETNAME "%c%X.%s", (hash < 0 ? c_EQUAL : c_MINUS), (unsigned int)(hash < 0 ? -hash : hash), real);
 		
 		else if (dotsCount > 1) {
 			
@@ -327,10 +327,10 @@ STR crypt_userhost(CSTR real, HOST_TYPE htype, short int dotsCount) {
 			while (strlen(ptr) > (MAX_DSN_HOST_LEN - CRYPT_NETNAME_LEN - HIDEHOST_CHECKSUM_LEN))
 				ptr = strchr(++ptr, c_DOT);
 
-			snprintf(hidehost_buffer, hidehost_buffer_size, CRYPT_NETNAME "%c%lX.%s", (hash < 0 ? c_EQUAL : c_MINUS), (hash < 0 ? -hash : hash), ptr + 1);
+			snprintf(hidehost_buffer, hidehost_buffer_size, CRYPT_NETNAME "%c%X.%s", (hash < 0 ? c_EQUAL : c_MINUS), (unsigned int)(hash < 0 ? -hash : hash), ptr + 1);
 
 		} else // LOCALHOST
-			snprintf(hidehost_buffer, hidehost_buffer_size, "%s%c%lX", real, (hash < 0 ? c_EQUAL : c_MINUS), (hash < 0 ? -hash : hash));
+			snprintf(hidehost_buffer, hidehost_buffer_size, "%s%c%X", real, (hash < 0 ? c_EQUAL : c_MINUS), (unsigned int)(hash < 0 ? -hash : hash));
 
 	} else if (htype == htIPv6) {
 
@@ -344,7 +344,7 @@ STR crypt_userhost(CSTR real, HOST_TYPE htype, short int dotsCount) {
 		memset(&(ip6addr.s6_addr[6]), 0, 10);
 		inet_ntop(AF_INET6, &ip6addr, ip6buffer, INET6_ADDRSTRLEN);
 
-		snprintf(hidehost_buffer, hidehost_buffer_size, "%s" CRYPT_NETNAME "%c%lX", ip6buffer, hash < 0 ? c_EQUAL : c_MINUS, hash < 0 ? -hash : hash);
+		snprintf(hidehost_buffer, hidehost_buffer_size, "%s" CRYPT_NETNAME "%c%X", ip6buffer, hash < 0 ? c_EQUAL : c_MINUS, (unsigned int)(hash < 0 ? -hash : hash));
 
 	} else {
 
@@ -360,9 +360,9 @@ STR crypt_userhost(CSTR real, HOST_TYPE htype, short int dotsCount) {
 		}
 
 		if (IS_NULL(ptr))
-			snprintf(hidehost_buffer, hidehost_buffer_size, CRYPT_NETNAME "%c%lX", hash < 0 ? c_EQUAL : c_MINUS, hash < 0 ? -hash : hash);
+			snprintf(hidehost_buffer, hidehost_buffer_size, CRYPT_NETNAME "%c%X", hash < 0 ? c_EQUAL : c_MINUS, (unsigned int)(hash < 0 ? -hash : hash));
 		else
-			snprintf(hidehost_buffer, hidehost_buffer_size, "%s." CRYPT_NETNAME "%c%lX", ipmask, hash < 0 ? c_EQUAL : c_MINUS, hash < 0 ? -hash : hash);
+			snprintf(hidehost_buffer, hidehost_buffer_size, "%s." CRYPT_NETNAME "%c%X", ipmask, hash < 0 ? c_EQUAL : c_MINUS, (unsigned int)(hash < 0 ? -hash : hash));
 	}
 
 	TRACE();

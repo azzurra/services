@@ -58,7 +58,11 @@ unsigned int	uplink_capab = CAPAB_UNKNOWN;
 
 unsigned long int npings = 0;
 
+#ifdef OS_64BIT
+uint64_t nservers = 0;
+#else
 int nservers = 0;
+#endif
 
 /*********************************************************
  * msg_update_flood_levels()                             *

@@ -611,14 +611,14 @@ BOOL regions_db_load(void) {
 									else {
 										Region32 region32;
 										result = stg_read_record(stg, (PBYTE)&region32, sizeof(Region32));
-										region->creator.name = (STR)region32.creator.name;
+										region->creator.name = (STR)(uintptr_t)region32.creator.name;
 										region->creator.time = region32.creator.time;
 										region->flags = region32.flags;
 										region->hits = region32.hits;
 										region->cidr = region32.cidr;
 										region->id = region32.id;
-										region->reason = (STR)region32.reason;
-										region->host_mask = (STR)region32.host_mask;
+										region->reason = (STR)(uintptr_t)region32.reason;
+										region->host_mask = (STR)(uintptr_t)region32.host_mask;
 									}
 #else
 

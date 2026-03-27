@@ -93,8 +93,8 @@ BOOL tagline_db_load(void) {
 							else {
 								Tagline32 tgl32;
 								result = stg_read_record(stg, (PBYTE)&tgl32, sizeof(Tagline_V10_32));
-								aTagline->text = (STR)tgl32.text;
-								aTagline->creator.name = (STR)tgl32.creator.name;
+								aTagline->text = (STR)(uintptr_t)tgl32.text;
+								aTagline->creator.name = (STR)(uintptr_t)tgl32.creator.name;
 								aTagline->creator.time = tgl32.creator.time;
 							}
 #else

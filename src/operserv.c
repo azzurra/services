@@ -586,7 +586,7 @@ void check_clones_v6(const User *newUser) {
 		
 			if (IS_NOT_EMPTY_STR(tmp_clones)) {
 				/* Check if there is enough space to store the nick + ", " */
-				if(sizeof(tmp_clones) < strlen(userIPv6_item->user->nick) + strlen(tmp_clones) + 3 + (nick_oper) ? 2 : 0) 
+				if(sizeof(tmp_clones) < strlen(userIPv6_item->user->nick) + strlen(tmp_clones) + 3 + ((nick_oper) ? 2 : 0))
 					more_clones = TRUE;
 				else {
 					/* Concatenate the last nick to the list */
@@ -1464,7 +1464,7 @@ static void do_masskill(CSTR source, User *callerUser, ServiceCommandData *data)
 
 		// nick
 		User *targetUser;
-		char *mask, defreason[16];
+		char *mask, defreason[32];
 		int count = 0, size = 0;
 
 		if (IS_NULL(targetUser = hash_onlineuser_find(target))) {
@@ -1618,7 +1618,7 @@ static void do_masskill(CSTR source, User *callerUser, ServiceCommandData *data)
 	}
 	else {
 
-		char defreason[16];
+		char defreason[32];
 		int i, count = 0, x = 0, check = 0;
 		float percent;
 		User *matches[512];

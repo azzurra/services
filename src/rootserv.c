@@ -289,7 +289,7 @@ static BOOL dynconf_db_load(void) {
 							result = stg_read_record(stg, (PBYTE)&dynConf, sizeof(dynConfig));
 						else {
 							result = stg_read_record(stg, (PBYTE)&cfg32, sizeof(dynConfig32));
-							dynConf.welcomeNotice = (char * )cfg32.welcomeNotice;
+							dynConf.welcomeNotice = (char *)(uintptr_t)cfg32.welcomeNotice;
 							dynConf.cs_regLimit = cfg32.cs_regLimit;
 							dynConf.ns_regLimit = cfg32.ns_regLimit;
 						}

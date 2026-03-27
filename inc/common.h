@@ -15,6 +15,7 @@
 #define SRV_COMMON_H
 
 /* C headers */
+#include <stdint.h>
 #include <stdarg.h>
 #include <stdio.h>
 #include <stdlib.h>

@@ -182,13 +182,13 @@ BOOL ignore_db_load(void) {
 								result = stg_read_record(stg, (PBYTE)anIgnore, sizeof(Ignore_V10));
 							else {
 								result = stg_read_record(stg, (PBYTE)&ignore32, sizeof(Ignore_V10_32));
-								anIgnore->nick = (STR) ignore32.nick;
-								anIgnore->username = (STR) ignore32.username;
-								anIgnore->host = (STR) ignore32.host;
+								anIgnore->nick = (STR)(uintptr_t) ignore32.nick;
+								anIgnore->username = (STR)(uintptr_t) ignore32.username;
+								anIgnore->host = (STR)(uintptr_t) ignore32.host;
 								memcpy(&anIgnore->cidr, &ignore32.cidr, sizeof(CIDR_IP));
-								anIgnore->info.creator.name = (STR) ignore32.info.creator.name;
+								anIgnore->info.creator.name = (STR)(uintptr_t) ignore32.info.creator.name;
 								anIgnore->info.creator.time = ignore32.info.creator.time;
-								anIgnore->info.reason = (STR) ignore32.info.reason;
+								anIgnore->info.reason = (STR)(uintptr_t) ignore32.info.reason;
 								anIgnore->expireTime = ignore32.expireTime;
 								anIgnore->lastUsed = ignore32.lastUsed;
 								anIgnore->flags = ignore32.flags;
