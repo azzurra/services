@@ -283,15 +283,6 @@ static void m_burst(CSTR source, const int ac, char **av) {
 		LOG_SNOOP(s_Snooper, "Synched to network data.");
 		send_SJOIN(s_DebugServ, CONF_DEBUG_CHAN);
 		send_SJOIN(s_GlobalNoticer, CONF_SNOOP_CHAN);
-		send_SJOIN(s_NickServ, CONF_SNOOP_CHAN);
-		send_SJOIN(s_ChanServ, CONF_SNOOP_CHAN);
-		send_SJOIN(s_HelpServ, CONF_SNOOP_CHAN);
-		send_SJOIN(s_MemoServ, CONF_SNOOP_CHAN);
-		send_SJOIN(s_OperServ, CONF_SNOOP_CHAN);
-		send_SJOIN(s_RootServ, CONF_SNOOP_CHAN);
-		send_SJOIN(s_StatServ, CONF_SNOOP_CHAN);
-		send_SJOIN(s_SeenServ, CONF_SNOOP_CHAN);
-
 	}
 #endif
 }
