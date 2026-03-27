@@ -42,6 +42,24 @@ struct _reservedName_V10 {
 // Current structs version
 typedef	reservedName_V10			reservedName;
 
+#ifdef OS_64BIT
+typedef struct _reservedName_V10_32	reservedName_V10_32;
+struct _reservedName_V10_32 {
+
+	int32_t				next;
+
+	int32_t				name;
+
+	CreationInfo32		info;
+
+	uint32_t			flags;		/* RESERVED_* */
+	int32_t				lastUpdate;
+};
+
+// Current structs version
+typedef	reservedName_V10_32			reservedName32;
+#endif
+
 enum _RESERVED_RESULT { reservedValid = 0, reservedBlock, reservedKill, reservedAutoKill};
 typedef enum _RESERVED_RESULT	RESERVED_RESULT;
 
