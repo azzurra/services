@@ -600,10 +600,13 @@ int check_oper(User *user, CSTR nick, CSTR password) {
 
 	if (FlagSet(oper->flags, OPER_FLAG_ENABLED)) {
 
-		if (IS_NULL(user->oper) || (user->oper->level < oper->level))
-			user->oper = oper;
+		if ((oper->level <= ULEVEL_HOP) || user_is_ircop(user)) {
 
-		return (user->oper->level);
+			if (IS_NULL(user->oper) || (user->oper->level < oper->level))
+				user->oper = oper;
+
+			return (user->oper->level);
+		}
 	}
 
 	return ULEVEL_USER;
