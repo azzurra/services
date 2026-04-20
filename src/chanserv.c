@@ -9379,8 +9379,8 @@ static void do_resetpass(CSTR source, User *callerUser, ServiceCommandData *data
 	 * password has to be used to identify again. */
 	user_remove_chanid(ci);
 
-	LOG_SNOOP(s_OperServ, "CS R %s -- by %s (%s@%s)", ci->name, callerUser->nick, callerUser->username, callerUser->host);
-	log_services(LOG_SERVICES_CHANSERV_GENERAL, "R %s -- by %s (%s@%s)", ci->name, callerUser->nick, callerUser->username, callerUser->host);
+	LOG_SNOOP(s_OperServ, "CS Rp %s -- by %s (%s@%s)", ci->name, callerUser->nick, callerUser->username, callerUser->host);
+	log_services(LOG_SERVICES_CHANSERV_GENERAL, "Rp %s -- by %s (%s@%s)", ci->name, callerUser->nick, callerUser->username, callerUser->host);
 
 	send_notice_lang_to_user(s_ChanServ, callerUser, GetCallerLang(), CS_RESETPASS_PASSWORD_CHANGED, ci->name, newpass);
 }
