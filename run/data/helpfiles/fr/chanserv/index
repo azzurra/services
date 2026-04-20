@@ -21,7 +21,7 @@ dans la liste ci-dessous; pour pouvoir les employer il faut taper /cs commande
  
 Autres commandes:
 COUNT, DEHALFOP, DEOP, DEVOICE, HALFOP, INFO, INVITE, MDEHALFOP,
-MDEOP, MDEVOICE, MKICK, MODE, OP, RESETMODES, UNBAN, VOICE
+MDEOP, MDEVOICE, MKICK, MODE, OP, RESETMODES, RESETPASS, UNBAN, VOICE
 
 Pour autres renseignements sur les commandes il faut taper /cs HELP commande.
  

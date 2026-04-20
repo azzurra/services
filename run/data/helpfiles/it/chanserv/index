@@ -21,7 +21,7 @@ elencati qui sotto; per poterli usare bisogna scrivere /cs COMANDO.
  
 Altri comandi disponibili:
 COUNT, DEHALFOP, DEOP, DEVOICE, HALFOP, INFO, INVITE, MDEHALFOP, 
-MDEOP, MDEVOICE, MKICK, MODE, OP, RESETMODES, UNBAN, VOICE.
+MDEOP, MDEVOICE, MKICK, MODE, OP, RESETMODES, RESETPASS, UNBAN, VOICE.
  
 Per avere maggiori informazioni sui comandi basta scrivere /cs HELP comando.
  
