@@ -1935,4 +1935,32 @@ NS_SENDCODE_EMAIL_RPWD
 	To confirm the password reset log back onto %s using
 	the nick %s and type:
 	/ns RESETPASS %s %lu <new-password>
-	
+
+CS_RESETPASS_SYNTAX_ERROR
+	Syntax: RESETPASS #channel code new-password
+CS_RESETPASS_ERROR_NOT_RESETTING
+	No password reset request is pending for channel %s.
+CS_RESETPASS_ERROR_WRONG_CODE
+	ERROR: Invalid password reset code.
+CS_RESETPASS_ERROR_EXPIRED
+	ERROR: The password reset code has expired. Ask an operator for a new SENDPASS.
+CS_RESETPASS_PASSWORD_CHANGED
+	The password of channel %s has been changed to: %s
+CS_SENDPASS_ERROR_PASSRESET_ON
+	A password reset is already in progress for channel %s. Use AUTHRESET to cancel it, or wait for it to expire.
+CS_SENDPASS_EMAIL_SUBJECT_RPWD
+	Subject: Password reset code for channel %s
+
+CS_SENDPASS_EMAIL_RPWD
+	Password reset request issued by: %s
+	Received: %s
+	To confirm the password reset for this channel, log back onto %s
+	using the nick %s and type:
+	/cs RESETPASS %s %lu <new-password>
+
+CS_INFO_PASSRESET_REQUEST
+	 * This channel requested a password reset.
+CS_INFO_OPER_PASSRESET_REQUEST
+	 * This channel requested a password reset. [ RESETPASS Code: %lu ]
+CS_DROP_ERROR_PASSRESET_ON
+	You cannot drop channel %s until the password reset is completed or expired.

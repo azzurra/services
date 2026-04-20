@@ -1939,4 +1939,32 @@ NS_SENDCODE_EMAIL_RPWD
 	Para confirmar el reseteo de contrasena, vuelve a conectar a %s
 	usando el nick %s y escribe:
 	/ns RESETPASS %s %lu <nueva-contrasena>
-	
+
+CS_RESETPASS_SYNTAX_ERROR
+	Sintaxis: RESETPASS #canal codigo nueva-contrasena
+CS_RESETPASS_ERROR_NOT_RESETTING
+	No hay ninguna solicitud de reseteo de contrasena en curso para el canal %s.
+CS_RESETPASS_ERROR_WRONG_CODE
+	ERROR: Codigo de reseteo de contrasena invalido.
+CS_RESETPASS_ERROR_EXPIRED
+	ERROR: El codigo de reseteo de contrasena ha caducado. Solicita a un operador un nuevo SENDPASS.
+CS_RESETPASS_PASSWORD_CHANGED
+	La contrasena del canal %s ha sido cambiada a: %s
+CS_SENDPASS_ERROR_PASSRESET_ON
+	Ya hay un reseteo de contrasena en curso para el canal %s. Usa AUTHRESET para cancelarlo, o espera a que caduque.
+CS_SENDPASS_EMAIL_SUBJECT_RPWD
+	Subject: Codigo de reseteo de contrasena para el canal %s
+
+CS_SENDPASS_EMAIL_RPWD
+	Solicitud de reseteo de contrasena enviada por: %s
+	Recibida: %s
+	Para confirmar el reseteo de la contrasena de este canal, identificate en %s
+	usando el nick %s y escribe:
+	/cs RESETPASS %s %lu <nueva-contrasena>
+
+CS_INFO_PASSRESET_REQUEST
+	 * Este canal ha solicitado un reseteo de contrasena.
+CS_INFO_OPER_PASSRESET_REQUEST
+	 * Este canal ha solicitado un reseteo de contrasena. [ Codigo RESETPASS: %lu ]
+CS_DROP_ERROR_PASSRESET_ON
+	No puedes borrar el canal %s hasta que el reseteo de contrasena se complete o caduque.

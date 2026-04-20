@@ -264,6 +264,11 @@ typedef struct channel_timeout_data {
 #define CI_TIMEOUT		0x40000000
 #define CI_NOMKICK		0x80000000
 
+/* bit 32+: flags_t is unsigned long, 64-bit on LP64 — bits above 0x80000000
+   are only meaningful on 64-bit services and must NEVER be persisted to a
+   32-bit ChannelInfo_V8_32 migration record. */
+#define CI_PASSRESET	0x100000000ULL		/* Channel requested a password reset. */
+
 /* Shaka 13/05/01
 
   Alcuni valori restituiti da get_access()
