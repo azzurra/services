@@ -1,0 +1,55 @@
+*** NickServ Help - Commande: AUTHRESET ***
+Annule les autorisations en cours sur un nick.
+
+Cette commande est réservée aux services operators et aux
+helpers. Elle annule une procédure en cours qui attend
+que le propriétaire du nick agisse sur un E-Mail envoyé
+par les services (code AUTH d'enregistrement, changement
+d'E-Mail, drop ou réinitialisation de mot de passe).
+
+Selon la sous-commande optionnelle, la commande agit sur
+un sous-ensemble différent de l'état du nick.
+
+Syntaxe :
+
+/ns AUTHRESET nickname [MAILCHANGE | DROP | RESETPASS]
+
+Sans sous-commande, l'action est une réinitialisation
+COMPLÈTE : le nick est remis à l'état non autorisé (le
+flag NI_AUTH est posé), l'E-Mail enregistrée et celle en
+attente sont supprimées, les éventuels états MailChange
+et Drop sont nettoyés. Le propriétaire devra refaire AUTH
+avec le code que les services émettront à la prochaine
+identification.
+
+Attention : exécuter AUTHRESET sans sous-commande sur un
+nick qui n'a qu'une réinitialisation de mot de passe en
+attente (flag NI_PASSRESET) est presque toujours une
+erreur. Cela supprime l'E-Mail enregistrée sans nettoyer
+NI_PASSRESET, laissant le propriétaire bloqué tant que
+AUTHRESET nickname RESETPASS n'est pas exécuté. Dans ce
+cas utilise directement AUTHRESET nickname RESETPASS.
+
+Sous-commandes :
+
+MAILCHANGE  Annule un changement d'E-Mail en cours.
+            Nettoie NI_MAILCHANGE et NI_NOMAIL, supprime
+            l'E-Mail en attente et le code AUTH. L'E-Mail
+            enregistrée et le mot de passe ne sont pas
+            touchés.
+
+DROP        Annule un drop de nick en cours. Nettoie
+            NI_DROP et supprime le code AUTH. L'E-Mail
+            enregistrée et le mot de passe ne sont pas
+            touchés.
+
+RESETPASS   Annule une réinitialisation de mot de passe
+            en cours (voir SENDPASS et RESETPASS). Nettoie
+            NI_PASSRESET et supprime le code AUTH.
+            L'E-Mail enregistrée et le mot de passe ne
+            sont pas touchés.
+
+Toutes les opérations sont annoncées via GlobOps et loggées.
+
+Pour tout renseignement, tape /join #IRCHelp
+*** Fin de l'Help ***

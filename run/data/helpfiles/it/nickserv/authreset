@@ -1,0 +1,52 @@
+*** NickServ Help - Comando: AUTHRESET ***
+Annulla le autorizzazioni in corso su un nick.
+
+Questo comando e' riservato agli services operator e agli
+helper. Cancella una procedura in corso che attende che
+il proprietario del nick agisca su una E-Mail inviata dai
+servizi (codice AUTH per la registrazione, il cambio di
+E-Mail, il drop o il reset della password).
+
+A seconda del sotto-comando opzionale, il comando agisce
+su una porzione diversa dello stato del nick.
+
+Sintassi:
+
+/ns AUTHRESET nickname [MAILCHANGE | DROP | RESETPASS]
+
+Senza sotto-comando, l'azione e' un reset COMPLETO: il
+nick viene riportato allo stato non autorizzato (flag
+NI_AUTH attivo), sia la E-Mail registrata che quella in
+pending vengono rimosse, eventuali stati di MailChange
+e Drop vengono annullati. Il proprietario dovra' fare
+di nuovo AUTH con il codice che i servizi emetteranno
+al prossimo identify.
+
+Attenzione: eseguire AUTHRESET senza sotto-comando su un
+nick che ha solo un reset password pendente (flag
+NI_PASSRESET) quasi mai e' cio' che vuoi. Rimuove la
+E-Mail registrata senza pulire NI_PASSRESET, lasciando
+il proprietario bloccato finche' non viene eseguito
+AUTHRESET nickname RESETPASS. In questo caso usa
+direttamente AUTHRESET nickname RESETPASS.
+
+Sotto-comandi:
+
+MAILCHANGE  Annulla un cambio di E-Mail in corso. Pulisce
+            NI_MAILCHANGE e NI_NOMAIL, rimuove la E-Mail
+            in pending e il codice AUTH. L'E-Mail
+            registrata e la password non vengono toccate.
+
+DROP        Annulla un drop del nick in corso. Pulisce
+            NI_DROP e rimuove il codice AUTH. L'E-Mail
+            registrata e la password non vengono toccate.
+
+RESETPASS   Annulla un reset password in corso (vedi
+            SENDPASS e RESETPASS). Pulisce NI_PASSRESET
+            e rimuove il codice AUTH. L'E-Mail registrata
+            e la password non vengono toccate.
+
+Tutte le operazioni sono annunciate via GlobOps e loggate.
+
+Per ulteriori chiarimenti, digita /join #IRCHelp
+*** Fine dell'Help ***
