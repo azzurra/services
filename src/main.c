@@ -100,6 +100,11 @@ int global_force_backup_count = 0;
 /* Contains a message as to why services is terminating */
 static char QUIT_MESSAGE[BUFSIZE];
 
+/* Set via -F on the command line — skip the fork() detachment in
+ * initialize() so services stays on PID 1 under a process supervisor
+ * (docker, systemd, etc) that expects the main process not to daemonize. */
+static BOOL foreground = FALSE;
+
 /* How many database expirations did we go through? */
 static unsigned long int expire_count = 1;
 
@@ -237,17 +242,25 @@ static BOOL initialize() {
 
 	region_init();
 
-	/* Detach ourselves. */
+	/* Detach ourselves — unless -F was given, in which case we stay
+	 * attached so the process supervisor (docker, systemd, ...) sees
+	 * services as the main process and can deliver signals to it. */
+	if (!foreground) {
 
-	if ((pid = fork()) < 0) {
+		if ((pid = fork()) < 0) {
 
-		perror("fork()");
-		return FALSE;
+			perror("fork()");
+			return FALSE;
+		}
+		else if (pid != 0) {
+
+			fprintf(stderr, "\nRunning in background (pid: %d)\n\n", pid);
+			exit(EXIT_SUCCESS);
+		}
 	}
-	else if (pid != 0) {
+	else {
 
-		fprintf(stderr, "\nRunning in background (pid: %d)\n\n", pid);
-		exit(EXIT_SUCCESS);
+		fprintf(stderr, "\nRunning in foreground (pid: %d)\n\n", (int) getpid());
 	}
 
 	if (setpgid(0, 0) < 0) {
@@ -577,6 +590,24 @@ int main(int ac, char **av, char **envp) {
 		*ptr = '\0';
 
 		chdir(buf);
+	}
+
+	/* Parse the handful of flags we accept. Keep this trivial: services has
+	 * historically taken no arguments. */
+	{
+		int i;
+
+		for (i = 1; i < ac; i++) {
+
+			if (strcmp(av[i], "-F") == 0)
+				foreground = TRUE;
+			else {
+
+				fprintf(stderr, "Usage: %s [-F]\n", av[0]);
+				fprintf(stderr, "  -F   run in foreground (do not fork at startup)\n");
+				return EXIT_FAILURE;
+			}
+		}
 	}
 
 	time(&NOW);
