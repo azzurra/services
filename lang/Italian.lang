@@ -1915,3 +1915,28 @@ SS_SEEN_REPLY_SOME
 	I found %d matches to your query (sorted): 
 SS_SEEN_SYNTAX_ERROR
 	Syntax: SEEN nick
+NS_RESETPASS_SYNTAX_ERROR
+	Sintassi: RESETPASS nick codice nuova-password
+NS_RESETPASS_ERROR_NOT_RESETTING
+	Non e' in corso alcuna richiesta di reset password per il nickname %s.
+NS_RESETPASS_ERROR_WRONG_CODE
+	ERRORE: Codice di reset password non valido.
+NS_RESETPASS_ERROR_EXPIRED
+	ERRORE: Il codice di reset password e' scaduto. Richiedine uno nuovo con SENDPASS.
+NS_DROP_ERROR_RESETPASS_ON
+	Non puoi droppare il tuo nick finche' il reset password non e' stato completato o non e' scaduto.
+NS_SET_EMAIL_ERROR_PASSRESET_ON
+	Non puoi richiedere un cambio E-Mail finche' il reset password non e' stato completato o non e' scaduto.
+NS_INFO_PASSRESET_REQUEST
+	 * Questo nick ha richiesto un reset password.
+NS_INFO_OPER_PASSRESET_REQUEST
+	 * Questo nick ha richiesto un reset password. [ Codice RESETPASS: %lu ]
+NS_SENDPASS_ERROR_PASSRESET_ON
+	Un reset password e' gia' in corso per il nickname %s. Usa AUTHRESET RESETPASS per annullarlo, o attendi che scada.
+NS_SENDCODE_EMAIL_SUBJECT_RPWD
+	il reset password
+NS_SENDCODE_EMAIL_RPWD
+	Per confermare il reset password, rientra su %s usando
+	il nick %s e digita:
+	/ns RESETPASS %s %lu <nuova-password>
+	

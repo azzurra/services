@@ -1916,27 +1916,27 @@ SS_SEEN_REPLY_SOME
 SS_SEEN_SYNTAX_ERROR
 	Syntax: SEEN nick
 NS_RESETPASS_SYNTAX_ERROR
-	Syntax: RESETPASS nick code new-password
+	Sintaxis: RESETPASS nick codigo nueva-contrasena
 NS_RESETPASS_ERROR_NOT_RESETTING
-	There is no ongoing password reset request for nickname %s.
+	No hay ninguna solicitud de reseteo de contrasena pendiente para el nickname %s.
 NS_RESETPASS_ERROR_WRONG_CODE
-	ERROR: Invalid password reset code.
+	ERROR: Codigo de reseteo de contrasena invalido.
+NS_RESETPASS_ERROR_EXPIRED
+	ERROR: Tu codigo de reseteo de contrasena ha caducado. Solicita uno nuevo con SENDPASS.
 NS_DROP_ERROR_RESETPASS_ON
-	You cannot drop your nick until your password reset is completed or expired.
+	No puedes borrar tu nick hasta que el reseteo de contrasena se complete o caduque.
 NS_SET_EMAIL_ERROR_PASSRESET_ON
-	You cannot request an E-Mail change until your password reset is completed or expired.
+	No puedes solicitar un cambio de E-Mail hasta que el reseteo de contrasena se complete o caduque.
 NS_INFO_PASSRESET_REQUEST
-	 * This nick requested a password reset.
+	 * Este nick ha solicitado un reseteo de contrasena.
 NS_INFO_OPER_PASSRESET_REQUEST
-	 * This nick requested a password reset. [ RESETPASS Code: %lu ]
+	 * Este nick ha solicitado un reseteo de contrasena. [ Codigo RESETPASS: %lu ]
+NS_SENDPASS_ERROR_PASSRESET_ON
+	Ya hay un reseteo de contrasena en curso para el nickname %s. Usa AUTHRESET RESETPASS para cancelarlo, o espera a que caduque.
 NS_SENDCODE_EMAIL_SUBJECT_RPWD
-	the password reset
+	el reseteo de contrasena
 NS_SENDCODE_EMAIL_RPWD
-	To confirm the password reset
-	log back onto %s and type:
-	/ns RESETPASS %s %lu <new password>
+	Para confirmar el reseteo de contrasena, vuelve a conectar a %s
+	usando el nick %s y escribe:
+	/ns RESETPASS %s %lu <nueva-contrasena>
 	
-CS_SENDPASS_PASSWORD_MEMO
-	Memo with new password for %s sent to %s
-CS_SENDPASS_MEMO_TEXT
-	%s resets password of %s for you. The new channel password is %s-%lu. Write it down, you will need it later.

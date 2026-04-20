@@ -1,0 +1,35 @@
+*** NickServ Help - Commande: RESETPASS ***
+Réinitialise le mot de passe d'un nick.
+
+Cette commande s'utilise avec SENDPASS. Un helper ou un
+services operator démarre la réinitialisation avec
+SENDPASS nick : un code d'autorisation est alors envoyé
+par E-Mail à l'adresse enregistrée pour le nick, avec
+les instructions à suivre.
+
+Une fois le code reçu par E-Mail, utilise RESETPASS pour
+définir un nouveau mot de passe. Le nouveau mot de passe
+doit faire au moins 5 caractères, ne doit pas contenir
+d'espaces ni de codes de contrôle, et ne doit pas être
+identique au nick.
+
+Le code est valable pendant 7 jours. Après ce délai la
+requête expire et une nouvelle SENDPASS est nécessaire.
+
+Il N'EST PAS nécessaire d'être identifié au nick pour
+employer cette commande : la preuve de possession du nick
+est de pouvoir recevoir l'E-Mail à l'adresse associée.
+
+Pour annuler une requête de réinitialisation en cours,
+contacte un services operator afin qu'il exécute AUTHRESET
+RESETPASS sur le nick.
+
+Syntaxe :
+
+/ns RESETPASS nickname code nouveau-mot-de-passe
+
+Exemple :
+/ns RESETPASS SuperPicci 1234567 n3wP4ssw0rd
+
+Pour tout renseignement, tape /join #IRCHelp
+*** Fin de l'Help ***
