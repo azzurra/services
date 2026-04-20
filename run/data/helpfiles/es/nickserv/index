@@ -15,6 +15,7 @@ Comando        Descrizione
 RECOVER    - Permite reapropiarte de un nick
 REGISTER   - Registra un nuevo nick
 RELEASE    - Permite utilizar tu nick tras haber utilizado el RECOVER
+RESETPASS  - Restablece la contraseña de un nick con un código enviado por E-Mail
 SET        - Permite configurar las opciones de tu nick
  
 Para recibir mas informaciones sobre los comandos digita /ns HELP nombredelcomando

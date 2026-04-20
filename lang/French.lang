@@ -1915,3 +1915,28 @@ SS_SEEN_REPLY_SOME
 	I found %d matches to your query (sorted): 
 SS_SEEN_SYNTAX_ERROR
 	Syntax: SEEN nick
+NS_RESETPASS_SYNTAX_ERROR
+	Syntaxe: RESETPASS pseudo code nouveau-mot-de-passe
+NS_RESETPASS_ERROR_NOT_RESETTING
+	Aucune demande de reinitialisation de mot de passe en cours pour le pseudo %s.
+NS_RESETPASS_ERROR_WRONG_CODE
+	ERREUR: Code de reinitialisation de mot de passe invalide.
+NS_RESETPASS_ERROR_EXPIRED
+	ERREUR: Votre code de reinitialisation a expire. Demandez-en un nouveau avec SENDPASS.
+NS_DROP_ERROR_RESETPASS_ON
+	Vous ne pouvez pas abandonner votre pseudo tant que la reinitialisation du mot de passe n'est pas terminee ou expiree.
+NS_SET_EMAIL_ERROR_PASSRESET_ON
+	Vous ne pouvez pas demander un changement d'E-Mail tant que la reinitialisation du mot de passe n'est pas terminee ou expiree.
+NS_INFO_PASSRESET_REQUEST
+	 * Ce pseudo a demande une reinitialisation du mot de passe.
+NS_INFO_OPER_PASSRESET_REQUEST
+	 * Ce pseudo a demande une reinitialisation du mot de passe. [ Code RESETPASS: %lu ]
+NS_SENDPASS_ERROR_PASSRESET_ON
+	Une reinitialisation de mot de passe est deja en cours pour le pseudo %s. Utilisez AUTHRESET RESETPASS pour l'annuler, ou attendez son expiration.
+NS_SENDCODE_EMAIL_SUBJECT_RPWD
+	la reinitialisation du mot de passe
+NS_SENDCODE_EMAIL_RPWD
+	Pour confirmer la reinitialisation du mot de passe, reconnectez-vous sur %s
+	en utilisant le pseudo %s et tapez:
+	/ns RESETPASS %s %lu <nouveau-mot-de-passe>
+	
