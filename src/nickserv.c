@@ -3954,8 +3954,8 @@ static void do_resetpass(CSTR source, User *callerUser, ServiceCommandData *data
 	 * has to be used to identify again. */
 	user_remove_id(ni->nick, FALSE);
 
-	LOG_SNOOP(s_OperServ, "NS R %s -- by %s (%s@%s)", ni->nick, callerUser->nick, callerUser->username, callerUser->host);
-	log_services(LOG_SERVICES_NICKSERV_GENERAL, "R %s -- by %s (%s@%s)", ni->nick, callerUser->nick, callerUser->username, callerUser->host);
+	LOG_SNOOP(s_OperServ, "NS Rp %s -- by %s (%s@%s)", ni->nick, callerUser->nick, callerUser->username, callerUser->host);
+	log_services(LOG_SERVICES_NICKSERV_GENERAL, "Rp %s -- by %s (%s@%s)", ni->nick, callerUser->nick, callerUser->username, callerUser->host);
 
 	send_notice_lang_to_user(s_NickServ, callerUser, GetCallerLang(), NS_SET_PASSWD_PASSWORD_CHANGED, ni->nick, newpass);
 }
