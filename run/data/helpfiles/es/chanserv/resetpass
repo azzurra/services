@@ -1,0 +1,37 @@
+*** ChanServ Help - Comando: RESETPASS ***
+Restablece la contraseña de un canal registrado.
+
+Este comando se utiliza junto a SENDPASS. Un helper o un
+services operator inicia el reset de la contraseña con
+SENDPASS #canal: un código de autorización se envía por
+E-Mail a la dirección registrada para el nick founder del
+canal, junto a las instrucciones para completar el reset.
+
+Cuando recibes el código por E-Mail, identifícate al nick
+founder (/ns IDENTIFY) y utiliza RESETPASS para configurar
+una nueva contraseña para el canal. La nueva contraseña
+debe tener al menos 5 caracteres, no puede contener
+espacios ni códigos de control, y no puede ser igual al
+nombre del canal.
+
+El código es válido por 7 días. Pasado este plazo la
+solicitud caduca y es necesario una nueva SENDPASS.
+
+NO es necesario estar identificado al canal para utilizar
+este comando: la prueba de posesión del canal consiste en
+poder recibir E-Mail en la dirección asociada al nick
+founder.
+
+Para anular una solicitud de reset pendiente, contacta a
+un services operator para que ejecute AUTHRESET sobre el
+canal.
+
+Sintaxis:
+
+/cs RESETPASS #canal codigo nueva-contraseña
+
+Ejemplo:
+/cs RESETPASS #lamer 1234567 n3wP4ssw0rd
+
+Para mas informaciòn, digita /join #IRCHelp
+*** Fin del Help ***

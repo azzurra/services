@@ -1939,4 +1939,32 @@ NS_SENDCODE_EMAIL_RPWD
 	Per confermare il reset password, rientra su %s usando
 	il nick %s e digita:
 	/ns RESETPASS %s %lu <nuova-password>
-	
+
+CS_RESETPASS_SYNTAX_ERROR
+	Sintassi: RESETPASS #canale codice nuova-password
+CS_RESETPASS_ERROR_NOT_RESETTING
+	Non e' in corso alcuna richiesta di reset password per il canale %s.
+CS_RESETPASS_ERROR_WRONG_CODE
+	ERRORE: Codice di reset password non valido.
+CS_RESETPASS_ERROR_EXPIRED
+	ERRORE: Il codice di reset password e' scaduto. Richiedi a un operatore un nuovo SENDPASS.
+CS_RESETPASS_PASSWORD_CHANGED
+	La password del canale %s e' stata cambiata in: %s
+CS_SENDPASS_ERROR_PASSRESET_ON
+	Un reset password e' gia' in corso per il canale %s. Usa AUTHRESET per annullarlo, o attendi che scada.
+CS_SENDPASS_EMAIL_SUBJECT_RPWD
+	Subject: Codice di reset password per il canale %s
+
+CS_SENDPASS_EMAIL_RPWD
+	Richiesta di reset password inviata da: %s
+	Ricevuta: %s
+	Per confermare il reset della password del canale, identificati su %s
+	usando il nick %s e digita:
+	/cs RESETPASS %s %lu <nuova-password>
+
+CS_INFO_PASSRESET_REQUEST
+	 * Questo canale ha richiesto un reset password.
+CS_INFO_OPER_PASSRESET_REQUEST
+	 * Questo canale ha richiesto un reset password. [ Codice RESETPASS: %lu ]
+CS_DROP_ERROR_PASSRESET_ON
+	Non puoi droppare il canale %s finche' il reset password non e' stato completato o non e' scaduto.

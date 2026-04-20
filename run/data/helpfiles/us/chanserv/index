@@ -21,7 +21,7 @@ to use them, type: /cs COMMANDNAME
  
 Other commands:
 COUNT, DEHALFOP, DEOP, DEVOICE, HALFOP, INFO, INVITE, MDEHALFOP, 
-MDEOP, MDEVOICE, MKICK, MODE, OP, RESETMODES, UNBAN, VOICE.
+MDEOP, MDEVOICE, MKICK, MODE, OP, RESETMODES, RESETPASS, UNBAN, VOICE.
  
 For more information on a specific command, type: /cs HELP COMMANDNAME
  

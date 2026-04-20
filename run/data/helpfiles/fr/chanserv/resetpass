@@ -1,0 +1,37 @@
+*** ChanServ Help - Commande: RESETPASS ***
+Réinitialise le mot de passe d'un canal enregistré.
+
+Cette commande s'utilise avec SENDPASS. Un helper ou un
+services operator démarre la réinitialisation avec
+SENDPASS #canal : un code d'autorisation est alors envoyé
+par E-Mail à l'adresse enregistrée pour le nick founder du
+canal, avec les instructions à suivre.
+
+Une fois le code reçu par E-Mail, identifie-toi sur le nick
+founder (/ns IDENTIFY) et utilise RESETPASS pour définir
+un nouveau mot de passe pour le canal. Le nouveau mot de
+passe doit faire au moins 5 caractères, ne doit pas
+contenir d'espaces ni de codes de contrôle, et ne doit pas
+être identique au nom du canal.
+
+Le code est valable pendant 7 jours. Après ce délai la
+requête expire et une nouvelle SENDPASS est nécessaire.
+
+Il N'EST PAS nécessaire d'être identifié au canal pour
+employer cette commande : la preuve de possession du canal
+est de pouvoir recevoir l'E-Mail à l'adresse associée au
+nick founder.
+
+Pour annuler une requête de réinitialisation en cours,
+contacte un services operator afin qu'il exécute AUTHRESET
+sur le canal.
+
+Syntaxe :
+
+/cs RESETPASS #canal code nouveau-mot-de-passe
+
+Exemple :
+/cs RESETPASS #lamer 1234567 n3wP4ssw0rd
+
+Pour tout renseignement, tape /join #IRCHelp
+*** Fin de l'Help ***

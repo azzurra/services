@@ -147,6 +147,7 @@ static void do_listreg(CSTR source, User *callerUser, ServiceCommandData *data);
 static void do_mark(CSTR source, User *callerUser, ServiceCommandData *data);
 static void do_open(CSTR source, User *callerUser, ServiceCommandData *data);
 static void do_sendpass(CSTR source, User *callerUser, ServiceCommandData *data);
+static void do_resetpass(CSTR source, User *callerUser, ServiceCommandData *data);
 static void do_suspend(CSTR source, User *callerUser, ServiceCommandData *data);
 static void do_unforbid(CSTR source, User *callerUser, ServiceCommandData *data);
 static void do_unfreeze(CSTR source, User *callerUser, ServiceCommandData *data);
@@ -303,6 +304,7 @@ static ServiceCommand	chanserv_commands_R[] = {
 	{ "REGISTER",	ULEVEL_USER,			0, do_register },
 	{ "REMOVE",		ULEVEL_USER,			0, do_remove },
 	{ "RESETMODES",	ULEVEL_USER,			0, handle_masscmds },
+	{ "RESETPASS",	ULEVEL_USER,			0, do_resetpass },
 	{ NULL,			0,						0, NULL }
 };
 // 'S' (83 / 18)
@@ -1334,8 +1336,14 @@ void chanserv_daily_expire() {
 
 			if ((ci->last_drop_request != 0) && (expire_drop >= ci->last_drop_request)) {
 
-				ci->last_drop_request = 0;
-				ci->auth = 0;
+				/* Daily-expire only applies to DROP codes (ONE_DAY TTL).
+				 * RESETPASS codes have a ONE_WEEK TTL and are expired lazily
+				 * when the founder next runs RESETPASS. */
+				if (FlagUnset(ci->flags, CI_PASSRESET)) {
+
+					ci->last_drop_request = 0;
+					ci->auth = 0;
+				}
 			}
 		}
 	}
@@ -3276,6 +3284,16 @@ static void do_drop(CSTR source, User *callerUser, ServiceCommandData *data) {
 
 		send_notice_lang_to_user(s_ChanServ, callerUser, GetCallerLang(), NS_ERROR_MUST_IDENTIFY, ci->founder);
 		send_notice_lang_to_user(s_ChanServ, callerUser, GetCallerLang(), CSNS_HELP_HOW_TO_IDENT, s_NS, ci->founder);
+	}
+	else if (FlagSet(ci->flags, CI_PASSRESET)) {
+
+		/* A password reset is pending: the auth code / timestamp slots belong to RESETPASS,
+		 * so refuse DROP until the password reset is either consumed or cleared via AUTHRESET.
+		 * This also prevents a RESETPASS code from ever being accepted as a DROP code. */
+
+		LOG_SNOOP(s_OperServ, "CS *D %s -- by %s (%s@%s) [Password reset pending]", ci->name, callerUser->nick, callerUser->username, callerUser->host);
+
+		send_notice_lang_to_user(s_ChanServ, callerUser, GetCallerLang(), CS_DROP_ERROR_PASSRESET_ON, ci->name);
 	}
 	else {
 
@@ -6147,7 +6165,9 @@ static void do_info(CSTR source, User *callerUser, ServiceCommandData *data) {
 			if (FlagSet(ci->flags, CI_CODERONLY))
 				send_notice_lang_to_user(s_ChanServ, callerUser, GetCallerLang(), OPER_CS_INFO_CHAN_CODERONLY);
 
-			if (ci->auth != 0)
+			if (FlagSet(ci->flags, CI_PASSRESET))
+				send_notice_lang_to_user(s_ChanServ, callerUser, GetCallerLang(), CS_INFO_OPER_PASSRESET_REQUEST, ci->auth);
+			else if (ci->auth != 0)
 				send_notice_lang_to_user(s_ChanServ, callerUser, GetCallerLang(), OPER_CS_INFO_DROP_REQUESTED, ci->auth);
 
 			send_notice_lang_to_user(s_ChanServ, callerUser, GetCallerLang(), OPER_CS_INFO_REAL_FOUNDER, ci->real_founder);
@@ -6163,6 +6183,9 @@ static void do_info(CSTR source, User *callerUser, ServiceCommandData *data) {
 
 			if (FlagSet(ci->flags, CI_FROZEN))
 				send_notice_lang_to_user(s_ChanServ, callerUser, GetCallerLang(), CS_INFO_PUB_CHAN_FROZEN);
+
+			if ((accessLevel >= CS_ACCESS_VOP) && FlagSet(ci->flags, CI_PASSRESET))
+				send_notice_lang_to_user(s_ChanServ, callerUser, GetCallerLang(), CS_INFO_PASSRESET_REQUEST, ci->name);
 		}
 
 		send_notice_lang_to_user(s_ChanServ, callerUser, GetCallerLang(), END_OF_INFO);
@@ -9177,24 +9200,42 @@ static void do_sendpass(CSTR source, User *callerUser, ServiceCommandData *data)
 		else
 			LOG_SNOOP(s_OperServ, "CS *S %s -- by %s (%s@%s) through %s [Marked]", ci->name, callerUser->nick, callerUser->username, callerUser->host, data->operName);
 	}
-	else if (FlagSet(ni->flags, NI_AUTH) || !ni->email)
+	else if (FlagSet(ci->flags, CI_PASSRESET))
+		send_notice_lang_to_user(s_ChanServ, callerUser, GetCallerLang(), CS_SENDPASS_ERROR_PASSRESET_ON, ci->name);
+
+	else if (ci->auth != 0) {
+
+		/* CI_PASSRESET was not set above, so a non-zero auth means a DROP code was
+		 * issued and is still pending. Refuse SENDPASS until DROP is resolved to keep
+		 * the auth/last_drop_request slots from being clobbered. */
+		send_notice_lang_to_user(s_ChanServ, callerUser, GetCallerLang(), CSNS_ERROR_DROP_CODE_ALREADY_SENT);
+	}
+
+	else if (FlagSet(ni->flags, NI_AUTH | NI_MAILCHANGE | NI_DROP) || !ni->email)
 		send_notice_lang_to_user(s_ChanServ, callerUser, GetCallerLang(), CS_SENDPASS_ERROR_NO_REGEMAIL, ni->nick);
 
 	else {
 
 		FILE *mailfile;
 
+		AddFlag(ci->flags, CI_PASSRESET);
+
+		srand(randomseed());
+
+		ci->auth = ci->time_registered + (getrandom(1, 99999) * getrandom(1, 9999));
+		ci->last_drop_request = NOW;
+
 		if (data->operMatch) {
 
 			LOG_SNOOP(s_OperServ, "CS S %s -- by %s (%s@%s)", ci->name, callerUser->nick, callerUser->username, callerUser->host);
-			log_services(LOG_SERVICES_CHANSERV_GENERAL, "S %s -- by %s (%s@%s) [Pass: %s]", ci->name, callerUser->nick, callerUser->username, callerUser->host, ci->founderpass);
+			log_services(LOG_SERVICES_CHANSERV_GENERAL, "S %s -- by %s (%s@%s)", ci->name, callerUser->nick, callerUser->username, callerUser->host);
 
 			send_globops(s_ChanServ, "\2%s\2 used SENDPASS on channel \2%s\2", source, ci->name);
 		}
 		else {
 
 			LOG_SNOOP(s_OperServ, "CS S %s -- by %s (%s@%s) through %s", ci->name, callerUser->nick, callerUser->username, callerUser->host, data->operName);
-			log_services(LOG_SERVICES_CHANSERV_GENERAL, "S %s -- by %s (%s@%s) through %s [Pass: %s]", ci->name, callerUser->nick, callerUser->username, callerUser->host, data->operName, ci->founderpass);
+			log_services(LOG_SERVICES_CHANSERV_GENERAL, "S %s -- by %s (%s@%s) through %s", ci->name, callerUser->nick, callerUser->username, callerUser->host, data->operName);
 
 			send_globops(s_ChanServ, "\2%s\2 (through \2%s\2) used SENDPASS on channel \2%s\2", source, data->operName, ci->name);
 		}
@@ -9208,11 +9249,11 @@ static void do_sendpass(CSTR source, User *callerUser, ServiceCommandData *data)
 			fprintf(mailfile, "From: %s <%s>\n", CONF_NETWORK_NAME, CONF_RETURN_EMAIL);
 			fprintf(mailfile, "To: %s\n", ni->email);
 
-			fprintf(mailfile, lang_msg(GetNickLang(ni), CS_SENDPASS_EMAIL_SUBJECT), ci->name);
+			fprintf(mailfile, lang_msg(GetNickLang(ni), CS_SENDPASS_EMAIL_SUBJECT_RPWD), ci->name);
 
 			lang_format_localtime(timebuf, sizeof(timebuf), GetCallerLang(), TIME_FORMAT_DATETIME, NOW);
 
-			fprintf(mailfile, lang_msg(GetNickLang(ni), CS_SENDPASS_EMAIL_TEXT), data->operName, timebuf, ci->name, ci->founderpass);
+			fprintf(mailfile, lang_msg(GetNickLang(ni), CS_SENDPASS_EMAIL_RPWD), data->operName, timebuf, CONF_NETWORK_NAME, ni->nick, ci->name, ci->auth);
 			fprintf(mailfile, lang_msg(GetNickLang(ni), CSNS_EMAIL_TEXT_ABUSE), MAIL_ABUSE, CONF_NETWORK_NAME);
 			fclose(mailfile);
 
@@ -9225,6 +9266,123 @@ static void do_sendpass(CSTR source, User *callerUser, ServiceCommandData *data)
 		else
 			log_error(FACILITY_CHANSERV_HANDLE_SENDPASS, __LINE__, LOG_TYPE_ERROR_RTL, LOG_SEVERITY_ERROR_HALTED, "do_sendpass(): unable to create sendpass.txt");
 	}
+}
+
+/*********************************************************/
+
+static void do_resetpass(CSTR source, User *callerUser, ServiceCommandData *data) {
+
+	const char *chan, *codestr, *newpass;
+	ChannelInfo *ci;
+	unsigned long int authcode;
+	char *err;
+
+
+	TRACE_MAIN_FCLT(FACILITY_CHANSERV_HANDLE_RESETPASS);
+
+	if (IS_NULL(chan = strtok(NULL, " "))
+		|| IS_NULL(codestr = strtok(NULL, " "))
+		|| IS_NULL(newpass = strtok(NULL, " "))) {
+
+		send_notice_lang_to_user(s_ChanServ, callerUser, GetCallerLang(), CS_RESETPASS_SYNTAX_ERROR);
+		send_notice_lang_to_user(s_ChanServ, callerUser, GetCallerLang(), GET_MORE_INFO_ON_COMMAND, s_CS, "RESETPASS");
+		return;
+	}
+
+	if (*chan != '#') {
+		send_notice_lang_to_user(s_ChanServ, callerUser, GetCallerLang(), CS_ERROR_INVALID_CHAN_NAME, chan, chan);
+		return;
+	}
+
+	if (IS_NULL(ci = cs_findchan(chan))) {
+		send_notice_lang_to_user(s_ChanServ, callerUser, GetCallerLang(), OPER_ERROR_CHAN_NOT_REG, chan);
+		return;
+	}
+
+	if (FlagSet(ci->flags, CI_FORBIDDEN)) {
+		send_notice_lang_to_user(s_ChanServ, callerUser, GetCallerLang(), CS_ERROR_CHAN_FORBIDDEN, ci->name);
+		return;
+	}
+
+	if (FlagSet(ci->flags, CI_FROZEN)) {
+		send_notice_lang_to_user(s_ChanServ, callerUser, GetCallerLang(), CS_ERROR_CHAN_FROZEN, ci->name);
+		return;
+	}
+
+	if (FlagUnset(ci->flags, CI_PASSRESET)) {
+		send_notice_lang_to_user(s_ChanServ, callerUser, GetCallerLang(), CS_RESETPASS_ERROR_NOT_RESETTING, ci->name);
+		return;
+	}
+
+	/* TTL check: code is only valid for ONE_WEEK since SENDPASS. */
+	if ((ci->last_drop_request == 0) || ((NOW - ci->last_drop_request) > ONE_WEEK)) {
+
+		RemoveFlag(ci->flags, CI_PASSRESET);
+		ci->auth = 0;
+		ci->last_drop_request = 0;
+
+		send_notice_lang_to_user(s_ChanServ, callerUser, GetCallerLang(), CS_RESETPASS_ERROR_EXPIRED);
+		return;
+	}
+
+	authcode = strtoul(codestr, &err, 10);
+
+	if ((*err != '\0') || (authcode == 0) || (authcode != ci->auth)) {
+
+		send_notice_lang_to_user(s_ChanServ, callerUser, GetCallerLang(), CS_RESETPASS_ERROR_WRONG_CODE);
+		send_notice_lang_to_user(s_ChanServ, callerUser, GetCallerLang(), RECEIVE_NETWORK_ASSISTANCE, CONF_NETWORK_NAME);
+		update_invalid_password_count(callerUser, s_ChanServ, ci->name);
+		return;
+	}
+
+	/* Validate the new password. */
+	if (strchr(newpass, ' ')) {
+		send_notice_lang_to_user(s_ChanServ, callerUser, GetCallerLang(), CSNS_ERROR_PASSWORD_WITH_SPACES);
+		return;
+	}
+
+	if (strpbrk(newpass, "<>")) {
+		send_notice_lang_to_user(s_ChanServ, callerUser, GetCallerLang(), CSNS_ERROR_BRAKES_IN_PASS, "<", ">");
+		return;
+	}
+
+	if (string_has_ccodes(newpass)) {
+		send_notice_lang_to_user(s_ChanServ, callerUser, GetCallerLang(), CSNS_ERROR_PASSWORD_WITH_CCODES);
+		return;
+	}
+
+	if ((str_len(newpass) < 5) || str_equals_nocase(newpass, ci->name) || str_equals_nocase(newpass, ci->name+1)) {
+		send_notice_lang_to_user(s_ChanServ, callerUser, GetCallerLang(), CSNS_ERROR_INSECURE_PASSWORD);
+		return;
+	}
+
+	if (str_equals_nocase(newpass, "PASSWORD")) {
+		send_notice_lang_to_user(s_ChanServ, callerUser, GetCallerLang(), CSNS_ERROR_PASSWORD_AS_PASS);
+		return;
+	}
+
+	if (str_len(newpass) > PASSMAX) {
+		send_notice_lang_to_user(s_ChanServ, callerUser, GetCallerLang(), CSNS_ERROR_PASSWORD_MAX_LENGTH, PASSMAX);
+		return;
+	}
+
+	/* All good — commit the new password. */
+	TRACE_MAIN();
+
+	str_copy_checked(newpass, ci->founderpass, PASSMAX);
+
+	RemoveFlag(ci->flags, CI_PASSRESET);
+	ci->auth = 0;
+	ci->last_drop_request = 0;
+
+	/* Drop every current identification for this channel so the new
+	 * password has to be used to identify again. */
+	user_remove_chanid(ci);
+
+	LOG_SNOOP(s_OperServ, "CS R %s -- by %s (%s@%s)", ci->name, callerUser->nick, callerUser->username, callerUser->host);
+	log_services(LOG_SERVICES_CHANSERV_GENERAL, "R %s -- by %s (%s@%s)", ci->name, callerUser->nick, callerUser->username, callerUser->host);
+
+	send_notice_lang_to_user(s_ChanServ, callerUser, GetCallerLang(), CS_RESETPASS_PASSWORD_CHANGED, ci->name, newpass);
 }
 
 /*********************************************************/
@@ -10353,6 +10511,7 @@ static void do_authreset(CSTR source, User *callerUser, ServiceCommandData *data
 		TRACE_MAIN();
 		ci->auth = 0;
 		ci->last_drop_request = 0;
+		RemoveFlag(ci->flags, CI_PASSRESET);
 
 		if (data->operMatch) {
 

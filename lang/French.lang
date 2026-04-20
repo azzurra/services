@@ -1939,4 +1939,32 @@ NS_SENDCODE_EMAIL_RPWD
 	Pour confirmer la reinitialisation du mot de passe, reconnectez-vous sur %s
 	en utilisant le pseudo %s et tapez:
 	/ns RESETPASS %s %lu <nouveau-mot-de-passe>
-	
+
+CS_RESETPASS_SYNTAX_ERROR
+	Syntaxe: RESETPASS #canal code nouveau-mot-de-passe
+CS_RESETPASS_ERROR_NOT_RESETTING
+	Aucune demande de reinitialisation de mot de passe en cours pour le canal %s.
+CS_RESETPASS_ERROR_WRONG_CODE
+	ERREUR: Code de reinitialisation de mot de passe invalide.
+CS_RESETPASS_ERROR_EXPIRED
+	ERREUR: Le code de reinitialisation du mot de passe a expire. Demandez a un operateur un nouveau SENDPASS.
+CS_RESETPASS_PASSWORD_CHANGED
+	Le mot de passe du canal %s a ete change en: %s
+CS_SENDPASS_ERROR_PASSRESET_ON
+	Une reinitialisation de mot de passe est deja en cours pour le canal %s. Utilisez AUTHRESET pour l'annuler, ou attendez son expiration.
+CS_SENDPASS_EMAIL_SUBJECT_RPWD
+	Subject: Code de reinitialisation de mot de passe pour le canal %s
+
+CS_SENDPASS_EMAIL_RPWD
+	Demande de reinitialisation de mot de passe envoyee par: %s
+	Recue: %s
+	Pour confirmer la reinitialisation du mot de passe de ce canal, identifiez-vous sur %s
+	en utilisant le pseudo %s et tapez:
+	/cs RESETPASS %s %lu <nouveau-mot-de-passe>
+
+CS_INFO_PASSRESET_REQUEST
+	 * Ce canal a demande une reinitialisation du mot de passe.
+CS_INFO_OPER_PASSRESET_REQUEST
+	 * Ce canal a demande une reinitialisation du mot de passe. [ Code RESETPASS: %lu ]
+CS_DROP_ERROR_PASSRESET_ON
+	Vous ne pouvez pas abandonner le canal %s tant que la reinitialisation du mot de passe n'est pas terminee ou expiree.

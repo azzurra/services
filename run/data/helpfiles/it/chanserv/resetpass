@@ -1,0 +1,35 @@
+*** ChanServ Help - Comando: RESETPASS ***
+Reimposta la password di un canale registrato.
+
+Questo comando si usa assieme a SENDPASS. Un helper o
+un services operator avvia la procedura di reset con
+SENDPASS #canale: un codice di autorizzazione viene inviato
+via E-Mail all'indirizzo registrato sul founder del canale,
+insieme alle istruzioni per completare il reset.
+
+Quando ricevi il codice via E-Mail, identificati al nick
+founder (/ns IDENTIFY) e usa RESETPASS per impostare una
+nuova password per il canale. La nuova password deve essere
+lunga almeno 5 caratteri, non puo' contenere spazi o codici
+di controllo, e non puo' essere uguale al nome del canale.
+
+Il codice e' valido per 7 giorni. Scaduto il termine la
+richiesta decade ed e' necessaria una nuova SENDPASS.
+
+NON e' necessario essere identificati al canale per usare
+questo comando: la prova di possesso del canale consiste
+nel saper ricevere E-Mail all'indirizzo associato al nick
+founder.
+
+Per annullare una richiesta di reset in corso, contatta
+uno services operator affinche' esegua AUTHRESET sul canale.
+
+Sintassi:
+
+/cs RESETPASS #canale codice nuova-password
+
+Esempio:
+/cs RESETPASS #lamer 1234567 n3wP4ssw0rd
+
+Per ulteriori chiarimenti, digita /join #IRCHelp
+*** Fine dell'Help ***
