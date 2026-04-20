@@ -1,4 +1,0 @@
-apt install build-essential libc6-dev libssl-dev 
-./configure
-make
-that's it
