@@ -24,9 +24,12 @@ jobs:
         run: |
           apt-get update
           apt-get install -y --no-install-recommends \
-            build-essential libc6-dev ca-certificates git
+            build-essential libc6-dev ca-certificates git python3
 
       - uses: actions/checkout@v4
+
+      - name: compile language files
+        run: python3 lang/langcomp.py
 
       - name: configure
         run: ./configure
