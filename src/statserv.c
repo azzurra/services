@@ -115,8 +115,10 @@ static void do_netstats(const char *source, User *callerUser, ServiceCommandData
 static void do_records(const char *source, User *callerUser, ServiceCommandData *data);
 static void do_server(const char *source, User *callerUser, ServiceCommandData *data);
 static void do_who(const char *source, User *callerUser, ServiceCommandData *data);
-
-
+#ifdef OS_64BIT
+static STG_RESULT read_global_stats32(STGHANDLE stg, GlobalStats * monthly);
+static STG_RESULT read_record_stats32(STGHANDLE stg, RecordStats * dst);
+#endif
 /*********************************************************
  * Initialization/cleanup routines                       *
  *********************************************************/
@@ -314,6 +316,104 @@ void statserv(const char *source, User *callerUser, char *buf) {
 /*********************************************************
  * Database functions                                    *
  *********************************************************/
+#ifdef OS_64BIT
+static STG_RESULT read_global_stats32(STGHANDLE stg, GlobalStats *dst) {
+	GlobalStats32 gs32;
+	STG_RESULT result = stg_read_record(stg, (PBYTE) &gs32, sizeof(GlobalStats32));
+	if (result != stgSuccess)
+		return result;
+
+	dst->last_update = gs32.last_update;
+	dst->nicks = gs32.nicks;
+	dst->kills = gs32.kills;
+	dst->skills = gs32.skills;
+	dst->joins = gs32.joins;
+	dst->parts = gs32.parts;
+	dst->quits = gs32.quits;
+	dst->kicks = gs32.kicks;
+	dst->bans = gs32.bans;
+	dst->addcmodes = gs32.addcmodes;
+	dst->delcmodes = gs32.delcmodes;
+	dst->umodes = gs32.umodes;
+	dst->connections = gs32.connections;
+	dst->oppings = gs32.oppings;
+	dst->deoppings = gs32.deoppings;
+	dst->halfoppings = gs32.halfoppings;
+	dst->dehalfoppings = gs32.dehalfoppings;
+	dst->voicings = gs32.voicings;
+	dst->devoicings = gs32.devoicings;
+	dst->topics = gs32.topics;
+
+	return result;
+}
+static STG_RESULT  read_record_stats32(STGHANDLE stg, RecordStats * dst) {
+	RecordStats32 rs32;
+	STG_RESULT result = stg_read_record(stg, (PBYTE) &rs32, sizeof(RecordStats32));
+	if (result != stgSuccess)
+		return result;
+
+	dst->started = rs32.started;
+	dst->maxusers = rs32.maxusers;
+	dst->maxusers_time = rs32.maxusers_time;
+	dst->maxchannels = rs32.maxchannels;
+	dst->maxchannels_time = rs32.maxchannels_time;
+	dst->maxopers = rs32.maxopers;
+	dst->maxopers_time = rs32.maxopers_time;
+	dst->maxservers = rs32.maxservers;
+	dst->maxservers_time = rs32.maxservers_time;
+	dst->maxconn = rs32.maxconn;
+	dst->maxconn_time = rs32.maxconn_time;
+
+	return result;
+}
+
+void convert_channelstats_32to64(ChannelStats_V10 * dst, ChannelStats32 * src) {
+	dst->name = (STR)(uintptr_t)src->name;
+	dst->time_added = src->time_added;
+	dst->last_change = src->last_change;
+#define M_CS(f) dst->f = (uint64_t)src->f
+
+	// 1. Statistiche Totali
+	M_CS(totaljoins); M_CS(totalparts); M_CS(totalkicks); M_CS(totalbans);
+	M_CS(totaloppings); M_CS(totaldeoppings); M_CS(totalhalfoppings); M_CS(totaldehalfoppings);
+	M_CS(totalvoicings); M_CS(totaldevoicings); M_CS(totaltopics); M_CS(totaldelcmodes); M_CS(totaladdcmodes);
+
+	// 2. I Peak (Picchi)
+	M_CS(totalpeak); M_CS(monthlypeak); M_CS(weeklypeak); M_CS(dailypeak);
+
+	// 3. Joins
+	M_CS(monthlyjoins); M_CS(weeklyjoins); M_CS(dailyjoins);
+
+	// 4. Parts
+	M_CS(monthlyparts); M_CS(weeklyparts); M_CS(dailyparts);
+
+	// 5. Kicks
+	M_CS(monthlykicks); M_CS(weeklykicks); M_CS(dailykicks);
+
+	// 6. Bans
+	M_CS(monthlybans); M_CS(weeklybans); M_CS(dailybans);
+
+	// 7. Oppings / Deoppings
+	M_CS(monthlyoppings); M_CS(weeklyoppings); M_CS(dailyoppings);
+	M_CS(monthlydeoppings); M_CS(weeklydeoppings); M_CS(dailydeoppings);
+
+	// 8. Half-Oppings / Dehalf-Oppings
+	M_CS(monthlyhalfoppings); M_CS(weeklyhalfoppings); M_CS(dailyhalfoppings);
+	M_CS(monthlydehalfoppings); M_CS(weeklydehalfoppings); M_CS(dailydehalfoppings);
+
+	// 9. Voicings / Devoicings
+	M_CS(monthlyvoicings); M_CS(weeklyvoicings); M_CS(dailyvoicings);
+	M_CS(monthlydevoicings); M_CS(weeklydevoicings); M_CS(dailydevoicings);
+
+	// 10. Topics & Modes
+	M_CS(monthlytopics); M_CS(weeklytopics); M_CS(dailytopics);
+	M_CS(monthlydelcmodes); M_CS(weeklydelcmodes); M_CS(dailydelcmodes);
+	M_CS(monthlyaddcmodes); M_CS(weeklyaddcmodes); M_CS(dailyaddcmodes);
+
+#undef M_CS
+}
+#endif
+
 
 BOOL statserv_chanstats_db_load(void) {
 
@@ -347,7 +447,35 @@ BOOL statserv_chanstats_db_load(void) {
 					ChannelStats_V10	*cs;
 
 					// Load global statistics
+#ifdef OS_64BIT
+					BOOL is64bit = stg_is64bit(stg);
+					if (is64bit) {
+						if (stg_read_record(stg, NULL, 0) != stgBeginOfSection ||
+						stg_read_record(stg, (PBYTE)&total,   sizeof(GlobalStats_V10)) != stgSuccess ||
+						stg_read_record(stg, (PBYTE)&monthly, sizeof(GlobalStats_V10)) != stgSuccess ||
+						stg_read_record(stg, (PBYTE)&weekly,  sizeof(GlobalStats_V10)) != stgSuccess ||
+						stg_read_record(stg, (PBYTE)&daily,   sizeof(GlobalStats_V10)) != stgSuccess ||
+						stg_read_record(stg, (PBYTE)&records, sizeof(RecordStats_V10)) != stgSuccess ||
+						stg_read_record(stg, NULL, 0) != stgEndOfSection) {
 
+							stg_close(stg, STATSERV_DB);
+							fatal_error(FACILITY_STATSERV_CHANSTATS_DB_LOAD, __LINE__, "Read error on %s - %s", STATSERV_DB, stg_result_to_string(stg_get_last_error()));
+						}
+					} else {
+						if (stg_read_record(stg, NULL, 0) != stgBeginOfSection ||
+							read_global_stats32(stg, &total) != stgSuccess ||
+							read_global_stats32(stg, &monthly) != stgSuccess ||
+							read_global_stats32(stg, &weekly) != stgSuccess ||
+							read_global_stats32(stg, &daily) != stgSuccess ||
+							read_record_stats32(stg, &records) != stgSuccess ||
+						    stg_read_record(stg, NULL, 0) != stgEndOfSection) {
+							stg_close(stg, STATSERV_DB);
+							fatal_error(
+								FACILITY_STATSERV_CHANSTATS_DB_LOAD, __LINE__, "Read error on %s - %s", STATSERV_DB,
+								stg_result_to_string(stg_get_last_error()));
+						}
+					}
+#else
 					if (stg_read_record(stg, NULL, 0) != stgBeginOfSection ||
 						stg_read_record(stg, (PBYTE)&total,   sizeof(GlobalStats_V10)) != stgSuccess ||
 						stg_read_record(stg, (PBYTE)&monthly, sizeof(GlobalStats_V10)) != stgSuccess ||
@@ -359,7 +487,7 @@ BOOL statserv_chanstats_db_load(void) {
 						stg_close(stg, STATSERV_DB);
 						fatal_error(FACILITY_STATSERV_CHANSTATS_DB_LOAD, __LINE__, "Read error on %s - %s", STATSERV_DB, stg_result_to_string(stg_get_last_error()));
 					}
-
+#endif
 
 					// channels stats
 					for (idx = 0; idx < CHANSTATS_HASHSIZE; ++idx) {
@@ -377,8 +505,17 @@ BOOL statserv_chanstats_db_load(void) {
 								cs = mem_malloc(sizeof(ChannelStats_V10));
 								#endif
 
+#ifdef OS_64BIT
+								if (is64bit) {
+									result = stg_read_record(stg, (PBYTE)cs, sizeof(ChannelStats_V10));
+								} else {
+									ChannelStats32 cs32;
+									result = stg_read_record(stg, (PBYTE)&cs32, sizeof(ChannelStats32));
+									convert_channelstats_32to64(cs, &cs32);
+								}
+#else
 								result = stg_read_record(stg, (PBYTE)cs, sizeof(ChannelStats_V10));
-
+#endif
 								switch (result) {
 
 									case stgEndOfSection: // end-of-section
@@ -468,8 +605,39 @@ BOOL statserv_servstats_db_load(void) {
 							
 							ss = mem_malloc(sizeof(ServerStats_V10));
 
-							if (stg_read_record(stg, (PBYTE)ss, sizeof(ServerStats_V10)) == stgSuccess) {
-
+#ifdef OS_64BIT
+							BOOL is64bit = stg_is64bit(stg);
+							if (is64bit)
+								result = stg_read_record(stg, (PBYTE)ss, sizeof(ServerStats_V10));
+							else {
+								ServerStats32 ss32;
+								result = stg_read_record(stg, (PBYTE)&ss32, sizeof(ServerStats32));
+								ss->name = (STR)(uintptr_t) ss32.name;
+								ss->time_added = ss32.time_added;
+								ss->clients = ss32.clients;
+								ss->maxclients = ss32.maxclients;
+								ss->maxclients_time = ss32.maxclients_time;
+								ss->opers = ss32.opers;
+								ss->maxopers = ss32.maxopers;
+								ss->maxopers_time = ss32.maxopers_time;
+								ss->operkills = ss32.operkills;
+								ss->servkills = ss32.servkills;
+								ss->connect = ss32.connect;
+								ss->squit = ss32.squit;
+								ss->hits = ss32.hits;
+								ss->msgs = ss32.msgs;
+								ss->users_average = ss32.users_average;
+								ss->opers_average = ss32.opers_average;
+								ss->dailysplits = ss32.dailysplits;
+								ss->weeklysplits = ss32.weeklysplits;
+								ss->monthlysplits = ss32.monthlysplits;
+								ss->totalsplits = ss32.totalsplits;
+								ss->flags = ss32.flags;
+							}
+#else
+							result = stg_read_record(stg, (PBYTE)ss, sizeof(ServerStats_V10));
+#endif
+							if (result == stgSuccess) {
 								if (IS_NOT_NULL(ss->name) && (stg_read_string(stg, &(ss->name), NULL) != stgSuccess))
 									fatal_error(FACILITY_STATSERV_SERVSTATS_DB_LOAD, __LINE__, "Read error on %s (2) - %s", SEENSERV_DB, stg_result_to_string(result));
 

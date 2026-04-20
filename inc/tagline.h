@@ -38,6 +38,20 @@ struct _tagline_V10 {
 // Current struct version
 typedef	Tagline_V10		Tagline;
 
+#ifdef OS_64BIT
+typedef struct _tagline_V10_32		Tagline_V10_32;
+struct _tagline_V10_32 {
+
+    int32_t	    prev, next;
+
+    int32_t		text;
+    Creator32	creator;
+};
+
+// Current struct version
+typedef	Tagline_V10_32		Tagline32;
+#endif
+
 
 /*********************************************************
  * Constants                                             *

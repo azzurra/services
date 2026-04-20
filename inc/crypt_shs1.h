@@ -65,7 +65,7 @@ typedef unsigned long UINT;		/* must be a 2 byte unsigned value */
 
 #ifndef HAVE_ULONG
 #define HAVE_ULONG
-typedef unsigned long ULONG;	/* must be a 4 byte unsigned value */
+typedef uint32_t ULONG;	/* must be a 4 byte unsigned value -- And OFC IT WASN'T ON 64Bit machines :D --Sonic*/
 #endif
 
 #endif /* HASH_MACROS */

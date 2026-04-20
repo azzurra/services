@@ -2481,8 +2481,6 @@ int user_handle_server_SQUIT(const Server *server) {
 
 					NickTimeoutData *ntd;
 
-					SeenInfo *si;
-
 					ntd = (NickTimeoutData*) timeout_get_data(toNickServ, TOTYPE_NICKSERV_COUNTDOWN, (unsigned long) user->ni);
 
 					if (IS_NOT_NULL(ntd))

@@ -26,7 +26,7 @@ typedef unsigned short int	LANG_MSG_SIZE;
 typedef LANG_MSG *			LANG_TABLE;
 
 
-typedef unsigned char	NICK_LANG_ID;
+typedef uint8_t	NICK_LANG_ID;
 
 
 typedef struct lang_item {
@@ -73,14 +73,14 @@ typedef struct lang_item {
 typedef struct lang_file_header {
 
 	LANG_VERSION		version;
-	LANG_ID				lang_id;
-	time_t				created;
+	LANG_ID			lang_id;
+	uint32_t		created;
 	unsigned int		standard_flags;
 	unsigned int		message_count;
-	char				lang_short_name[3];
+	char			lang_short_name[3];
 	LANG_MSG_SIZE		name_loc_size;
 	LANG_MSG_SIZE		name_eng_size;
-	unsigned long int	signature;
+	uint32_t		signature;
 
 } LANG_FILE_HEADER;
 

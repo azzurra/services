@@ -87,6 +87,22 @@ struct _Oper_V11 {
 	flags_t			flags;					/* OPER_* defined below. */
 	int				level;					/* Oper's access level to services (ULEVEL_*) */
 };
+#ifdef OS_64BIT
+typedef struct _Oper_V11_32	Oper_V11_32;
+struct _Oper_V11_32 {
+
+	int32_t				prev, next;
+
+	int32_t				nick;
+
+	Creator32			creator;
+	int32_t				lastUpdate;
+
+	uint32_t			flags;					/* OPER_* defined below. */
+	int32_t				level;					/* Oper's access level to services (ULEVEL_*) */
+};
+typedef Oper_V11_32 Oper32;
+#endif
 
 // Current structs version
 #define	Oper	Oper_V11
@@ -156,13 +172,13 @@ extern BOOL oper_db_save(void);
 extern void oper_remove_nick(CSTR nick);
 extern int check_oper(User *user, CSTR nick, CSTR pass);
 
-extern __inline__ BOOL is_services_master(const User *user);
-extern __inline__ BOOL is_services_coder(const User *user);
-extern __inline__ BOOL is_services_root(const User *user);
-extern __inline__ BOOL is_services_admin(const User *user);
-extern __inline__ BOOL is_services_oper(const User *user);
-extern __inline__ BOOL is_services_helpop(const User *user);
-extern __inline__ BOOL is_services_valid_oper(const User *user);
+extern BOOL is_services_master(const User *user);
+extern BOOL is_services_coder(const User *user);
+extern BOOL is_services_root(const User *user);
+extern BOOL is_services_admin(const User *user);
+extern BOOL is_services_oper(const User *user);
+extern BOOL is_services_helpop(const User *user);
+extern BOOL is_services_valid_oper(const User *user);
 
 extern int get_services_access(const User *user, CSTR nick);
 

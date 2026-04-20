@@ -53,6 +53,24 @@ struct _Region {
 	Region			*next, *prev;
 };
 
+#ifdef OS_64BIT
+typedef	struct _Region_32	Region32;
+struct __attribute__((packed)) _Region_32 {
+
+	REGION_ID		id;
+	uint32_t		flags;	/* RF_* */
+	uint32_t		hits;
+
+	CIDR_IP			cidr;
+	uint32_t		host_mask;
+
+	Creator32		creator;
+	uint32_t		reason;
+
+	uint32_t		next, prev;
+};
+#endif
+
 
 // Error reporting
 typedef struct _RegionError {
@@ -586,9 +604,26 @@ BOOL regions_db_load(void) {
 								while (in_section) {
 
 									region = mem_malloc(sizeof(Region));
+#ifdef OS_64BIT
+									BOOL is64Bit = stg_is64bit(stg);
+									if (is64Bit)
+										result = stg_read_record(stg, (PBYTE)region, sizeof(Region));
+									else {
+										Region32 region32;
+										result = stg_read_record(stg, (PBYTE)&region32, sizeof(Region32));
+										region->creator.name = (STR)(uintptr_t)region32.creator.name;
+										region->creator.time = region32.creator.time;
+										region->flags = region32.flags;
+										region->hits = region32.hits;
+										region->cidr = region32.cidr;
+										region->id = region32.id;
+										region->reason = (STR)(uintptr_t)region32.reason;
+										region->host_mask = (STR)(uintptr_t)region32.host_mask;
+									}
+#else
 
 									result = stg_read_record(stg, (PBYTE)region, sizeof(Region));
-
+#endif
 									switch (result) {
 
 										case stgEndOfSection: // end-of-section

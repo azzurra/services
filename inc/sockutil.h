@@ -38,7 +38,7 @@ extern unsigned long long int total_written;
  *********************************************************/
 
 extern SOCKET_RESULT socket_read(char *buf, long int len);
-extern __inline__ void socket_write(char *text, size_t len);
+extern void socket_write(char *text, size_t len);
 extern BOOL socket_connect(CSTR host, const unsigned short int port);
 extern void socket_disconnect(void);
 

@@ -1,0 +1,51 @@
+*** NickServ Help - Comando: AUTHRESET ***
+Anula las autorizaciones pendientes sobre un nick.
+
+Este comando está reservado a los services operators y
+a los helpers. Cancela un procedimiento en curso que
+espera que el propietario del nick actúe sobre un E-Mail
+enviado por los servicios (código AUTH de registro,
+cambio de E-Mail, drop o reset de contraseña).
+
+Según el sub-comando opcional, el comando actúa sobre un
+subconjunto distinto del estado del nick.
+
+Sintaxis:
+
+/ns AUTHRESET nickname [MAILCHANGE | DROP | RESETPASS]
+
+Sin sub-comando, la acción es un reset COMPLETO: el nick
+vuelve al estado no autorizado (se pone el flag NI_AUTH),
+tanto la E-Mail registrada como la pendiente se eliminan,
+y los posibles estados MailChange y Drop se limpian. El
+propietario deberá hacer AUTH de nuevo con el código que
+los servicios emitirán en el siguiente identify.
+
+Atención: ejecutar AUTHRESET sin sub-comando sobre un
+nick que sólo tiene un reset de contraseña pendiente
+(flag NI_PASSRESET) casi nunca es lo que quieres. Elimina
+la E-Mail registrada sin limpiar NI_PASSRESET, dejando
+al propietario bloqueado hasta que se ejecute
+AUTHRESET nickname RESETPASS. En este caso utiliza
+directamente AUTHRESET nickname RESETPASS.
+
+Sub-comandos:
+
+MAILCHANGE  Anula un cambio de E-Mail pendiente. Limpia
+            NI_MAILCHANGE y NI_NOMAIL, elimina la E-Mail
+            pendiente y el código AUTH. La E-Mail
+            registrada y la contraseña no se tocan.
+
+DROP        Anula un drop de nick pendiente. Limpia
+            NI_DROP y elimina el código AUTH. La E-Mail
+            registrada y la contraseña no se tocan.
+
+RESETPASS   Anula un reset de contraseña pendiente (ver
+            SENDPASS y RESETPASS). Limpia NI_PASSRESET y
+            elimina el código AUTH. La E-Mail registrada
+            y la contraseña no se tocan.
+
+Todas las operaciones se anuncian vía GlobOps y se loguean.
+
+Para mas informaciòn, digita /join #IRCHelp
+*** Fin del Help ***

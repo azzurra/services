@@ -41,7 +41,7 @@ struct _SeenInfo_V10 {
 	char			*host;			/* user's hostname */
 	char			*realname;
 
-	unsigned long	ip;
+	uint32_t		ip;
 	short int		mode;			/* User's last usermodes */
 	unsigned char   type;			/* SEEN_TYPE_* defined below */
 	char			*tempnick;		/* Nick the user changed to (or from, depending on type),
@@ -54,6 +54,34 @@ struct _SeenInfo_V10 {
 // Current structs version
 typedef SeenInfo_V10	SeenInfo;
 
+#ifdef OS_64BIT
+typedef struct _SeenInfo_V10_32	SeenInfo_V10_32;
+struct _SeenInfo_V10_32 {
+
+	int32_t		next, prev;
+
+#ifdef FIX_USE_MPOOL
+	uint32_t	mblock_id;
+#endif
+
+	int32_t			nick;			/* user's nickname */
+	int32_t			username;		/* user's username (ident) */
+	int32_t			host;			/* user's hostname */
+	int32_t			realname;
+
+	uint32_t		ip;
+	short int		mode;			/* User's last usermodes */
+	unsigned char   type;			/* SEEN_TYPE_* defined below */
+	int32_t			tempnick;		/* Nick the user changed to (or from, depending on type),
+									   or oper who killed it */
+	int32_t			quitmsg;		/* User's quit message */
+	int32_t			last_seen;
+	unsigned char   pad[4];
+};
+
+// Current structs version
+typedef SeenInfo_V10_32	SeenInfo32;
+#endif
 
 /*********************************************************
  * Constants                                             *

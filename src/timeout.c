@@ -303,11 +303,10 @@ void time_check(const time_t now) {
 	if (now >= time_next_midnight) {
 
 		struct tm	*ltm = localtime(&now);
-		int			new_day, new_month, new_year, new_wday;
+		int			new_month, new_year, new_wday;
 
 		if (IS_NOT_NULL(ltm)) {
 
-			new_day   = ltm->tm_mday;
 			new_month = ltm->tm_mon + 1;
 			new_year  = ltm->tm_year + 1900;
 			new_wday  = ltm->tm_wday;
@@ -315,7 +314,6 @@ void time_check(const time_t now) {
 		else {
 
 			log_error(FACILITY_TIMEOUT_TIME_CHECK, __LINE__, LOG_TYPE_ERROR_ASSERTION, LOG_SEVERITY_ERROR_HALTED, "time_check() - localtime() failed. Timed-checks skipped!");
-			new_day   = time_today_day;
 			new_month = time_today_month;
 			new_year  = time_today_year;
 			new_wday  = time_today_wday;

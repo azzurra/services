@@ -94,7 +94,24 @@ BOOL oper_db_load(void) {
 
 								anOper = mem_malloc(sizeof(Oper));
 
+#ifdef OS_64BIT
+								BOOL is64Bit = stg_is64bit(stg);
+								if (is64Bit)
+									result = stg_read_record(stg, (PBYTE)anOper, sizeof(Oper));
+								else {
+									Oper32 oper32;
+									result = stg_read_record(stg, (PBYTE)&oper32, sizeof(Oper32));
+									anOper->nick = (STR)(uintptr_t)oper32.nick;
+									anOper->creator.name = (STR)(uintptr_t)oper32.creator.name;
+									anOper->creator.time = oper32.creator.time;
+									anOper->lastUpdate = oper32.lastUpdate;
+									anOper->flags = oper32.flags;
+									anOper->level = oper32.level;
+								}
+#else
 								result = stg_read_record(stg, (PBYTE)anOper, sizeof(Oper));
+#endif
+
 
 								switch (result) {
 
@@ -583,10 +600,13 @@ int check_oper(User *user, CSTR nick, CSTR password) {
 
 	if (FlagSet(oper->flags, OPER_FLAG_ENABLED)) {
 
-		if (IS_NULL(user->oper) || (user->oper->level < oper->level))
-			user->oper = oper;
+		if ((oper->level <= ULEVEL_HOP) || user_is_ircop(user)) {
 
-		return (user->oper->level);
+			if (IS_NULL(user->oper) || (user->oper->level < oper->level))
+				user->oper = oper;
+
+			return (user->oper->level);
+		}
 	}
 
 	return ULEVEL_USER;

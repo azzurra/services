@@ -79,6 +79,6 @@ extern unsigned long int aton(CSTR ipaddr);
 
 
 // CRC
-void crc32(PBYTE data, size_t size, unsigned long int *crc);
+void crc32(PBYTE data, size_t size, uint32_t *crc);
 
 #endif /* SRV_MISC_H */

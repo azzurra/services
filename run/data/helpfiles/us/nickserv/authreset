@@ -1,0 +1,49 @@
+*** NickServ Help - Command: AUTHRESET ***
+Resets pending authorizations on a nickname.
+
+This command is reserved to services operators and helpers.
+It cancels a pending procedure that expects the nick owner
+to act on an E-Mail sent by services (AUTH code for
+registration, mail change, drop, or password reset).
+
+Depending on the optional sub-command, the command operates
+on a different subset of the nickname's state.
+
+Syntax:
+
+/ns AUTHRESET nickname [MAILCHANGE | DROP | RESETPASS]
+
+Without a sub-command, the command performs a FULL reset:
+the nickname is moved back to unauthorized state (flag
+NI_AUTH is set), both the registered and the pending
+E-Mail are removed, and pending MailChange / Drop state
+is cleared. The owner will have to AUTH again with the
+new code that services will request on next identify.
+
+Warning: running AUTHRESET with no sub-command on a nick
+that only has a pending password reset (flag NI_PASSRESET)
+is almost never what you want. It wipes the registered
+E-Mail without clearing NI_PASSRESET, locking the owner
+out until AUTHRESET nickname RESETPASS is run. In that
+case, use AUTHRESET nickname RESETPASS directly.
+
+Sub-commands:
+
+MAILCHANGE  Cancel a pending change of E-Mail. Clears
+            NI_MAILCHANGE and NI_NOMAIL, drops the pending
+            E-Mail and the AUTH code. The registered
+            E-Mail and the password are left untouched.
+
+DROP        Cancel a pending nickname drop. Clears NI_DROP
+            and drops the AUTH code. The registered E-Mail
+            and the password are left untouched.
+
+RESETPASS   Cancel a pending password reset (see SENDPASS
+            and RESETPASS). Clears NI_PASSRESET and drops
+            the AUTH code. The registered E-Mail and the
+            password are left untouched.
+
+All operations are announced via GlobOps and logged.
+
+Type /join #IRCHelp for more information.
+*** End of Help ***

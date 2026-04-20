@@ -25,8 +25,8 @@
  * Data types                                            *
  *********************************************************/
 
-typedef unsigned int	REGION_ID;
-typedef unsigned int	REGION_TYPE;
+typedef uint32_t	REGION_ID;
+typedef uint32_t	REGION_TYPE;
 
 
 /*********************************************************

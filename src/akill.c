@@ -117,7 +117,9 @@ BOOL akill_db_load(void) {
 				case AKILL_DB_CURRENT_VERSION: {
 
 					AutoKill_V10 *akill;
-
+#ifdef OS_64BIT
+					AutoKill32 akill32;
+#endif
 					// start-of-section marker
 					result = stg_read_record(stg, NULL, 0);
 
@@ -128,9 +130,15 @@ BOOL akill_db_load(void) {
 						while (in_section) {
 
 							akill = mem_malloc(sizeof(AutoKill_V10));
-
+#ifdef OS_64BIT
+							BOOL is64Bit = stg_is64bit(stg);
+							if (!is64Bit)
+								result = stg_read_record(stg, (PBYTE)&akill32, sizeof(AutoKill32));
+							else
+								result = stg_read_record(stg, (PBYTE)akill, sizeof(AutoKill_V10));
+#else
 							result = stg_read_record(stg, (PBYTE)akill, sizeof(AutoKill_V10));
-
+#endif
 							switch (result) {
 
 								case stgEndOfSection: // end-of-section
@@ -139,7 +147,19 @@ BOOL akill_db_load(void) {
 									break;
 
 								case stgSuccess: // a valid record
-
+									if (!is64Bit) {
+										akill->creator.name = (STR)(uintptr_t) akill32.creator.name;
+										akill->creator.time = akill32.creator.time;
+										akill->username = (STR)(uintptr_t) akill32.username;
+										akill->host = (STR)(uintptr_t) akill32.host;
+										akill->reason = (STR)(uintptr_t) akill32.reason;
+										akill->desc = (STR)(uintptr_t) akill32.desc;
+										memcpy(&akill->cidr, &akill32.cidr, sizeof(CIDR_IP));
+										akill->expireTime = akill32.expireTime;
+										akill->lastUsed = akill32.lastUsed;
+										akill->id = akill32.id;
+										akill->type = akill32.type;
+									}
 									read_done = TRUE;
 
 									if (akill->username)

@@ -62,40 +62,45 @@ struct _NickInfo_V7 {
 	unsigned char		reserved[3];		/* For future expansion -- decrease! */
 };
 
-typedef struct _NickInfo_V10		NickInfo_V10;
-struct _NickInfo_V10 {
+#ifdef OS_64BIT
+struct _NickInfo_V7_32 {
 
-    NickInfo_V10		*next, *prev;
+	int					next, prev; //we read it has 32bit pointers
+	char				nick[NICKMAX];
+	char				pass[PASSMAX];
+	int32_t				last_usermask;
+	int32_t				last_realname;
+	int32_t				time_registered;
+	int32_t				last_seen;
+	int32_t				accesscount;			/* # of entries */
+	int32_t				access;				/* Array of strings */
+	int32_t				flags;					/* NI_* */
+	int32_t				last_drop_request;		/* Was id_timestamp */
+	uint16_t			memomax;
+	int16_t				channelcount;			/* Number of channels nick has access to */
+	int32_t				url;
+	int32_t				email;
+	int32_t				forward;
+	int32_t				hold;       /*  }                                       */
+	int32_t				mark;       /*  }   --   Identities (what svsadmin did it?)  */
+	int32_t				forbid;     /*  }                                       */
+	int					news;
+	int32_t				regemail;				/* Original e-mail */
+	int32_t				last_email_request;		/* Was ICQ number */
+	uint32_t			auth;
+	int32_t				freeze;
+	NICK_LANG_ID		langID;
 
-	char				*nick;
-    char				*pass;
-    char				*last_usermask;
-    char				*last_realname;
-
-    char				*url;
-    char				*email;
-    char				*regemail;
-    char				*forward;
-
-    time_t				time_registered;
-    time_t				last_seen;
-    time_t				last_email_request;
-    time_t				last_drop_request;
-
-    unsigned char		accesscount;
-    char				**access;
-
-    flags_t				flags;
-    unsigned char		channelcount;
-
-    NICK_LANG_ID		langID;
-	SettingsInfo		*info;
-
-    unsigned long int	auth;
+	unsigned char		reserved[3];		/* For future expansion -- decrease! */
 };
+#endif
+
 
 // Current structs version
 typedef NickInfo_V7		NickInfo;
+#ifdef OS_64BIT
+typedef struct _NickInfo_V7_32		NickInfo32;
+#endif
 
 
 // NickServ timeout data
@@ -140,6 +145,7 @@ typedef struct nick_timeout_data {
 #define NI_KILL_NORMAL		0x00800000  /* "Guest" if not identified in 20s */
 #define NI_KILL_FAST		0x01000000  /* "Guest" if not identified in 5s */
 #define NI_NOCHANMEMO		0x02000000  /* No memos sent to channels will be received. */
+#define NI_PASSRESET		0x04000000  /* Nick requested a password reset. */
 #define NI_ENFORCED			0x20000000  /* Nick is being held after a kill */
 #define NI_NOWELCOME		0x40000000  /* Was NI_RECOGNIZED */
 #define NI_IDENTIFIED		0x80000000  /* This is free */

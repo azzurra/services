@@ -16,11 +16,11 @@
 #*   along with this program; if not, write to the Free Software
 #*   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 #*/
-
+-include Makefile.inc
 RM=/bin/rm
 
 # Compile flags
-CFLAGS= -pipe -Wall -O3 -g -Wshadow -Wcast-align -Wsign-compare
+CFLAGS += -pipe -Wall -O0 -g -Wshadow -Wcast-align -Wsign-compare
 # linker flags.
 LDFLAGS=
 

@@ -86,9 +86,20 @@ BOOL tagline_db_load(void) {
 						while (in_section) {
 
 							aTagline = mem_malloc(sizeof(Tagline_V10));
-
+#ifdef OS_64BIT
+							BOOL is64Bit = stg_is64bit(stg);
+							if (is64Bit)
+								result = stg_read_record(stg, (PBYTE)aTagline, sizeof(Tagline_V10));
+							else {
+								Tagline32 tgl32;
+								result = stg_read_record(stg, (PBYTE)&tgl32, sizeof(Tagline_V10_32));
+								aTagline->text = (STR)(uintptr_t)tgl32.text;
+								aTagline->creator.name = (STR)(uintptr_t)tgl32.creator.name;
+								aTagline->creator.time = tgl32.creator.time;
+							}
+#else
 							result = stg_read_record(stg, (PBYTE)aTagline, sizeof(Tagline_V10));
-
+#endif
 							switch (result) {
 
 								case stgEndOfSection: // end-of-section

@@ -29,8 +29,8 @@ extern void handle_cryptkey(CSTR source, User *callerUser, ServiceCommandData *d
 
 extern STR crypt_userhost(CSTR real, HOST_TYPE htype, short int dotsCount);
 
-extern long crypt_hash_FNV(CSTR string, size_t size);
-extern long crypt_hash_SHA1(CSTR string, size_t size, STR buffer, size_t bufferSize);
+extern int32_t crypt_hash_FNV(CSTR string, size_t size);
+extern int32_t crypt_hash_SHA1(CSTR string, size_t size, STR buffer, size_t bufferSize);
 
 extern STR user_hidehost(CSTR real);
 

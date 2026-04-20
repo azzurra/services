@@ -37,7 +37,12 @@ typedef struct _Creator {
 	time_t		time;
 
 } Creator;
-
+#ifdef OS_64BIT
+typedef struct _Creator_32 {
+	uint32_t	name;
+	uint32_t	time;
+} Creator32;
+#endif
 
 typedef struct _CreationInfo {
 
@@ -45,6 +50,13 @@ typedef struct _CreationInfo {
 	STR			reason;
 
 } CreationInfo;
+
+#ifdef OS_64BIT
+typedef struct _CreationInfo_32 {
+	Creator32	creator;
+	uint32_t	reason;
+} CreationInfo32;
+#endif
 
 
 typedef struct	_SettingsInfo	SettingsInfo;
@@ -173,7 +185,7 @@ extern const unsigned char _toupper_table[];
 
 extern STDVAL	str_parse_standard_value(CSTR value);
 
-extern __inline__ CSTR str_get_valid_display_value(CSTR string);
+extern CSTR str_get_valid_display_value(CSTR string);
 
 extern STR str_replace(STR string, size_t size, CSTR find, CSTR replace);
 /* extern STR str_tokenize(CSTR string, STR token, size_t token_len, CSTR delimiters); */
@@ -219,9 +231,9 @@ extern int str_compare_partial(CSTR string1, CSTR string2, size_t len);
 
 
 /* String matching functions */
-extern __inline__ BOOL str_match_wild(CSTR pattern, CSTR string);
-extern __inline__ BOOL str_match_wild_nocase(CSTR pattern, CSTR string);
-extern __inline__ BOOL str_match_everything(CSTR string);
+extern BOOL str_match_wild(CSTR pattern, CSTR string);
+extern BOOL str_match_wild_nocase(CSTR pattern, CSTR string);
+extern BOOL str_match_everything(CSTR string);
 
 /* "Creator" support
    Riempie i campi della struttura passata:
@@ -230,11 +242,11 @@ extern __inline__ BOOL str_match_everything(CSTR string);
 */
 extern void str_creator_init(Creator *creator);
 extern BOOL str_creator_set(Creator *creator, CSTR name, time_t time_set);
-extern __inline__ void str_creator_free(Creator *creator);
+extern void str_creator_free(Creator *creator);
 
 extern void str_creationinfo_init(CreationInfo *info);
 extern BOOL str_creationinfo_set(CreationInfo *info, CSTR creator, CSTR reason, time_t time_set);
-extern __inline__ void str_creationinfo_free(CreationInfo *info);
+extern void str_creationinfo_free(CreationInfo *info);
 
 extern BOOL str_settingsinfo_add(SettingsInfo **infoList, unsigned long int type, CSTR creator, CSTR reason);
 extern BOOL str_settingsinfo_remove(SettingsInfo **infoList, unsigned long int type);

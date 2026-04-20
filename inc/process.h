@@ -25,7 +25,7 @@ extern int		to_dispatched;
 extern BOOL		debug_inject;
 extern STR		debug_monitor_inputbuffer_filter;
 
-unsigned long int total_recvM;
+extern unsigned long int total_recvM;
 
 
 /*********************************************************

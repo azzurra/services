@@ -278,9 +278,27 @@ BOOL seenserv_db_load(void) {
 								#else
 								si = mem_malloc(sizeof(SeenInfo_V10));
 								#endif
-
+#ifdef OS_64BIT
+								BOOL is64Bit = stg_is64bit(stg);
+								if (is64Bit)
+									result = stg_read_record(stg, (PBYTE)si, sizeof(SeenInfo_V10));
+								else {
+									SeenInfo32 seen32;
+									result = stg_read_record(stg, (PBYTE)&seen32, sizeof(SeenInfo32));
+									si->last_seen = seen32.last_seen;
+									si->ip = seen32.ip;
+									si->mode = seen32.mode;
+									si->type = seen32.type;
+									si->nick = (STR)(uintptr_t) seen32.nick ;
+									si->username = (STR)(uintptr_t) (seen32.username);
+									si->host = (STR)(uintptr_t) (seen32.host);
+									si->realname = (STR)(uintptr_t) (seen32.realname);
+									si->tempnick = (STR)(uintptr_t) (seen32.tempnick);
+									si->quitmsg = (STR)(uintptr_t) (seen32.quitmsg);
+								}
+#else
 								result = stg_read_record(stg, (PBYTE)si, sizeof(SeenInfo_V10));
-
+#endif
 								switch (result) {
 
 									case stgEndOfSection: // end-of-section

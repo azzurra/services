@@ -74,9 +74,33 @@ BOOL access_db_load(Access **accessList, CSTR database, BOOL *ListLoadComplete) 
 							anAccess = mem_malloc(sizeof(Access));
 
 							++recordIdx;
-
+#ifdef OS_64BIT
+							BOOL is64Bit = stg_is64bit(stg);
+							if (is64Bit) {
+								result = stg_read_record(stg, (PBYTE)anAccess, sizeof(Access));
+							} else {
+								Access32 acc32;
+								result = stg_read_record(stg, (PBYTE)&acc32, sizeof(Access32));
+								anAccess->flags = acc32.flags;
+								anAccess->lastUpdate = acc32.lastUpdate;
+								anAccess->creator.name = (STR)(uintptr_t)acc32.creator.name;
+								anAccess->creator.time = acc32.creator.time;
+								anAccess->host = (STR)(uintptr_t)acc32.host;
+								anAccess->host2 = (STR)(uintptr_t)acc32.host2;
+								anAccess->host3 = (STR)(uintptr_t)acc32.host3;
+								anAccess->server = (STR)(uintptr_t)acc32.server;
+								anAccess->server2 = (STR)(uintptr_t)acc32.server2;
+								anAccess->server3 = (STR)(uintptr_t)acc32.server3;
+								anAccess->user = (STR)(uintptr_t)acc32.user;
+								anAccess->user2 = (STR)(uintptr_t)acc32.user2;
+								anAccess->user3 = (STR)(uintptr_t)acc32.user3;
+								anAccess->nick = (STR)(uintptr_t)acc32.nick;
+								anAccess->modes_off = acc32.modes_off;
+								anAccess->modes_on = acc32.modes_on;
+							}
+#else
 							result = stg_read_record(stg, (PBYTE)anAccess, sizeof(Access));
-
+#endif
 							switch (result) {
 
 								case stgEndOfSection: // end-of-section

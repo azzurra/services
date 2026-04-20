@@ -18,7 +18,7 @@
  * Data types                                            *
  *********************************************************/
 
-typedef int						STGHANDLE;
+typedef long				STGHANDLE;
 typedef unsigned short int		STGVERSION;
 
 
@@ -39,7 +39,7 @@ typedef enum _STG_RESULT	STG_RESULT;
 #define SF_READ_ACCESS		0x00000001
 #define SF_WRITE_ACCESS		0x00000002
 #define SF_CRC_CHECK		0x00000010
-
+#define SF_64BIT_RECORDS	0x00000020
 
 #define	STG_INVALID_VERSION	((STGVERSION) 0)
 
@@ -50,7 +50,7 @@ typedef enum _STG_RESULT	STG_RESULT;
  * Global variables                                      *
  *********************************************************/
 
-STG_RESULT	stg_last_error;
+extern STG_RESULT	stg_last_error;
 
 
 /*********************************************************
@@ -61,16 +61,18 @@ STG_RESULT stg_open(CSTR path, STGHANDLE *handle);
 STG_RESULT stg_create(CSTR path, flags_t flags, STGVERSION version, STGHANDLE *handle);
 STG_RESULT stg_close(STGHANDLE handle, CSTR path);
 
-__inline__ STGVERSION stg_data_version(STGHANDLE handle);
-
-__inline__ STG_RESULT stg_start_section(STGHANDLE handle);
-__inline__ STG_RESULT stg_end_section(STGHANDLE handle);
+STGVERSION stg_data_version(STGHANDLE handle);
+#ifdef OS_64BIT
+BOOL stg_is64bit(STGHANDLE handle);
+#endif
+STG_RESULT stg_start_section(STGHANDLE handle);
+STG_RESULT stg_end_section(STGHANDLE handle);
 
 STG_RESULT stg_read_record(STGHANDLE handle, PBYTE record, size_t record_size);
 STG_RESULT stg_write_record(STGHANDLE handle, PBYTE record, size_t record_size);
 
 STG_RESULT stg_read_string(STGHANDLE handle, char **string, size_t *length);
-__inline__ STG_RESULT stg_write_string(STGHANDLE handle, char *string);
+STG_RESULT stg_write_string(STGHANDLE handle, char *string);
 STG_RESULT stg_write_strings(STGHANDLE handle, char **strings, size_t strings_count, int *error_index);
 
 

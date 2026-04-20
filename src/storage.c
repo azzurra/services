@@ -26,16 +26,30 @@
 /*********************************************************
  * Data types                                            *
  *********************************************************/
-
+#define STF_HEADER_SIGNATURE_SIZE 6
 typedef struct _StorageHeader {
 
-	char				signature[6];	/* STORAGE_SIGNATURE */
+	char				signature[STF_HEADER_SIGNATURE_SIZE];	/* STORAGE_SIGNATURE */
 	STGVERSION			version;		/* STORAGE_CURRENT_VERSION */
 	STGVERSION			data_version;
 	flags_t				flags;			/* SF_* */
 	time_t				last_save;
 
 } StorageHeader;
+
+#ifdef OS_64BIT
+#pragma pack(push, 4)
+typedef struct _StorageHeader32 {
+
+	char				signature[STF_HEADER_SIGNATURE_SIZE];	/* STORAGE_SIGNATURE */
+	STGVERSION			version;		/* STORAGE_CURRENT_VERSION */
+	STGVERSION			data_version;
+	uint32_t			flags;			/* SF_* */
+	int32_t				last_save;
+
+} StorageHeader32;
+#pragma pack(pop)
+#endif
 
 
 typedef struct _StorageDescriptor {
@@ -51,8 +65,8 @@ typedef struct _RecordDescriptor {
 
 	unsigned char		signature;
 	tiny_flags_t		flags; // SRF_*
-	unsigned short int	size;
-	unsigned long int	crc;
+	uint16_t		size;
+	uint32_t		crc;
 
 } RecordDescriptor;
 
@@ -64,7 +78,11 @@ typedef struct _RecordDescriptor {
 
 #define STORAGE_SIGNATURE					"ASSTG"
 
+#ifdef OS_64BIT
+#define	STORAGE_CURRENT_VERSION				11
+#else
 #define	STORAGE_CURRENT_VERSION				10
+#endif
 #define	STORAGE_MIN_VERSION					10
 #define	STORAGE_MAX_VERSION					STORAGE_CURRENT_VERSION
 
@@ -93,10 +111,13 @@ STG_RESULT	stg_last_error = stgSuccess;
  * Local variables                                       *
  *********************************************************/
 
-#define stgVersionToSignature(v) (unsigned long int)((v << 24) | ((v & 0x0000FF00) << 8) | ((v & 0x00FF0000) >> 8) | ((v & 0xFF000000) >> 24))
+#define stgVersionToSignature(v) (uint32_t)((v << 24) | ((v & 0x0000FF00) << 8) | ((v & 0x00FF0000) >> 8) | ((v & 0xFF000000) >> 24))
 
-static unsigned long int	stgCurrentVersionSignature = stgVersionToSignature(STORAGE_CURRENT_VERSION);
-static unsigned long int	stgCompatibilityVersionSignature = stgVersionToSignature(STORAGE_COMPATIBILITY_VERSION);
+static uint32_t			stgCurrentVersionSignature = stgVersionToSignature(STORAGE_CURRENT_VERSION);
+#ifdef OS_64BIT
+static uint32_t			stg32BitVersionSignature = stgVersionToSignature(STORAGE_MIN_VERSION);
+#endif
+static uint32_t	stgCompatibilityVersionSignature = stgVersionToSignature(STORAGE_COMPATIBILITY_VERSION);
 
 
 
@@ -144,15 +165,30 @@ STG_RESULT stg_open(const char *path, STGHANDLE *handle) {
 
 		if (IS_NOT_NULL(sd->fd)) {
 
-			unsigned long int	storage_version;
+			uint32_t	storage_version;
 
 			// storage version
 			if (fread(&storage_version, sizeof(storage_version), 1, sd->fd) == 1) {
 
-				if (storage_version == stgCurrentVersionSignature) {
-
-					result = stg_read_record((STGHANDLE)sd, (PBYTE)&(sd->header), sizeof(StorageHeader));
-
+				if ((storage_version == stgCurrentVersionSignature)
+#ifdef OS_64BIT
+					|| (storage_version == stg32BitVersionSignature)
+#endif
+					) {
+					if (storage_version == stgCurrentVersionSignature)
+						result = stg_read_record((STGHANDLE)sd, (PBYTE)&(sd->header), sizeof(StorageHeader));
+#ifdef OS_64BIT
+					else {
+						//could be a 32bit ?
+						StorageHeader32 sd32;
+						result = stg_read_record((STGHANDLE)sd, (PBYTE)&(sd32), sizeof(StorageHeader32));
+						sd->header.flags = sd32.flags;
+						sd->header.version = sd32.version;
+						sd->header.data_version = sd32.data_version;
+						sd->header.last_save = sd32.last_save;
+						memcpy(sd->header.signature, sd32.signature, STF_HEADER_SIGNATURE_SIZE);
+					}
+#endif
 					if (result == stgSuccess) {
 
 						if ((sd->header.version < STORAGE_MIN_VERSION) || (sd->header.version > STORAGE_MAX_VERSION) ||
@@ -250,6 +286,9 @@ STG_RESULT stg_create(const char *path, flags_t flags, STGVERSION version, STGHA
 					if (fwrite(&stgCurrentVersionSignature, sizeof(stgCurrentVersionSignature), 1, sd->fd) == 1) {
 
 						sd->flags = flags | SF_WRITE_ACCESS;
+#ifdef OS_64BIT
+						flags |= SF_64BIT_RECORDS;
+#endif
 
 						str_copy_checked(STORAGE_SIGNATURE, sd->header.signature, sizeof(sd->header.signature));
 						sd->header.version = STORAGE_CURRENT_VERSION;
@@ -333,16 +372,23 @@ STG_RESULT stg_close(STGHANDLE handle, const char *path) {
 }
 
 
-__inline__ STGVERSION stg_data_version(STGHANDLE handle) {
+STGVERSION stg_data_version(STGHANDLE handle) {
 	return (handle != 0) ? ((StorageDescriptor *)handle)->header.data_version : STG_INVALID_VERSION;
 }
+#ifdef OS_64BIT
+BOOL stg_is64bit(STGHANDLE handle) {
+	if ((handle != 0))
+		return !!(((StorageDescriptor *) handle)->header.flags & SF_64BIT_RECORDS);
+	return FALSE;
+}
+#endif
 
 
-__inline__ STG_RESULT stg_start_section(STGHANDLE handle) {
+STG_RESULT stg_start_section(STGHANDLE handle) {
 	return stg_last_error = stg_write_section(handle, TRUE);
 }
 
-__inline__ STG_RESULT stg_end_section(STGHANDLE handle) {
+STG_RESULT stg_end_section(STGHANDLE handle) {
 	return stg_last_error = stg_write_section(handle, FALSE);
 }
 
@@ -392,7 +438,7 @@ STG_RESULT stg_read_record(STGHANDLE handle, PBYTE record, size_t record_size) {
 
 										if (FlagSet(rd.flags, RDF_CRC_CHECK)) {
 
-											unsigned long int	crc = CRC32_INITIAL_VALUE;
+											uint32_t	crc = CRC32_INITIAL_VALUE;
 
 											crc32(record, record_size, &crc);
 											result = (crc == rd.crc) ? stgSuccess : stgCRCError;	// done
@@ -494,7 +540,7 @@ STG_RESULT stg_read_string(STGHANDLE handle, char **string, size_t *length) {
 
 				if (FlagSet(sd->flags, SF_CRC_CHECK)) {
 
-					unsigned long int	crc = CRC32_INITIAL_VALUE;
+					uint32_t	crc = CRC32_INITIAL_VALUE;
 
 					crc32((PBYTE)data, rd.size, &crc);
 					result = (crc == rd.crc) ? stgSuccess : stgCRCError;	// done
@@ -513,7 +559,7 @@ STG_RESULT stg_read_string(STGHANDLE handle, char **string, size_t *length) {
 	return stg_last_error = result;
 }
 
-__inline__ STG_RESULT stg_write_string(STGHANDLE handle, char *string) {
+STG_RESULT stg_write_string(STGHANDLE handle, char *string) {
 
 	return stg_write_record(handle, (PBYTE)string, str_len(string) + 1);
 }

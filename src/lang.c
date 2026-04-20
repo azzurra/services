@@ -937,7 +937,11 @@ void lang_start(void) {
 
 		/* Initialize news. */
 
-		snprintf(table->news_path, sizeof(table->news_path), "%s/%s/news/news", HELPSERV_DIR, table->lang_short_name);
+		{
+			char lang_short[sizeof(table->lang_short_name) + 1];
+			str_copy_checked(table->lang_short_name, lang_short, sizeof(lang_short));
+			snprintf(table->news_path, sizeof(table->news_path), "%s/%s/news/news", HELPSERV_DIR, lang_short);
+		}
 		str_tolower(table->news_path);
 
 		table->news_size = (stat(table->news_path, &st) == 0) ? st.st_size : 0;

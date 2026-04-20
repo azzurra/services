@@ -41,8 +41,18 @@ struct _dynConfig {
    // notice on-connect
    char             *welcomeNotice;
 };
+#ifdef OS_64BIT
+typedef struct _dynConfig32 dynConfig32;
+struct __attribute__((packed)) _dynConfig32  {
 
+    // limiti nelle registrazioni di nick e chan
+    uint32_t    ns_regLimit;
+    uint32_t    cs_regLimit;
 
+    // notice on-connect
+    int32_t          welcomeNotice;
+};
+#endif
 /*********************************************************
  * Global variables                                      *
  *********************************************************/
