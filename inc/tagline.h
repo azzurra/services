@@ -60,6 +60,31 @@ typedef	Tagline_V10_32		Tagline32;
 #define	TAGLINE_DB_CURRENT_VERSION		10
 #define TAGLINE_DB_SUPPORTED_VERSION	"10"
 
+/*
+ * TAGLINE_MAX_LEN -- hard cap on tagline text length, in bytes.
+ *
+ * This is not an arbitrary knob. Taglines are broadcast through
+ * send_globops() (see tagline_show() and handle_tagline() in tagline.c),
+ * which ultimately produces an IRC server message of the form:
+ *
+ *     :<server> NOTICE $* :<OperServ> (through <oper>) added the
+ *     following tagline: <text>\r\n
+ *
+ * The IRC protocol caps a single line at 512 bytes including the trailing
+ * CR-LF (RFC 1459 section 2.3.1). The fixed overhead above -- server
+ * prefix, command, target, boilerplate and the optional "(through <oper>)"
+ * variant emitted when an operator acts via a service -- eats roughly
+ * 100-110 bytes in realistic cases. 400 leaves comfortable headroom for
+ * multibyte glyphs and long operator/server names without bumping into the
+ * 512-byte ceiling.
+ *
+ * Before raising this value, re-derive the worst-case envelope against
+ * every send_globops() call site that embeds a tagline: blind increases
+ * cause silent truncation at the uplink (bahamut) with no feedback to the
+ * originating operator.
+ */
+#define TAGLINE_MAX_LEN				400
+
 
 /*********************************************************
  * Global variables                                      *
