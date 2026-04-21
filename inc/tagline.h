@@ -63,27 +63,39 @@ typedef	Tagline_V10_32		Tagline32;
 /*
  * TAGLINE_MAX_LEN -- hard cap on tagline text length, in bytes.
  *
- * This is not an arbitrary knob. Taglines are broadcast through
- * send_globops() (see tagline_show() and handle_tagline() in tagline.c),
- * which ultimately produces an IRC server message of the form:
+ * This is not an arbitrary knob. The tightest constraint is not storage
+ * or the inbound PRIVMSG the operator sends to OperServ (servers use a
+ * nick-only prefix when propagating client traffic, per RFC 1459 s.2.3
+ * and bahamut convention, which leaves ample room). It is the *outbound*
+ * broadcast produced by send_globops() in handle_tagline() and
+ * tagline_show(), which bahamut turns into a NOTICE to every +g operator
+ * (see src/send.c:send_globops in bahamut):
  *
- *     :<server> NOTICE $* :<OperServ> (through <oper>) added the
- *     following tagline: <text>\r\n
+ *     :<server> NOTICE <destnick> :*** Global -- \2<caller>\2
+ *     (through \2<oper>\2) added the following tagline: <text>\r\n
  *
- * The IRC protocol caps a single line at 512 bytes including the trailing
- * CR-LF (RFC 1459 section 2.3.1). The fixed overhead above -- server
- * prefix, command, target, boilerplate and the optional "(through <oper>)"
- * variant emitted when an operator acts via a service -- eats roughly
- * 100-110 bytes in realistic cases. 400 leaves comfortable headroom for
- * multibyte glyphs and long operator/server names without bumping into the
- * 512-byte ceiling.
+ * The IRC protocol caps a single line at 512 bytes including the
+ * trailing CR-LF (RFC 1459 s.2.3.1). Worst-case byte budget:
  *
- * Before raising this value, re-derive the worst-case envelope against
- * every send_globops() call site that embeds a tagline: blind increases
- * cause silent truncation at the uplink (bahamut) with no feedback to the
- * originating operator.
+ *     `:<server>` (HOSTMAX=63) + ` NOTICE ` (8) + `<destnick>`
+ *     (NICKMAX=32) + ` :*** Global -- ` (16) + bold markers + `<caller>`
+ *     (NICKMAX=32) + ` (through ` (10) + bold markers + `<oper>`
+ *     (NICKMAX=32) + `) added the following tagline: ` (31) + <text>
+ *     + `\r\n` (2) ~= 230 + text
+ *
+ * So the theoretical worst case caps text at ~280, though realistic
+ * Azzurra params (server name ~21, operator nicks ~8-12) leave comfortable
+ * headroom. 350 keeps us well clear of truncation across both realistic
+ * and near-worst-case combinations without pushing the limit.
+ *
+ * Before raising this value, re-derive both envelopes (services-side
+ * send_globops() and bahamut's send_globops() NOTICE wrapper) against
+ * every call site that embeds a tagline. Blind increases cause silent
+ * truncation at the receiving server with no feedback to the originating
+ * operator -- the stored tagline is fine, but the GLOBOPS confirmation
+ * message seen by +g opers gets its tail cut.
  */
-#define TAGLINE_MAX_LEN				400
+#define TAGLINE_MAX_LEN				350
 
 
 /*********************************************************
