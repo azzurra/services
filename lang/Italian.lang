@@ -1965,7 +1965,6 @@ CS_SENDPASS_ERROR_PASSRESET_ON
 	Un reset password e' gia' in corso per il canale %s. Usa AUTHRESET per annullarlo, o attendi che scada.
 CS_SENDPASS_EMAIL_SUBJECT_RPWD
 	Subject: Codice di reset password per il canale %s
-
 	
 	
 CS_SENDPASS_EMAIL_RPWD

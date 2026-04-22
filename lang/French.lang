@@ -1965,7 +1965,6 @@ CS_SENDPASS_ERROR_PASSRESET_ON
 	Une reinitialisation de mot de passe est deja en cours pour le canal %s. Utilisez AUTHRESET pour l'annuler, ou attendez son expiration.
 CS_SENDPASS_EMAIL_SUBJECT_RPWD
 	Subject: Code de reinitialisation de mot de passe pour le canal %s
-
 	
 	
 CS_SENDPASS_EMAIL_RPWD

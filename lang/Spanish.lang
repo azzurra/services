@@ -1965,7 +1965,6 @@ CS_SENDPASS_ERROR_PASSRESET_ON
 	Ya hay un reseteo de contrasena en curso para el canal %s. Usa AUTHRESET para cancelarlo, o espera a que caduque.
 CS_SENDPASS_EMAIL_SUBJECT_RPWD
 	Subject: Codigo de reseteo de contrasena para el canal %s
-
 	
 	
 CS_SENDPASS_EMAIL_RPWD
