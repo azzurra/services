@@ -164,6 +164,7 @@ CS_DROP_CODE_SENT
 CS_DROP_EMAIL_SUBJECT
 	Subject: Codigo de autorizaciòn para dar de baja tu canal en %s
 	
+	
 CS_DROP_EMAIL_TEXT
 	Tu o alguien mas ha pedido la anulaciòn de tu canal.
 	Si quieres confirmar el drop, sigue las instrucciones reportadas en seguida:
@@ -396,6 +397,7 @@ CS_REGISTER_SYNTAX_ERROR
 CS_REMIND_EMAIL_SUBJECT
 	Subject: Registraciòn de tu canal en %s
 	
+	
 CS_REMIND_EMAIL_TEXT
 	El canal %s expirarà en %d dias.
 	Si quieres evitar que se anule, tu o algun otro operador tienen que entrar minimo una vez antes de la fecha de expiraciòn.
@@ -415,6 +417,7 @@ CS_RESTRICTED_KICK_REASON
 	No tienes ninguna autorizaciòn para acceder a este canal.
 CS_SENDPASS_EMAIL_SUBJECT
 	Subject: Password del canal %s
+	
 	
 CS_SENDPASS_EMAIL_TEXT
 	Solicitaciòn de contraseña enviada por: %s
@@ -1120,6 +1123,7 @@ MS_READ_SYNTAX_ERROR
 MS_SENDTO_EMAIL_SUBJECT
 	Subject: Nuevo memo para el nick %s
 	
+	
 MS_SENDTO_EMAIL_TEXT
 	Memo de parte de: %s
 	Para el canal: %s
@@ -1149,6 +1153,7 @@ MS_SENDTO_SYNTAX_ERROR
 	Sintaxis: SENDTO #canal [VOP|AOP|SOP|CF] texto
 MS_SEND_EMAIL_SUBJECT
 	Subject: Nuevo memo para el nick %s
+	
 	
 MS_SEND_EMAIL_TEXT
 	Memo de parte de: %s
@@ -1304,6 +1309,7 @@ NS_DROP_CODE_SENT
 	En unos momentos recibiràs un E-Mail en la direcciòn %s con el codigo de drop necesario para autorizar la registraciòn de tu nick. Sigue las instrucciones del Email para completar el proceso.
 NS_DROP_EMAIL_SUBJECT
 	Subject: Codico de autorizaciòn para anular tu nick en %s
+	
 	
 NS_DROP_EMAIL_TEXT
 	Tu o alguien mas pidiò la anulaciòn de tu nick.
@@ -1471,6 +1477,7 @@ NS_RECOVER_SYNTAX_ERROR
 NS_REGISTER_EMAIL_SUBJECT
 	Subject: Confirmaciòn de la registraciòn del nick %s.
 	
+	
 NS_REGISTER_EMAIL_TEXT_1
 	Gracias por haber escogido %s!
 	El codigo de autorizaciòn para tu nick es: %lu 
@@ -1540,6 +1547,7 @@ NS_RELEASE_SYNTAX_ERROR
 NS_REMIND_EMAIL_SUBJECT
 	Subject: Registraciòn de tu nick en %s
 	
+	
 NS_REMIND_EMAIL_TEXT
 	El nick %s expirarà en %d dias.
 	Si no quieres que esto pase, tienes que identificarte minimo una vez antes que se te expire.
@@ -1573,6 +1581,7 @@ NS_SENDCODE_EMAIL_MAIL2
 NS_SENDCODE_EMAIL_SUBJECT
 	Subject: Codigo de autorizaciòn para %s del nick %s
 	
+	
 NS_SENDCODE_EMAIL_SUBJECT_AUTH
 	la registraciòn
 NS_SENDCODE_EMAIL_SUBJECT_DROP
@@ -1590,6 +1599,7 @@ NS_SENDCODE_SYNTAX_ERROR
 	Syntax: SENDCODE nickname
 NS_SENDPASS_EMAIL_SUBJECT
 	Subject: Contraseña del nick %s
+	
 	
 NS_SENDPASS_EMAIL_TEXT
 	Pedida de contraseña enviada por: %s
@@ -1638,6 +1648,7 @@ NS_SET_EMAIL_SHOW
 	La direcciòn de Email del nick %s ha sido ajustada en invisible.
 NS_SET_EMAIL_SUBJECT
 	Subject: Cambio direccion Email del nick %s
+	
 	
 NS_SET_EMAIL_TEXT_1
 	Pedida de cambio de direcciòn E-Mail enviada por
@@ -1955,6 +1966,8 @@ CS_SENDPASS_ERROR_PASSRESET_ON
 CS_SENDPASS_EMAIL_SUBJECT_RPWD
 	Subject: Codigo de reseteo de contrasena para el canal %s
 
+	
+	
 CS_SENDPASS_EMAIL_RPWD
 	Solicitud de reseteo de contrasena enviada por: %s
 	Recibida: %s
