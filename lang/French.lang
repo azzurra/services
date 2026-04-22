@@ -164,6 +164,7 @@ CS_DROP_CODE_SENT
 CS_DROP_EMAIL_SUBJECT
 	Subject: Code d'autorisation pour confirmer l'effacement de ton canal sur %s
 	
+	
 CS_DROP_EMAIL_TEXT
 	Toi ou quelqu'un d'autre a demandé l'effacement de ton canal.
 	Si tu veux le confirmer, suis les instructions écrites ci-dessous:
@@ -396,6 +397,7 @@ CS_REGISTER_SYNTAX_ERROR
 CS_REMIND_EMAIL_SUBJECT
 	Subject: Registration de ton canal sur %s
 	
+	
 CS_REMIND_EMAIL_TEXT
 	Le canal %s expirera entre %d jours.
 	Si tu veux eviter qu'il sera effacé, toi ou un de tes opérateurs doit y entrer au moins une foix avant la date de l'expiration.
@@ -415,6 +417,7 @@ CS_RESTRICTED_KICK_REASON
 	Tu n'a pas la permission d'entrer dans ce canal.
 CS_SENDPASS_EMAIL_SUBJECT
 	Subject: Mot de passe du canal %s
+	
 	
 CS_SENDPASS_EMAIL_TEXT
 	Mot de passe envoyé par: %s
@@ -1120,6 +1123,7 @@ MS_READ_SYNTAX_ERROR
 MS_SENDTO_EMAIL_SUBJECT
 	Subject: Nouveau memo pour le nick %s
 	
+	
 MS_SENDTO_EMAIL_TEXT
 	Memo de la part de: %s
 	Au canal: %s
@@ -1149,6 +1153,7 @@ MS_SENDTO_SYNTAX_ERROR
 	Syntaxe: SENDTO #canal [VOP|AOP|SOP|CF] texte
 MS_SEND_EMAIL_SUBJECT
 	Subject: Nouveau memo pour le nick %s
+	
 	
 MS_SEND_EMAIL_TEXT
 	Memo de la part de: %s
@@ -1304,6 +1309,7 @@ NS_DROP_CODE_SENT
 	Dans peu de temps tu recevras un E-Mail à l'adresse %s qui contiendra le code de drop nécessaire pour autoriser l'effacement de la registration de ton nick. Suis les instructions dans l'E-Mail pour compléter la procédure.
 NS_DROP_EMAIL_SUBJECT
 	Subject: Code d'autorisation pour effacer ton nick sur %s
+	
 	
 NS_DROP_EMAIL_TEXT
 	Toi ou quelqu'un d'autre a demandé l'effacement de ton nick.
@@ -1471,6 +1477,7 @@ NS_RECOVER_SYNTAX_ERROR
 NS_REGISTER_EMAIL_SUBJECT
 	Subject: Confirme de l'enregistrement du nick sur %s.
 	
+	
 NS_REGISTER_EMAIL_TEXT_1
 	Merci d'avoir choisi %s!
 	Le code d'autorisation de ton nick est: %lu 
@@ -1540,6 +1547,7 @@ NS_RELEASE_SYNTAX_ERROR
 NS_REMIND_EMAIL_SUBJECT
 	Subject: enregistrement de ton nick sur %s
 	
+	
 NS_REMIND_EMAIL_TEXT
 	Le nick %s expirera en %d jours.
 	Si tu veux eviter qu'il soit effacé, tu dois t'identifier au moins une fois avant la date d'échéance.
@@ -1573,6 +1581,7 @@ NS_SENDCODE_EMAIL_MAIL2
 NS_SENDCODE_EMAIL_SUBJECT
 	Subject: Code d'autorisation pour %s du nick %s
 	
+	
 NS_SENDCODE_EMAIL_SUBJECT_AUTH
 	l'enregistrement
 NS_SENDCODE_EMAIL_SUBJECT_DROP
@@ -1590,6 +1599,7 @@ NS_SENDCODE_SYNTAX_ERROR
 	Syntax: SENDCODE nickname
 NS_SENDPASS_EMAIL_SUBJECT
 	Subject: Mot de passe du nick %s
+	
 	
 NS_SENDPASS_EMAIL_TEXT
 	Demande de mot de passe envoyée par: %s
@@ -1638,6 +1648,7 @@ NS_SET_EMAIL_SHOW
 	L'adresse E-Mail du nick %s a été rendue visible.
 NS_SET_EMAIL_SUBJECT
 	Subject: Changement d'E-Mail du nick %s
+	
 	
 NS_SET_EMAIL_TEXT_1
 	Demande de changement d'E-Mail envoyée par
@@ -1954,7 +1965,8 @@ CS_SENDPASS_ERROR_PASSRESET_ON
 	Une reinitialisation de mot de passe est deja en cours pour le canal %s. Utilisez AUTHRESET pour l'annuler, ou attendez son expiration.
 CS_SENDPASS_EMAIL_SUBJECT_RPWD
 	Subject: Code de reinitialisation de mot de passe pour le canal %s
-
+	
+	
 CS_SENDPASS_EMAIL_RPWD
 	Demande de reinitialisation de mot de passe envoyee par: %s
 	Recue: %s

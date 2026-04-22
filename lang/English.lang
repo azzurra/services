@@ -164,6 +164,7 @@ CS_DROP_CODE_SENT
 CS_DROP_EMAIL_SUBJECT
 	Subject: Channel drop authorization on %s
 	
+	
 CS_DROP_EMAIL_TEXT
 	You or someone else has recently requested your channel to be dropped.
 	If you wish this action to be taken, follow these steps:
@@ -395,6 +396,7 @@ CS_REGISTER_SYNTAX_ERROR
 CS_REMIND_EMAIL_SUBJECT
 	Subject: Channel registration on %s
 	
+	
 CS_REMIND_EMAIL_TEXT
 	Your channel %s will expire in %d days.
 	To avoid this, either you or one of your channel operators must join it at least once before it expires.
@@ -414,6 +416,7 @@ CS_RESTRICTED_KICK_REASON
 	You are not permitted to be on this channel.
 CS_SENDPASS_EMAIL_SUBJECT
 	Subject: %s channel password
+	
 	
 CS_SENDPASS_EMAIL_TEXT
 	Password request sent by: %s
@@ -1119,6 +1122,7 @@ MS_READ_SYNTAX_ERROR
 MS_SENDTO_EMAIL_SUBJECT
 	Subject: New memo for nick %s
 	
+	
 MS_SENDTO_EMAIL_TEXT
 	Memo from: %s
 	To channel: %s
@@ -1148,6 +1152,7 @@ MS_SENDTO_SYNTAX_ERROR
 	Syntax: SENDTO #channel [VOP|AOP|SOP|CF] message
 MS_SEND_EMAIL_SUBJECT
 	Subject: New memo for nick %s
+	
 	
 MS_SEND_EMAIL_TEXT
 	Memo from: %s
@@ -1303,6 +1308,7 @@ NS_DROP_CODE_SENT
 	You will receive a drop authorization code in your E-Mail (%s) shortly. Please follow the instructions of the email to complete the action of dropping this nick.
 NS_DROP_EMAIL_SUBJECT
 	Subject: %s nickname drop code
+	
 	
 NS_DROP_EMAIL_TEXT
 	You or someone has recently requested your nickname to be dropped.
@@ -1470,6 +1476,7 @@ NS_RECOVER_SYNTAX_ERROR
 NS_REGISTER_EMAIL_SUBJECT
 	Subject: %s nickname registration confirmation
 	
+	
 NS_REGISTER_EMAIL_TEXT_1
 	Thank you for flying %s!
 	The authorization code for your nick is: %lu 
@@ -1535,6 +1542,7 @@ NS_RELEASE_SYNTAX_ERROR
 NS_REMIND_EMAIL_SUBJECT
 	Subject: Nickname registration on %s
 	
+	
 NS_REMIND_EMAIL_TEXT
 	Your nickname %s will expire in %d days.
 	To avoid this, you must identify to it at least once before it expires.
@@ -1569,6 +1577,7 @@ NS_SENDCODE_EMAIL_MAIL2
 NS_SENDCODE_EMAIL_SUBJECT
 	Subject: Authorization code for %s of the nick %s
 	
+	
 NS_SENDCODE_EMAIL_SUBJECT_AUTH
 	the registration
 NS_SENDCODE_EMAIL_SUBJECT_DROP
@@ -1586,6 +1595,7 @@ NS_SENDCODE_SYNTAX_ERROR
 	Syntax: SENDCODE nickname
 NS_SENDPASS_EMAIL_SUBJECT
 	Subject: Password for nick %s
+	
 	
 NS_SENDPASS_EMAIL_TEXT
 	Password retreival by: %s
@@ -1634,6 +1644,7 @@ NS_SET_EMAIL_SHOW
 	E-Mail address for %s is now public.
 NS_SET_EMAIL_SUBJECT
 	Subject: Nickname %s E-Mail change
+	
 	
 NS_SET_EMAIL_TEXT_1
 	This E-Mail change request was sent by
@@ -1950,7 +1961,8 @@ CS_SENDPASS_ERROR_PASSRESET_ON
 	A password reset is already in progress for channel %s. Use AUTHRESET to cancel it, or wait for it to expire.
 CS_SENDPASS_EMAIL_SUBJECT_RPWD
 	Subject: Password reset code for channel %s
-
+	
+	
 CS_SENDPASS_EMAIL_RPWD
 	Password reset request issued by: %s
 	Received: %s

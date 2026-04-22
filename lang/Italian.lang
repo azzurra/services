@@ -164,6 +164,7 @@ CS_DROP_CODE_SENT
 CS_DROP_EMAIL_SUBJECT
 	Subject: Codice di autorizzazione per droppare il tuo canale su %s
 	
+	
 CS_DROP_EMAIL_TEXT
 	Tu o qualcun altro ha richiesto la cancellazione del tuo canale.
 	Se vuoi confermare il drop, segui le istruzioni riportate qui sotto:
@@ -396,6 +397,7 @@ CS_REGISTER_SYNTAX_ERROR
 CS_REMIND_EMAIL_SUBJECT
 	Subject: Registrazione del tuo canale su %s
 	
+	
 CS_REMIND_EMAIL_TEXT
 	Il canale %s scadra' fra %d giorni.
 	Se vuoi evitare che venga cancellato, tu o un tuo operatore deve entrarci almeno una volta prima della data di scadenza.
@@ -415,6 +417,7 @@ CS_RESTRICTED_KICK_REASON
 	Non hai il permesso di entrare in questo canale.
 CS_SENDPASS_EMAIL_SUBJECT
 	Subject: Password del canale %s
+	
 	
 CS_SENDPASS_EMAIL_TEXT
 	Richiesta di password inviata da: %s
@@ -1120,6 +1123,7 @@ MS_READ_SYNTAX_ERROR
 MS_SENDTO_EMAIL_SUBJECT
 	Subject: Nuovo memo per il nick %s
 	
+	
 MS_SENDTO_EMAIL_TEXT
 	Memo da parte di: %s
 	Al canale: %s
@@ -1149,6 +1153,7 @@ MS_SENDTO_SYNTAX_ERROR
 	Sintassi: SENDTO #canale [VOP|AOP|SOP|CF] testo
 MS_SEND_EMAIL_SUBJECT
 	Subject: Nuovo memo per il nick %s
+	
 	
 MS_SEND_EMAIL_TEXT
 	Memo da parte di: %s
@@ -1304,6 +1309,7 @@ NS_DROP_CODE_SENT
 	A breve riceverai una E-Mail all'indirizzo %s contenente il drop code necessario per autorizzare la cancellazione della registrazione del tuo nick. Segui le istruzioni contenute nell'E-Mail per completare il processo.
 NS_DROP_EMAIL_SUBJECT
 	Subject: Codice di autorizzazione per droppare il tuo nick su %s
+	
 	
 NS_DROP_EMAIL_TEXT
 	Tu o qualcun altro ha richiesto la cancellazione del tuo nick.
@@ -1471,6 +1477,7 @@ NS_RECOVER_SYNTAX_ERROR
 NS_REGISTER_EMAIL_SUBJECT
 	Subject: Conferma della registrazione del nick %s.
 	
+	
 NS_REGISTER_EMAIL_TEXT_1
 	Grazie per aver scelto %s!
 	Il codice di autorizzazione del tuo nick e': %lu 
@@ -1540,6 +1547,7 @@ NS_RELEASE_SYNTAX_ERROR
 NS_REMIND_EMAIL_SUBJECT
 	Subject: Registrazione del tuo nick su %s
 	
+	
 NS_REMIND_EMAIL_TEXT
 	Il nick %s scadra' fra %d giorni.
 	Se vuoi evitare che venga cancellato, devi identificartici almeno una volta prima della data di scadenza.
@@ -1573,6 +1581,7 @@ NS_SENDCODE_EMAIL_MAIL2
 NS_SENDCODE_EMAIL_SUBJECT
 	Subject: Codice di autorizzazione per %s del nick %s
 	
+	
 NS_SENDCODE_EMAIL_SUBJECT_AUTH
 	la registrazione
 NS_SENDCODE_EMAIL_SUBJECT_DROP
@@ -1590,6 +1599,7 @@ NS_SENDCODE_SYNTAX_ERROR
 	Syntax: SENDCODE nickname
 NS_SENDPASS_EMAIL_SUBJECT
 	Subject: Password del nick %s
+	
 	
 NS_SENDPASS_EMAIL_TEXT
 	Richiesta di password inviata da: %s
@@ -1638,6 +1648,7 @@ NS_SET_EMAIL_SHOW
 	L'indirizzo E-Mail del nick %s e' stato reso visibile.
 NS_SET_EMAIL_SUBJECT
 	Subject: Cambio mail del nick %s
+	
 	
 NS_SET_EMAIL_TEXT_1
 	Richiesta di cambio di indirizzo E-Mail inviata da
@@ -1954,7 +1965,8 @@ CS_SENDPASS_ERROR_PASSRESET_ON
 	Un reset password e' gia' in corso per il canale %s. Usa AUTHRESET per annullarlo, o attendi che scada.
 CS_SENDPASS_EMAIL_SUBJECT_RPWD
 	Subject: Codice di reset password per il canale %s
-
+	
+	
 CS_SENDPASS_EMAIL_RPWD
 	Richiesta di reset password inviata da: %s
 	Ricevuta: %s
