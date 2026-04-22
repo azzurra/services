@@ -327,9 +327,9 @@ void handle_tagline(CSTR source, User *callerUser, ServiceCommandData *data) {
 			return;
 		}
 
-		if ((len = str_len(text)) > 260) {
+		if ((len = str_len(text)) > TAGLINE_MAX_LEN) {
 
-			send_notice_to_user(s_OperServ, callerUser, "The maximum length for a tagline is 260 characters. Your tagline has %d.", len);
+			send_notice_to_user(s_OperServ, callerUser, "The maximum length for a tagline is %d characters. Your tagline has %d.", TAGLINE_MAX_LEN, len);
 			return;
 		}
 
@@ -417,7 +417,7 @@ void handle_tagline(CSTR source, User *callerUser, ServiceCommandData *data) {
 			return;
 		}
 
-		if (str_len(text) > 260) {
+		if (str_len(text) > TAGLINE_MAX_LEN) {
 
 			send_notice_to_user(s_OperServ, callerUser, "Tagline not found.");
 			return;
