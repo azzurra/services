@@ -2702,9 +2702,6 @@ void introduce_services_agent(CSTR nick) {
 
 		send_NICK(s_NickServ, "+", CONF_SERVICES_USERNAME, CONF_SERVICES_HOST, "Nickname Services");
 		user_add_services_agent(s_NickServ, 0, "Nickname Services");
-
-		if (nick)
-			send_SJOIN(s_NickServ, CONF_SNOOP_CHAN);
 	}
 
 	TRACE();
@@ -2712,9 +2709,6 @@ void introduce_services_agent(CSTR nick) {
 
 		send_NICK(s_ChanServ, "+z", CONF_SERVICES_USERNAME, CONF_SERVICES_HOST, "Channel Services");
 		user_add_services_agent(s_ChanServ, UMODE_z, "Channel Services");
-
-		if (nick)
-			send_SJOIN(s_ChanServ, CONF_SNOOP_CHAN);
 	}
 
 	TRACE();
@@ -2722,9 +2716,6 @@ void introduce_services_agent(CSTR nick) {
 
 		send_NICK(s_HelpServ, "+", CONF_SERVICES_USERNAME, CONF_SERVICES_HOST, "Help Services");
 		user_add_services_agent(s_HelpServ, 0, "Help Services");
-
-		if (nick)
-			send_SJOIN(s_HelpServ, CONF_SNOOP_CHAN);
 	}
 
 	TRACE();
@@ -2732,9 +2723,6 @@ void introduce_services_agent(CSTR nick) {
 
 		send_NICK(s_MemoServ, "+", CONF_SERVICES_USERNAME, CONF_SERVICES_HOST, "Memo Services");
 		user_add_services_agent(s_MemoServ, 0, "Memo Services");
-
-		if (nick)
-			send_SJOIN(s_MemoServ, CONF_SNOOP_CHAN);
 	}
 
 	TRACE();
@@ -2742,9 +2730,6 @@ void introduce_services_agent(CSTR nick) {
 
 		send_NICK(s_OperServ, "+i", CONF_SERVICES_USERNAME, CONF_SERVICES_HOST, "Operator Services");
 		user_add_services_agent(s_OperServ, UMODE_i, "Operator Services");
-
-		if (nick)
-			send_SJOIN(s_OperServ, CONF_SNOOP_CHAN);
 	}
 
 	TRACE();
@@ -2752,9 +2737,6 @@ void introduce_services_agent(CSTR nick) {
 
 		send_NICK(s_RootServ, "+i", CONF_SERVICES_USERNAME, CONF_SERVICES_HOST, "Services Root System");
 		user_add_services_agent(s_RootServ, UMODE_i, "Services Root System");
-
-		if (nick)
-			send_SJOIN(s_RootServ, CONF_SNOOP_CHAN);
 	}
 
 	TRACE();
@@ -2762,9 +2744,6 @@ void introduce_services_agent(CSTR nick) {
 
 		send_NICK(s_StatServ, "+i", CONF_SERVICES_USERNAME, CONF_SERVICES_HOST, "Statistical Services");
 		user_add_services_agent(s_StatServ, 0, "Statistical Services");
-
-		if (nick)
-			send_SJOIN(s_StatServ, CONF_SNOOP_CHAN);
 	}
 
 	TRACE();
@@ -2772,9 +2751,6 @@ void introduce_services_agent(CSTR nick) {
 
 		send_NICK(s_SeenServ, "+", CONF_SERVICES_USERNAME, CONF_SERVICES_HOST, "Seen Services");
 		user_add_services_agent(s_SeenServ, 0, "Seen Services");
-
-		if (nick)
-			send_SJOIN(s_SeenServ, CONF_SNOOP_CHAN);
 	}
 
 	TRACE();
