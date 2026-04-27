@@ -270,7 +270,8 @@ STR crypt_userhost(CSTR real, HOST_TYPE htype, short int dotsCount) {
 
 	size_t			len, virlen;
 	int32_t			hash;
-	char			*ptr;
+	char			*ptr, *expanded_real = real;
+	char expanded_real_buf[40];
 
 	#define MAX_DSN_HOST_LEN	64
 
@@ -291,10 +292,11 @@ STR crypt_userhost(CSTR real, HOST_TYPE htype, short int dotsCount) {
 
 	TRACE();
 	if (htype == htIPv6) {
-		len = str_len(expand_ipv6(real));
-	} else {
-		len = str_len(real);
+
+		expand_ipv6(real, expanded_real_buf, sizeof(expanded_real_buf));
+		expanded_real = expanded_real_buf;
 	}
+	len = str_len(expanded_real);
 	virlen = len + CRYPT_NETNAME_LEN + HIDEHOST_CHECKSUM_LEN + 2;
 
 	if (virlen > hidehost_buffer_size) {
@@ -305,11 +307,7 @@ STR crypt_userhost(CSTR real, HOST_TYPE htype, short int dotsCount) {
 
 	// generazione crypt
 
-	if (htype == htIPv6) {
-		hash = crypt_hash_SHA1(expand_ipv6(real), len, hidehost_crypt_buffer, hidehost_crypt_buffer_size);
-	} else {
-		hash = crypt_hash_SHA1(real, len, hidehost_crypt_buffer, hidehost_crypt_buffer_size);
-	}
+	hash = crypt_hash_SHA1(expanded_real, len, hidehost_crypt_buffer, hidehost_crypt_buffer_size);
 
 	// creazione stringa "criptata"
 
@@ -337,8 +335,6 @@ STR crypt_userhost(CSTR real, HOST_TYPE htype, short int dotsCount) {
 		struct in6_addr ip6addr;
 
 		char ip6buffer[INET6_ADDRSTRLEN];
-		strncpy(ip6buffer, expand_ipv6(real), sizeof(ip6buffer));
-
 		memset(ip6buffer, 0, sizeof(ip6buffer));
 		inet_pton(AF_INET6, real, &ip6addr);
 		memset(&(ip6addr.s6_addr[6]), 0, 10);

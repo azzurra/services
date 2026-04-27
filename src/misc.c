@@ -2158,20 +2158,20 @@ HOST_TYPE host_type(CSTR host, short int *dotsCountPtr) {
  * compact form to its complete form.                    *
  *********************************************************/
 
-char *expand_ipv6(const char *input) {
+void expand_ipv6(CSTR input, STR output, size_t output_size) {
 
-	char output[40];
-	char *ptr = output;
+	char *ptr;
 	int i = 0, colons, len;
 
-	memcpy(ptr, "0000:0000:0000:0000:0000:0000:0000:0000", 40);
+	memcpy(output, "0000:0000:0000:0000:0000:0000:0000:0000", 40);
 
 	colons = str_count(input, ':');
 
 	if (colons > 7) {
-
 		LOG_DEBUG_SNOOP("Warning: IPv6 %s is invalid!", input);
-		return str_duplicate(input);
+		strncpy(output, input, output_size - 1);
+		output[output_size - 1] = '\0';
+		return;
 	}
 
 	len = strlen(input);
@@ -2208,8 +2208,6 @@ char *expand_ipv6(const char *input) {
 		input--;
 		len--;
 	}
-
-	return str_duplicate(output);
 }
 
 

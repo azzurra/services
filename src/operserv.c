@@ -555,7 +555,7 @@ void check_clones_v6(const User *newUser) {
 	memset(clone_nicks, 0, sizeof(clone_nicks));
 	memset(tmp_clones, 0, sizeof(tmp_clones));
 	
-	strncpy(ipbuf, expand_ipv6(get_ip6(newUser->ipv6)), 42);
+	expand_ipv6(get_ip6(newUser->ipv6), ipbuf, sizeof(ipbuf));
 	idx = CONF_CLONE_SCAN_V6 * 5;
 	
 	ipbuf[idx++] = '*';
@@ -569,8 +569,7 @@ void check_clones_v6(const User *newUser) {
 		if (FlagUnset(userIPv6_item->user->flags, USER_FLAG_HAS_IPV6))
 			continue;
 
-		strncpy(ip_clonebuf, expand_ipv6(get_ip6(userIPv6_item->user->ipv6)), 42);
-		ip_clonebuf[41] = '\0';
+		expand_ipv6(get_ip6(userIPv6_item->user->ipv6), ip_clonebuf, sizeof(ip_clonebuf));
 
 		if (str_match_wild_nocase(ipbuf, ip_clonebuf)) {
 
