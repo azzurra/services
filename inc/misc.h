@@ -62,7 +62,7 @@ extern HOST_TYPE host_type(CSTR host, short int *dotsCountPtr);
 extern BOOL year_is_leap(const int year);
 extern BOOL validate_date(const int dateYear, const int dateMonth, const int dateDay);
 
-extern char *expand_ipv6(CSTR input);
+extern void expand_ipv6(CSTR input, STR output, size_t output_size);
 
 extern char *convert_time(char *buffer, size_t len, time_t timeSpan, const LANG_ID langID);
 extern char *expire_left(char *buffer, size_t len, time_t expiry);
