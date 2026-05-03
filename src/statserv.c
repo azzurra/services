@@ -783,7 +783,7 @@ void expire_stats() {
 
 	TRACE_FCLT(FACILITY_STATSERV_EXPIRE_STATS);
 
-	if (CONF_SET_NOEXPIRE)
+	if (!CONF_STATS_EXPIRE || !CONF_SET_NOEXPIRE)
 		return;
 
 	HASH_FOREACH_BRANCH(hashIdx, CHANSTATS_HASHSIZE) {
@@ -805,7 +805,7 @@ void expire_stats() {
 
 	TRACE();
 	if (CONF_DISPLAY_UPDATES)
-		send_globops(NULL, "Completed Stat Records Expire (%d/%d)", xcount, count);
+		send_globops(NULL, "Completed Channel Expire (%d/%d)", xcount, count);
 }
 
 /*********************************************************/
@@ -1486,6 +1486,12 @@ static void do_listreg(CSTR source, User *callerUser, ServiceCommandData *data) 
 				--paramIdx;
 			}
 		}
+	}
+
+	if (IS_NOT_NULL(search) && str_equals(search, s_STAR)) {
+
+		send_notice_to_user(s_StatServ, callerUser, "\2ERROR\2: Search pattern too broad.");
+		return;
 	}
 
 	/* Intervallo */

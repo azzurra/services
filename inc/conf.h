@@ -113,6 +113,7 @@ extern int CONF_AUTHDEL_DAYS;
 extern BOOL CONF_SHOW_TAGLINES;
 extern int CONF_STATS_EXPIRE;
 extern int CONF_SEEN_EXPIRE;
+extern int CONF_MAX_WILD_SEEN;
 
 extern float CONF_AKILL_PERCENT;
 extern time_t CONF_DEFAULT_AKILL_EXPIRY;

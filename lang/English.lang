@@ -1903,7 +1903,7 @@ SS_SEENNICK_REPLY_IDENTIFIED_ONLINE
 SS_SEENNICK_REPLY_IDENTIFIED_OFFLINE
 	User was identified to that nick
 SS_SEENNICK_REPLY_NOTID_ONLINE
-	User does not have access to that nick, or that nick is not registered
+	Missing: SS_SEENNICK_REPLY_NOTID_ONLINE
 SS_SEENNICK_REPLY_NOTID_OFFLINE
 	User did not have access to that nick, or that nick is not registered
 END_OF_SEEN
@@ -1912,14 +1912,16 @@ SS_SEENNICK_REPLY_USERMODE
 	Last usermode: %s
 SS_SEEN_SYNTAX_ERROR_OPER
 	Syntax: SEEN [nick!]user@host
+SS_SEEN_REPLY_MAXSEEN
+	Missing: SS_SEEN_REPLY_MAXSEEN
 SS_SEEN_REPLY_NOMATCH
 	No matches to your query were found.
 SS_SEEN_REPLY_MANY
-	I found %d matches to your query. Here are the %d most recent (sorted): 
+	I found %s matches to your query. Here are the %s most recent (sorted): 
 SS_SEEN_REPLY_ONE
 	I found only one match to your query: 
 SS_SEEN_REPLY_SOME
-	I found %d matches to your query (sorted): 
+	I found %s matches to your query (sorted): 
 SS_SEEN_SYNTAX_ERROR
 	Syntax: SEEN nick
 NS_RESETPASS_SYNTAX_ERROR

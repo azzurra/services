@@ -454,7 +454,7 @@ void seenserv_expire_records() {
 
 	TRACE_FCLT(FACILITY_SEENSERV_EXPIRE_RECORDS);
 
-	if (CONF_SET_NOEXPIRE)
+	if (!CONF_SEEN_EXPIRE)
 		return;
 
 	HASH_FOREACH_BRANCH(hashIdx, SEENINFO_HASHSIZE) {
@@ -1412,7 +1412,10 @@ proceed:
 
 		TRACE_MAIN();
 
-		if (count == 0)
+		if ((count > CONF_MAX_WILD_SEEN) && !isOper)
+			send_notice_lang_to_user(s_SeenServ, callerUser, GetCallerLang(), SS_SEEN_REPLY_MAXSEEN, CONF_MAX_WILD_SEEN);
+
+		else if (count == 0)
 			send_notice_lang_to_user(s_SeenServ, callerUser, GetCallerLang(), SS_SEEN_REPLY_NOMATCH);
 
 		else {
