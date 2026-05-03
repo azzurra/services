@@ -1075,6 +1075,7 @@ void user_handle_NICK(CSTR source, const int ac, char **av) {
 		user->server = server;
 
 		TRACE_MAIN();
+		++(user->server->userCount);
 
 		htype = host_type(user->host, &dotsCount);
 

@@ -152,7 +152,6 @@ static void unlink_server(Server *removed) {
 					--nservers;
 				}
 
-				server->userCount = 0;
 				server->uplink = NULL;
 				unlink_server(server);
 			}
@@ -290,7 +289,6 @@ void server_handle_SQUIT(CSTR source, const int ac, char **av) {
 	LOG_SNOOP(s_Snooper, "Lost server: \2%s\2 [Reason: %s]", av[0], av[1]);
 	#endif
 
-	server->userCount = 0;
 	unlink_server(server);
 }
 
