@@ -1454,12 +1454,6 @@ void handle_count(const char *source, User *callerUser, ServiceCommandData *data
 	else if (str_equals_nocase(service, s_RootServ) || str_equals_nocase(service, s_RS))
 		type = AGENTID_ROOTSERV;
 
-	else if (str_equals_nocase(service, s_StatServ) || str_equals_nocase(service, s_ST))
-		type = AGENTID_STATSERV;
-
-	else if (str_equals_nocase(service, s_SeenServ) || str_equals_nocase(service, s_SS))
-		type = AGENTID_SEENSERV;
-
 	else {
 
 		send_notice_to_user(data->agent->nick, callerUser, "No such service: %s", service);
@@ -1530,8 +1524,8 @@ CSTR oper_get_agent_name(agentid_t id) {
 		/* AGENTID_OPERSERV */	s_OperServ,
 		/* AGENTID_ROOTSERV */	s_RootServ,
 
-		/* AGENTID_STATSERV */	s_StatServ,
-		/* AGENTID_SEENSERV */	s_SeenServ,
+		/* AGENTID_STATSERV */	"",
+		/* AGENTID_SEENSERV */	"",
 
 		/* AGENTID_CYBCOP */	"",
 		
@@ -1557,8 +1551,8 @@ agentid_t oper_get_agentid(CSTR agentNickname, BOOL performMatch) {
 		/* AGENTID_OPERSERV */	s_OperServ,
 		/* AGENTID_ROOTSERV */	s_RootServ,
 
-		/* AGENTID_STATSERV */	s_StatServ,
-		/* AGENTID_SEENSERV */	s_SeenServ,
+		/* AGENTID_STATSERV */	"",
+		/* AGENTID_SEENSERV */	"",
 
 		/* AGENTID_CYBCOP */	"",
 		
@@ -1608,11 +1602,12 @@ ServiceCommand **oper_get_agent_command_map(agentid_t agentID) {
 		case AGENTID_HELPSERV: return NULL /*helpserv_commands*/;
 		case AGENTID_OPERSERV: return operserv_commands;
 		case AGENTID_ROOTSERV: return rootserv_commands;
-		case AGENTID_STATSERV: return statserv_commands;
-		case AGENTID_SEENSERV: return seenserv_commands;
 		case AGENTID_GNOTICER: return NULL;
 		
 		case AGENTID_DEBUGSERV: return debugserv_commands;
+
+		case AGENTID_STATSERV: return NULL;
+		case AGENTID_SEENSERV: return NULL;
 		
 		case AGENTID_CYBCOP: return NULL;
 		
