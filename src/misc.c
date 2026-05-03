@@ -227,20 +227,17 @@ BOOL validate_email(CSTR email, BOOL allowWild) {
 		return FALSE;
 
 	for (hostIdx = 0; hostIdx < hostlen; ++hostIdx) {
-		if ((host[hostIdx] != '-') && (host[hostIdx] != '.')
-			&& (allowWild ? (host[hostIdx] != '*') : 1)
-			&& (allowWild ? (host[hostIdx] != '?') : 1)
-			&& !isalnum(host[hostIdx]))
+		if ((host[hostIdx] != '-') && (host[hostIdx] != '.') && !isalnum(host[hostIdx]))
 			return FALSE;
 	}
 
-	if (IS_NULL(tld = strrchr(email, '.')) && !allowWild)
+	if (IS_NULL(tld = strrchr(email, '.')))
 		return FALSE;
 
 	if (strstr(host, ".."))
 		return FALSE;
 
-	return allowWild ? TRUE : validate_tld(tld + 1, FALSE);
+	return validate_tld(tld + 1, FALSE);
 }
 
 

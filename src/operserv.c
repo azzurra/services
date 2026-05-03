@@ -1641,6 +1641,37 @@ static void do_masskill(CSTR source, User *callerUser, ServiceCommandData *data)
 			return;
 		}
 
+		ptr = target;
+
+		while (*ptr) {
+
+			c = *(ptr++);
+
+			if (!strchr("*.?!@", c))
+				++valid;
+		}
+
+		if (valid < 4) {
+
+			if (data->operMatch) {
+
+				send_globops(s_OperServ, "\2%s\2 tried to masskill \2%s\2", source, target);
+
+				LOG_SNOOP(s_OperServ, "OS *Mk %s -- by %s (%s@%s) [Lamer]", target, callerUser->nick, callerUser->username, callerUser->host);
+				log_services(LOG_SERVICES_OPERSERV, "*Mk %s -- by %s (%s@%s) [Lamer]", target, callerUser->nick, callerUser->username, callerUser->host);
+			}
+			else {
+
+				send_globops(s_OperServ, "\2%s\2 (through \2%s\2) tried to masskill \2%s\2", source, data->operName, target);
+
+				LOG_SNOOP(s_OperServ, "OS *Mk %s -- by %s (%s@%s) through %s [Lamer]", target, callerUser->nick, callerUser->username, callerUser->host, data->operName);
+				log_services(LOG_SERVICES_OPERSERV, "*Mk %s -- by %s (%s@%s) through %s [Lamer]", target, callerUser->nick, callerUser->username, callerUser->host, data->operName);
+			}
+
+			send_notice_to_user(s_OperServ, callerUser, "Hrmmm, target would your admin think of that?");
+			return;
+		}
+
 		for (i = 0; i < 512; ++i)
 			matches[i] = NULL;
 

@@ -2,7 +2,7 @@
 Lists all registered nicks matching the given pattern.
  
 Syntax:
-LISTREG type pattern [page_number]
+LISTREG type [pattern] [first [last]]
  
 type is one of:
  

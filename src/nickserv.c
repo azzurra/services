@@ -328,39 +328,6 @@ void nickserv(CSTR source, User *callerUser, char *buf) {
 }
 
 /*********************************************************/
-#ifdef OS_64BIT
-static void nickinfo32_to64(NickInfo32 * ni32, NickInfo *ni) {
-	//we don't care about valid pointer, we just make sure NULL stays NULL and not NULL stays NOT NULL
-	//eventually they will get overwritten with a valid pointer later
-
-	ni->next = NULL;
-	ni->prev = NULL;
-	memcpy(ni->nick, ni32->nick, NICKMAX);
-	memcpy(ni->pass, ni32->pass, PASSMAX);
-	ni->last_usermask = (char *)(uintptr_t)ni32->last_usermask;
-	ni->last_realname = (char *)(uintptr_t)ni32->last_realname;
-	ni->time_registered = ni32->time_registered;
-	ni->last_seen = ni32->last_seen;
-	ni->accesscount = ni32->accesscount;
-	ni->access = (char **)(uintptr_t)ni32->access;
-	ni->flags = ni32->flags;
-	ni->last_drop_request = ni32->last_drop_request;
-	ni->channelcount = ni32->channelcount;
-	ni->url = (char *)(uintptr_t)ni32->url;
-	ni->email = (char *)(uintptr_t)ni32->email;
-	ni->forward = (char *)(uintptr_t)ni32->forward;
-	ni->hold = (char *)(uintptr_t)ni32->hold;
-	ni->mark = (char *)(uintptr_t)ni32->mark;
-	ni->forbid = (char *)(uintptr_t)ni32->forbid;
-	ni->news = ni32->news;
-	ni->regemail = (char *)(uintptr_t)ni32->regemail;
-	ni->last_email_request = ni32->last_email_request;
-	ni->auth = ni32->auth;
-	ni->freeze = (char *)(uintptr_t)ni32->freeze;
-	ni->langID = ni32->langID;
-	memset(ni->reserved, 0, sizeof(ni->reserved));
-}
-#endif
 
 /* Load/save data files. */
 void load_ns_dbase(void) {
@@ -3728,7 +3695,7 @@ static void do_sendcode(CSTR source, User *callerUser, ServiceCommandData *data)
 			else if (FlagSet(ni->flags, NI_PASSRESET)) {
 				fprintf(mailfile, lang_msg(GetNickLang(ni), NS_SENDCODE_EMAIL_RPWD), CONF_NETWORK_NAME, ni->nick, ni->nick, ni->auth);
 			}
-			
+
 			fprintf(mailfile, lang_msg(GetNickLang(ni), CSNS_EMAIL_TEXT_ABUSE), MAIL_ABUSE, CONF_NETWORK_NAME);
 			fclose(mailfile);
 
@@ -5250,131 +5217,211 @@ static BOOL ns_listreg_match_is_frozen(const NickInfo *ni, CSTR pattern) {
 
 static void do_listreg(CSTR source, User *callerUser, ServiceCommandData *data) {
 
-	NickInfo				*ni;
-	ns_listreg_match_proc	compare;
-	char					*type, *search, *page;
-	int						i;
-	unsigned long int		start_line, end_line, line;
+	ns_listreg_match_proc	compare = NULL;
+	NickInfo			*ni;
+	char				*prms[4] = {NULL, NULL, NULL, NULL};
+	char				*type	= NULL;
+	char				*start	= NULL;
+	char				*end	= NULL;
+	char				*search	= NULL;
+	unsigned long int	start_line, end_line, line, idx = 0;
+	BOOL				error = FALSE;
 
 	#define	LR_OUT_STANDARD		0
 	#define	LR_OUT_REALNAME		1
 	#define	LR_OUT_EMAIL		2
-	int						output_type = LR_OUT_STANDARD;
+	int					output_type = LR_OUT_STANDARD;
 
 	TRACE_MAIN_FCLT(FACILITY_NICKSERV_HANDLE_LISTREG);
 
-	if (IS_NULL(type = strtok(NULL, " ")) || IS_NULL(search = strtok(NULL, " "))) {
+	while ((idx < 4) && IS_NOT_NULL((prms[idx] = strtok(NULL, s_SPACE))))
+		++idx;
 
-		send_notice_lang_to_user(s_NickServ, callerUser, GetCallerLang(), NS_LISTREG_SYNTAX_ERROR);
-		send_notice_lang_to_user(s_NickServ, callerUser, GetCallerLang(), OPER_GET_MORE_INFO_ON_COMMAND, s_NS, "LISTREG");
-		return;
-	}
+	if (idx < 1)
+		error = TRUE;
 
-	TRACE_MAIN();
-
-	if (str_equals_nocase(type, "NICK") || str_equals_nocase(type, "N")) {
-
-		compare = ns_listreg_match_nick;
-		send_notice_lang_to_user(s_NickServ, callerUser, GetCallerLang(), CSNS_LISTREG_LIST_HEADER, "by Nickname: ", search);
-	}
-	else if (str_equals_nocase(type, "MASK") || str_equals_nocase(type, "M")) {
-
-		compare = ns_listreg_match_seenmask;
-		send_notice_lang_to_user(s_NickServ, callerUser, GetCallerLang(), CSNS_LISTREG_LIST_HEADER, "by Mask: ", search);
-	}
-	else if (str_equals_nocase(type, "REALNAME") || str_equals_nocase(type, "RN")) {
-
-		compare = ns_listreg_match_realname;
-		output_type = LR_OUT_REALNAME;
-		send_notice_lang_to_user(s_NickServ, callerUser, GetCallerLang(), CSNS_LISTREG_LIST_HEADER, "by Real Name: ", search);
-	}
-	else if (str_equals_nocase(type, "EMAIL") || str_equals_nocase(type, "E")) {
-
-		compare = ns_listreg_match_email;
-		output_type = LR_OUT_EMAIL;
-		send_notice_lang_to_user(s_NickServ, callerUser, GetCallerLang(), CSNS_LISTREG_LIST_HEADER, "by E-Mail Address: ", search);
-	}
-	else if (str_equals_nocase(type, "NOEMAIL") || str_equals_nocase(type, "NE")) {
-
-		compare = ns_listreg_match_noemail;
-		send_notice_lang_to_user(s_NickServ, callerUser, GetCallerLang(), CSNS_LISTREG_LIST_HEADER, "\2without\2 E-Mail Address: ", search);
-	}
-	else if (str_equals_nocase(type, "BUGGED") || str_equals_nocase(type, "B")) {
-
-		compare = ns_listreg_match_bugged;
-		send_notice_lang_to_user(s_NickServ, callerUser, GetCallerLang(), CSNS_LISTREG_LIST_HEADER, "by Bugged Registration: ", search);
-	}
-	else if (str_equals_nocase(type, "NOTAUTH") || str_equals_nocase(type, "NA")) {
-
-		compare = ns_listreg_match_is_not_auth;
-		send_notice_lang_to_user(s_NickServ, callerUser, GetCallerLang(), CSNS_LISTREG_LIST_HEADER, "\2without\2 authorization: ", s_NULL);
-	}
-	else if (str_equals_nocase(type, "INAUTH") || str_equals_nocase(type, "IA")) {
-
-		compare = ns_listreg_match_is_in_auth;
-		send_notice_lang_to_user(s_NickServ, callerUser, GetCallerLang(), CSNS_LISTREG_LIST_HEADER, "\2waiting for\2 authorization: ", s_NULL);
-	}
-	else if (str_equals_nocase(type, "HOLD") || str_equals_nocase(type, "H")) {
-
-		compare = ns_listreg_match_is_held;
-		send_notice_lang_to_user(s_NickServ, callerUser, GetCallerLang(), CSNS_LISTREG_LIST_HEADER, "by HELD flag: ", s_NULL);
-	}
-	else if (str_equals_nocase(type, "MARK") || str_equals_nocase(type, "K")) {
-
-		compare = ns_listreg_match_is_marked;
-		send_notice_lang_to_user(s_NickServ, callerUser, GetCallerLang(), CSNS_LISTREG_LIST_HEADER, "by MARK flag: ", s_NULL);
-	}
-	else if (str_equals_nocase(type, "FORBID") || str_equals_nocase(type, "F")) {
-
-		compare = ns_listreg_match_is_forbidded;
-		send_notice_lang_to_user(s_NickServ, callerUser, GetCallerLang(), CSNS_LISTREG_LIST_HEADER, "by FORBID flag: ", s_NULL);
-	}
-	else if (str_equals_nocase(type, "FREEZE") || str_equals_nocase(type, "Z")) {
-
-		compare = ns_listreg_match_is_frozen;
-		send_notice_lang_to_user(s_NickServ, callerUser, GetCallerLang(), CSNS_LISTREG_LIST_HEADER, "by FREEZE flag: ", s_NULL);
-	}
 	else {
 
+		type = prms[0];
+
+		TRACE_MAIN();
+		/* Tipo */
+
+		if (str_equals_nocase(type, "NICK") || str_equals_nocase(type, "N")) {
+
+			compare = ns_listreg_match_nick;
+			search = prms[1];
+			start = prms[2];
+			end = prms[3];
+
+			if (IS_NOT_NULL(search)) {
+
+				send_notice_lang_to_user(s_NickServ, callerUser, GetCallerLang(), CSNS_LISTREG_LIST_HEADER, "by Nickname: ", search);
+				str_tolower(search);
+			}
+		}
+		else if (str_equals_nocase(type, "MASK") || str_equals_nocase(type, "M")) {
+
+			compare = ns_listreg_match_seenmask;
+			search = prms[1];
+			start = prms[2];
+			end = prms[3];
+
+			if (IS_NOT_NULL(search)) {
+
+				send_notice_lang_to_user(s_NickServ, callerUser, GetCallerLang(), CSNS_LISTREG_LIST_HEADER, "by Mask: ", search);
+				str_tolower(search);
+			}
+		}
+		else if (str_equals_nocase(type, "REALNAME") || str_equals_nocase(type, "RN")) {
+
+			compare = ns_listreg_match_realname;
+			search = prms[1];
+			start = prms[2];
+			end = prms[3];
+			output_type = LR_OUT_REALNAME;
+
+			if (IS_NOT_NULL(search)) {
+
+				send_notice_lang_to_user(s_NickServ, callerUser, GetCallerLang(), CSNS_LISTREG_LIST_HEADER, "by Real Name: ", search);
+				str_tolower(search);
+			}
+		}
+		else if (str_equals_nocase(type, "EMAIL") || str_equals_nocase(type, "E")) {
+
+			compare = ns_listreg_match_email;
+			search = prms[1];
+			start = prms[2];
+			end = prms[3];
+			output_type = LR_OUT_EMAIL;
+
+			if (IS_NOT_NULL(search)) {
+
+				send_notice_lang_to_user(s_NickServ, callerUser, GetCallerLang(), CSNS_LISTREG_LIST_HEADER, "by E-Mail Address: ", search);
+				str_tolower(search);
+			}
+		}
+		else if (str_equals_nocase(type, "NOEMAIL") || str_equals_nocase(type, "NE")) {
+
+			compare = ns_listreg_match_noemail;
+			search = (STR)s_STAR;
+			start = prms[1];
+			end = prms[2];
+
+			send_notice_lang_to_user(s_NickServ, callerUser, GetCallerLang(), CSNS_LISTREG_LIST_HEADER, "\2without\2 E-Mail Address: ", search);
+		}
+		else if (str_equals_nocase(type, "BUGGED") || str_equals_nocase(type, "B")) {
+
+			compare = ns_listreg_match_bugged;
+			search = (STR)s_STAR;
+			start = prms[1];
+			end = prms[2];
+
+			send_notice_lang_to_user(s_NickServ, callerUser, GetCallerLang(), CSNS_LISTREG_LIST_HEADER, "by Bugged Registration: ", search);
+		}
+		else if (str_equals_nocase(type, "NOTAUTH") || str_equals_nocase(type, "NA")) {
+
+			compare = ns_listreg_match_is_not_auth;
+			search = (STR)s_STAR;
+			start = prms[1];
+			end = prms[2];
+
+			send_notice_lang_to_user(s_NickServ, callerUser, GetCallerLang(), CSNS_LISTREG_LIST_HEADER, "\2without\2 authorization: ", s_NULL);
+		}
+		else if (str_equals_nocase(type, "INAUTH") || str_equals_nocase(type, "IA")) {
+
+			compare = ns_listreg_match_is_in_auth;
+			search = (STR)s_STAR;
+			start = prms[1];
+			end = prms[2];
+
+			send_notice_lang_to_user(s_NickServ, callerUser, GetCallerLang(), CSNS_LISTREG_LIST_HEADER, "\2waiting for\2 authorization: ", s_NULL);
+		}
+		else if (str_equals_nocase(type, "HOLD") || str_equals_nocase(type, "H")) {
+
+			compare = ns_listreg_match_is_held;
+			search = (STR)s_STAR;
+			start = prms[1];
+			end = prms[2];
+
+			send_notice_lang_to_user(s_NickServ, callerUser, GetCallerLang(), CSNS_LISTREG_LIST_HEADER, "by HELD flag: ", s_NULL);
+		}
+		else if (str_equals_nocase(type, "MARK") || str_equals_nocase(type, "K")) {
+
+			compare = ns_listreg_match_is_marked;
+			search = (STR)s_STAR;
+			start = prms[1];
+			end = prms[2];
+
+			send_notice_lang_to_user(s_NickServ, callerUser, GetCallerLang(), CSNS_LISTREG_LIST_HEADER, "by MARK flag: ", s_NULL);
+		}
+		else if (str_equals_nocase(type, "FORBID") || str_equals_nocase(type, "F")) {
+
+			compare = ns_listreg_match_is_forbidded;
+			search = (STR)s_STAR;
+			start = prms[1];
+			end = prms[2];
+
+			send_notice_lang_to_user(s_NickServ, callerUser, GetCallerLang(), CSNS_LISTREG_LIST_HEADER, "by FORBID flag: ", s_NULL);
+		}
+		else if (str_equals_nocase(type, "FREEZE") || str_equals_nocase(type, "Z")) {
+
+			compare = ns_listreg_match_is_frozen;
+			search = (STR)s_STAR;
+			start = prms[1];
+			end = prms[2];
+
+			send_notice_lang_to_user(s_NickServ, callerUser, GetCallerLang(), CSNS_LISTREG_LIST_HEADER, "by FREEZE flag: ", s_NULL);
+		}
+		else
+			error = TRUE;
+	}
+
+	/* Convalida parametri */
+	TRACE_MAIN();
+
+	error |= IS_NULL(search);
+
+	if (error) {
+
 		send_notice_lang_to_user(s_NickServ, callerUser, GetCallerLang(), NS_LISTREG_SYNTAX_ERROR);
 		send_notice_lang_to_user(s_NickServ, callerUser, GetCallerLang(), OPER_GET_MORE_INFO_ON_COMMAND, s_NS, "LISTREG");
 		return;
 	}
 
+	if (IS_NULL(start))
+		start = "0";
+
+	if (IS_NULL(end))
+		end = "+50";
+
 	TRACE_MAIN();
 
-	if (IS_NOT_NULL(page = strtok(NULL, s_SPACE))) {
+	/* Intervallo */
+	start_line = strtoul(start, NULL, 10);
 
-		unsigned long int page_number = strtoul(page, NULL, 10);
-
-		if (page_number == 0) {
-
-			send_notice_lang_to_user(s_NickServ, callerUser, GetCallerLang(), NS_LISTREG_SYNTAX_ERROR);
-			send_notice_lang_to_user(s_NickServ, callerUser, GetCallerLang(), OPER_GET_MORE_INFO_ON_COMMAND, s_NS, "LISTREG");
-			return;
-		}
-
-		start_line = (page_number - 1) * 50;
-	}
+	if (end[0] == c_PLUS)
+		end_line = start_line + strtoul(end + 1, NULL, 10);
 	else
-		start_line = 0;
+		end_line = strtoul(end, NULL, 10);
 
-	end_line = start_line + 50;
+	/* Ricerca */
 
-	str_tolower(search);
+	if (end_line == 0)
+		end_line = start_line + 50;
 
-	// ricerca
+	line = 0;
 
-	for (line = i = 0; i < 256; ++i) {
+	for (idx = 65; idx < 126; ++idx) {
 
-		for (ni = nicklists[i]; IS_NOT_NULL(ni); ni = ni->next) {
+		for (ni = nicklists[idx]; IS_NOT_NULL(ni); ni = ni->next) {
 
 			if (compare(ni, search)) {
 
 				TRACE_MAIN();
 				++line;
 
-				if (line < start_line)
+				if ((line < start_line) || (line >= end_line))
 					continue;
 
 				switch (output_type) {
@@ -5393,12 +5440,6 @@ static void do_listreg(CSTR source, User *callerUser, ServiceCommandData *data) 
 					case LR_OUT_EMAIL:
 						send_notice_to_user(s_NickServ, callerUser, "%d) \2%s\2 [%s] [E-Mail Address: %s]", line, ni->nick, ni->last_usermask, ni->email);
 						break;
-				}
-
-				if (line >= end_line) {
-
-					send_notice_lang_to_user(s_NickServ, callerUser, GetCallerLang(), END_OF_LIST);
-					return;
 				}
 			}
 		}
