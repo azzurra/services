@@ -565,10 +565,17 @@ void servers_update_killcount(User *user, User *killer) {
 		return;
 	}
 
-	if (IS_NOT_NULL(killer)) {
+	if (IS_NULL(user->server->stats)) {
 
-		if (user_is_services_client(killer))
-			return;
+		log_error(FACILITY_SERVERS_UPDATE_KILLCOUNT, __LINE__, LOG_TYPE_ERROR_ASSERTION, LOG_SEVERITY_ERROR_HALTED,
+			"servers_update_killcount(): Server %s has an empty stats record", user->server->name);
+
+		return;
+	}
+
+	++(user->server->stats->servkills);
+
+	if (IS_NOT_NULL(killer)) {
 
 		if (IS_NULL(killer->server)) {
 
@@ -588,16 +595,6 @@ void servers_update_killcount(User *user, User *killer) {
 
 		++(killer->server->stats->operkills);
 	}
-
-	if (IS_NULL(user->server->stats)) {
-
-		log_error(FACILITY_SERVERS_UPDATE_KILLCOUNT, __LINE__, LOG_TYPE_ERROR_ASSERTION, LOG_SEVERITY_ERROR_HALTED,
-			"servers_update_killcount(): Server %s has an empty stats record", user->server->name);
-
-		return;
-	}
-
-	++(user->server->stats->servkills);
 }
 
 /*********************************************************/
