@@ -1617,10 +1617,12 @@ static void do_masskill(CSTR source, User *callerUser, ServiceCommandData *data)
 	}
 	else {
 
-		char defreason[32];
-		int i, count = 0, x = 0, check = 0;
+		char defreason[16];
+		int i, count = 0, x = 0, check = 0, valid = 0;
 		float percent;
 		User *matches[512];
+		unsigned char c;
+		char *ptr;
 
 		TRACE_MAIN();
 

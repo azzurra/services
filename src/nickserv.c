@@ -328,6 +328,39 @@ void nickserv(CSTR source, User *callerUser, char *buf) {
 }
 
 /*********************************************************/
+#ifdef OS_64BIT
+static void nickinfo32_to64(NickInfo32 * ni32, NickInfo *ni) {
+	//we don't care about valid pointer, we just make sure NULL stays NULL and not NULL stays NOT NULL
+	//eventually they will get overwritten with a valid pointer later
+
+	ni->next = NULL;
+	ni->prev = NULL;
+	memcpy(ni->nick, ni32->nick, NICKMAX);
+	memcpy(ni->pass, ni32->pass, PASSMAX);
+	ni->last_usermask = (char *)(uintptr_t)ni32->last_usermask;
+	ni->last_realname = (char *)(uintptr_t)ni32->last_realname;
+	ni->time_registered = ni32->time_registered;
+	ni->last_seen = ni32->last_seen;
+	ni->accesscount = ni32->accesscount;
+	ni->access = (char **)(uintptr_t)ni32->access;
+	ni->flags = ni32->flags;
+	ni->last_drop_request = ni32->last_drop_request;
+	ni->channelcount = ni32->channelcount;
+	ni->url = (char *)(uintptr_t)ni32->url;
+	ni->email = (char *)(uintptr_t)ni32->email;
+	ni->forward = (char *)(uintptr_t)ni32->forward;
+	ni->hold = (char *)(uintptr_t)ni32->hold;
+	ni->mark = (char *)(uintptr_t)ni32->mark;
+	ni->forbid = (char *)(uintptr_t)ni32->forbid;
+	ni->news = ni32->news;
+	ni->regemail = (char *)(uintptr_t)ni32->regemail;
+	ni->last_email_request = ni32->last_email_request;
+	ni->auth = ni32->auth;
+	ni->freeze = (char *)(uintptr_t)ni32->freeze;
+	ni->langID = ni32->langID;
+	memset(ni->reserved, 0, sizeof(ni->reserved));
+}
+#endif
 
 /* Load/save data files. */
 void load_ns_dbase(void) {
@@ -1872,7 +1905,7 @@ static void do_identify(CSTR source, User *callerUser, ServiceCommandData *data)
 		}
 
 		if (CONF_SET_EXTRASNOOP)
-			LOG_SNOOP(s_OperServ, "NS I %s -- by %s (%s@%s) [%s]", nick, source, callerUser->username, callerUser->host, user_is_ircop(callerUser) ? "OPER-HIDDEN" : pass);
+			LOG_SNOOP(s_OperServ, "NS I %s -- by %s (%s@%s)", nick, source, callerUser->username, callerUser->host);
 
 		log_services(LOG_SERVICES_NICKSERV_ID, "I %s -- by %s (%s@%s) [%s]", nick, source, callerUser->username, callerUser->host, pass);
 
