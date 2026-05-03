@@ -806,8 +806,6 @@ void expire_stats() {
 	TRACE();
 	if (CONF_DISPLAY_UPDATES)
 		send_globops(NULL, "Completed Stats Expire (%d/%d)", xcount, count);
-	else
-		LOG_SNOOP(s_OperServ, "Completed Stats Expire (%d/%d)", xcount, count);
 }
 
 /*********************************************************/
@@ -863,8 +861,6 @@ void statserv_daily_expire() {
 
 	if (CONF_DISPLAY_UPDATES)
 		send_globops(NULL, "Completed Daily Stats Expire (Channels/Servers in database: %d/%d)", count, scount);
-	else
-		LOG_SNOOP(s_OperServ, "Completed Daily Stats Expire (Channels/Servers in database: %d/%d)", count, scount);
 }
 
 /*********************************************************/
@@ -911,8 +907,6 @@ void statserv_weekly_expire() {
 
 	if (CONF_DISPLAY_UPDATES)
 		send_globops(NULL, "Completed Weekly Stats Expire (Channels in database: %d)", count);
-	else
-		LOG_SNOOP(s_OperServ, "Completed Weekly Stats Expire (Channels in database: %d)", count);
 }
 
 /*********************************************************/
@@ -959,8 +953,6 @@ void statserv_monthly_expire() {
 
 	if (CONF_DISPLAY_UPDATES)
 		send_globops(NULL, "Completed Monthly Stats Expire (Channels in database: %d)", count);
-	else
-		LOG_SNOOP(s_OperServ, "Completed Monthly Stats Expire (Channels in database: %d)", count);
 }
 
 

@@ -478,8 +478,6 @@ void seenserv_expire_records() {
 
 	if (CONF_DISPLAY_UPDATES)
 		send_globops(NULL, "Completed Seen Records Expire (%d/%d)", xcount, count);
-	else
-		LOG_SNOOP(s_OperServ, "Completed Seen Records Expire (%d/%d)", xcount, count);
 }
 
 
@@ -495,8 +493,6 @@ void seenserv_weekly_expire() {
 
 	if (CONF_DISPLAY_UPDATES)
 		send_globops(NULL, "Completed Weekly Seen Expire");
-	else
-		LOG_SNOOP(s_OperServ, "Completed Weekly Seen Expire");
 }
 
 
