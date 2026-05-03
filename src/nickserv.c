@@ -760,7 +760,7 @@ void nickserv_daily_expire() {
 
 	TRACE();
 	if (CONF_DISPLAY_UPDATES)
-		send_globops(NULL, "Completed Nick Daily Expire (\2%d\2/\2%d\2)", xcount, count);
+		send_globops(s_NickServ, "Completed Nick Daily Expire (\2%d\2/\2%d\2)", xcount, count);
 }
 
 

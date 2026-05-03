@@ -227,6 +227,7 @@ static BOOL initialize() {
 
 	crypt_init();
 	user_init();
+	message_init();
 
 	fprintf(stderr, "\nAzzurra IRC Services starting...");
 
@@ -447,6 +448,7 @@ void services_cleanup() {
 	TRACE_MAIN();
 	log_done();
 
+	message_terminate();
 	region_terminate();
 	process_terminate();
 }
