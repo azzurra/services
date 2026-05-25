@@ -22,4 +22,5 @@
   u  - Ne montre pas les messages de QUIT ou PART
   U  - Permet qu'aussi les usagers non-italiens pas identifiés aux nicks entrent dans le canal
   v  - Donne à un nick la permission de parler dans un canal modéré (+m)
+  z  - Empêche l'accès à un masque (nick!user@host), sauf pour les utilisateurs identifiés
 *** Fin de la liste ***

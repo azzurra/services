@@ -21,4 +21,5 @@
   t  - Permite el cambio de topic del canal unicamente a los op's
   U  - Permite a los usuarios sin nick registrado en los robins .US y .EU entrar en un canal
   v  - Permite a los nicknames con +v escribir en un canal moderado (+m)
+  z  - Impide el acceso a una máscara (nick!user@host), excepto a los usuarios identificados
 *** Fin de la Lista ***
