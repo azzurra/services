@@ -983,9 +983,6 @@ NickInfo *retnick(int i) {
 /* Is the given user's address on the given nick's access list? Return 1 if so, 0 if not. */
 BOOL is_on_access(const User *user, const NickInfo *ni) {
 
-	size_t	len;
-	char	buffer[IRCBUFSIZE];
-	STR		ptr;
 	int		accessIdx;
 
 
@@ -1002,22 +999,15 @@ BOOL is_on_access(const User *user, const NickInfo *ni) {
 	if ((ni->accesscount == 0) || FlagSet(ni->flags, NI_SECURE))
 		return FALSE;
 
-	len = str_len(user->username);
-	memcpy(buffer, user->username, len);
-	ptr = buffer + len;
-
-	TRACE();
-	*(ptr++) = c_AT;
-	len = str_len(user->host);
-	memcpy(ptr, user->host, len);
-	ptr += len;
-
-	*ptr = c_NULL;
-
 	TRACE();
 	for (accessIdx = 0; (accessIdx < ni->accesscount); ++accessIdx) {
 
-		if (str_match_wild_nocase(ni->access[accessIdx], buffer))
+		/* Match against the real host, the +x masked host and the (v4/v6) IP,
+		 * exactly like ChanServ akick/ban recognition does. The previous hand-rolled
+		 * "username@host" glob only ever looked at user->host, so an access mask
+		 * written against the IP address (e.g. an IPv6 prefix) never matched and the
+		 * user got guested even when correctly listed. */
+		if (user_usermask_match(ni->access[accessIdx], user, TRUE, TRUE))
 			return TRUE;
 	}
 
