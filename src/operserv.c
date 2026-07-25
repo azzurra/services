@@ -546,7 +546,7 @@ void check_clones_v6(const User *newUser) {
 	char			clone_nicks[220], ipbuf[42], ip_clonebuf[42], tmp_clones[220 - 4];
 	char			*reason;
 	BOOL    		more_clones = FALSE, sameHost = TRUE, nick_oper = FALSE, nick_exempt = FALSE, isExempt = FALSE, triggered = FALSE;
-	int			idx, warningIdx, cloneCount = 0, len = 0, position;
+	int			idx, warningIdx, cloneCount = 0, len = 0, position = 0;
 	User_AltListItem	*userIPv6_item = NULL;
 
 
