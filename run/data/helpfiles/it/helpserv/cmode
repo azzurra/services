@@ -22,4 +22,5 @@
   u  - Non mostra i messaggi di QUIT e PART di utenti del canale.
   U  - Permette agli utenti esteri non identificati di entrare nel canale.
   v  - Concede ad un nickname il permesso di parlare in un canale moderato (+m).
+  z  - Impedisce l'accesso a una mask (nick!user@host), salvo agli utenti identificati.
 *** Fine della Lista ***

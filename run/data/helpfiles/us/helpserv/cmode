@@ -22,4 +22,5 @@
   u  - Blocks PART/QUIT messages sent to the channel.
   U  - Allow users without a registered nick on .US and .EU robins to join the channel. 
   v  - Gives voice to a nickname in the channel.
+  z  - Prevents access to a mask (nick!user@host), except for identified users.
 *** End of List ***
