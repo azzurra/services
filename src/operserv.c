@@ -1140,7 +1140,9 @@ static void do_find(CSTR source, User *callerUser, ServiceCommandData *data) {
 				TRACE_MAIN();
 			#ifdef ENABLE_CAPAB_NICKIP
 				if ((nick ? str_match_wild(nick, user_nick) : 1 ) && str_match_wild(username, user_username) &&
-					(str_match_wild(host, user_host) || str_match_wild(host, user_xhost) || str_match_wild(host, str_tolower(get_ip(user->ip)))) )
+					(str_match_wild(host, user_host) || str_match_wild(host, user_xhost) ||
+					 str_match_wild(host, str_tolower(get_ip(user->ip))) ||
+					 str_match_wild(host, str_tolower(get_ip6(user->ipv6)))) )
 			#else
 				if ((nick ? str_match_wild(nick, user_nick) : 1 ) && str_match_wild(username, user_username) &&
 					(str_match_wild(host, user_host) || str_match_wild(host, user_xhost)))
