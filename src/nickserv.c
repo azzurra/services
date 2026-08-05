@@ -1002,12 +1002,15 @@ BOOL is_on_access(const User *user, const NickInfo *ni) {
 	TRACE();
 	for (accessIdx = 0; (accessIdx < ni->accesscount); ++accessIdx) {
 
-		/* Match against the real host, the +x masked host and the (v4/v6) IP,
-		 * exactly like ChanServ akick/ban recognition does. The previous hand-rolled
+		/* Match against the real host and the (v4/v6) IP. The previous hand-rolled
 		 * "username@host" glob only ever looked at user->host, so an access mask
 		 * written against the IP address (e.g. an IPv6 prefix) never matched and the
-		 * user got guested even when correctly listed. */
-		if (user_usermask_match(ni->access[accessIdx], user, TRUE, TRUE))
+		 * user got guested even when correctly listed.
+		 * The +x masked host is deliberately not matched: the user always knows their
+		 * own plaintext host/IP, so there is nothing to gain from listing a cloak.
+		 * user_usermask_match() lacks support for IPv6 CIDR matching, so IPv6 access
+		 * entries work only with wildcard-based patterns; IPv4 CIDR is fully supported. */
+		if (user_usermask_match(ni->access[accessIdx], user, FALSE, TRUE))
 			return TRUE;
 	}
 
