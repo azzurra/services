@@ -145,28 +145,11 @@ extern time_t log_next_midnight_time;
  * Macros                                                *
  *********************************************************/
 
-#define LOG_DEBUG(fmt, ...) \
-	do { \
-		if ((CONF_SET_DEBUG == TRUE) && IS_NOT_NULL(fmt) && (log_rotation_started == FALSE)) \
-			log_debug((fmt) , ##__VA_ARGS__); \
-	} while (0)
-
-#define LOG_SNOOP(agent, fmt, ...) \
-	do { \
-		if ((global_running == TRUE) && (CONF_SET_SNOOP == TRUE) && IS_NOT_NULL(fmt)) \
-			log_snoop((agent), (fmt) , ##__VA_ARGS__); \
-	} while (0)
-
-#define LOG_DEBUG_SNOOP(fmt, ...) \
-	do { \
-		if ((global_running == TRUE) && (CONF_SET_SNOOP == TRUE) && IS_NOT_NULL(fmt)) \
-			log_debug_snoop((fmt) , ##__VA_ARGS__); \
-	} while (0)
-
-#define LOG_PROXY(agent, fmt, ...) \
-	do { \
-		if ((global_running == TRUE) && (CONF_SET_SNOOP == TRUE) && IS_NOT_NULL(fmt)) \
-			log_proxy((agent), (fmt) , ##__VA_ARGS__); \
-	} while (0)
+ /* TODO: for backward compatibility only, replace uppercase variants with lowercase ones
+  * only after everything is working (LOG_SNOOP alone has 700+ callsites across the codebase!)
+  */
+#define LOG_DEBUG log_debug
+#define LOG_SNOOP log_snoop
+#define LOG_DEBUG_SNOOP log_debug_snoop
 
 #endif /* SRV_LOGGING_H */

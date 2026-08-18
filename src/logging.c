@@ -460,16 +460,15 @@ CSTR log_get_last_error_signature(void) {
 
 
 void log_debug(CSTR fmt, ...) {
+	if ((CONF_SET_DEBUG == TRUE) && IS_NOT_NULL(fmt) && (log_rotation_started == FALSE)) {
+		va_list		args;
 
-	/* Note: do *NOT* call this directly. Use the LOG_DEBUG() macro instead. */
+		va_start(args, fmt);
+		log_buffer[0] = c_NULL;
+		vsnprintf(log_buffer, sizeof(log_buffer), fmt, args);
 
-	va_list		args;
-
-	va_start(args, fmt);
-	log_buffer[0] = c_NULL;
-	vsnprintf(log_buffer, sizeof(log_buffer), fmt, args);
-
-	log_debug_direct(log_buffer);
+		log_debug_direct(log_buffer);
+	}
 }
 
 void log_debug_direct(CSTR string) {
@@ -563,29 +562,27 @@ void log_panic_direct(CSTR string) {
 
 
 void log_snoop(CSTR source, CSTR fmt, ...) {
+	if ((global_running == TRUE) && (CONF_SET_SNOOP == TRUE) && IS_NOT_NULL(fmt)) {
+		va_list		args;
 
-	/* Note: do *NOT* call this directly. Use the LOG_SNOOP() macro instead. */
+		log_buffer[0] = c_NULL;
+		va_start(args, fmt);
+		vsnprintf(log_buffer, sizeof(log_buffer), fmt, args);
 
-	va_list		args;
-
-	log_buffer[0] = c_NULL;
-	va_start(args, fmt);
-	vsnprintf(log_buffer, sizeof(log_buffer), fmt, args);
-
-	send_cmd(":%s PRIVMSG %s :%s", source, CONF_SNOOP_CHAN, log_buffer);
+		send_cmd(":%s PRIVMSG %s :%s", source, CONF_SNOOP_CHAN, log_buffer);
+	}
 }
 
 void log_debug_snoop(CSTR fmt, ...) {
+	if ((global_running == TRUE) && (CONF_SET_SNOOP == TRUE) && IS_NOT_NULL(fmt)) {
+		va_list		args;
 
-	/* Note: do *NOT* call this directly. Use the LOG_DEBUG_SNOOP() macro instead. */
+		log_buffer[0] = c_NULL;
+		va_start(args, fmt);
+		vsnprintf(log_buffer, sizeof(log_buffer), fmt, args);
 
-	va_list		args;
-
-	log_buffer[0] = c_NULL;
-	va_start(args, fmt);
-	vsnprintf(log_buffer, sizeof(log_buffer), fmt, args);
-
-	send_cmd(":%s PRIVMSG %s :%s", s_DebugServ, CONF_DEBUG_CHAN, log_buffer);
+		send_cmd(":%s PRIVMSG %s :%s", s_DebugServ, CONF_DEBUG_CHAN, log_buffer);
+	}
 }
 
 void log_stderr(CSTR fmt, ...) {

@@ -24,3 +24,4 @@ Makefile.inc
 *.swp
 *.o
 lang/__pycache__/
+/.vscode/**

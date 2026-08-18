@@ -429,6 +429,7 @@ fi
 # Create files.
 
 echo2 "Creating sysconf.h... "
+LBIT=$(getconf LONG_BIT)
 cat >inc/sysconf.h <<EOT
 /*
  * This file is generated automatically by "configure".  Any changes made
@@ -437,6 +438,8 @@ cat >inc/sysconf.h <<EOT
 
 #define SERVICES_BIN		"$BINDEST/services"
 #define SERVICES_DIR		"$DATDEST"
+
+#define OS_${LBIT}BIT
 
 EOT
 
@@ -465,7 +468,6 @@ fi
 echo "done."
 
 echo2 "Creating Makefile.inc... "
-LBIT=$(getconf LONG_BIT)
 cat >Makefile.inc <<EOT
 # This file is generated automatically by "configure".  Any changes made
 # to it will be erased next time "configure" is run.
@@ -478,8 +480,6 @@ LIBS=$CC_LIBS
 PROGRAM=services
 BINDEST=$BINDEST
 DATDEST=$DATDEST
-LBIT=$LBIT
-CFLAGS += -DOS_${LBIT}BIT
 
 EOT
 echo "done."

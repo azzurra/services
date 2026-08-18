@@ -1032,7 +1032,7 @@ void load_suspend_db(void) {
 		}
 #else
 		if (fread(name, sizeof(ChannelSuspendData), 1, f) != 1)
-			fatal_error(FACILITY_CHANSERV_LOAD_SUSPEND_DB, __LINE__, "Read error on %s at entry %d", SUSPEND_DB, i);ù
+			fatal_error(FACILITY_CHANSERV_LOAD_SUSPEND_DB, __LINE__, "Read error on %s at entry %d", SUSPEND_DB, i);
 
 #endif
 		TRACE();
