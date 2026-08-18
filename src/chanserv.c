@@ -1290,7 +1290,7 @@ void expire_chans() {
 	if (CONF_DISPLAY_UPDATES)
 		send_globops(NULL, "Completed Channel Expire (\2%d\2/\2%d\2/\2%d\2)", xcount, rcount, count);
 	else
-		LOG_SNOOP(s_OperServ, "Completed Channel Expire (\2%d\2/\2%d\2/\2%d\2)", xcount, rcount, count);
+		LOG_SNOOP(s_OperServ, "Completed Channel Expire (\2%ld\2/\2%ld\2/\2%ld\2)", xcount, rcount, count);
 }
 
 /*********************************************************/
@@ -1350,9 +1350,9 @@ void chanserv_daily_expire() {
 
 	TRACE();
 	if (CONF_DISPLAY_UPDATES)
-		send_globops(NULL, "Completed Daily Channel Expire (Channels in database: \2%d\2)", count);
+		send_globops(NULL, "Completed Daily Channel Expire (Channels in database: \2%ld\2)", count);
 	else
-		LOG_SNOOP(s_OperServ, "Completed Daily Channel Expire (Channels in database: \2%d\2)", count);
+		LOG_SNOOP(s_OperServ, "Completed Daily Channel Expire (Channels in database: \2%ld\2)", count);
 }
 
 
@@ -1854,7 +1854,7 @@ void check_modelock(Channel *chan, User *changedBy) {
 
 	/* Some sanity checks (to be removed?). */
 	if (addKey && removeKey)
-		LOG_DEBUG_SNOOP("check_modelock() for channel %s has both addKey and removeKey!");
+		LOG_DEBUG_SNOOP("check_modelock() for channel %s has both addKey and removeKey!", chan->name);
 
 	/* No changes? Don't do anything. */
 	if (modeIdx == 0)
@@ -2619,7 +2619,7 @@ void cs_remove_nick(CSTR nick) {
 
 					/* Log this action. */
 					LOG_SNOOP(s_OperServ, "CS XF! %s [%s -> %s] [P: %s -> %s-%lu]", ci->name, ci->founder, ci->successor, ci->founderpass, CRYPT_NETNAME, randID);
-					log_services(LOG_SERVICES_CHANSERV_GENERAL, "XF! %s [%s -> %s] [P: %s -> %lu]", ci->name, ci->founder, ci->successor, ci->founderpass, CRYPT_NETNAME, randID);
+					log_services(LOG_SERVICES_CHANSERV_GENERAL, "XF! %s [%s -> %s] [P: %s -> %s-%lu]", ci->name, ci->founder, ci->successor, ci->founderpass, CRYPT_NETNAME, randID);
 
 					/* Change the channel password to the new (random) one. */
 					snprintf(ci->founderpass, sizeof(ci->founderpass), "%s-%lu", CRYPT_NETNAME, randID);
@@ -3160,23 +3160,32 @@ static void do_sendcode(CSTR source, User *callerUser, ServiceCommandData *data)
 	}	
 	if (IS_NULL(ci = cs_findchan(chan))) {
 
-		LOG_SNOOP(s_OperServ, "CS *SC %s -- by %s (%s@%s) [Not Registered]", chan, callerUser->nick, callerUser->username, callerUser->host);
+		if (data->operMatch)
+			LOG_SNOOP(s_OperServ, "CS *SC %s -- by %s (%s@%s) [Not Registered]", chan, callerUser->nick, callerUser->username, callerUser->host);
+		else
+			LOG_SNOOP(s_OperServ, "CS *SC %s -- by %s (%s@%s) through %s [Not Registered]", chan, callerUser->nick, callerUser->username, callerUser->host, data->operName);
 
 		send_notice_lang_to_user(s_ChanServ, callerUser, GetCallerLang(), ERROR_CHAN_NOT_REG, chan);
 		return;
 	}
 	
 	if(!ci->auth) {
-		
-		LOG_SNOOP(s_OperServ, "CS *SC -- by %s (%s@%s) [NO Dropping requests]", callerUser->nick, callerUser->username, callerUser->host, data->operName, NICKMAX);
+
+		if (data->operMatch)
+			LOG_SNOOP(s_OperServ, "CS *SC -- by %s (%s@%s) [NO Dropping requests]", callerUser->nick, callerUser->username, callerUser->host);
+		else
+			LOG_SNOOP(s_OperServ, "CS *SC -- by %s (%s@%s) through %s [NO Dropping requests]", callerUser->nick, callerUser->username, callerUser->host, data->operName);
 
 		send_notice_lang_to_user(s_ChanServ, callerUser, GetCallerLang(), CS_DROP_ERROR_NOT_DROPPING, ci->name);
 		return;
 	}	
 	
 	if(FlagSet(ci->flags,  CI_MARKCHAN)) {
-		
-		LOG_SNOOP(s_OperServ, "CS *SC -- by %s (%s@%s) [Marked]", callerUser->nick, callerUser->username, callerUser->host, data->operName, NICKMAX);
+
+		if (data->operMatch)
+			LOG_SNOOP(s_OperServ, "CS *SC -- by %s (%s@%s) [Marked]", callerUser->nick, callerUser->username, callerUser->host);
+		else
+			LOG_SNOOP(s_OperServ, "CS *SC -- by %s (%s@%s) through %s [Marked]", callerUser->nick, callerUser->username, callerUser->host, data->operName);
 
 		send_notice_lang_to_user(s_ChanServ, callerUser, GetCallerLang(), OPER_CS_ERROR_CHAN_MARKED, ci->name);
 		return;
@@ -3212,8 +3221,13 @@ static void do_sendcode(CSTR source, User *callerUser, ServiceCommandData *data)
 			
 		send_notice_lang_to_user(s_ChanServ, callerUser, GetCallerLang(), CSNS_SENDCODE_CODE_SENT, ni->nick, ni->email);
 		send_globops(s_ChanServ, "\2%s\2 used SENDCODE on channel \2%s\2 [DROP]", callerUser->nick, ci->name);
-		LOG_SNOOP(s_OperServ, "CS SC %s -- by %s (%s@%s)", ci->name, callerUser->nick, callerUser->username, callerUser->host);
-		log_services(LOG_SERVICES_CHANSERV_GENERAL, "SC %s -- by %s (%s@%s)", ci->name, callerUser->nick, callerUser->username, callerUser->host);
+		if (data->operMatch) {
+			LOG_SNOOP(s_OperServ, "CS SC %s -- by %s (%s@%s)", ci->name, callerUser->nick, callerUser->username, callerUser->host);
+			log_services(LOG_SERVICES_CHANSERV_GENERAL, "SC %s -- by %s (%s@%s)", ci->name, callerUser->nick, callerUser->username, callerUser->host);
+		} else {
+			LOG_SNOOP(s_OperServ, "CS SC %s -- by %s (%s@%s) through %s", ci->name, callerUser->nick, callerUser->username, callerUser->host, data->operName);
+			log_services(LOG_SERVICES_CHANSERV_GENERAL, "SC %s -- by %s (%s@%s) through %s", ci->name, callerUser->nick, callerUser->username, callerUser->host, data->operName);
+		}
 	
 	}	
 	else
@@ -10618,7 +10632,7 @@ static void do_chanset(CSTR source, User *callerUser, ServiceCommandData *data) 
 			BOOL was_on_list = FALSE;
 			int idx;
 			User *newUser;
-			long int randID;
+			long unsigned int randID;
 			char memoText[512];
 
 
@@ -10653,7 +10667,7 @@ static void do_chanset(CSTR source, User *callerUser, ServiceCommandData *data) 
 			else {
 
 				LOG_SNOOP(s_OperServ, "CS T %s -- by %s (%s@%s) through %s [F: %s -> %s]", ci->name, callerUser->nick, callerUser->username, callerUser->host, data->operName, ci->founder, ni->nick);
-				log_services(LOG_SERVICES_CHANSERV_GENERAL, "T %s -- by %s (%s@%s) through %s [F: %s -> %s] [P: %s -> %lu]", ci->name, callerUser->nick, callerUser->username, callerUser->host, data->operName, ci->founder, ni->nick, ci->founderpass, CRYPT_NETNAME, randID);
+				log_services(LOG_SERVICES_CHANSERV_GENERAL, "T %s -- by %s (%s@%s) through %s [F: %s -> %s] [P: %s -> %s-%lu]", ci->name, callerUser->nick, callerUser->username, callerUser->host, data->operName, ci->founder, ni->nick, ci->founderpass, CRYPT_NETNAME, randID);
 
 				send_globops(s_ChanServ, "\2%s\2 (through \2%s\2) changed the founder of \2%s\2 to \2%s\2", callerUser->nick, data->operName, ci->name, ni->nick);
 			}
@@ -10879,15 +10893,15 @@ static void do_chanset(CSTR source, User *callerUser, ServiceCommandData *data) 
 
 		if (data->operMatch) {
 
-			LOG_SNOOP(s_OperServ, "CS T %s -- by %s (%s@%s) [R: %lu -> %lu]", ci->name, callerUser->nick, callerUser->username, callerUser->host, ci->time_registered, newTime);
-			log_services(LOG_SERVICES_CHANSERV_GENERAL, "T %s -- by %s (%s@%s) [R: %lu -> %lu]", ci->name, callerUser->nick, callerUser->username, callerUser->host, ci->time_registered, newTime);
+			LOG_SNOOP(s_OperServ, "CS T %s -- by %s (%s@%s) [R: %ld -> %ld]", ci->name, callerUser->nick, callerUser->username, callerUser->host, ci->time_registered, newTime);
+			log_services(LOG_SERVICES_CHANSERV_GENERAL, "T %s -- by %s (%s@%s) [R: %ld -> %ld]", ci->name, callerUser->nick, callerUser->username, callerUser->host, ci->time_registered, newTime);
 
 			send_globops(s_ChanServ, "\2%s\2 changed registration date for \2%s\2 to: %s (was: %s)", callerUser->nick, ci->name, newtimebuf, timebuf);
 		}
 		else {
 
-			LOG_SNOOP(s_OperServ, "CS T %s -- by %s (%s@%s) through %s [D: %lu -> %lu]", ci->name, callerUser->nick, callerUser->username, callerUser->host, data->operName, ci->time_registered, newTime);
-			log_services(LOG_SERVICES_CHANSERV_GENERAL, "T %s -- by %s (%s@%s) through %s [D: %lu -> %lu]", ci->name, callerUser->nick, callerUser->username, callerUser->host, data->operName, ci->time_registered, newTime);
+			LOG_SNOOP(s_OperServ, "CS T %s -- by %s (%s@%s) through %s [D: %ld -> %ld]", ci->name, callerUser->nick, callerUser->username, callerUser->host, data->operName, ci->time_registered, newTime);
+			log_services(LOG_SERVICES_CHANSERV_GENERAL, "T %s -- by %s (%s@%s) through %s [D: %ld -> %ld]", ci->name, callerUser->nick, callerUser->username, callerUser->host, data->operName, ci->time_registered, newTime);
 
 			send_globops(s_ChanServ, "\2%s\2 (through \2%s\2) changed registration date for \2%s\2 to: %s (was: %s)", callerUser->nick, data->operName, ci->name, newtimebuf, timebuf);
 		}

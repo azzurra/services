@@ -1376,7 +1376,7 @@ void akill_ds_dump(CSTR sourceNick, const User *callerUser, STR request) {
 							akill = akill->next;
 						}
 
-						LOG_DEBUG_SNOOP("Command: DUMP AKILL ID %lu-%s -- by %s", id, type, callerUser->nick);
+						LOG_DEBUG_SNOOP("Command: DUMP AKILL ID %lu-%s -- by %s", t, type, callerUser->nick);
 					}
 					else
 						needSyntax = TRUE;

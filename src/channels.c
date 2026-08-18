@@ -373,7 +373,7 @@ void chan_handle_SJOIN(CSTR source, const int ac, char **av) {
 			UserListItem *item, *next;
 
 
-			LOG_DEBUG("Received SJOIN for %s at %ld (-%ds) by %s, resetting channel.", chan_name, timestamp, (chan->creation_time - timestamp), nick_token_ptr);
+			LOG_DEBUG("Received SJOIN for %s at %ld (-%lds) by %s, resetting channel.", chan_name, timestamp, (chan->creation_time - timestamp), nick_token_ptr);
 
 			/* Reset channel modes. */
 			chan->mode = 0;
@@ -4851,7 +4851,7 @@ void handle_mode(CSTR source, User *callerUser, ServiceCommandData *data) {
 					send_globops(data->agent->nick, "\2%s\2 changed mode for user \2%s\2 to: \2%s\2", source, user->nick, modebuf);
 
 					LOG_SNOOP(s_OperServ, "%s M %s -- by %s (%s@%s) [%s]", data->agent->shortNick, user->nick, callerUser->nick, callerUser->username, callerUser->host, modebuf);
-					log_services(data->agent->logID, "M %s -- by %s (%s@%s) [%s]", data->agent->shortNick, user->nick, callerUser->nick, callerUser->username, callerUser->host, modebuf);
+					log_services(data->agent->logID, "M %s -- by %s (%s@%s) [%s]", user->nick, callerUser->nick, callerUser->username, callerUser->host, modebuf);
 				}
 				else {
 

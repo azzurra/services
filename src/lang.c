@@ -42,7 +42,7 @@ LANG_ID		current_caller_lang;
 * Local variables                                       *
 *********************************************************/
 
-#define CLNG_FILE_FORMAT	"lang/svc%d.clng"
+#define CLNG_FILE_FORMAT	"lang/svc%u.clng"
 
 // Tabella lingue
 
@@ -493,7 +493,7 @@ static BOOL lang_load(LANG_ID lang_id) {
 								}
 								else {
 
-									LOG_DEBUG_SNOOP("lang_load() invalid id! %d", msgheader.id);
+									LOG_DEBUG_SNOOP("lang_load() invalid id! %u", msgheader.id);
 									continue; // il messaggio non e' previsto, saltarlo
 								}
 							}
@@ -661,7 +661,7 @@ const LANG_MSG lang_msg(LANG_ID lang_id, LANG_MSG_ID msg_id) {
 	if ((msg_id < LANG_MSG_FIRST) || (msg_id > LANG_MSG_LAST)) {
 
 		log_error(FACILITY_LANG_MSG, __LINE__, LOG_TYPE_ERROR_ASSERTION, LOG_SEVERITY_ERROR_PROPAGATED,
-			"lang_msg(): message ID %d for language %d (%s) is out of bounds", msg_id, lang_id, lang_get_name(lang_id, FALSE));
+			"lang_msg(): message ID %u for language %u (%s) is out of bounds", msg_id, lang_id, lang_get_name(lang_id, FALSE));
 
 		return lang_msg_not_valid;
 	}
@@ -671,7 +671,7 @@ const LANG_MSG lang_msg(LANG_ID lang_id, LANG_MSG_ID msg_id) {
 	if (IS_NULL(table)) {
 
 		log_error(FACILITY_LANG_MSG, __LINE__, LOG_TYPE_ERROR_ASSERTION, LOG_SEVERITY_ERROR_PROPAGATED,
-			"lang_msg(): requested table for message ID %d in language %d (%s) is empty", msg_id, lang_id, lang_get_name(lang_id, FALSE));
+			"lang_msg(): requested table for message ID %u in language %u (%s) is empty", msg_id, lang_id, lang_get_name(lang_id, FALSE));
 
 		if (lang_id != LANG_DEFAULT)
 			return lang_msg(LANG_DEFAULT, msg_id);
@@ -689,7 +689,7 @@ const LANG_MSG lang_msg(LANG_ID lang_id, LANG_MSG_ID msg_id) {
 		if (FlagSet(table->flags, LIF_OFFLINE)) {
 
 			log_error(FACILITY_LANG_MSG, __LINE__, LOG_TYPE_ERROR_ASSERTION, LOG_SEVERITY_ERROR_PROPAGATED,
-				"lang_msg(): requested table for message ID %d in language %d (%s) is offline", msg_id, lang_id, lang_get_name(lang_id, FALSE));
+				"lang_msg(): requested table for message ID %u in language %u (%s) is offline", msg_id, lang_id, lang_get_name(lang_id, FALSE));
 
 			if (lang_id != LANG_DEFAULT)
 				return lang_msg(LANG_DEFAULT, msg_id);
@@ -714,7 +714,7 @@ const LANG_MSG lang_msg(LANG_ID lang_id, LANG_MSG_ID msg_id) {
 		if (FlagUnset(table->flags, LIF_LOADED)) {
 
 			log_error(FACILITY_LANG_MSG, __LINE__, LOG_TYPE_ERROR_ASSERTION, LOG_SEVERITY_ERROR_PROPAGATED,
-				"lang_msg(): requested table for message ID %d in language %d (%s) is not loaded", msg_id, lang_id, lang_get_name(lang_id, FALSE));
+				"lang_msg(): requested table for message ID %u in language %u (%s) is not loaded", msg_id, lang_id, lang_get_name(lang_id, FALSE));
 
 			return lang_not_loaded;
 		}
@@ -732,7 +732,7 @@ const LANG_MSG lang_msg(LANG_ID lang_id, LANG_MSG_ID msg_id) {
 		else {
 
 			log_error(FACILITY_LANG_MSG, __LINE__, LOG_TYPE_ERROR_ASSERTION, LOG_SEVERITY_ERROR_PROPAGATED,
-				"lang_msg(): requested entry with message ID %d in language %d (%s) is empty", msg_id, lang_id, lang_get_name(lang_id, FALSE));
+				"lang_msg(): requested entry with message ID %u in language %u (%s) is empty", msg_id, lang_id, lang_get_name(lang_id, FALSE));
 
 			if (lang_id != LANG_DEFAULT)
 				return lang_msg(LANG_DEFAULT, msg_id);
@@ -743,7 +743,7 @@ const LANG_MSG lang_msg(LANG_ID lang_id, LANG_MSG_ID msg_id) {
 	else {
 
 		log_error(FACILITY_LANG_MSG, __LINE__, LOG_TYPE_ERROR_ASSERTION, LOG_SEVERITY_ERROR_PROPAGATED,
-			"lang_msg(): requested language %d (%s) was not loaded (message ID: %d)", lang_id, lang_get_name(lang_id, FALSE), msg_id);
+			"lang_msg(): requested language %u (%s) was not loaded (message ID: %u)", lang_id, lang_get_name(lang_id, FALSE), msg_id);
 
 		if (lang_id != LANG_DEFAULT)
 			return lang_msg(LANG_DEFAULT, msg_id);
@@ -976,11 +976,11 @@ BOOL lang_reload(LANG_ID lang_id) {
 	TRACE_FCLT(FACILITY_LANG_RELOAD);
 
 	lang_name = lang_get_shortname(lang_id);
-	LOG_DEBUG_SNOOP("Reloading language \2%s\2 (%d) ...", lang_name, lang_id);
+	LOG_DEBUG_SNOOP("Reloading language \2%s\2 (%u) ...", lang_name, lang_id);
 
 	if (!lang_check_data_file(lang_id)) {
 
-		LOG_DEBUG_SNOOP("\2ERROR:\2 Invalid signature or file not found : \2%s\2 (%d). Reload interrupted.", lang_name, lang_id);
+		LOG_DEBUG_SNOOP("\2ERROR:\2 Invalid signature or file not found : \2%s\2 (%u). Reload interrupted.", lang_name, lang_id);
 		return FALSE;
 	}
 
@@ -992,14 +992,14 @@ BOOL lang_reload(LANG_ID lang_id) {
 
 		TRACE();
 		if (FlagSet(table->flags, LIF_LOADED)) {
-			LOG_DEBUG_SNOOP("Unloading language (\2%d\2 B) ...", table->memory_size);
+			LOG_DEBUG_SNOOP("Unloading language (\2%lu\2 B) ...", table->memory_size);
 			TRACE();
 			lang_unload(lang_id);
 		}
 
 		TRACE();
 		if (lang_load(lang_id)) {
-			LOG_DEBUG_SNOOP("Language loaded (\2%d\2 B)", table->memory_size);
+			LOG_DEBUG_SNOOP("Language loaded (\2%lu\2 B)", table->memory_size);
 			return TRUE;
 		} else {
 			LOG_DEBUG_SNOOP("Reload of language \2%s\2 failed: lang_load() failed!", lang_name);

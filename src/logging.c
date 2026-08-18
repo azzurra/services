@@ -153,7 +153,7 @@ static STDSTR log_get_signature(FACILITY facility, FACILITY_LINE line, LOG_TYPE 
 
 	static char		signature[32];
 
-	snprintf(signature, sizeof(signature), "[F%05d L%05d T%03d S%03d]", facility, line, type, severity);
+	snprintf(signature, sizeof(signature), "[F%05d L%05u T%03d S%03d]", facility, line, type, severity);
 	return (STDSTR) signature;
 }
 
@@ -237,7 +237,7 @@ CSTR log_get_trace_string(FACILITY main_facility, FACILITY_LINE main_line, FACIL
 
 	static char		trace_string[64];
 
-	snprintf(trace_string, sizeof(trace_string), "E%d MF%d ML%d CF%d CL%d", TRACE_ENABLED, main_facility, main_line, current_facility, current_line);
+	snprintf(trace_string, sizeof(trace_string), "E%d MF%d ML%u CF%d CL%u", TRACE_ENABLED, main_facility, main_line, current_facility, current_line);
 	return (CSTR) trace_string;
 }
 
@@ -403,7 +403,7 @@ void log_rotate(BOOL force) {
 
 void log_error(FACILITY facility, FACILITY_LINE line, LOG_TYPE type, SEVERITY severity, CSTR fmt, ...) {
 
-	if (IS_NOT_NULL(fmt) && !log_rotation_started) {
+	if (!log_rotation_started) {
 
 		va_list		args;
 		STR			ptr;
@@ -460,7 +460,7 @@ CSTR log_get_last_error_signature(void) {
 
 
 void log_debug(CSTR fmt, ...) {
-	if ((CONF_SET_DEBUG == TRUE) && IS_NOT_NULL(fmt) && (log_rotation_started == FALSE)) {
+	if ((CONF_SET_DEBUG == TRUE) && (log_rotation_started == FALSE)) {
 		va_list		args;
 
 		va_start(args, fmt);
@@ -518,8 +518,7 @@ int logid_from_agentid(agentid_t agentID) {
 
 void log_services(int services, CSTR fmt, ...) {
 
-	if (IS_NOT_NULL(fmt) &&
-		(services >= LOG_SERVICES_NICKSERV_GENERAL && services <= LOG_SERVICES_SEENSERV)
+	if ((services >= LOG_SERVICES_NICKSERV_GENERAL && services <= LOG_SERVICES_SEENSERV)
 		&& !log_rotation_started
 		) {
 
@@ -541,7 +540,7 @@ void log_services(int services, CSTR fmt, ...) {
 
 void log_panic(CSTR fmt, ...) {
 
-	if (IS_NOT_NULL(fmt) && !log_rotation_started) {
+	if (!log_rotation_started) {
 
 		va_list		args;
 
@@ -562,7 +561,7 @@ void log_panic_direct(CSTR string) {
 
 
 void log_snoop(CSTR source, CSTR fmt, ...) {
-	if ((global_running == TRUE) && (CONF_SET_SNOOP == TRUE) && IS_NOT_NULL(fmt)) {
+	if ((global_running == TRUE) && (CONF_SET_SNOOP == TRUE)) {
 		va_list		args;
 
 		log_buffer[0] = c_NULL;
@@ -574,7 +573,7 @@ void log_snoop(CSTR source, CSTR fmt, ...) {
 }
 
 void log_debug_snoop(CSTR fmt, ...) {
-	if ((global_running == TRUE) && (CONF_SET_SNOOP == TRUE) && IS_NOT_NULL(fmt)) {
+	if ((global_running == TRUE) && (CONF_SET_SNOOP == TRUE)) {
 		va_list		args;
 
 		log_buffer[0] = c_NULL;
@@ -587,7 +586,7 @@ void log_debug_snoop(CSTR fmt, ...) {
 
 void log_stderr(CSTR fmt, ...) {
 
-	if (IS_NOT_NULL(fmt) && !log_rotation_started) {
+	if (!log_rotation_started) {
 
 		va_list		args;
 
@@ -1065,7 +1064,7 @@ void handle_search(CSTR source, User *callerUser, ServiceCommandData *data) {
 
 	// Ricerca
 	TRACE();
-	LOG_DEBUG_SNOOP("Command: LOG SEARCH %s %s \2%s\2 %d %d -- by %s (%s@%s)", type, days, search, start_line, end_line, callerUser->nick, callerUser->username, callerUser->host);
+	LOG_DEBUG_SNOOP("Command: LOG SEARCH %s %s \2%s\2 %lu %lu -- by %s (%s@%s)", type, days, search, start_line, end_line, callerUser->nick, callerUser->username, callerUser->host);
 	log_search_file(data->agent->nick, callerUser, log_type, days, search, start_line, end_line);
 
 	TRACE();
