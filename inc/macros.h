@@ -116,5 +116,13 @@ typedef	unsigned int			result_t;
 		len += str_copy_checked((string), (buffer + len), (sizeof(buffer) - len)); \
 	}
 
+#ifndef ATTRIBUTE_PRINTF
+#if defined(__GNUC__) && __GNUC__ >= 4
+#define ATTRIBUTE_PRINTF(fnum, anum) __attribute__((nonnull(fnum))) \
+    __attribute__((__format__(__printf__, fnum, anum)))
+#else
+#define ATTRIBUTE_PRINTF(format, arg)
+#endif /* defined(__GNUC__) && __GNUC__ >= 4 */
+#endif /* ATTRIBUTE_PRINTF */
 
 #endif /* SRV_MACROS_H */
