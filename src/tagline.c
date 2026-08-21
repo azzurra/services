@@ -522,7 +522,7 @@ void tagline_show(const time_t now) {
 
 	if (!CONF_SHOW_TAGLINES || IS_NULL(TaglineList)) {
 
-		send_globops(NULL, "Completed database write (%d secs)", time(NULL) - now);
+		send_globops(NULL, "Completed database write (%ld secs)", time(NULL) - now);
 		return;
 	}
 
@@ -540,12 +540,12 @@ void tagline_show(const time_t now) {
 			log_error(FACILITY_TAGLINE_SHOW, __LINE__, LOG_TYPE_ERROR_ASSERTION, LOG_SEVERITY_ERROR_HALTED,
 				"tagline_show() returned NULL value (tagIdx: %d)", tagIdx);
 
-			send_globops(NULL, "Completed database write (%d secs)", time(NULL) - now);
+			send_globops(NULL, "Completed database write (%ld secs)", time(NULL) - now);
 			return;
 		}
 	}
 
-	send_globops(NULL, "Completed database write (%d secs) -> %s", (time(NULL) - now), aTagline->text);
+	send_globops(NULL, "Completed database write (%ld secs) -> %s", (time(NULL) - now), aTagline->text);
 }
 
 

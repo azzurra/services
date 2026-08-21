@@ -272,7 +272,7 @@ void sxline_burst_send(void) {
 
 	while (IS_NOT_NULL(aSXLine)) {
 
-		send_cmd("SGLINE %d :%s:%s", str_len(aSXLine->name), aSXLine->name, aSXLine->info.reason);
+		send_cmd("SGLINE %lu :%s:%s", str_len(aSXLine->name), aSXLine->name, aSXLine->info.reason);
 		aSXLine = aSXLine->next;
 	}
 }
@@ -568,7 +568,7 @@ void handle_sxline(CSTR source, User *callerUser, ServiceCommandData *data) {
 			}
 			else {
 
-				send_globops(s_OperServ, "\2%s\2 (through \2%s\2) tried to S%c:Line \2%.3f%s\2 of the network! (Limit: %.3f%s)", source, data->commandName[1], data->operName, percent, "%", CONF_AKILL_PERCENT, "%");
+				send_globops(s_OperServ, "\2%s\2 (through \2%s\2) tried to S%c:Line \2%.3f%s\2 of the network! (Limit: %.3f%s)", source, data->operName, data->commandName[1], percent, "%", CONF_AKILL_PERCENT, "%");
 
 				LOG_SNOOP(s_OperServ, "OS +S%c* %s -- by %s (%s@%s) through %s [%.3f%s > %.3f%s]", data->commandName[1], name, callerUser->nick, callerUser->username, callerUser->host, data->operName, percent, "%", CONF_AKILL_PERCENT, "%");
 				log_services(LOG_SERVICES_OPERSERV, "+S%c* %s -- by %s (%s@%s) through %s [%.3f%s > %.3f%s]", data->commandName[1], name, callerUser->nick, callerUser->username, callerUser->host, data->operName, percent, "%", CONF_AKILL_PERCENT, "%");
@@ -614,7 +614,7 @@ void handle_sxline(CSTR source, User *callerUser, ServiceCommandData *data) {
 		if (isQLine)
 			send_cmd("SQLINE %s :%s", name, reason);
 		else
-			send_cmd("SGLINE %d :%s:%s", str_len(name), name, reason);
+			send_cmd("SGLINE %lu :%s:%s", str_len(name), name, reason);
 
 		TRACE_MAIN();
 

@@ -1162,7 +1162,7 @@ static void do_dynconf(CSTR source, User *callerUser, ServiceCommandData *data) 
 									LOG_SNOOP(s_OperServ, "RS D NS -- by %s (%s@%s) [%lu]", callerUser->nick, callerUser->username, callerUser->host, value);
 									log_services(LOG_SERVICES_ROOTSERV, "D NS -- by %s (%s@%s) [%lu]", callerUser->nick, callerUser->username, callerUser->host, value);
 
-									send_globops(s_RootServ, "\2%s\2 set nick registration limit to \2%d\2", source, value);
+									send_globops(s_RootServ, "\2%s\2 set nick registration limit to \2%lu\2", source, value);
 								}
 								else {
 

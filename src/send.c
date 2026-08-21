@@ -321,7 +321,7 @@ void send_AKILL(CSTR username, CSTR host, CSTR who, CSTR reason, const unsigned 
 
 	snprintf(buffer, sizeof(buffer), "%s [AKill ID: %lu-%s]", reason, id, type);
 
-	send_cmd("AKILL %s %s 0 %s %lu :%s", host, username, who, time(NULL), buffer);
+	send_cmd("AKILL %s %s 0 %s %ld :%s", host, username, who, time(NULL), buffer);
 }
 
 /* Remove an AutoKill. */

@@ -376,7 +376,7 @@ static BOOL initialize() {
 
 	send_cmd("PASS %s :TS", CONF_REMOTE_PASSWORD);
 	send_cmd("SVINFO 5 3 0 :%ld", time(NULL));
-	send_cmd(CAPAB);
+	send_cmd("%s", CAPAB);
 	send_cmd("SERVER %s 1 :%s", CONF_SERVICES_NAME, CONF_SERVICES_DESC);
 
 	TRACE_MAIN();

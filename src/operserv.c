@@ -1237,7 +1237,7 @@ static void do_kick_ban(CSTR source, User *callerUser, ServiceCommandData *data)
 
 			/* If this ban is not already present and the banlist is not full, send it. */
 			if (!chan_has_ban(chan, mask, NULL) && chan_add_ban(chan, mask))
-				send_cmd(":%s MODE %s +b %s %lu", s_OperServ, chan_name, mask, NOW);
+				send_cmd(":%s MODE %s +b %s %ld", s_OperServ, chan_name, mask, NOW);
 
 			if (data->operMatch) {
 

@@ -2543,7 +2543,7 @@ void chan_handle_TOPIC(const char *source, const int ac, char **av) {
 				str_copy_checked(ci->last_topic_setter, chan->topic_setter, NICKMAX);
 				chan->topic_time = ci->last_topic_time;
 
-				send_cmd(":%s TOPIC %s %s %lu :%s", s_ChanServ, chan->name, chan->topic_setter, chan->topic_time, chan->topic ? chan->topic : "");
+				send_cmd(":%s TOPIC %s %s %ld :%s", s_ChanServ, chan->name, chan->topic_setter, chan->topic_time, chan->topic ? chan->topic : "");
 				return;
 			}
 		}
@@ -2635,7 +2635,7 @@ void synch_topics() {
 
 				TRACE();
 				if (IS_NOT_NULL(chan->topic))
-					send_cmd(":%s TOPIC %s %s %lu :%s", s_ChanServ, chan->name, chan->topic_setter, chan->topic_time, chan->topic ? chan->topic : "");
+					send_cmd(":%s TOPIC %s %s %ld :%s", s_ChanServ, chan->name, chan->topic_setter, chan->topic_time, chan->topic ? chan->topic : "");
 			}
 		}
 	}
@@ -3638,7 +3638,7 @@ void handle_masscmds(CSTR source, User *callerUser, ServiceCommandData *data) {
 				AddFlag(chan->mode, CMODE_CS);
 			}
 
-			send_cmd(":%s MODE %s +b *!*@* %lu", s_ChanServ, chan_name, NOW);
+			send_cmd(":%s MODE %s +b *!*@* %ld", s_ChanServ, chan_name, NOW);
 
 			for (item = chan->users; item; item = next_item) {
 
@@ -3995,7 +3995,7 @@ void handle_mode(CSTR source, User *callerUser, ServiceCommandData *data) {
 							}
 
 							chan_add_ban(chan, token);
-							send_cmd(":%s MODE %s +b %s %lu", s_OperServ, chan->name, token, NOW);
+							send_cmd(":%s MODE %s +b %s %ld", s_OperServ, chan->name, token, NOW);
 
 							send_notice_to_user(s_OperServ, callerUser, "Channel ban on \2%s\2 added on \2%s\2.", token, chan->name);
 						}

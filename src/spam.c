@@ -436,8 +436,8 @@ void handle_spam(CSTR source, User *callerUser, ServiceCommandData *data) {
 
 			if (IS_NULL(spam)) {
 
-				long int	type;
-				char		*err;
+				int		type;
+				char	*err;
 
 				if (str_char_toupper(action[0]) == 'A') {
 
@@ -480,7 +480,7 @@ void handle_spam(CSTR source, User *callerUser, ServiceCommandData *data) {
 					return;
 				}
 
-				type = strtol(spamtype, &err, 10);
+				type = (int) strtol(spamtype, &err, 10);
 
 				if ((*err == '\0') && (type >= 0) && (type <= 5)) {
 
@@ -491,13 +491,13 @@ void handle_spam(CSTR source, User *callerUser, ServiceCommandData *data) {
 					send_SPAM(spamtext, type, reason);
 
 					if (data->operMatch) {
-						LOG_SNOOP(data->agent->nick, "%s +SP %s -- by %s (%s@%s) [Type: %ld - Reason: %s]", data->agent->shortNick, spamtext, callerUser->nick, callerUser->username, callerUser->host, type, reason);
-						log_services(data->agent->logID, "+SP %s -- by %s (%s@%s) [Type: %ld - Reason: %s]", spamtext, callerUser->nick, callerUser->username, callerUser->host, type, reason);
-						send_SPAMOPS(data->agent->nick, "\2%s\2 added a new SPAM [Text: \2%s\2] [Type: %ld] [Reason: %s]", source, spamtext, type, reason);
+						LOG_SNOOP(data->agent->nick, "%s +SP %s -- by %s (%s@%s) [Type: %d - Reason: %s]", data->agent->shortNick, spamtext, callerUser->nick, callerUser->username, callerUser->host, type, reason);
+						log_services(data->agent->logID, "+SP %s -- by %s (%s@%s) [Type: %d - Reason: %s]", spamtext, callerUser->nick, callerUser->username, callerUser->host, type, reason);
+						send_SPAMOPS(data->agent->nick, "\2%s\2 added a new SPAM [Text: \2%s\2] [Type: %d] [Reason: %s]", source, spamtext, type, reason);
 					} else {
-						LOG_SNOOP(data->agent->nick, "%s +SP %s -- by %s (%s@%s) through %s [Type: %ld - Reason: %s]", data->agent->shortNick, spamtext, callerUser->nick, callerUser->username, callerUser->host, data->operName, type, reason);
-						log_services(data->agent->logID, "+SP %s -- by %s (%s@%s) through %s [Type: %ld - Reason: %s]", spamtext, callerUser->nick, callerUser->username, callerUser->host, data->operName, type, reason);
-						send_SPAMOPS(data->agent->nick, "\2%s\2 (through \2%s\2) added a new SPAM [Text: \2%s\2] [Type: %ld] [Reason: %s]", source, data->operName, spamtext, type, reason);
+						LOG_SNOOP(data->agent->nick, "%s +SP %s -- by %s (%s@%s) through %s [Type: %d - Reason: %s]", data->agent->shortNick, spamtext, callerUser->nick, callerUser->username, callerUser->host, data->operName, type, reason);
+						log_services(data->agent->logID, "+SP %s -- by %s (%s@%s) through %s [Type: %d - Reason: %s]", spamtext, callerUser->nick, callerUser->username, callerUser->host, data->operName, type, reason);
+						send_SPAMOPS(data->agent->nick, "\2%s\2 (through \2%s\2) added a new SPAM [Text: \2%s\2] [Type: %d] [Reason: %s]", source, data->operName, spamtext, type, reason);
 					}
 
 					send_notice_to_user(data->agent->nick, callerUser, "\2%s\2 added to SPAM list.", spamtext);

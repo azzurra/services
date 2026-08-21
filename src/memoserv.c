@@ -545,7 +545,7 @@ void expire_memos() {
 	}
 
 	if (CONF_DISPLAY_UPDATES)
-		send_globops(NULL, "Completed MemoServ Expire: (%d/%d) Record Expire: (%d/%d)", expiredMemoCount, memoCount, expiredRecordCount, recordCount);
+		send_globops(NULL, "Completed MemoServ Expire: (%lu/%lu) Record Expire: (%lu/%lu)", expiredMemoCount, memoCount, expiredRecordCount, recordCount);
 	else
 		LOG_SNOOP(s_OperServ, "Completed MemoServ Expire: (%lu/%lu) Record Expire: (%lu/%lu)", expiredMemoCount, memoCount, expiredRecordCount, recordCount);
 }
@@ -2961,14 +2961,14 @@ static void do_info(const char *source, User *callerUser, ServiceCommandData *da
 
 		if (data->operMatch) {
 
-			send_globops(s_MemoServ, "\2%s\2 requested Memo Information on nick \2%s\2 [ Reading Memo number \2%d\2 ]", source, ni->nick, value);
+			send_globops(s_MemoServ, "\2%s\2 requested Memo Information on nick \2%s\2 [ Reading Memo number \2%ld\2 ]", source, ni->nick, value);
 
 			LOG_SNOOP(s_OperServ, "MS M %s -- by %s (%s@%s) [Reading Memo #%ld]", ni->nick, callerUser->nick, callerUser->username, callerUser->host, value);
 			log_services(LOG_SERVICES_MEMOSERV, "M %s -- by %s (%s@%s) [Reading Memo #%ld]", ni->nick, callerUser->nick, callerUser->username, callerUser->host, value);
 		}
 		else {
 
-			send_globops(s_MemoServ, "\2%s\2 (through \2%s\2) requested Memo Information on nick \2%s\2 [ Reading Memo number \2%d\2 ]", source, data->operName, ni->nick, value);
+			send_globops(s_MemoServ, "\2%s\2 (through \2%s\2) requested Memo Information on nick \2%s\2 [ Reading Memo number \2%ld\2 ]", source, data->operName, ni->nick, value);
 
 			LOG_SNOOP(s_OperServ, "MS M %s -- by %s (%s@%s) through %s [Reading Memo #%ld]", ni->nick, callerUser->nick, callerUser->username, callerUser->host, data->operName, value);
 			log_services(LOG_SERVICES_MEMOSERV, "M %s -- by %s (%s@%s) through %s [Reading Memo #%ld]", ni->nick, callerUser->nick, callerUser->username, callerUser->host, data->operName, value);

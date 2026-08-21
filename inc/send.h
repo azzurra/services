@@ -7,7 +7,7 @@
 * details.
 *
 * send.h - Routines for sending stuff to the network
-* 
+*
 */
 
 
@@ -33,11 +33,11 @@ extern unsigned long int total_sendM;
  * Public code                                           *
  *********************************************************/
 
-extern void send_cmd(CSTR fmt, ...);
+extern void send_cmd(CSTR fmt, ...) ATTRIBUTE_PRINTF(1, 2);
 
-extern void send_globops(CSTR source, CSTR fmt, ...);
-extern void send_chatops(CSTR source, CSTR fmt, ...);
-extern void send_SPAMOPS(CSTR source, CSTR fmt, ...);
+extern void send_globops(CSTR source, CSTR fmt, ...) ATTRIBUTE_PRINTF(2, 3);
+extern void send_chatops(CSTR source, CSTR fmt, ...) ATTRIBUTE_PRINTF(2, 3);
+extern void send_SPAMOPS(CSTR source, CSTR fmt, ...) ATTRIBUTE_PRINTF(2, 3);
 extern void send_PRIVMSG(CSTR source, CSTR dest, CSTR fmt, ...);
 extern void send_NICK(CSTR nickname, CSTR umode, CSTR username, CSTR hostname, CSTR realname);
 extern void send_KILL(CSTR source, CSTR who, CSTR reason, BOOL killUser);

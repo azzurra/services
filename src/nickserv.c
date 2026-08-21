@@ -1430,13 +1430,13 @@ static void do_register(CSTR source, User *callerUser, ServiceCommandData *data)
 
 		if (dynConf.ns_regLimit <= ns_regCount) {
 
-			send_globops(s_NickServ, "\2%s\2 hit the maximum number of registrations allowed (\2%d\2/\2%d\2)", s_NickServ, ns_regCount, dynConf.ns_regLimit);
+			send_globops(s_NickServ, "\2%s\2 hit the maximum number of registrations allowed (\2%lu\2/\2%lu\2)", s_NickServ, ns_regCount, dynConf.ns_regLimit);
 			send_notice_lang_to_user(s_NickServ, callerUser, GetCallerLang(), CSNS_ERROR_MAX_REG_REACHED);
 			return;
 
 		}
 		else if (dynConf.ns_regLimit <= (ns_regCount + 10))
-			send_globops(s_NickServ, "\2%s\2 is about to hit the maximum number of registrations allowed (\2%d\2/\2%d\2)", s_NickServ, ns_regCount, dynConf.ns_regLimit);
+			send_globops(s_NickServ, "\2%s\2 is about to hit the maximum number of registrations allowed (\2%lu\2/\2%lu\2)", s_NickServ, ns_regCount, dynConf.ns_regLimit);
 	}
 
 	TRACE_MAIN();
@@ -5779,7 +5779,7 @@ static void do_nickset(CSTR source, User *callerUser, ServiceCommandData *data) 
 			LOG_SNOOP(s_OperServ, "NS N %s -- by %s (%s@%s) through %s [U: %d -> %d]", ni->nick, callerUser->nick, callerUser->username, callerUser->host, data->operName, ni->channelcount, newcount);
 			log_services(LOG_SERVICES_NICKSERV_GENERAL, "N %s -- by %s (%s@%s) through %s [U: %d -> %d]", ni->nick, callerUser->nick, callerUser->username, callerUser->host, data->operName, ni->channelcount, newcount);
 
-			send_globops(s_NickServ, "\2%s\2 (through \2%s\2) changed channel count value for \2%s\2 to \2%d\2 (was: \2%d\2)", callerUser->nick, data->operName, ni->channelcount, newcount);
+			send_globops(s_NickServ, "\2%s\2 (through \2%s\2) changed channel count value for \2%s\2 to \2%d\2 (was: \2%d\2)", callerUser->nick, data->operName, ni->nick, ni->channelcount, newcount);
 		}
 
 		ni->channelcount = newcount;

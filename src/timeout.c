@@ -321,7 +321,7 @@ void time_check(const time_t now) {
 
 		// midnight checks
 
-		send_globops(NULL, "Running Daily Database Expire %d", daily_dbcnt);
+		send_globops(NULL, "Running Daily Database Expire %lu", daily_dbcnt);
 		nickserv_daily_expire();
 		chanserv_daily_expire();
 		statserv_daily_expire();

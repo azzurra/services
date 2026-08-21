@@ -932,9 +932,9 @@ void handle_regions(const char *source, User *callerUser, ServiceCommandData *da
 			if (IS_NOT_NULL(region) && (error.value.cidr_error == cidrSuccess)) {
 
 				if (data->operMatch)
-					send_globops(data->agent->nick, "\2%s\2 removed CIDR for \2%s\2 from region \2%d\2", source, region->host_mask, region->id);
+					send_globops(data->agent->nick, "\2%s\2 removed CIDR for \2%s\2 from region \2%u\2", source, region->host_mask, region->id);
 				else
-					send_globops(data->agent->nick, "\2%s\2 (through \2%s\2) removed CIDR for \2%s\2 from region \2%d\2", source, data->operName, region->host_mask, region->id);
+					send_globops(data->agent->nick, "\2%s\2 (through \2%s\2) removed CIDR for \2%s\2 from region \2%u\2", source, data->operName, region->host_mask, region->id);
 
 				region_list_remove(region);
 				region_delete(region);
@@ -960,9 +960,9 @@ void handle_regions(const char *source, User *callerUser, ServiceCommandData *da
 			if (IS_NOT_NULL(region) && (error.value.host_error == RESULT_SUCCESS)) {
 
 				if (data->operMatch)
-					send_globops(data->agent->nick, "\2%s\2 removed host \2%s\2 from region \2%d\2", source, region->host_mask, region->id);
+					send_globops(data->agent->nick, "\2%s\2 removed host \2%s\2 from region \2%u\2", source, region->host_mask, region->id);
 				else
-					send_globops(data->agent->nick, "\2%s\2 (through \2%s\2) removed host \2%s\2 from region \2%d\2", source, data->operName, region->host_mask, region->id);
+					send_globops(data->agent->nick, "\2%s\2 (through \2%s\2) removed host \2%s\2 from region \2%u\2", source, data->operName, region->host_mask, region->id);
 
 				region_list_remove(region);
 				region_delete(region);

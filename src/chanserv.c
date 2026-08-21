@@ -1288,7 +1288,7 @@ void expire_chans() {
 
 	TRACE();
 	if (CONF_DISPLAY_UPDATES)
-		send_globops(NULL, "Completed Channel Expire (\2%d\2/\2%d\2/\2%d\2)", xcount, rcount, count);
+		send_globops(NULL, "Completed Channel Expire (\2%ld\2/\2%ld\2/\2%ld\2)", xcount, rcount, count);
 	else
 		LOG_SNOOP(s_OperServ, "Completed Channel Expire (\2%ld\2/\2%ld\2/\2%ld\2)", xcount, rcount, count);
 }
@@ -1705,7 +1705,7 @@ static int masskick_channel(CSTR chan_name, LANG_MSG_ID reason) {
 			AddFlag(chan->mode, CMODE_CS);
 		}
 
-		send_cmd(":%s MODE %s +b *!*@* %lu", s_ChanServ, chan_name, NOW);
+		send_cmd(":%s MODE %s +b *!*@* %ld", s_ChanServ, chan_name, NOW);
 
 		for (item = chan->users; item; item = next_item) {
 
@@ -2423,7 +2423,7 @@ kick:
 
 	/* If this ban is not already present and can be added (i.e. banlist is not full) send it. */
 	if (!chan_has_ban(chan, mask, NULL) && chan_add_ban(chan, mask))
-		send_cmd(":%s MODE %s +b %s %lu", s_ChanServ, chan->name, mask, NOW);
+		send_cmd(":%s MODE %s +b %s %ld", s_ChanServ, chan->name, mask, NOW);
 
 	TRACE();
 	send_cmd(":%s KICK %s %s :%s", s_ChanServ, chan->name, user->nick, reason);
@@ -2494,7 +2494,7 @@ void restore_topic(Channel *chan) {
 
 	TRACE();
 	if (IS_NOT_NULL(chan->topic))
-		send_cmd(":%s TOPIC %s %s %lu :%s", s_ChanServ, chan->name, chan->topic_setter, chan->topic_time, chan->topic ? chan->topic : "");
+		send_cmd(":%s TOPIC %s %s %ld :%s", s_ChanServ, chan->name, chan->topic_setter, chan->topic_time, chan->topic ? chan->topic : "");
 }
 
 /*********************************************************/
@@ -2529,7 +2529,7 @@ BOOL check_topiclock(const User *user, Channel *chan) {
 	str_copy_checked(ci->last_topic_setter, chan->topic_setter, NICKMAX);
 	chan->topic_time = ci->last_topic_time;
 
-	send_cmd(":%s TOPIC %s %s %lu :%s", s_ChanServ, chan->name, chan->topic_setter, chan->topic_time, chan->topic ? chan->topic : "");
+	send_cmd(":%s TOPIC %s %s %ld :%s", s_ChanServ, chan->name, chan->topic_setter, chan->topic_time, chan->topic ? chan->topic : "");
 	return TRUE;
 }
 
@@ -2901,14 +2901,14 @@ static void do_register(CSTR source, User *callerUser, ServiceCommandData *data)
 
 		if (dynConf.cs_regLimit <= cs_regCount) {
 
-			send_globops(NULL, "\2%s\2 hit the maximum number of registrations allowed (\2%d\2/\2%d\2)",
+			send_globops(NULL, "\2%s\2 hit the maximum number of registrations allowed (\2%lu\2/\2%lu\2)",
 				s_ChanServ, cs_regCount, dynConf.cs_regLimit);
 			send_notice_lang_to_user(s_ChanServ, callerUser, GetCallerLang(), CSNS_ERROR_MAX_REG_REACHED);
 			return;
 		}
 		else if (dynConf.cs_regLimit <= (cs_regCount + 10)) {
 
-			send_globops(NULL, "\2%s\2 is about to hit the maximum number of registrations allowed (\2%d\2/\2%d\2)",
+			send_globops(NULL, "\2%s\2 is about to hit the maximum number of registrations allowed (\2%lu\2/\2%lu\2)",
 				s_ChanServ, cs_regCount, dynConf.cs_regLimit);
 		}
 	}
@@ -4373,7 +4373,7 @@ static void do_set_topic(User *callerUser, ChannelInfo *ci, CSTR param, const in
 		str_copy_checked(accessName, chan->topic_setter, NICKMAX);
 		chan->topic_time = NOW;
 
-		send_cmd(":%s TOPIC %s %s %lu :%s", s_ChanServ, ci->name, accessName, NOW, param);
+		send_cmd(":%s TOPIC %s %s %ld :%s", s_ChanServ, ci->name, accessName, NOW, param);
 		send_notice_lang_to_user(s_ChanServ, callerUser, GetCallerLang(), CS_SET_TOPIC_CHANGED, ci->name);
 
 		if (CSMatchVerbose(ci->settings, CI_NOTICE_VERBOSE_SET)) {
@@ -10835,7 +10835,7 @@ static void do_chanset(CSTR source, User *callerUser, ServiceCommandData *data) 
 				str_copy_checked(s_ChanServ, channel->topic_setter, NICKMAX);
 				channel->topic_time = NOW;
 
-				send_cmd(":%s TOPIC %s %s %lu :%s", s_ChanServ, chan, s_ChanServ, channel->topic_time, new_topic);
+				send_cmd(":%s TOPIC %s %s %ld :%s", s_ChanServ, chan, s_ChanServ, channel->topic_time, new_topic);
 			}
 
 			if (data->operMatch) {
