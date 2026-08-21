@@ -410,13 +410,14 @@ void log_error(FACILITY facility, FACILITY_LINE line, LOG_TYPE type, SEVERITY se
 		size_t		len;
 
 
-		va_start(args, fmt);
 		snprintf(log_buffer, sizeof(log_buffer), "%s %s ", log_get_timestamp(0), log_get_signature(facility, line, type, severity));
 
 		len = str_len(log_buffer);
 		ptr = log_buffer + len;
 
+		va_start(args, fmt);
 		vsnprintf(ptr, sizeof(log_buffer) - len, fmt, args);
+		va_end(args);
 
 		fputs(log_buffer, log_files[LOG_GENERAL_ERRORS].file);
 		fputc(c_LF, log_files[LOG_GENERAL_ERRORS].file);
@@ -466,6 +467,7 @@ void log_debug(CSTR fmt, ...) {
 		va_start(args, fmt);
 		log_buffer[0] = c_NULL;
 		vsnprintf(log_buffer, sizeof(log_buffer), fmt, args);
+		va_end(args);
 
 		log_debug_direct(log_buffer);
 	}
@@ -526,11 +528,12 @@ void log_services(int services, CSTR fmt, ...) {
 		size_t		len;
 
 
-		va_start(args, fmt);
 		log_buffer[0] = c_NULL;
 		snprintf(log_buffer, sizeof(log_buffer), "%s ", log_get_timestamp(0));
 		len = str_len(log_buffer);
+		va_start(args, fmt);
 		vsnprintf(log_buffer + len, sizeof(log_buffer) - len, fmt, args);
+		va_end(args);
 
 		fputs(log_buffer, log_files[services].file);
 		fputc(c_LF, log_files[services].file);
@@ -546,6 +549,7 @@ void log_panic(CSTR fmt, ...) {
 
 		va_start(args, fmt);
 		vfprintf(log_files[LOG_GENERAL_PANIC].file, fmt, args);
+		va_end(args);
 		fputc(c_LF, log_files[LOG_GENERAL_PANIC].file);
 	}
 }
@@ -567,6 +571,7 @@ void log_snoop(CSTR source, CSTR fmt, ...) {
 		log_buffer[0] = c_NULL;
 		va_start(args, fmt);
 		vsnprintf(log_buffer, sizeof(log_buffer), fmt, args);
+		va_end(args);
 
 		send_cmd(":%s PRIVMSG %s :%s", source, CONF_SNOOP_CHAN, log_buffer);
 	}
@@ -579,6 +584,7 @@ void log_debug_snoop(CSTR fmt, ...) {
 		log_buffer[0] = c_NULL;
 		va_start(args, fmt);
 		vsnprintf(log_buffer, sizeof(log_buffer), fmt, args);
+		va_end(args);
 
 		send_cmd(":%s PRIVMSG %s :%s", s_DebugServ, CONF_DEBUG_CHAN, log_buffer);
 	}
@@ -593,6 +599,7 @@ void log_stderr(CSTR fmt, ...) {
 		log_buffer[0] = c_NULL;
 		va_start(args, fmt);
 		vsnprintf(log_buffer, sizeof(log_buffer), fmt, args);
+		va_end(args);
 
 		// send the message on the debug snoop channel ...
 		if (global_running)
@@ -610,14 +617,13 @@ void fatal_error(FACILITY facility, FACILITY_LINE line, CSTR fmt, ...) {
 	va_list args;
 
 
-	va_start(args, fmt);
 
 	lang_format_localtime(timebuf, sizeof(timebuf), LANG_DEFAULT, TIME_FORMAT_FULLDATE, NOW);
 
 	len = str_copy_checked("FATAL ERROR: ", buffer, sizeof(buffer));
 
+	va_start(args, fmt);
 	vsnprintf(buffer + len, sizeof(buffer) - len, fmt, args);
-
 	va_end(args);
 
 	/* Log to appropriate log file, also sends to console. */
