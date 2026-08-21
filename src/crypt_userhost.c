@@ -270,7 +270,8 @@ STR crypt_userhost(CSTR real, HOST_TYPE htype, short int dotsCount) {
 
 	size_t			len, virlen;
 	int32_t			hash;
-	char			*ptr, *expanded_real = real;
+	char			*ptr;
+	CSTR expanded_real = real;
 	char expanded_real_buf[40];
 
 	#define MAX_DSN_HOST_LEN	64

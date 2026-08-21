@@ -88,7 +88,7 @@ BOOL timeout_add(TimeoutType type, int user_type, unsigned long hash, int interv
 	} else {
 
 		log_error(FACILITY_TIMEOUT_ADD_TIMEOUT, __LINE__, LOG_TYPE_ERROR_ASSERTION, LOG_SEVERITY_ERROR_HALTED, 
-			"timeout_add(%d, %d, %d, %d, %d, %08X, %08X) - Invalid parameters!", type, user_type, hash, interval, repeat, handler, data);
+			"timeout_add(%u, %d, %lu, %d, %d, %p, %p) - Invalid parameters!", type, user_type, hash, interval, repeat, handler, data);
 		
 		return FALSE;
 	}
@@ -195,7 +195,7 @@ BOOL timeout_remove(TimeoutType type, int user_type, unsigned long hash) {
 	}
 	else
 		log_error(FACILITY_TIMEOUT_DEL_TIMEOUT, __LINE__, LOG_TYPE_ERROR_ASSERTION, LOG_SEVERITY_ERROR_HALTED, 
-			"timeout_remove(%d, %d, %d) - Invalid parameters!", type, user_type, hash);
+			"timeout_remove(%u, %d, %lu) - Invalid parameters!", type, user_type, hash);
 
 	return TRUE;
 }

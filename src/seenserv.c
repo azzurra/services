@@ -477,20 +477,18 @@ void seenserv_expire_records() {
 	}
 
 	if (CONF_DISPLAY_UPDATES)
-		send_globops(NULL, "Completed Seen Records Expire (%d/%d)", xcount, count);
+		send_globops(NULL, "Completed Seen Records Expire (%ld/%ld)", xcount, count);
 	else
-		LOG_SNOOP(s_OperServ, "Completed Seen Records Expire (%d/%d)", xcount, count);
+		LOG_SNOOP(s_OperServ, "Completed Seen Records Expire (%ld/%ld)", xcount, count);
 }
 
 
 void seenserv_weekly_expire() {
 
 	#ifdef	FIX_USE_MPOOL
-	unsigned int	count;
+	unsigned int	count = mempool_garbage_collect(seen_nickseen_mempool);
 
-	count = mempool_garbage_collect(seen_nickseen_mempool);
-
-	LOG_DEBUG_SNOOP("\2MPGC\2 Seens:\2 %d\2 blocks collected", count);
+	LOG_DEBUG_SNOOP("\2MPGC\2 Seens:\2 %u\2 blocks collected", count);
 	#endif
 
 	if (CONF_DISPLAY_UPDATES)
@@ -1597,7 +1595,7 @@ void seenserv_ds_dump(CSTR sourceNick, const User *callerUser, STR request) {
 					send_notice_to_user(sourceNick, callerUser, "%05d) ADR\2 0x%08X\2 - NXT\2 0x%08X\2 - PRV\2 0x%08X\2 - KEY \2%s\2", idx, (unsigned long)si, (unsigned long)si->next, (unsigned long)si->prev, str_get_valid_display_value(si->nick));
 			}
 
-			LOG_DEBUG_SNOOP("Command: DUMP SEENSERV HASHTABLE %d %d %d -- by %s (%s@%s)", hashIdx, startIdx, endIdx, callerUser->nick, callerUser->username, callerUser->host);
+			LOG_DEBUG_SNOOP("Command: DUMP SEENSERV HASHTABLE %ld %ld %ld -- by %s (%s@%s)", hashIdx, startIdx, endIdx, callerUser->nick, callerUser->username, callerUser->host);
 		}
 		else
 			needSyntax = TRUE;

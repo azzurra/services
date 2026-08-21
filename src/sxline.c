@@ -7,7 +7,7 @@
 * details.
 *
 * sxline.c - Services G:/Q:/Z:Lines
-* 
+*
 */
 
 
@@ -804,14 +804,14 @@ void sxline_ds_dump(CSTR sourceNick, const User *callerUser, STR request) {
 		endIdx = (startIdx + 5);
 
 	if (IS_NULL(request)) {
-
-		send_notice_to_user(sourceNick, callerUser, "DUMP: \2S%c:Line\2 List (showing entries %d-%d):", str_char_toupper(request[1]), startIdx, endIdx);
-		LOG_DEBUG_SNOOP("Command: DUMP S%cLINE %d-%d -- by %s (%s@%s)", str_char_toupper(request[1]), startIdx, endIdx, callerUser->nick, callerUser->username, callerUser->host);
+		/* FIXME: str_char_toupper should return a signed int, not an unsigned one! */
+		send_notice_to_user(sourceNick, callerUser, "DUMP: \2S%c:Line\2 List (showing entries %d-%d):", (int)str_char_toupper(request[1]), startIdx, endIdx);
+		LOG_DEBUG_SNOOP("Command: DUMP S%cLINE %d-%d -- by %s (%s@%s)", (int)str_char_toupper(request[1]), startIdx, endIdx, callerUser->nick, callerUser->username, callerUser->host);
 	}
 	else {
-
-		send_notice_to_user(sourceNick, callerUser, "DUMP: \2S%c:Line\2 List (showing entries %d-%d matching %s):", str_char_toupper(request[1]), startIdx, endIdx, request);
-		LOG_DEBUG_SNOOP("Command: DUMP S%cLINE %d-%d -- by %s (%s@%s) [Pattern: %s]", str_char_toupper(request[1]), startIdx, endIdx, callerUser->nick, callerUser->username, callerUser->host, request);
+		/* FIXME: str_char_toupper should return a signed int, not an unsigned one! */
+		send_notice_to_user(sourceNick, callerUser, "DUMP: \2S%c:Line\2 List (showing entries %d-%d matching %s):", (int)str_char_toupper(request[1]), startIdx, endIdx, request);
+		LOG_DEBUG_SNOOP("Command: DUMP S%cLINE %d-%d -- by %s (%s@%s) [Pattern: %s]", (int)str_char_toupper(request[1]), startIdx, endIdx, callerUser->nick, callerUser->username, callerUser->host, request);
 	}
 
 	while (IS_NOT_NULL(aSXLine)) {

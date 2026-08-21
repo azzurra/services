@@ -1242,12 +1242,12 @@ static void do_kick_ban(CSTR source, User *callerUser, ServiceCommandData *data)
 			if (data->operMatch) {
 
 				LOG_SNOOP(s_OperServ, "OS B %s %s -- by %s (%s@%s) [%s]", chan->name, nick, callerUser->nick, callerUser->username, callerUser->host, reason);
-				log_services(LOG_SERVICES_OPERSERV, "B %s -- by %s (%s@%s) [%s]", chan->name, nick, callerUser->nick, callerUser->username, callerUser->host, reason);
+				log_services(LOG_SERVICES_OPERSERV, "B %s %s -- by %s (%s@%s) [%s]", chan->name, nick, callerUser->nick, callerUser->username, callerUser->host, reason);
 			}
 			else {
 
 				LOG_SNOOP(s_OperServ, "OS B %s %s -- by %s (%s@%s) through %s [%s]", chan->name, nick, callerUser->nick, callerUser->username, callerUser->host, data->operName, reason);
-				log_services(LOG_SERVICES_OPERSERV, "B %s -- by %s (%s@%s) through %s [%s]", chan->name, nick, callerUser->nick, callerUser->username, callerUser->host, data->operName, reason);
+				log_services(LOG_SERVICES_OPERSERV, "B %s %s -- by %s (%s@%s) through %s [%s]", chan->name, nick, callerUser->nick, callerUser->username, callerUser->host, data->operName, reason);
 			}
 
 			TRACE_MAIN();

@@ -686,9 +686,9 @@ void expire_nicks() {
 
 	TRACE();
 	if (CONF_DISPLAY_UPDATES)
-		send_globops(NULL, "Completed Nick Expire (\2%d\2/\2%d\2/\2%d\2)", xcount, rcount, count);
+		send_globops(NULL, "Completed Nick Expire (\2%ld\2/\2%ld\2/\2%ld\2)", xcount, rcount, count);
 	else
-		LOG_SNOOP(s_OperServ, "Completed Nick Expire (\2%d\2/\2%d\2/\2%d\2)", xcount, rcount, count);
+		LOG_SNOOP(s_OperServ, "Completed Nick Expire (\2%ld\2/\2%ld\2/\2%ld\2)", xcount, rcount, count);
 }
 
 /*********************************************************/
@@ -762,9 +762,9 @@ void nickserv_daily_expire() {
 
 	TRACE();
 	if (CONF_DISPLAY_UPDATES)
-		send_globops(NULL, "Completed Nick Daily Expire (\2%d\2/\2%d\2)", xcount, count);
+		send_globops(NULL, "Completed Nick Daily Expire (\2%ld\2/\2%ld\2)", xcount, count);
 	else
-		LOG_SNOOP(s_OperServ, "Completed Nick Daily Expire (\2%d\2/\2%d\2)", xcount, count);
+		LOG_SNOOP(s_OperServ, "Completed Nick Daily Expire (\2%ld\2/\2%ld\2)", xcount, count);
 }
 
 
@@ -1257,7 +1257,7 @@ static void collide(NickInfo *ni, BOOL from_timeout) {
 		if (from_timeout)
 			AddFlag(ni->flags, NI_ENFORCE);
 
-		snprintf(newnick, sizeof(newnick), "Guest%d", grn);
+		snprintf(newnick, sizeof(newnick), "Guest%u", grn);
 		send_SVSNICK(ni->nick, newnick);
 	}
 }
@@ -4174,7 +4174,7 @@ static void do_forbid(CSTR source, User *callerUser, ServiceCommandData *data) {
 				}
 			}
 
-			snprintf(newnick, sizeof(newnick), "Guest%d", grn);
+			snprintf(newnick, sizeof(newnick), "Guest%u", grn);
 
 			TRACE();
 
@@ -4375,7 +4375,7 @@ static void do_freeze(CSTR source, User *callerUser, ServiceCommandData *data) {
 				}
 			}
 
-			snprintf(newnick, sizeof(newnick), "Guest%d", grn);
+			snprintf(newnick, sizeof(newnick), "Guest%u", grn);
 
 			TRACE();
 
@@ -5624,15 +5624,15 @@ static void do_nickset(CSTR source, User *callerUser, ServiceCommandData *data) 
 
 		if (data->operMatch) {
 
-			LOG_SNOOP(s_OperServ, "NS N %s -- by %s (%s@%s) [D: %lu -> %lu]", ni->nick, callerUser->nick, callerUser->username, callerUser->host, ni->time_registered, newdate);
-			log_services(LOG_SERVICES_NICKSERV_GENERAL, "N %s -- by %s (%s@%s) [D: %lu -> %lu]", ni->nick, callerUser->nick, callerUser->username, callerUser->host, ni->time_registered, newdate);
+			LOG_SNOOP(s_OperServ, "NS N %s -- by %s (%s@%s) [D: %ld -> %ld]", ni->nick, callerUser->nick, callerUser->username, callerUser->host, ni->time_registered, newdate);
+			log_services(LOG_SERVICES_NICKSERV_GENERAL, "N %s -- by %s (%s@%s) [D: %ld -> %ld]", ni->nick, callerUser->nick, callerUser->username, callerUser->host, ni->time_registered, newdate);
 
 			send_globops(s_NickServ, "\2%s\2 changed registration date for \2%s\2 to: %s (was: %s)", callerUser->nick, ni->nick, newtimebuf, timebuf);
 		}
 		else {
 
-			LOG_SNOOP(s_OperServ, "NS N %s -- by %s (%s@%s) through %s [D: %lu -> %lu]", ni->nick, callerUser->nick, callerUser->username, callerUser->host, data->operName, ni->time_registered, newdate);
-			log_services(LOG_SERVICES_NICKSERV_GENERAL, "N %s -- by %s (%s@%s) through %s [D: %lu -> %lu]", ni->nick, callerUser->nick, callerUser->username, callerUser->host, data->operName, ni->time_registered, newdate);
+			LOG_SNOOP(s_OperServ, "NS N %s -- by %s (%s@%s) through %s [D: %ld -> %ld]", ni->nick, callerUser->nick, callerUser->username, callerUser->host, data->operName, ni->time_registered, newdate);
+			log_services(LOG_SERVICES_NICKSERV_GENERAL, "N %s -- by %s (%s@%s) through %s [D: %ld -> %ld]", ni->nick, callerUser->nick, callerUser->username, callerUser->host, data->operName, ni->time_registered, newdate);
 
 			send_globops(s_NickServ, "\2%s\2 (through \2%s\2) changed registration date for \2%s\2 to: %s (was: %s)", callerUser->nick, data->operName, ni->nick, newtimebuf, timebuf);
 		}
@@ -5683,15 +5683,15 @@ static void do_nickset(CSTR source, User *callerUser, ServiceCommandData *data) 
 
 		if (data->operMatch) {
 
-			LOG_SNOOP(s_OperServ, "NS N %s -- by %s (%s@%s) [S: %lu -> %lu]", ni->nick, callerUser->nick, callerUser->username, callerUser->host, ni->last_seen, newdate);
-			log_services(LOG_SERVICES_NICKSERV_GENERAL, "N %s -- by %s (%s@%s) [S: %lu -> %lu]", ni->nick, callerUser->nick, callerUser->username, callerUser->host, ni->last_seen, newdate);
+			LOG_SNOOP(s_OperServ, "NS N %s -- by %s (%s@%s) [S: %ld -> %ld]", ni->nick, callerUser->nick, callerUser->username, callerUser->host, ni->last_seen, newdate);
+			log_services(LOG_SERVICES_NICKSERV_GENERAL, "N %s -- by %s (%s@%s) [S: %ld -> %ld]", ni->nick, callerUser->nick, callerUser->username, callerUser->host, ni->last_seen, newdate);
 
 			send_globops(s_NickServ, "\2%s\2 changed last seen for \2%s\2 to: %s (was: %s)", callerUser->nick, ni->nick, newtimebuf, timebuf);
 		}
 		else {
 
-			LOG_SNOOP(s_OperServ, "NS N %s -- by %s (%s@%s) through %s [S: %lu -> %lu]", ni->nick, callerUser->nick, callerUser->username, callerUser->host, data->operName, ni->last_seen, newdate);
-			log_services(LOG_SERVICES_NICKSERV_GENERAL, "N %s -- by %s (%s@%s) through %s [S: %lu -> %lu]", ni->nick, callerUser->nick, callerUser->username, callerUser->host, data->operName, ni->last_seen, newdate);
+			LOG_SNOOP(s_OperServ, "NS N %s -- by %s (%s@%s) through %s [S: %ld -> %ld]", ni->nick, callerUser->nick, callerUser->username, callerUser->host, data->operName, ni->last_seen, newdate);
+			log_services(LOG_SERVICES_NICKSERV_GENERAL, "N %s -- by %s (%s@%s) through %s [S: %ld -> %ld]", ni->nick, callerUser->nick, callerUser->username, callerUser->host, data->operName, ni->last_seen, newdate);
 
 			send_globops(s_NickServ, "\2%s\2 (through \2%s\2) changed last seen for \2%s\2 to: %s (was: %s)", callerUser->nick, data->operName, ni->nick, newtimebuf, timebuf);
 		}
@@ -5776,8 +5776,8 @@ static void do_nickset(CSTR source, User *callerUser, ServiceCommandData *data) 
 		}
 		else {
 
-			LOG_SNOOP(s_OperServ, "NS N %s -- by %s (%s@%s) through %s [U: %s -> %s]", ni->nick, callerUser->nick, callerUser->username, callerUser->host, data->operName, ni->channelcount, newcount);
-			log_services(LOG_SERVICES_NICKSERV_GENERAL, "N %s -- by %s (%s@%s) through %s [U: %s -> %s]", ni->nick, callerUser->nick, callerUser->username, callerUser->host, data->operName, ni->channelcount, newcount);
+			LOG_SNOOP(s_OperServ, "NS N %s -- by %s (%s@%s) through %s [U: %d -> %d]", ni->nick, callerUser->nick, callerUser->username, callerUser->host, data->operName, ni->channelcount, newcount);
+			log_services(LOG_SERVICES_NICKSERV_GENERAL, "N %s -- by %s (%s@%s) through %s [U: %d -> %d]", ni->nick, callerUser->nick, callerUser->username, callerUser->host, data->operName, ni->channelcount, newcount);
 
 			send_globops(s_NickServ, "\2%s\2 (through \2%s\2) changed channel count value for \2%s\2 to \2%d\2 (was: \2%d\2)", callerUser->nick, data->operName, ni->channelcount, newcount);
 		}

@@ -25,3 +25,4 @@ Makefile.inc
 *.o
 lang/__pycache__/
 /.vscode/**
+/.idea/**

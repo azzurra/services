@@ -2582,7 +2582,7 @@ void statserv_ds_dump(CSTR sourceNick, const User *callerUser, STR request) {
 					send_notice_to_user(sourceNick, callerUser, "%05d) ADR\2 0x%08X\2 - NXT\2 0x%08X\2 - PRV\2 0x%08X\2 - KEY \2%s\2", idx, (unsigned long)cs, (unsigned long)cs->next, (unsigned long)cs->prev, str_get_valid_display_value(cs->name));
 			}
 
-			LOG_DEBUG_SNOOP("Command: DUMP STATSERV HASHTABLE %d %d %d -- by %s (%s@%s)", hashIdx, startIdx, endIdx, callerUser->nick, callerUser->username, callerUser->host);
+			LOG_DEBUG_SNOOP("Command: DUMP STATSERV HASHTABLE %ld %ld %ld -- by %s (%s@%s)", hashIdx, startIdx, endIdx, callerUser->nick, callerUser->username, callerUser->host);
 		}
 		else
 			needSyntax = TRUE;

@@ -547,7 +547,7 @@ void expire_memos() {
 	if (CONF_DISPLAY_UPDATES)
 		send_globops(NULL, "Completed MemoServ Expire: (%d/%d) Record Expire: (%d/%d)", expiredMemoCount, memoCount, expiredRecordCount, recordCount);
 	else
-		LOG_SNOOP(s_OperServ, "Completed MemoServ Expire: (%d/%d) Record Expire: (%d/%d)", expiredMemoCount, memoCount, expiredRecordCount, recordCount);
+		LOG_SNOOP(s_OperServ, "Completed MemoServ Expire: (%lu/%lu) Record Expire: (%lu/%lu)", expiredMemoCount, memoCount, expiredRecordCount, recordCount);
 }
 
 
@@ -2008,9 +2008,9 @@ static void do_del(const char *source, User *callerUser, ServiceCommandData *dat
 					send_notice_lang_to_user(s_MemoServ, callerUser, GetCallerLang(), MS_DEL_MEMO_MARKED_DEL, value);
 
 					if (CONF_SET_EXTRASNOOP)
-						LOG_SNOOP(s_OperServ, "MS D %d -- by %s (%s@%s) [Message: %s ]", value, callerUser->nick, callerUser->username, callerUser->host, memo->text);
+						LOG_SNOOP(s_OperServ, "MS D %ld -- by %s (%s@%s) [Message: %s ]", value, callerUser->nick, callerUser->username, callerUser->host, memo->text);
 
-					log_services(LOG_SERVICES_MEMOSERV, "D %d -- by %s (%s@%s) [Message: %s ]", value, callerUser->nick, callerUser->username, callerUser->host, memo->text);
+					log_services(LOG_SERVICES_MEMOSERV, "D %ld -- by %s (%s@%s) [Message: %s ]", value, callerUser->nick, callerUser->username, callerUser->host, memo->text);
 				}
 			}
 			else
@@ -2255,9 +2255,9 @@ static void do_undel(const char *source, User *callerUser, ServiceCommandData *d
 					send_notice_lang_to_user(s_MemoServ, callerUser, GetCallerLang(), MS_UNDEL_MEMO_UNMARKED, value);
 
 					if (CONF_SET_EXTRASNOOP)
-						LOG_SNOOP(s_OperServ, "MS UD %d -- by %s (%s@%s) [Message: %s ]", value, callerUser->nick, callerUser->username, callerUser->host, memo->text);
+						LOG_SNOOP(s_OperServ, "MS UD %ld -- by %s (%s@%s) [Message: %s ]", value, callerUser->nick, callerUser->username, callerUser->host, memo->text);
 
-					log_services(LOG_SERVICES_MEMOSERV, "UD %d -- by %s (%s@%s) [Message: %s ]", value, callerUser->nick, callerUser->username, callerUser->host, memo->text);
+					log_services(LOG_SERVICES_MEMOSERV, "UD %ld -- by %s (%s@%s) [Message: %s ]", value, callerUser->nick, callerUser->username, callerUser->host, memo->text);
 				}
 				else
 					send_notice_lang_to_user(s_MemoServ, callerUser, GetCallerLang(), MS_UNDEL_ERROR_MEMO_NOT_MARKED, value);
@@ -2727,9 +2727,9 @@ static void do_ignore(const char *source, User *callerUser, ServiceCommandData *
 			send_notice_lang_to_user(s_MemoServ, callerUser, GetCallerLang(), WARNING_READONLY);
 
 		if (CONF_SET_EXTRASNOOP)
-			LOG_SNOOP(s_OperServ, "MS I! -- by %s (%s@%s) [Entries: %d ]", callerUser->nick, callerUser->username, callerUser->host, ml->n_ignores);
+			LOG_SNOOP(s_OperServ, "MS I! -- by %s (%s@%s) [Entries: %ld ]", callerUser->nick, callerUser->username, callerUser->host, ml->n_ignores);
 
-		log_services(LOG_SERVICES_MEMOSERV, "I! -- by %s (%s@%s) [Entries: %d ]", callerUser->nick, callerUser->username, callerUser->host, ml->n_ignores);
+		log_services(LOG_SERVICES_MEMOSERV, "I! -- by %s (%s@%s) [Entries: %ld ]", callerUser->nick, callerUser->username, callerUser->host, ml->n_ignores);
 
 		ml->ignores = NULL;
 		ml->n_ignores = 0;
@@ -2963,15 +2963,15 @@ static void do_info(const char *source, User *callerUser, ServiceCommandData *da
 
 			send_globops(s_MemoServ, "\2%s\2 requested Memo Information on nick \2%s\2 [ Reading Memo number \2%d\2 ]", source, ni->nick, value);
 
-			LOG_SNOOP(s_OperServ, "MS M %s -- by %s (%s@%s) [Reading Memo #%d]", ni->nick, callerUser->nick, callerUser->username, callerUser->host, value);
-			log_services(LOG_SERVICES_MEMOSERV, "M %s -- by %s (%s@%s) [Reading Memo #%d]", ni->nick, callerUser->nick, callerUser->username, callerUser->host, value);
+			LOG_SNOOP(s_OperServ, "MS M %s -- by %s (%s@%s) [Reading Memo #%ld]", ni->nick, callerUser->nick, callerUser->username, callerUser->host, value);
+			log_services(LOG_SERVICES_MEMOSERV, "M %s -- by %s (%s@%s) [Reading Memo #%ld]", ni->nick, callerUser->nick, callerUser->username, callerUser->host, value);
 		}
 		else {
 
 			send_globops(s_MemoServ, "\2%s\2 (through \2%s\2) requested Memo Information on nick \2%s\2 [ Reading Memo number \2%d\2 ]", source, data->operName, ni->nick, value);
 
-			LOG_SNOOP(s_OperServ, "MS M %s -- by %s (%s@%s) through %s [Reading Memo #%d]", ni->nick, callerUser->nick, callerUser->username, callerUser->host, data->operName, value);
-			log_services(LOG_SERVICES_MEMOSERV, "M %s -- by %s (%s@%s) through %s [Reading Memo #%d]", ni->nick, callerUser->nick, callerUser->username, callerUser->host, data->operName, value);
+			LOG_SNOOP(s_OperServ, "MS M %s -- by %s (%s@%s) through %s [Reading Memo #%ld]", ni->nick, callerUser->nick, callerUser->username, callerUser->host, data->operName, value);
+			log_services(LOG_SERVICES_MEMOSERV, "M %s -- by %s (%s@%s) through %s [Reading Memo #%ld]", ni->nick, callerUser->nick, callerUser->username, callerUser->host, data->operName, value);
 		}
 	}
 	else {

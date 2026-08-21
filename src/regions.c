@@ -312,7 +312,7 @@ BOOL region_list_add(Region *region) {
 		}
 		else
 			log_error(FACILITY_REGION_LIST_ADD, __LINE__, LOG_TYPE_ERROR_SANITY, LOG_SEVERITY_ERROR_PROPAGATED,
-				"region_list_add() - Invalid region-type flag (%d)", region->flags & 0x03);
+				"region_list_add() - Invalid region-type flag (%lu)", region->flags & 0x03);
 			// fall and fail ...
 	}
 
@@ -368,7 +368,7 @@ void region_list_remove(Region *region) {
 		}
 		else
 			log_error(FACILITY_REGION_LIST_REMOVE, __LINE__, LOG_TYPE_ERROR_SANITY, LOG_SEVERITY_ERROR_PROPAGATED,
-				"region_list_remove() - Invalid region-type flag (%d)", region->flags & 0x03);
+				"region_list_remove() - Invalid region-type flag (%lu)", region->flags & 0x03);
 			// fall and fail ...
 	}
 }

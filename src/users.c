@@ -285,7 +285,7 @@ static BOOL user_onlinehost_remove(const User *user) {
 			return TRUE;
 		}
 		else
-			LOG_DEBUG_SNOOP("user_onlinehost_remove() - !hash_onlinehost_find() user %s | item = 0x%0X | item->u = 0x%0X | user = 0x%0X", user->nick, item, item ? item->user : 0, user);
+			LOG_DEBUG_SNOOP("user_onlinehost_remove() - !hash_onlinehost_find() user %s | item = %p | item->u = %p | user = %p", user->nick, item, item ? item->user : 0, user);
 	}
 
 	return FALSE;
@@ -1660,7 +1660,7 @@ void user_handle_JOIN(CSTR source, const int ac, char **av) {
 			else
 				TimeStamp = NOW;
 
-			snprintf(channel_TS, sizeof(channel_TS), "%lu", TimeStamp);
+			snprintf(channel_TS, sizeof(channel_TS), "%ld", TimeStamp);
 
 			if (FlagSet(uplink_capab, CAPAB_SSJOIN)) {
 

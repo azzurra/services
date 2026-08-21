@@ -1159,30 +1159,30 @@ static void do_dynconf(CSTR source, User *callerUser, ServiceCommandData *data) 
 
 								if (data->operMatch) {
 
-									LOG_SNOOP(s_OperServ, "RS D NS -- by %s (%s@%s) [%d]", callerUser->nick, callerUser->username, callerUser->host, value);
-									log_services(LOG_SERVICES_ROOTSERV, "D NS -- by %s (%s@%s) [%d]", callerUser->nick, callerUser->username, callerUser->host, value);
+									LOG_SNOOP(s_OperServ, "RS D NS -- by %s (%s@%s) [%lu]", callerUser->nick, callerUser->username, callerUser->host, value);
+									log_services(LOG_SERVICES_ROOTSERV, "D NS -- by %s (%s@%s) [%lu]", callerUser->nick, callerUser->username, callerUser->host, value);
 
 									send_globops(s_RootServ, "\2%s\2 set nick registration limit to \2%d\2", source, value);
 								}
 								else {
 
-									LOG_SNOOP(s_OperServ, "RS D NS -- by %s (%s@%s) through %s [%d]", callerUser->nick, callerUser->username, callerUser->host, data->operName, value);
-									log_services(LOG_SERVICES_ROOTSERV, "D NS -- by %s (%s@%s) through %s [%d]", callerUser->nick, callerUser->username, callerUser->host, data->operName, value);
+									LOG_SNOOP(s_OperServ, "RS D NS -- by %s (%s@%s) through %s [%lu]", callerUser->nick, callerUser->username, callerUser->host, data->operName, value);
+									log_services(LOG_SERVICES_ROOTSERV, "D NS -- by %s (%s@%s) through %s [%lu]", callerUser->nick, callerUser->username, callerUser->host, data->operName, value);
 
-									send_globops(s_RootServ, "\2%s\2 (through \2%s\2) set nick registration limit to \2%d\2", source, data->operName, value);
+									send_globops(s_RootServ, "\2%s\2 (through \2%s\2) set nick registration limit to \2%lu\2", source, data->operName, value);
 								}
 
-								send_notice_to_user(s_RootServ, callerUser, "\2%s\2 e' stato impostato a \2%d\2", option, value);
+								send_notice_to_user(s_RootServ, callerUser, "\2%s\2 has been set to \2%lu\2", option, value);
 							}
 							else {
 
 								TRACE_MAIN();
 								if (data->operMatch)
-									LOG_SNOOP(s_OperServ, "RS *D NS -- by %s (%s@%s) [%d < %d]", callerUser->nick, callerUser->username, callerUser->host, value, (ns_regCount + 25));
+									LOG_SNOOP(s_OperServ, "RS *D NS -- by %s (%s@%s) [%lu < %lu]", callerUser->nick, callerUser->username, callerUser->host, value, (ns_regCount + 25));
 								else
-									LOG_SNOOP(s_OperServ, "RS *D NS -- by %s (%s@%s) through %s [%d < %d]", callerUser->nick, callerUser->username, callerUser->host, data->operName, value, (ns_regCount + 25));
+									LOG_SNOOP(s_OperServ, "RS *D NS -- by %s (%s@%s) through %s [%lu < %lu]", callerUser->nick, callerUser->username, callerUser->host, data->operName, value, (ns_regCount + 25));
 
-								send_notice_to_user(s_RootServ, callerUser, "The given value is less than the current number of registered nicks! [%d < %d]", value, (ns_regCount + 25));
+								send_notice_to_user(s_RootServ, callerUser, "The given value is less than the current number of registered nicks! [%lu < %lu]", value, (ns_regCount + 25));
 							}
 						}
 						else {
@@ -1194,39 +1194,39 @@ static void do_dynconf(CSTR source, User *callerUser, ServiceCommandData *data) 
 
 								if (data->operMatch) {
 
-									LOG_SNOOP(s_OperServ, "RS D CS -- by %s (%s@%s) [%d]", callerUser->nick, callerUser->username, callerUser->host, value);
-									log_services(LOG_SERVICES_ROOTSERV, "D CS -- by %s (%s@%s) [%d]", callerUser->nick, callerUser->username, callerUser->host, value);
+									LOG_SNOOP(s_OperServ, "RS D CS -- by %s (%s@%s) [%lu]", callerUser->nick, callerUser->username, callerUser->host, value);
+									log_services(LOG_SERVICES_ROOTSERV, "D CS -- by %s (%s@%s) [%lu]", callerUser->nick, callerUser->username, callerUser->host, value);
 
-									send_globops(s_RootServ, "\2%s\2 set channel registration limit to \2%d\2", source, value);
+									send_globops(s_RootServ, "\2%s\2 set channel registration limit to \2%lu\2", source, value);
 								}
 								else {
 
-									LOG_SNOOP(s_OperServ, "RS D CS -- by %s (%s@%s) through %s [%d]", callerUser->nick, callerUser->username, callerUser->host, data->operName, value);
-									log_services(LOG_SERVICES_ROOTSERV, "D CS -- by %s (%s@%s) through %s [%d]", callerUser->nick, callerUser->username, callerUser->host, data->operName, value);
+									LOG_SNOOP(s_OperServ, "RS D CS -- by %s (%s@%s) through %s [%lu]", callerUser->nick, callerUser->username, callerUser->host, data->operName, value);
+									log_services(LOG_SERVICES_ROOTSERV, "D CS -- by %s (%s@%s) through %s [%lu]", callerUser->nick, callerUser->username, callerUser->host, data->operName, value);
 
-									send_globops(s_RootServ, "\2%s\2 (through \2%s\2) set channel registration limit to \2%d\2", source, data->operName, value);
+									send_globops(s_RootServ, "\2%s\2 (through \2%s\2) set channel registration limit to \2%lu\2", source, data->operName, value);
 								}
 
-								send_notice_to_user(s_RootServ, callerUser, "\2%s\2 e' stato impostato a \2%d\2", option, value);
+								send_notice_to_user(s_RootServ, callerUser, "\2%s\2 has been set to \2%lu\2", option, value);
 							}
 							else {
 
 								TRACE_MAIN();
 								if (data->operMatch)
-									LOG_SNOOP(s_OperServ, "RS *D CS -- by %s (%s@%s) [%d < %d]", callerUser->nick, callerUser->username, callerUser->host, value, (cs_regCount + 25));
+									LOG_SNOOP(s_OperServ, "RS *D CS -- by %s (%s@%s) [%lu < %lu]", callerUser->nick, callerUser->username, callerUser->host, value, (cs_regCount + 25));
 								else
-									LOG_SNOOP(s_OperServ, "RS *D CS -- by %s (%s@%s) through %s [%d < %d]", callerUser->nick, callerUser->username, callerUser->host, data->operName, value, (cs_regCount + 25));
+									LOG_SNOOP(s_OperServ, "RS *D CS -- by %s (%s@%s) through %s [%lu < %lu]", callerUser->nick, callerUser->username, callerUser->host, data->operName, value, (cs_regCount + 25));
 
-								send_notice_to_user(s_RootServ, callerUser, "The given value is less than the current number of registered channels! [%d < %d]", value, (cs_regCount + 25));
+								send_notice_to_user(s_RootServ, callerUser, "The given value is less than the current number of registered channels! [%lu < %lu]", value, (cs_regCount + 25));
 							}
 						}
 					}
 					else {
 
 						if (data->operMatch)
-							LOG_SNOOP(s_OperServ, "RS *D %cS -- by %s (%s@%s) [%d < 0]", option[0], callerUser->nick, callerUser->username, callerUser->host, value);
+							LOG_SNOOP(s_OperServ, "RS *D %cS -- by %s (%s@%s) [%lu < 0]", option[0], callerUser->nick, callerUser->username, callerUser->host, value);
 						else
-							LOG_SNOOP(s_OperServ, "RS *D %cS -- by %s (%s@%s) through %s [%d < 0]", option[0], callerUser->nick, callerUser->username, callerUser->host, data->operName, value);
+							LOG_SNOOP(s_OperServ, "RS *D %cS -- by %s (%s@%s) through %s [%lu < 0]", option[0], callerUser->nick, callerUser->username, callerUser->host, data->operName, value);
 
 						send_notice_to_user(s_RootServ, callerUser, "Value must be a positive number.");
 					}
