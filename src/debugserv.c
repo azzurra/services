@@ -501,7 +501,7 @@ static void do_set(const char *source, User *callerUser, ServiceCommandData *dat
 
 						snprintf(misc_buffer, sizeof(misc_buffer), s_DS_IBD_ACTIVATED, source);
 						send_notice_to_user(s_DebugServ, callerUser, misc_buffer);
-						LOG_DEBUG_SNOOP(misc_buffer);
+						LOG_DEBUG_SNOOP("%s", misc_buffer);
 						log_debug_direct(misc_buffer);
 
 						if (IS_NOT_NULL(debug_monitor_inputbuffer_filter))
@@ -522,7 +522,7 @@ static void do_set(const char *source, User *callerUser, ServiceCommandData *dat
 
 						snprintf(misc_buffer, sizeof(misc_buffer), s_DS_IBD_DEACTIVATED, source);
 						send_notice_to_user(s_DebugServ, callerUser, misc_buffer);
-						LOG_DEBUG_SNOOP(misc_buffer);
+						LOG_DEBUG_SNOOP("%s", misc_buffer);
 						log_debug_direct(misc_buffer);
 
 						if (IS_NOT_NULL(debug_monitor_inputbuffer_filter)) {
@@ -713,7 +713,7 @@ static void do_inject(const char *source, User *callerUser, ServiceCommandData *
 	else {
 
 		LOG_DEBUG_SNOOP("\2%s\2 had me INJECT the following command:", source);
-		LOG_DEBUG_SNOOP(command);
+		LOG_DEBUG_SNOOP("%s", command);
 		log_debug_direct(command);
 
 		if (store_flag == 'Y') {

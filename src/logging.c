@@ -618,8 +618,11 @@ void fatal_error(FACILITY facility, FACILITY_LINE line, CSTR fmt, ...) {
 
 	vsnprintf(buffer + len, sizeof(buffer) - len, fmt, args);
 
+	va_end(args);
+
 	/* Log to appropriate log file, also sends to console. */
-	log_error(facility, line, LOG_TYPE_ERROR_FATAL, LOG_SEVERITY_ERROR_QUIT, buffer);
+	/* While this seems pointless after a vsnprintf call, buffer contents *MIGHT* contain valid format specifiers, let's guard against that! */
+	log_error(facility, line, LOG_TYPE_ERROR_FATAL, LOG_SEVERITY_ERROR_QUIT, "%s", buffer);
 
 	/* Send a globop if we're still connected. */
 	if (global_running)

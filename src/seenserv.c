@@ -1428,7 +1428,7 @@ proceed:
 				snprintf(reply, sizeof(reply), lang_msg(GetCallerLang(), SS_SEEN_REPLY_MANY), count, max_hits);
 
 			else if (count == 1)
-				snprintf(reply, sizeof(reply), lang_msg(GetCallerLang(), SS_SEEN_REPLY_ONE));
+				snprintf(reply, sizeof(reply), "%s", lang_msg(GetCallerLang(), SS_SEEN_REPLY_ONE)); /* FIXME: prevent false positive for format-security, should go away if/when we move lang stuff to gettext */
 
 			else
 				snprintf(reply, sizeof(reply), lang_msg(GetCallerLang(), SS_SEEN_REPLY_SOME), count);

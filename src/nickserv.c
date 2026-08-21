@@ -1568,9 +1568,9 @@ static void do_register(CSTR source, User *callerUser, ServiceCommandData *data)
 
 				fprintf(mailfile, lang_msg(GetCallerLang(), NS_REGISTER_EMAIL_SUBJECT), callerUser->ni->nick);
 				fprintf(mailfile, lang_msg(GetCallerLang(), NS_REGISTER_EMAIL_TEXT_1), CONF_NETWORK_NAME, callerUser->ni->auth, CONF_NETWORK_NAME, callerUser->ni->nick, s_NickServ, callerUser->ni->auth);
-				fprintf(mailfile, lang_msg(GetCallerLang(), NS_REGISTER_EMAIL_TEXT_2));
-				fprintf(mailfile, lang_msg(GetCallerLang(), NS_REGISTER_EMAIL_TEXT_3));
-				fprintf(mailfile, lang_msg(GetCallerLang(), NS_REGISTER_EMAIL_TEXT_4));
+				fprintf(mailfile, "%s", lang_msg(GetCallerLang(), NS_REGISTER_EMAIL_TEXT_2)); /* FIXME: prevent false positive for format-security, should go away if/when we move lang stuff to gettext */
+				fprintf(mailfile, "%s", lang_msg(GetCallerLang(), NS_REGISTER_EMAIL_TEXT_3)); /* FIXME: prevent false positive for format-security, should go away if/when we move lang stuff to gettext */
+				fprintf(mailfile, "%s", lang_msg(GetCallerLang(), NS_REGISTER_EMAIL_TEXT_4)); /* FIXME: prevent false positive for format-security, should go away if/when we move lang stuff to gettext */
 				fprintf(mailfile, lang_msg(GetCallerLang(), NS_REGISTER_EMAIL_TEXT_5), CONF_NETWORK_NAME, CONF_NETWORK_NAME);
 				fprintf(mailfile, lang_msg(GetCallerLang(), NS_REGISTER_EMAIL_TEXT_6), CONF_NETWORK_NAME, CONF_NETWORK_NAME);
 				fprintf(mailfile, lang_msg(GetCallerLang(), NS_REGISTER_EMAIL_TEXT_7), CONF_NETWORK_NAME);
