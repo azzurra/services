@@ -1521,7 +1521,7 @@ void seenserv_ds_dump(CSTR sourceNick, const User *callerUser, STR request) {
 
 				send_notice_to_user(sourceNick, callerUser, "DUMP: Seen record for \2%s\2:", nick);
 
-				send_notice_to_user(sourceNick, callerUser, "Address %ps, size %zu B",				(void *)si, sizeof(SeenInfo) + str_len(si->nick) + str_len(si->username) + str_len(si->host) + str_len(si->realname) + str_len(si->tempnick) + str_len(si->quitmsg) + 6);
+				send_notice_to_user(sourceNick, callerUser, "Address %p, size %zu B",				(void *)si, sizeof(SeenInfo) + str_len(si->nick) + str_len(si->username) + str_len(si->host) + str_len(si->realname) + str_len(si->tempnick) + str_len(si->quitmsg) + 6);
 				send_notice_to_user(sourceNick, callerUser, "Name: %p \2[\2%s\2]\2",				(void *)si->nick, str_get_valid_display_value(si->nick));
 				send_notice_to_user(sourceNick, callerUser, "Username: %p \2[\2%s\2]\2",			(void *)si->username, str_get_valid_display_value(si->username));
 				send_notice_to_user(sourceNick, callerUser, "Realname: %p \2[\2%s\2]\2",			(void *)si->realname, str_get_valid_display_value(si->realname));

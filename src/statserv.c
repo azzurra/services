@@ -1436,7 +1436,7 @@ static void do_records(CSTR source, User *callerUser, ServiceCommandData *data) 
 
 	tm = *localtime(&records.maxservers_time);
 	strftime(timebuf, sizeof(timebuf), "%a %d/%m/%Y %H:%M:%S %Z", &tm);
-	send_notice_to_user(s_StatServ, callerUser, "Current Servers: \2l%lu\2 [Record: \2%lu\2 on %s]", nservers, records.maxservers, timebuf);
+	send_notice_to_user(s_StatServ, callerUser, "Current Servers: \2%lu\2 [Record: \2%lu\2 on %s]", nservers, records.maxservers, timebuf);
 
 	tm = *localtime(&records.maxconn_time);
 	strftime(timebuf, sizeof(timebuf), "%a %d/%m/%Y", &tm);
