@@ -5779,7 +5779,7 @@ static void do_nickset(CSTR source, User *callerUser, ServiceCommandData *data) 
 			LOG_SNOOP(s_OperServ, "NS N %s -- by %s (%s@%s) through %s [U: %d -> %d]", ni->nick, callerUser->nick, callerUser->username, callerUser->host, data->operName, ni->channelcount, newcount);
 			log_services(LOG_SERVICES_NICKSERV_GENERAL, "N %s -- by %s (%s@%s) through %s [U: %d -> %d]", ni->nick, callerUser->nick, callerUser->username, callerUser->host, data->operName, ni->channelcount, newcount);
 
-			send_globops(s_NickServ, "\2%s\2 (through \2%s\2) changed channel count value for \2%s\2 to \2%d\2 (was: \2%d\2)", callerUser->nick, data->operName, ni->nick, ni->channelcount, newcount);
+			send_globops(s_NickServ, "\2%s\2 (through \2%s\2) changed channel count value for \2%s\2 to \2%d\2 (was: \2%d\2)", callerUser->nick, data->operName, ni->nick, newcount, ni->channelcount);
 		}
 
 		ni->channelcount = newcount;
