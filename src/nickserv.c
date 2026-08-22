@@ -5882,7 +5882,7 @@ void nickserv_ds_dump(CSTR sourceNick, const User *callerUser, STR request) {
 					send_notice_to_user(sourceNick, callerUser, "Max memos: %d",						ni->memomax);
 					send_notice_to_user(sourceNick, callerUser, "Channels count: %d",					ni->channelcount);
 					send_notice_to_user(sourceNick, callerUser, "News check value: %d",					ni->news);
-					send_notice_to_user(sourceNick, callerUser, "Registration E-Mail: %p \2[\2%s\2]\2",	ni->regemail, str_get_valid_display_value(ni->regemail));
+					send_notice_to_user(sourceNick, callerUser, "Registration E-Mail: %p \2[\2%s\2]\2",	(void *)ni->regemail, str_get_valid_display_value(ni->regemail));
 					send_notice_to_user(sourceNick, callerUser, "URL: %p \2[\2%s\2]\2",					(void *)ni->url, str_get_valid_display_value(ni->url));
 					send_notice_to_user(sourceNick, callerUser, "New E-Mail: %p \2[\2%s\2]\2",			(void *)ni->email, str_get_valid_display_value(ni->email));
 					send_notice_to_user(sourceNick, callerUser, "Memo forwarded to: %p \2[\2%s\2]\2",	(void *)ni->forward, str_get_valid_display_value(ni->forward));
@@ -5919,7 +5919,7 @@ void nickserv_ds_dump(CSTR sourceNick, const User *callerUser, STR request) {
 						send_notice_to_user(sourceNick, callerUser, "DUMP: Access List for nickname \2%s\2", value);
 
 					for (anAccess = ni->access, i = 0; i < ni->accesscount; ++anAccess, ++i)
-						send_notice_to_user(sourceNick, callerUser, "%ld) Mask: %p \2[\2%s\2]\2", i+1, *anAccess, *anAccess);
+						send_notice_to_user(sourceNick, callerUser, "%ld) Mask: %p \2[\2%s\2]\2", i+1, (void *)*anAccess, *anAccess);
 
 					LOG_DEBUG_SNOOP("Command: DUMP NICKSERV ACCESS %s -- by %s (%s@%s)", value, callerUser->nick, callerUser->username, callerUser->host);
 				}
@@ -5928,7 +5928,7 @@ void nickserv_ds_dump(CSTR sourceNick, const User *callerUser, STR request) {
 
 			unsigned int	idx, n;
 
-			send_notice_to_user(sourceNick, callerUser, "DUMP: Guest Used List (\2 %p \2)", nickserv_used_guest_list);
+			send_notice_to_user(sourceNick, callerUser, "DUMP: Guest Used List (\2 %p \2)", (void *)nickserv_used_guest_list);
 
 			if (IS_NOT_NULL(nickserv_used_guest_list)) {
 

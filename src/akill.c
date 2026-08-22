@@ -1324,7 +1324,7 @@ void akill_ds_dump(CSTR sourceNick, const User *callerUser, STR request) {
 						send_notice_to_user(sourceNick, callerUser, "Expiry C-time: %ld",			akill->expireTime);
 						send_notice_to_user(sourceNick, callerUser, "Last Used C-time: %ld",		akill->lastUsed);
 						send_notice_to_user(sourceNick, callerUser, "Reason: %p \2[\2%s\2]\2",		(void *)akill->reason, str_get_valid_display_value(akill->reason));
-						send_notice_to_user(sourceNick, callerUser, "Description: %p \2[\2%s\2]\2",	akill->desc, str_get_valid_display_value(akill->desc));
+						send_notice_to_user(sourceNick, callerUser, "Description: %p \2[\2%s\2]\2",	(void *)akill->desc, str_get_valid_display_value(akill->desc));
 						send_notice_to_user(sourceNick, callerUser, "Type: %#lx \2[\2%s\2]\2",		akill->type, get_akill_type_long(akill->type));
 						send_notice_to_user(sourceNick, callerUser, "ID: %lu-%s",					akill->id, get_akill_type_short(akill->type));
 						send_notice_to_user(sourceNick, callerUser, "Next/Prev records: %p / %p",	(void *)akill->next, (void *)akill->prev);

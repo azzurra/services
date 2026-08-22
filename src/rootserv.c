@@ -1391,7 +1391,7 @@ void rootserv_ds_dump(CSTR sourceNick, const User *callerUser, STR request) {
 
 		send_notice_to_user(sourceNick, callerUser, "ChanServ Registration Limit: %lu", dynConf.cs_regLimit);
 		send_notice_to_user(sourceNick, callerUser, "NickServ Registration Limit: %lu", dynConf.ns_regLimit);
-		send_notice_to_user(sourceNick, callerUser, "Welcome Notice: %p \2[\2%s\2]\2", dynConf.welcomeNotice, str_get_valid_display_value(dynConf.welcomeNotice));
+		send_notice_to_user(sourceNick, callerUser, "Welcome Notice: %p \2[\2%s\2]\2", (void *)dynConf.welcomeNotice, str_get_valid_display_value(dynConf.welcomeNotice));
 
 		LOG_DEBUG_SNOOP("Command: DUMP ROOTSERV DYNCONF -- by %s (%s@%s)", callerUser->nick, callerUser->username, callerUser->host);
 	}

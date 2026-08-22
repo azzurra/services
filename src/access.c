@@ -572,7 +572,7 @@ void access_send_dump(Access *anAccess, CSTR sourceNick, const User *callerUser)
 	send_notice_to_user(sourceNick, callerUser, "Modes ON: %ld \2[\2%s\2]\2",	anAccess->modes_on, get_user_modes(anAccess->modes_on, 0));
 	send_notice_to_user(sourceNick, callerUser, "Modes OFF: %ld \2[\2%s\2]\2",	anAccess->modes_off, get_user_modes(0, anAccess->modes_off));
 
-	send_notice_to_user(sourceNick, callerUser, "Created by: %p \2[\2%s\2]\2",	anAccess->creator.name, str_get_valid_display_value(anAccess->creator.name));
+	send_notice_to_user(sourceNick, callerUser, "Created by: %p \2[\2%s\2]\2",	(void *)anAccess->creator.name, str_get_valid_display_value(anAccess->creator.name));
 	send_notice_to_user(sourceNick, callerUser, "Time Added C-time: %ld",		anAccess->creator.time);
 	send_notice_to_user(sourceNick, callerUser, "Last Update C-time: %ld",		anAccess->lastUpdate);
 	send_notice_to_user(sourceNick, callerUser, "Next record: %p",				(void *)anAccess->next);
