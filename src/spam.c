@@ -436,8 +436,9 @@ void handle_spam(CSTR source, User *callerUser, ServiceCommandData *data) {
 
 			if (IS_NULL(spam)) {
 
-				int		type;
-				char	*err;
+				long int	stype;
+				int			type;
+				char		*err;
 
 				if (str_char_toupper(action[0]) == 'A') {
 
@@ -480,9 +481,11 @@ void handle_spam(CSTR source, User *callerUser, ServiceCommandData *data) {
 					return;
 				}
 
-				type = (int) strtol(spamtype, &err, 10);
+				stype = strtol(spamtype, &err, 10);
 
-				if ((*err == '\0') && (type >= 0) && (type <= 5)) {
+				if ((*err == '\0') && (stype >= 0) && (stype <= 5)) {
+
+					type = (int) stype;
 
 					spam = spam_create(spamtext, type, reason, data->operName);
 
