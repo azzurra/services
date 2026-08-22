@@ -20,7 +20,8 @@
 RM=/bin/rm
 
 # Compile flags
-CFLAGS += -pipe -Wall -Wpedantic -O0 -g -Wshadow -Wcast-align -Wsign-compare -Wformat -Wformat-signedness -Wformat-security -Werror=format -Werror=format-security
+CFLAGS = $(BASE_CFLAGS)
+CFLAGS += -pipe -Wall -Wpedantic -g -Wshadow -Wcast-align -Wsign-compare -Wformat -Wformat-signedness -Wformat-security -Werror=format -Werror=format-security
 # linker flags.
 LDFLAGS=
 

@@ -80,7 +80,7 @@ test_function () {
     #include <stdio.h>
     #include <string.h>
 	int main() {
-		extern int $func$proto;
+		extern $rettype $func$proto;
 		$TEST
 	}
 EOT
@@ -156,6 +156,7 @@ USER_CC=
 USER_CC_FLAGS=bonkle
 USER_CC_LFLAGS=bonkle
 USER_CC_LIBS=
+FORCE_M32=no
 
 export USER_CC USER_CC_FLAGS USER_CC_LFLAGS USER_CC_LIBS
 
@@ -172,6 +173,8 @@ while [ $# -gt 0 ] ; do
 	elif [ "$1" = "-libs" ] ; then
 		shift
 		USER_CC_LIBS=$1
+	elif [ "$1" = "-m32" ] ; then
+		FORCE_M32=yes
 	else
 		if [ "$1" != "-help" -a "$1" != "-h" -a "$1" != "--help" ]; then
 			echo >&2 Unknown option/parameter: "$1"
@@ -181,11 +184,12 @@ while [ $# -gt 0 ] ; do
 		fi
 		cat >&2 <<EOT
 Available options:
-	-cc			Specify C compiler to use (overrides check)
-	-cflags		Specify compilation flags (defaults: -O2 for gcc,
-			    -O for other compilers; overrides check)
-	-lflags		Specify link flags for C compiler (default: none)
-	-libs		Specify extra link libraries to use (default: none)
+    -cc     Specify C compiler to use (overrides check)
+    -cflags Specify compilation flags (defaults: -O2 for gcc,
+            -O for other compilers; overrides check)
+    -lflags Specify link flags for C compiler (default: none)
+    -libs   Specify extra link libraries to use (default: none)
+    -m32    Force ILP32 build on LP64 systems (DANGEROUS, use with care!)
 EOT
 		exit $exitval
 	fi
@@ -216,7 +220,7 @@ if [ "$USER_CC" ] ; then
 elif run gcc --version ; then
 	echo "great, found gcc!"
 	CC=gcc
-	DEF_CC_FLAGS=-O2
+	DEF_CC_FLAGS=-O0
 	log using \`gcc\'
 else
 	echo "gcc not found."
@@ -251,6 +255,15 @@ EOT
 	DEF_CC_FLAGS=-O
 fi
 
+if [ "x$FORCE_M32" = "xyes" ]; then
+echo '************************************** /!\ DANGER /!\ **************************************'
+echo 'Forcing ILP32 build, DO NOT DO THIS IN PRODUCTION UNLESS YOU KNOW EXACTLY WHAT YOU ARE DOING'
+echo '********************************************************************************************'
+LBIT=32
+DEF_CC_FLAGS="-m32 $DEF_CC_FLAGS"
+else
+LBIT=$(getconf LONG_BIT)
+fi
 
 # Test compiler options.
 
@@ -394,7 +407,7 @@ TEST='
 	}
 
 	return 0;'
-if test_function int snprintf "(char *, long unsigned int, const char *, ...)" ; then : ; else
+if test_function int snprintf "(char *, size_t, const char *, ...)" ; then : ; else
 	echo2 "snprintf "
 	echo ""
 	echo "Your snprintf() is not compatible with services' needs."
@@ -429,7 +442,6 @@ fi
 # Create files.
 
 echo2 "Creating sysconf.h... "
-LBIT=$(getconf LONG_BIT)
 cat >inc/sysconf.h <<EOT
 /*
  * This file is generated automatically by "configure".  Any changes made
