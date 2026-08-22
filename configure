@@ -271,6 +271,9 @@ fi
 MODE="find_ccopts     "
 if [ "$USER_CC_FLAGS" != bonkle ] ; then
 	CC_FLAGS="$USER_CC_FLAGS"
+	if [ "x$FORCE_M32" = 'xyes' ]; then
+		CC_FLAGS="-m32 $CC_FLAGS"
+	fi
 	echo "Compiler flags supplied: $CC_FLAGS"
 	log user supplied flags: \`"$CC_FLAGS'"
 else
