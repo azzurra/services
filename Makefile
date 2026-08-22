@@ -35,7 +35,7 @@ build: inc/sysconf.h $(SUBDIRS)
 inc/sysconf.h:
 	@$(SHELL) configure
 
-$(SUBDIRS):
+$(SUBDIRS): | inc/sysconf.h
 	$(MAKE) -C $@
 
 clean:
