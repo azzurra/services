@@ -623,11 +623,11 @@ void tagline_ds_dump(CSTR sourceNick, const User *callerUser, STR request) {
 			continue;
 		}
 
-		send_notice_to_user(sourceNick, callerUser, "%d) Address %p, size %lu B",	taglineIdx, aTagline, sizeof(Tagline));
-		send_notice_to_user(sourceNick, callerUser, "Text: %p \2[\2%s\2]\2",		aTagline->text, str_get_valid_display_value(aTagline->text));
-		send_notice_to_user(sourceNick, callerUser, "Creator: %p \2[\2%s\2]\2",		aTagline->creator.name, str_get_valid_display_value(aTagline->creator.name));
+		send_notice_to_user(sourceNick, callerUser, "%d) Address %p, size %zu B",	taglineIdx, (void *)aTagline, sizeof(Tagline));
+		send_notice_to_user(sourceNick, callerUser, "Text: %p \2[\2%s\2]\2",		(void *)aTagline->text, str_get_valid_display_value(aTagline->text));
+		send_notice_to_user(sourceNick, callerUser, "Creator: %p \2[\2%s\2]\2",		(void *)aTagline->creator.name, str_get_valid_display_value(aTagline->creator.name));
 		send_notice_to_user(sourceNick, callerUser, "Time Set C-time: %ld",			aTagline->creator.time);
-		send_notice_to_user(sourceNick, callerUser, "Next/Prev records: %p / %p",	aTagline->next, aTagline->prev);
+		send_notice_to_user(sourceNick, callerUser, "Next/Prev records: %p / %p",	(void *)aTagline->next, (void *)aTagline->prev);
 
 		if (sentIdx >= endIdx)
 			break;

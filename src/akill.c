@@ -1313,19 +1313,19 @@ void akill_ds_dump(CSTR sourceNick, const User *callerUser, STR request) {
 					if (str_match_wild_nocase(user, akill->username) &&
 						str_match_wild_nocase(host, akill->host)) {
 
-						send_notice_to_user(sourceNick, callerUser, "%d) Address %p, size %lu B",	akillIdx, akill, sizeof(AutoKill) + str_len(akill->username) + str_len(akill->host) + str_len(akill->creator.name) + str_len(akill->reason));
-						send_notice_to_user(sourceNick, callerUser, "User: %p \2[\2%s\2]\2",		akill->username, str_get_valid_display_value(akill->username));
-						send_notice_to_user(sourceNick, callerUser, "Host: %p \2[\2%s\2]\2",		akill->host, str_get_valid_display_value(akill->host));
+						send_notice_to_user(sourceNick, callerUser, "%d) Address %p, size %lu B",	akillIdx, (void *)akill, sizeof(AutoKill) + str_len(akill->username) + str_len(akill->host) + str_len(akill->creator.name) + str_len(akill->reason));
+						send_notice_to_user(sourceNick, callerUser, "User: %p \2[\2%s\2]\2",		(void *)akill->username, str_get_valid_display_value(akill->username));
+						send_notice_to_user(sourceNick, callerUser, "Host: %p \2[\2%s\2]\2",		(void *)akill->host, str_get_valid_display_value(akill->host));
 						send_notice_to_user(sourceNick, callerUser, "CIDR: %u/%u",					akill->cidr.ip, akill->cidr.mask);
-						send_notice_to_user(sourceNick, callerUser, "Set by: %p \2[\2%s\2]\2",		akill->creator.name, str_get_valid_display_value(akill->creator.name));
+						send_notice_to_user(sourceNick, callerUser, "Set by: %p \2[\2%s\2]\2",		(void *)akill->creator.name, str_get_valid_display_value(akill->creator.name));
 						send_notice_to_user(sourceNick, callerUser, "Time Set C-time: %ld",			akill->creator.time);
 						send_notice_to_user(sourceNick, callerUser, "Expiry C-time: %ld",			akill->expireTime);
 						send_notice_to_user(sourceNick, callerUser, "Last Used C-time: %ld",		akill->lastUsed);
-						send_notice_to_user(sourceNick, callerUser, "Reason: %p \2[\2%s\2]\2",		akill->reason, str_get_valid_display_value(akill->reason));
+						send_notice_to_user(sourceNick, callerUser, "Reason: %p \2[\2%s\2]\2",		(void *)akill->reason, str_get_valid_display_value(akill->reason));
 						send_notice_to_user(sourceNick, callerUser, "Description: %p \2[\2%s\2]\2",	akill->desc, str_get_valid_display_value(akill->desc));
 						send_notice_to_user(sourceNick, callerUser, "Type: %#lx \2[\2%s\2]\2",		akill->type, get_akill_type_long(akill->type));
 						send_notice_to_user(sourceNick, callerUser, "ID: %lu-%s",					akill->id, get_akill_type_short(akill->type));
-						send_notice_to_user(sourceNick, callerUser, "Next/Prev records: %p / %p",	akill->next, akill->prev);
+						send_notice_to_user(sourceNick, callerUser, "Next/Prev records: %p / %p",	(void *)akill->next, (void *)akill->prev);
 					}
 
 					akill = akill->next;
@@ -1358,19 +1358,19 @@ void akill_ds_dump(CSTR sourceNick, const User *callerUser, STR request) {
 
 								++akillIdx;
 
-								send_notice_to_user(sourceNick, callerUser, "%d) Address %p, size %lu B",	akillIdx, akill, sizeof(AutoKill) + str_len(akill->username) + str_len(akill->host) + str_len(akill->creator.name) + str_len(akill->reason) + 4);
-								send_notice_to_user(sourceNick, callerUser, "User: %p \2[\2%s\2]\2",		akill->username, str_get_valid_display_value(akill->username));
-								send_notice_to_user(sourceNick, callerUser, "Host: %p \2[\2%s\2]\2",		akill->host, str_get_valid_display_value(akill->host));
+								send_notice_to_user(sourceNick, callerUser, "%d) Address %p, size %lu B",	akillIdx, (void *)akill, sizeof(AutoKill) + str_len(akill->username) + str_len(akill->host) + str_len(akill->creator.name) + str_len(akill->reason) + 4);
+								send_notice_to_user(sourceNick, callerUser, "User: %p \2[\2%s\2]\2",		(void *)akill->username, str_get_valid_display_value(akill->username));
+								send_notice_to_user(sourceNick, callerUser, "Host: %p \2[\2%s\2]\2",		(void *)akill->host, str_get_valid_display_value(akill->host));
 								send_notice_to_user(sourceNick, callerUser, "CIDR: %u/%u",					akill->cidr.ip, akill->cidr.mask);
-								send_notice_to_user(sourceNick, callerUser, "Set by: %p \2[\2%s\2]\2",		akill->creator.name, str_get_valid_display_value(akill->creator.name));
+								send_notice_to_user(sourceNick, callerUser, "Set by: %p \2[\2%s\2]\2",		(void *)akill->creator.name, str_get_valid_display_value(akill->creator.name));
 								send_notice_to_user(sourceNick, callerUser, "Time Set C-time: %ld",			akill->creator.time);
 								send_notice_to_user(sourceNick, callerUser, "Expiry C-time: %ld",			akill->expireTime);
 								send_notice_to_user(sourceNick, callerUser, "Last Used C-time: %ld",		akill->lastUsed);
-								send_notice_to_user(sourceNick, callerUser, "Reason: %p \2[\2%s\2]\2",		akill->reason, str_get_valid_display_value(akill->reason));
-								send_notice_to_user(sourceNick, callerUser, "Description: %p \2[\2%s\2]\2",	akill->desc, str_get_valid_display_value(akill->desc));
+								send_notice_to_user(sourceNick, callerUser, "Reason: %p \2[\2%s\2]\2",		(void *)akill->reason, str_get_valid_display_value(akill->reason));
+								send_notice_to_user(sourceNick, callerUser, "Description: %p \2[\2%s\2]\2",	(void *)akill->desc, str_get_valid_display_value(akill->desc));
 								send_notice_to_user(sourceNick, callerUser, "Type: %#lx \2[\2%s\2]\2",		akill->type, get_akill_type_long(akill->type));
 								send_notice_to_user(sourceNick, callerUser, "ID: %lu-%s",					akill->id, get_akill_type_short(akill->type));
-								send_notice_to_user(sourceNick, callerUser, "Next/Prev records: %p / %p",	akill->next, akill->prev);
+								send_notice_to_user(sourceNick, callerUser, "Next/Prev records: %p / %p",	(void *)akill->next, (void *)akill->prev);
 							}
 
 							akill = akill->next;

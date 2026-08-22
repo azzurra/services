@@ -793,16 +793,16 @@ void server_ds_dump(CSTR sourceNick, const User *callerUser, STR request) {
 
 				send_notice_to_user(sourceNick, callerUser, "DUMP: Server \2%s\2", value);
 
-				send_notice_to_user(sourceNick, callerUser, "Address %p, size %lu B",			server, sizeof(Server) + str_len(server->name) + str_len(server->desc) + 2);
-				send_notice_to_user(sourceNick, callerUser, "Name: %p \2[\2%s\2]\2",			server->name, str_get_valid_display_value(server->name));
-				send_notice_to_user(sourceNick, callerUser, "Desc: %p \2[\2%s\2]\2",			server->desc, str_get_valid_display_value(server->desc));
-				send_notice_to_user(sourceNick, callerUser, "Uplink: %p \2[\2%s\2]\2",			server->uplink, str_get_valid_display_value(server->uplink->name));
+				send_notice_to_user(sourceNick, callerUser, "Address %p, size %zu B",			(void *)server, sizeof(Server) + str_len(server->name) + str_len(server->desc) + 2);
+				send_notice_to_user(sourceNick, callerUser, "Name: %p \2[\2%s\2]\2",			(void *)server->name, str_get_valid_display_value(server->name));
+				send_notice_to_user(sourceNick, callerUser, "Desc: %p \2[\2%s\2]\2",			(void *)server->desc, str_get_valid_display_value(server->desc));
+				send_notice_to_user(sourceNick, callerUser, "Uplink: %p \2[\2%s\2]\2",			(void *)server->uplink, str_get_valid_display_value(server->uplink->name));
 				send_notice_to_user(sourceNick, callerUser, "Hops: %u",							server->hops);
 				send_notice_to_user(sourceNick, callerUser, "Users: %u",						server->userCount);
 				send_notice_to_user(sourceNick, callerUser, "Connected C-time: %ld",			server->connected);
 				send_notice_to_user(sourceNick, callerUser, "Flags: %d",						server->flags);
-				send_notice_to_user(sourceNick, callerUser, "Stats: %p",						server->stats);
-				send_notice_to_user(sourceNick, callerUser, "Next / previous record: %p / %p",	server->next, server->prev);
+				send_notice_to_user(sourceNick, callerUser, "Stats: %p",						(void *)server->stats);
+				send_notice_to_user(sourceNick, callerUser, "Next / previous record: %p / %p",	(void *)server->next, (void *)server->prev);
 
 				LOG_DEBUG_SNOOP("Command: DUMP SERVER %s -- by %s (%s@%s)", value, callerUser->nick, callerUser->username, callerUser->host);
 			}

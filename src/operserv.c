@@ -1796,8 +1796,8 @@ void operserv_ds_dump(CSTR sourceNick, const User *callerUser, STR request) {
 
 		for (idx = 0; idx < CLONE_DETECT_SIZE; ++idx) {
 
-			send_notice_to_user(sourceNick, callerUser, "%lu) Address %p, size %lu B",	idx + 1, &warnings[idx], sizeof(CloneWarning));
-			send_notice_to_user(sourceNick, callerUser, "Host: %p \2[\2%s\2]\2",		warnings[idx].host, str_get_valid_display_value(warnings[idx].host));
+			send_notice_to_user(sourceNick, callerUser, "%lu) Address %p, size %zu B",	idx + 1, (void *)&warnings[idx], sizeof(CloneWarning));
+			send_notice_to_user(sourceNick, callerUser, "Host: %p \2[\2%s\2]\2",		(void *)warnings[idx].host, str_get_valid_display_value(warnings[idx].host));
 			send_notice_to_user(sourceNick, callerUser, "IP: %lu \2[\2%s\2]\2",			warnings[idx].ip, get_ip(warnings[idx].ip));
 			send_notice_to_user(sourceNick, callerUser, "Time Set C-time: %ld",			warnings[idx].timeAdded);
 			send_notice_to_user(sourceNick, callerUser, "Clone count: %d",				warnings[idx].cloneCount);

@@ -833,13 +833,13 @@ void sxline_ds_dump(CSTR sourceNick, const User *callerUser, STR request) {
 			continue;
 		}
 
-		send_notice_to_user(sourceNick, callerUser, "%d) Address %p, size %lu B",	lineIdx, aSXLine, sizeof(SXLine));
-		send_notice_to_user(sourceNick, callerUser, "Name: %p \2[\2%s\2]\2",		aSXLine->name, str_get_valid_display_value(aSXLine->name));
-		send_notice_to_user(sourceNick, callerUser, "Creator: %p \2[\2%s\2]\2",		aSXLine->info.creator.name, str_get_valid_display_value(aSXLine->info.creator.name));
-		send_notice_to_user(sourceNick, callerUser, "Reason: %p \2[\2%s\2]\2",		aSXLine->info.reason, str_get_valid_display_value(aSXLine->info.reason));
+		send_notice_to_user(sourceNick, callerUser, "%d) Address %p, size %lu B",	lineIdx, (void *)aSXLine, sizeof(SXLine));
+		send_notice_to_user(sourceNick, callerUser, "Name: %p \2[\2%s\2]\2",		(void *)aSXLine->name, str_get_valid_display_value(aSXLine->name));
+		send_notice_to_user(sourceNick, callerUser, "Creator: %p \2[\2%s\2]\2",		(void *)aSXLine->info.creator.name, str_get_valid_display_value(aSXLine->info.creator.name));
+		send_notice_to_user(sourceNick, callerUser, "Reason: %p \2[\2%s\2]\2",		(void *)aSXLine->info.reason, str_get_valid_display_value(aSXLine->info.reason));
 		send_notice_to_user(sourceNick, callerUser, "Time Set C-time: %ld",			aSXLine->info.creator.time);
 		send_notice_to_user(sourceNick, callerUser, "Last Used C-time: %ld",		aSXLine->lastUsed);
-		send_notice_to_user(sourceNick, callerUser, "Next/Prev records: %p / %p",	aSXLine->next, aSXLine->prev);
+		send_notice_to_user(sourceNick, callerUser, "Next/Prev records: %p / %p",	(void *)aSXLine->next, (void *)aSXLine->prev);
 
 		if (sentIdx >= endIdx)
 			break;

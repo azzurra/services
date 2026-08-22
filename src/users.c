@@ -285,7 +285,7 @@ static BOOL user_onlinehost_remove(const User *user) {
 			return TRUE;
 		}
 		else
-			LOG_DEBUG_SNOOP("user_onlinehost_remove() - !hash_onlinehost_find() user %s | item = %p | item->u = %p | user = %p", user->nick, item, item ? item->user : 0, user);
+			LOG_DEBUG_SNOOP("user_onlinehost_remove() - !hash_onlinehost_find() user %s | item = %p | item->u = %p | user = %p", user->nick, (void *)item, (void *)(item ? item->user : NULL), (void *)user);
 	}
 
 	return FALSE;
@@ -3832,10 +3832,10 @@ static void user_ds_dump_display(CSTR sourceNick, const User *callerUser, const 
 	}
 
 	send_notice_to_user(sourceNick, callerUser, "DUMP: user \2%s\2", user->nick);
-	send_notice_to_user(sourceNick, callerUser, "Address %p, size %lu B",						user, sizeof(User) + str_len(user->username) + str_len(user->host) + str_len(user->maskedHost) + str_len(user->realname) + 4);
+	send_notice_to_user(sourceNick, callerUser, "Address %p, size %zu B",						(void *)user, sizeof(User) + str_len(user->username) + str_len(user->host) + str_len(user->maskedHost) + str_len(user->realname) + 4);
 	send_notice_to_user(sourceNick, callerUser, "Nick: %s",										user->nick);
-	send_notice_to_user(sourceNick, callerUser, "Username: %p \2[\2%s\2]\2",					user->username, str_get_valid_display_value(user->username));
-	send_notice_to_user(sourceNick, callerUser, "Host: %p \2[\2%s\2]\2",						user->host, str_get_valid_display_value(user->host));
+	send_notice_to_user(sourceNick, callerUser, "Username: %p \2[\2%s\2]\2",					(void *)user->username, str_get_valid_display_value(user->username));
+	send_notice_to_user(sourceNick, callerUser, "Host: %p \2[\2%s\2]\2",						(void *)user->host, str_get_valid_display_value(user->host));
 
 	#ifdef ENABLE_CAPAB_NICKIP
 	if (FlagUnset(user->flags, USER_FLAG_HAS_IPV6) || FlagSet(user->flags, USER_FLAG_6TO4 | USER_FLAG_TEREDO))
@@ -3844,10 +3844,10 @@ static void user_ds_dump_display(CSTR sourceNick, const User *callerUser, const 
 		send_notice_to_user(sourceNick, callerUser, "IPv6 from NICKIP: \002[\002%s\002]\002",	get_ip6(user->ipv6));
 	#endif
 
-	send_notice_to_user(sourceNick, callerUser, "Masked host: %p \2[\2%s\2]\2",					user->maskedHost, str_get_valid_display_value(user->maskedHost));
-	send_notice_to_user(sourceNick, callerUser, "Realname: %p \2[\2%s\2]\2",					user->realname, str_get_valid_display_value(user->realname));
-	send_notice_to_user(sourceNick, callerUser, "Server: %p \2[\2%s\2]\2",						user->server, str_get_valid_display_value(user->server ? user->server->name : NULL));
-	send_notice_to_user(sourceNick, callerUser, "Username: %p \2[\2%s\2]\2",					user->username, str_get_valid_display_value(user->username));
+	send_notice_to_user(sourceNick, callerUser, "Masked host: %p \2[\2%s\2]\2",					(void *)user->maskedHost, str_get_valid_display_value(user->maskedHost));
+	send_notice_to_user(sourceNick, callerUser, "Realname: %p \2[\2%s\2]\2",					(void *)user->realname, str_get_valid_display_value(user->realname));
+	send_notice_to_user(sourceNick, callerUser, "Server: %p \2[\2%s\2]\2",						(void *)user->server, str_get_valid_display_value(user->server ? user->server->name : NULL));
+	send_notice_to_user(sourceNick, callerUser, "Username: %p \2[\2%s\2]\2",					(void *)user->username, str_get_valid_display_value(user->username));
 	send_notice_to_user(sourceNick, callerUser, "TS Info: %ld",									user->tsinfo);
 	send_notice_to_user(sourceNick, callerUser, "Signon (Server POV): %ld",						user->signon);
 	send_notice_to_user(sourceNick, callerUser, "Signon (Services POV): %ld",					user->my_signon);
@@ -3859,21 +3859,21 @@ static void user_ds_dump_display(CSTR sourceNick, const User *callerUser, const 
 	send_notice_to_user(sourceNick, callerUser, "Last nick registration C-time: %ld",			user->lastnickreg);
 	send_notice_to_user(sourceNick, callerUser, "Flood status: Level / Message count / Reset C-time: %u / %u / %ld", user->flood_current_level, user->flood_msg_count, user->flood_reset_time);
 
-	send_notice_to_user(sourceNick, callerUser, "NickInfo record: %p \2[\2%s\2]\2",				user->ni, user->ni ? str_get_valid_display_value(user->ni->nick) : "NULL");
+	send_notice_to_user(sourceNick, callerUser, "NickInfo record: %p \2[\2%s\2]\2",				(void *)user->ni, user->ni ? str_get_valid_display_value(user->ni->nick) : "NULL");
 
-	send_notice_to_user(sourceNick, callerUser, "Next / previous record: %p / %p",				user->next, user->prev);
+	send_notice_to_user(sourceNick, callerUser, "Next / previous record: %p / %p",				(void *)user->next, (void *)user->prev);
 
 	send_notice_to_user(sourceNick, callerUser, " ");
 	send_notice_to_user(sourceNick, callerUser, "\2Channel list\2 (name | next / previous record):");
 
 	for (item = user->chans, idx = 1; IS_NOT_NULL(item); ++idx, item = item->next)
-		send_notice_to_user(sourceNick, callerUser, "%d) %s | %p / %p", idx, IS_NOT_NULL(item->chan) ? item->chan->name : "NULL pointer", item->next, item->prev);
+		send_notice_to_user(sourceNick, callerUser, "%d) %s | %p / %p", idx, IS_NOT_NULL(item->chan) ? item->chan->name : "NULL pointer", (void *)item->next, (void *)item->prev);
 
 	send_notice_to_user(sourceNick, callerUser, " ");
 	send_notice_to_user(sourceNick, callerUser, "\2Identified-channel list\2 (name | next / previous record):");
 
 	for (infoItem = user->founder_chans, idx = 1; IS_NOT_NULL(infoItem); ++idx, infoItem = infoItem->next)
-		send_notice_to_user(sourceNick, callerUser, "%d) %s | %p / %p", idx, IS_NOT_NULL(infoItem->ci) ? infoItem->ci->name : "NULL pointer", infoItem->next, infoItem->prev);
+		send_notice_to_user(sourceNick, callerUser, "%d) %s | %p / %p", idx, IS_NOT_NULL(infoItem->ci) ? infoItem->ci->name : "NULL pointer", (void *)infoItem->next, (void *)infoItem->prev);
 
 	send_notice_to_user(sourceNick, callerUser, " ");
 	send_notice_to_user(sourceNick, callerUser, "\2Identified-nick list\2:");
@@ -3999,7 +3999,7 @@ void user_ds_dump(CSTR sourceNick, const User *callerUser, STR request) {
 					HASH_FOREACH_BRANCH(idx, ONLINEHOST_HASHSIZE) {
 
 						host_item = hashtable_onlinehost[idx];
-						send_notice_to_user(sourceNick, callerUser, "%ld) %p", idx, host_item);
+						send_notice_to_user(sourceNick, callerUser, "%ld) %p", idx, (void *)host_item);
 					}
 				}
 			}
@@ -4014,7 +4014,7 @@ void user_ds_dump(CSTR sourceNick, const User *callerUser, STR request) {
 		MemoryPoolStats pstats;
 
 		mempool_stats(user_mempool, &pstats);
-		send_notice_to_user(sourceNick, callerUser, "DUMP: Users memory pool - Address %p, ID: %u",	user_mempool, pstats.id);
+		send_notice_to_user(sourceNick, callerUser, "DUMP: Users memory pool - Address %p, ID: %u",	(void *)user_mempool, pstats.id);
 		send_notice_to_user(sourceNick, callerUser, "Memory allocated / free: %lu B / %lu B",		pstats.memory_allocated, pstats.memory_free);
 		send_notice_to_user(sourceNick, callerUser, "Items allocated / free: %lu / %lu",			pstats.items_allocated, pstats.items_free);
 		send_notice_to_user(sourceNick, callerUser, "Items per block / block count: %lu / %lu",		pstats.items_per_block, pstats.block_count);

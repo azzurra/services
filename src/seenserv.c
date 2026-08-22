@@ -1521,11 +1521,11 @@ void seenserv_ds_dump(CSTR sourceNick, const User *callerUser, STR request) {
 
 				send_notice_to_user(sourceNick, callerUser, "DUMP: Seen record for \2%s\2:", nick);
 
-				send_notice_to_user(sourceNick, callerUser, "Address %ps, size %lu B",				si, sizeof(SeenInfo) + str_len(si->nick) + str_len(si->username) + str_len(si->host) + str_len(si->realname) + str_len(si->tempnick) + str_len(si->quitmsg) + 6);
-				send_notice_to_user(sourceNick, callerUser, "Name: %ps \2[\2%s\2]\2",				si->nick, str_get_valid_display_value(si->nick));
-				send_notice_to_user(sourceNick, callerUser, "Username: %ps \2[\2%s\2]\2",			si->username, str_get_valid_display_value(si->username));
-				send_notice_to_user(sourceNick, callerUser, "Realname: %ps \2[\2%s\2]\2",			si->realname, str_get_valid_display_value(si->realname));
-				send_notice_to_user(sourceNick, callerUser, "Host: %ps \2[\2%s\2]\2",				si->host, str_get_valid_display_value(si->host));
+				send_notice_to_user(sourceNick, callerUser, "Address %ps, size %zu B",				(void *)si, sizeof(SeenInfo) + str_len(si->nick) + str_len(si->username) + str_len(si->host) + str_len(si->realname) + str_len(si->tempnick) + str_len(si->quitmsg) + 6);
+				send_notice_to_user(sourceNick, callerUser, "Name: %p \2[\2%s\2]\2",				(void *)si->nick, str_get_valid_display_value(si->nick));
+				send_notice_to_user(sourceNick, callerUser, "Username: %p \2[\2%s\2]\2",			(void *)si->username, str_get_valid_display_value(si->username));
+				send_notice_to_user(sourceNick, callerUser, "Realname: %p \2[\2%s\2]\2",			(void *)si->realname, str_get_valid_display_value(si->realname));
+				send_notice_to_user(sourceNick, callerUser, "Host: %p \2[\2%s\2]\2",				(void *)si->host, str_get_valid_display_value(si->host));
 
 				#ifdef ENABLE_CAPAB_NICKIP
 				send_notice_to_user(sourceNick, callerUser, "IP from NICKIP: %#x \2[\2%s\2]\2",		si->ip, get_ip(si->ip));
@@ -1533,10 +1533,10 @@ void seenserv_ds_dump(CSTR sourceNick, const User *callerUser, STR request) {
 
 				send_notice_to_user(sourceNick, callerUser, "User Modes: %d",						si->mode);
 				send_notice_to_user(sourceNick, callerUser, "Type: %d",								(int)si->type);
-				send_notice_to_user(sourceNick, callerUser, "Temp Nick: %ps \2[\2%s\2]\2",			si->tempnick, str_get_valid_display_value(si->tempnick));
-				send_notice_to_user(sourceNick, callerUser, "Quit Message: %ps \2[\2%s\2]\2",		si->quitmsg, str_get_valid_display_value(si->quitmsg));
+				send_notice_to_user(sourceNick, callerUser, "Temp Nick: %p \2[\2%s\2]\2",			(void *)si->tempnick, str_get_valid_display_value(si->tempnick));
+				send_notice_to_user(sourceNick, callerUser, "Quit Message: %p \2[\2%s\2]\2",		(void *)si->quitmsg, str_get_valid_display_value(si->quitmsg));
 				send_notice_to_user(sourceNick, callerUser, "Last seen C-time: %ld",				si->last_seen);
-				send_notice_to_user(sourceNick, callerUser, "Next / previous record: %ps / %ps",	si->next, si->prev);
+				send_notice_to_user(sourceNick, callerUser, "Next / previous record: %p / %p",		(void *)si->next, (void *)si->prev);
 
 				LOG_DEBUG_SNOOP("Command: DUMP SEENSERV NICK %s -- by %s (%s@%s)", nick, callerUser->nick, callerUser->username, callerUser->host);
 			}
@@ -1592,7 +1592,7 @@ void seenserv_ds_dump(CSTR sourceNick, const User *callerUser, STR request) {
 			for (idx = 0, si = hashtable_seeninfo[hashIdx]; IS_NOT_NULL(si) && (idx <= endIdx); ++idx, si = si->next) {
 
 				if (idx >= startIdx)
-					send_notice_to_user(sourceNick, callerUser, "%05ld) ADR\2 %p\2 - NXT\2 %p\2 - PRV\2 %p\2 - KEY \2%s\2", idx, si, si->next, si->prev, str_get_valid_display_value(si->nick));
+					send_notice_to_user(sourceNick, callerUser, "%05ld) ADR\2 %p\2 - NXT\2 %p\2 - PRV\2 %p\2 - KEY \2%s\2", idx, (void *)si, (void *)si->next, (void *)si->prev, str_get_valid_display_value(si->nick));
 			}
 
 			LOG_DEBUG_SNOOP("Command: DUMP SEENSERV HASHTABLE %ld %ld %ld -- by %s (%s@%s)", hashIdx, startIdx, endIdx, callerUser->nick, callerUser->username, callerUser->host);
@@ -1607,7 +1607,7 @@ void seenserv_ds_dump(CSTR sourceNick, const User *callerUser, STR request) {
 		MemoryPoolStats pstats;
 
 		mempool_stats(seen_nickseen_mempool, &pstats);
-		send_notice_to_user(sourceNick, callerUser, "DUMP: SeenServ nickseen memory pool - Address %p, ID: %u",	seen_nickseen_mempool, pstats.id);
+		send_notice_to_user(sourceNick, callerUser, "DUMP: SeenServ nickseen memory pool - Address %p, ID: %u",	(void *)seen_nickseen_mempool, pstats.id);
 		send_notice_to_user(sourceNick, callerUser, "Memory allocated / free: %lu B / %lu B",					pstats.memory_allocated, pstats.memory_free);
 		send_notice_to_user(sourceNick, callerUser, "Items allocated / free: %lu / %lu",						pstats.items_allocated, pstats.items_free);
 		send_notice_to_user(sourceNick, callerUser, "Items per block / block count: %lu / %lu",					pstats.items_per_block, pstats.block_count);

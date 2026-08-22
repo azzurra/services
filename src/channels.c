@@ -4911,23 +4911,23 @@ static void chan_ds_dump_display(CSTR sourceNick, const User *callerUser, const 
 			++ops;
 
 		send_notice_to_user(sourceNick, callerUser, "DUMP: channel \2%s\2", chan->name);
-		send_notice_to_user(sourceNick, callerUser, "Address %p, size %lu B",		chan, sizeof(chan));
+		send_notice_to_user(sourceNick, callerUser, "Address %p, size %lu B",		(void *)chan, sizeof(chan));
 		send_notice_to_user(sourceNick, callerUser, "Name: %s",						chan->name);
 		send_notice_to_user(sourceNick, callerUser, "Creation C-time: %ld",			chan->creation_time);
-		send_notice_to_user(sourceNick, callerUser, "Last topic: %p \2[\2%s\2]\2",	chan->topic, str_get_valid_display_value(chan->topic));
+		send_notice_to_user(sourceNick, callerUser, "Last topic: %p \2[\2%s\2]\2",	(void *)chan->topic, str_get_valid_display_value(chan->topic));
 		send_notice_to_user(sourceNick, callerUser, "Last topic setter: %s",		chan->topic_setter);
 		send_notice_to_user(sourceNick, callerUser, "Last topic C-time: %ld",		chan->topic_time);
 
 		send_notice_to_user(sourceNick, callerUser, "Mode: %#lx (%s)",							(long unsigned int)chan->mode, get_channel_mode(chan->mode, 0));
-		send_notice_to_user(sourceNick, callerUser, "Mode +l/+k values: %ld / %p \2[\2%s\2]\2",	chan->limit, chan->key, str_get_valid_display_value(chan->key));
+		send_notice_to_user(sourceNick, callerUser, "Mode +l/+k values: %ld / %p \2[\2%s\2]\2",	chan->limit, (void *)chan->key, str_get_valid_display_value(chan->key));
 
-		send_notice_to_user(sourceNick, callerUser, "Bans count / list size / list head: %d / %d / %p",			chan->bancount, chan->bansize, chan->bans);
+		send_notice_to_user(sourceNick, callerUser, "Bans count / list size / list head: %d / %d / %p",			chan->bancount, chan->bansize, (void *)chan->bans);
 		send_notice_to_user(sourceNick, callerUser, "Users [%d/%d] / ops [%d] / halfops [%d] / voices [%d]",	chan->userCount, users, ops, halfops, voices);
-		send_notice_to_user(sourceNick, callerUser, "List heads: %p / %p / %p / %p",							chan->users, chan->chanops, chan->halfops, chan->voices);
+		send_notice_to_user(sourceNick, callerUser, "List heads: %p / %p / %p / %p",							(void *)chan->users, (void *)chan->chanops, (void *)chan->halfops, (void *)chan->voices);
 
-		send_notice_to_user(sourceNick, callerUser, "ChanInfo record: %p \2[\2%s\2]\2", chan->ci, chan->ci ? str_get_valid_display_value(chan->ci->name) : "NULL");
+		send_notice_to_user(sourceNick, callerUser, "ChanInfo record: %p \2[\2%s\2]\2", (void *)chan->ci, chan->ci ? str_get_valid_display_value(chan->ci->name) : "NULL");
 
-		send_notice_to_user(sourceNick, callerUser, "Next / previous record: %p / %p", chan->next, chan->prev);
+		send_notice_to_user(sourceNick, callerUser, "Next / previous record: %p / %p", (void *)chan->next, (void *)chan->prev);
 	}
 	else if (str_equals_nocase(what, "USER") || str_equals_nocase(what, "OP") || str_equals_nocase(what, "HALFOP")|| str_equals_nocase(what, "VOICE")) {
 
@@ -5054,7 +5054,7 @@ void chan_ds_dump(CSTR sourceNick, const User *callerUser, STR request) {
 			MemoryPoolStats pstats;
 
 			mempool_stats(channels_mempool, &pstats);
-			send_notice_to_user(sourceNick, callerUser, "DUMP: Channels memory pool - Address %p, ID: %u",	channels_mempool, pstats.id);
+			send_notice_to_user(sourceNick, callerUser, "DUMP: Channels memory pool - Address %p, ID: %u",	(void *)channels_mempool, pstats.id);
 			send_notice_to_user(sourceNick, callerUser, "Memory allocated / free: %lu B / %lu B",			pstats.memory_allocated, pstats.memory_free);
 			send_notice_to_user(sourceNick, callerUser, "Items allocated / free: %lu / %lu",				pstats.items_allocated, pstats.items_free);
 			send_notice_to_user(sourceNick, callerUser, "Items per block / block count: %lu / %lu",			pstats.items_per_block, pstats.block_count);

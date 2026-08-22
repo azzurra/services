@@ -938,17 +938,17 @@ void ignore_ds_dump(CSTR sourceNick, const User *callerUser, STR request) {
 			continue;
 		}
 
-		send_notice_to_user(sourceNick, callerUser, "%d) Address %p, size %lu B",	ignoreIdx, anIgnore, sizeof(Ignore));
-		send_notice_to_user(sourceNick, callerUser, "Nick: %p \2[\2%s\2]\2",		anIgnore->nick, str_get_valid_display_value(anIgnore->nick));
-		send_notice_to_user(sourceNick, callerUser, "Username: %p \2[\2%s\2]\2",	anIgnore->username, str_get_valid_display_value(anIgnore->username));
-		send_notice_to_user(sourceNick, callerUser, "Host: %p \2[\2%s\2]\2",		anIgnore->host, str_get_valid_display_value(anIgnore->host));
-		send_notice_to_user(sourceNick, callerUser, "Creator: %p \2[\2%s\2]\2",		anIgnore->info.creator.name, str_get_valid_display_value(anIgnore->info.creator.name));
-		send_notice_to_user(sourceNick, callerUser, "Reason: %p \2[\2%s\2]\2",		anIgnore->info.reason, str_get_valid_display_value(anIgnore->info.reason));
+		send_notice_to_user(sourceNick, callerUser, "%d) Address %p, size %lu B",	ignoreIdx, (void *)anIgnore, sizeof(Ignore));
+		send_notice_to_user(sourceNick, callerUser, "Nick: %p \2[\2%s\2]\2",		(void *)anIgnore->nick, str_get_valid_display_value(anIgnore->nick));
+		send_notice_to_user(sourceNick, callerUser, "Username: %p \2[\2%s\2]\2",	(void *)anIgnore->username, str_get_valid_display_value(anIgnore->username));
+		send_notice_to_user(sourceNick, callerUser, "Host: %p \2[\2%s\2]\2",		(void *)anIgnore->host, str_get_valid_display_value(anIgnore->host));
+		send_notice_to_user(sourceNick, callerUser, "Creator: %p \2[\2%s\2]\2",		(void *)anIgnore->info.creator.name, str_get_valid_display_value(anIgnore->info.creator.name));
+		send_notice_to_user(sourceNick, callerUser, "Reason: %p \2[\2%s\2]\2",		(void *)anIgnore->info.reason, str_get_valid_display_value(anIgnore->info.reason));
 		send_notice_to_user(sourceNick, callerUser, "Time Set C-time: %ld",			anIgnore->info.creator.time);
 		send_notice_to_user(sourceNick, callerUser, "Expire C-time: %ld",			anIgnore->expireTime);
 		send_notice_to_user(sourceNick, callerUser, "Last Used C-time: %ld",		anIgnore->lastUsed);
 		send_notice_to_user(sourceNick, callerUser, "Flags: %d",					anIgnore->flags);
-		send_notice_to_user(sourceNick, callerUser, "Next/Prev records: %p / %p",	anIgnore->next, anIgnore->prev);
+		send_notice_to_user(sourceNick, callerUser, "Next/Prev records: %p / %p",	(void *)anIgnore->next, (void *)anIgnore->prev);
 
 		if (ignoreIdx >= endIdx)
 			break;

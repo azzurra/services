@@ -556,17 +556,17 @@ BOOL send_access_info(Access *accessList, CSTR nick, CSTR sourceNick, const User
 
 void access_send_dump(Access *anAccess, CSTR sourceNick, const User *callerUser) {
 
-	send_notice_to_user(sourceNick, callerUser, "Address %p, size %lu B",		anAccess, sizeof(Access));
-	send_notice_to_user(sourceNick, callerUser, "Nick: %p \2[\2%s\2]\2",		anAccess->nick, str_get_valid_display_value(anAccess->nick));
-	send_notice_to_user(sourceNick, callerUser, "User: %p \2[\2%s\2]\2",		anAccess->user, str_get_valid_display_value(anAccess->user));
-	send_notice_to_user(sourceNick, callerUser, "User2: %p \2[\2%s\2]\2",		anAccess->user2, str_get_valid_display_value(anAccess->user2));
-	send_notice_to_user(sourceNick, callerUser, "User3: %p \2[\2%s\2]\2",		anAccess->user3, str_get_valid_display_value(anAccess->user3));
-	send_notice_to_user(sourceNick, callerUser, "Host: %p \2[\2%s\2]\2",		anAccess->host, str_get_valid_display_value(anAccess->host));
-	send_notice_to_user(sourceNick, callerUser, "Host2: %p \2[\2%s\2]\2",		anAccess->host2, str_get_valid_display_value(anAccess->host2));
-	send_notice_to_user(sourceNick, callerUser, "Host3: %p \2[\2%s\2]\2",		anAccess->host3, str_get_valid_display_value(anAccess->host3));
-	send_notice_to_user(sourceNick, callerUser, "Server: %p \2[\2%s\2]\2",		anAccess->server, str_get_valid_display_value(anAccess->server));
-	send_notice_to_user(sourceNick, callerUser, "Server2: %p \2[\2%s\2]\2",		anAccess->server2, str_get_valid_display_value(anAccess->server2));
-	send_notice_to_user(sourceNick, callerUser, "Server3: %p \2[\2%s\2]\2",		anAccess->server3, str_get_valid_display_value(anAccess->server3));
+	send_notice_to_user(sourceNick, callerUser, "Address %p, size %lu B",		(void *)anAccess, sizeof(Access));
+	send_notice_to_user(sourceNick, callerUser, "Nick: %p \2[\2%s\2]\2",		(void *)anAccess->nick, str_get_valid_display_value(anAccess->nick));
+	send_notice_to_user(sourceNick, callerUser, "User: %p \2[\2%s\2]\2",		(void *)anAccess->user, str_get_valid_display_value(anAccess->user));
+	send_notice_to_user(sourceNick, callerUser, "User2: %p \2[\2%s\2]\2",		(void *)anAccess->user2, str_get_valid_display_value(anAccess->user2));
+	send_notice_to_user(sourceNick, callerUser, "User3: %p \2[\2%s\2]\2",		(void *)anAccess->user3, str_get_valid_display_value(anAccess->user3));
+	send_notice_to_user(sourceNick, callerUser, "Host: %p \2[\2%s\2]\2",		(void *)anAccess->host, str_get_valid_display_value(anAccess->host));
+	send_notice_to_user(sourceNick, callerUser, "Host2: %p \2[\2%s\2]\2",		(void *)anAccess->host2, str_get_valid_display_value(anAccess->host2));
+	send_notice_to_user(sourceNick, callerUser, "Host3: %p \2[\2%s\2]\2",		(void *)anAccess->host3, str_get_valid_display_value(anAccess->host3));
+	send_notice_to_user(sourceNick, callerUser, "Server: %p \2[\2%s\2]\2",		(void *)anAccess->server, str_get_valid_display_value(anAccess->server));
+	send_notice_to_user(sourceNick, callerUser, "Server2: %p \2[\2%s\2]\2",		(void *)anAccess->server2, str_get_valid_display_value(anAccess->server2));
+	send_notice_to_user(sourceNick, callerUser, "Server3: %p \2[\2%s\2]\2",		(void *)anAccess->server3, str_get_valid_display_value(anAccess->server3));
 	send_notice_to_user(sourceNick, callerUser, "Flags: %ld",					anAccess->flags);
 
 	send_notice_to_user(sourceNick, callerUser, "Modes ON: %ld \2[\2%s\2]\2",	anAccess->modes_on, get_user_modes(anAccess->modes_on, 0));
@@ -575,7 +575,7 @@ void access_send_dump(Access *anAccess, CSTR sourceNick, const User *callerUser)
 	send_notice_to_user(sourceNick, callerUser, "Created by: %p \2[\2%s\2]\2",	anAccess->creator.name, str_get_valid_display_value(anAccess->creator.name));
 	send_notice_to_user(sourceNick, callerUser, "Time Added C-time: %ld",		anAccess->creator.time);
 	send_notice_to_user(sourceNick, callerUser, "Last Update C-time: %ld",		anAccess->lastUpdate);
-	send_notice_to_user(sourceNick, callerUser, "Next record: %p",				anAccess->next);
+	send_notice_to_user(sourceNick, callerUser, "Next record: %p",				(void *)anAccess->next);
 }
 
 /*********************************************************/

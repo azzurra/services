@@ -573,12 +573,12 @@ void jupe_ds_dump(CSTR sourceNick, const User *callerUser, STR request) {
 			continue;
 		}
 
-		send_notice_to_user(sourceNick, callerUser, "%d) Address %p, size %lu B",	jupeIdx, aJupe, sizeof(Jupe));
-		send_notice_to_user(sourceNick, callerUser, "Server: %p \2[\2%s\2]\2",		aJupe->name, str_get_valid_display_value(aJupe->name));
-		send_notice_to_user(sourceNick, callerUser, "Creator: %p \2[\2%s\2]\2",		aJupe->info.creator.name, str_get_valid_display_value(aJupe->info.creator.name));
-		send_notice_to_user(sourceNick, callerUser, "Reason: %p \2[\2%s\2]\2",		aJupe->info.reason, str_get_valid_display_value(aJupe->info.reason));
+		send_notice_to_user(sourceNick, callerUser, "%d) Address %p, size %lu B",	jupeIdx, (void *)aJupe, sizeof(Jupe));
+		send_notice_to_user(sourceNick, callerUser, "Server: %p \2[\2%s\2]\2",		(void *)aJupe->name, str_get_valid_display_value(aJupe->name));
+		send_notice_to_user(sourceNick, callerUser, "Creator: %p \2[\2%s\2]\2",		(void *)aJupe->info.creator.name, str_get_valid_display_value(aJupe->info.creator.name));
+		send_notice_to_user(sourceNick, callerUser, "Reason: %p \2[\2%s\2]\2",		(void *)aJupe->info.reason, str_get_valid_display_value(aJupe->info.reason));
 		send_notice_to_user(sourceNick, callerUser, "Time Set C-time: %ld",			aJupe->info.creator.time);
-		send_notice_to_user(sourceNick, callerUser, "Next/Prev records: %p / %p",	aJupe->next, aJupe->prev);
+		send_notice_to_user(sourceNick, callerUser, "Next/Prev records: %p / %p",	(void *)aJupe->next, (void *)aJupe->prev);
 
 		if (sentIdx >= endIdx)
 			break;

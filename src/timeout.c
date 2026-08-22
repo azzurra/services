@@ -87,8 +87,8 @@ BOOL timeout_add(TimeoutType type, int user_type, unsigned long hash, int interv
 
 	} else {
 
-		log_error(FACILITY_TIMEOUT_ADD_TIMEOUT, __LINE__, LOG_TYPE_ERROR_ASSERTION, LOG_SEVERITY_ERROR_HALTED, 
-			"timeout_add(%u, %d, %lu, %d, %d, %p, %p) - Invalid parameters!", type, user_type, hash, interval, repeat, handler, data);
+		log_error(FACILITY_TIMEOUT_ADD_TIMEOUT, __LINE__, LOG_TYPE_ERROR_ASSERTION, LOG_SEVERITY_ERROR_HALTED,
+			"timeout_add(%u, %d, %lu, %d, %d, %s, %p) - Invalid parameters!", type, user_type, hash, interval, repeat, IS_NULL(handler) ? "NULL" : "<function pointer>", data);
 		
 		return FALSE;
 	}

@@ -2519,11 +2519,11 @@ void statserv_ds_dump(CSTR sourceNick, const User *callerUser, STR request) {
 
 				send_notice_to_user(sourceNick, callerUser, "DUMP: Stats record for \2%s\2:", chan_name);
 
-				send_notice_to_user(sourceNick, callerUser, "Address %p, size %lu B",			cs, sizeof(ChannelStats) + str_len(cs->name) + 1);
-				send_notice_to_user(sourceNick, callerUser, "Name: %p \2[\2%s\2]\2",			cs->name, str_get_valid_display_value(cs->name));
+				send_notice_to_user(sourceNick, callerUser, "Address %p, size %zu B",			(void *)cs, sizeof(ChannelStats) + str_len(cs->name) + 1);
+				send_notice_to_user(sourceNick, callerUser, "Name: %p \2[\2%s\2]\2",			(void *)cs->name, str_get_valid_display_value(cs->name));
 				send_notice_to_user(sourceNick, callerUser, "Time Added C-time: %ld",			cs->time_added);
 				send_notice_to_user(sourceNick, callerUser, "Last Change C-time: %ld",			cs->last_change);
-				send_notice_to_user(sourceNick, callerUser, "Next / previous record: %p / %p",	cs->next, cs->prev);
+				send_notice_to_user(sourceNick, callerUser, "Next / previous record: %p / %p",	(void *)cs->next, (void *)cs->prev);
 
 				LOG_DEBUG_SNOOP("Command: DUMP STATSERV CHAN %s -- by %s (%s@%s)", chan_name, callerUser->nick, callerUser->username, callerUser->host);
 			}
@@ -2579,7 +2579,7 @@ void statserv_ds_dump(CSTR sourceNick, const User *callerUser, STR request) {
 			for (idx = 0, cs = hashtable_chanstats[hashIdx]; IS_NOT_NULL(cs) && (idx <= endIdx); ++idx, cs = cs->next) {
 
 				if (idx >= startIdx)
-					send_notice_to_user(sourceNick, callerUser, "%05ld) ADR\2 %p\2 - NXT\2 %p\2 - PRV\2 %p\2 - KEY \2%s\2", idx, cs, cs->next, cs->prev, str_get_valid_display_value(cs->name));
+					send_notice_to_user(sourceNick, callerUser, "%05ld) ADR\2 %p\2 - NXT\2 %p\2 - PRV\2 %p\2 - KEY \2%s\2", idx, (void *)cs, (void *)cs->next, (void *)cs->prev, str_get_valid_display_value(cs->name));
 			}
 
 			LOG_DEBUG_SNOOP("Command: DUMP STATSERV HASHTABLE %ld %ld %ld -- by %s (%s@%s)", hashIdx, startIdx, endIdx, callerUser->nick, callerUser->username, callerUser->host);
@@ -2594,7 +2594,7 @@ void statserv_ds_dump(CSTR sourceNick, const User *callerUser, STR request) {
 		MemoryPoolStats pstats;
 
 		mempool_stats(stats_chan_mempool, &pstats);
-		send_notice_to_user(sourceNick, callerUser, "DUMP: StatServ chanstat memory pool - Address %p, ID: %u",	stats_chan_mempool, pstats.id);
+		send_notice_to_user(sourceNick, callerUser, "DUMP: StatServ chanstat memory pool - Address %p, ID: %u",	(void *)stats_chan_mempool, pstats.id);
 		send_notice_to_user(sourceNick, callerUser, "Memory allocated / free: %lu B / %lu B",					pstats.memory_allocated, pstats.memory_free);
 		send_notice_to_user(sourceNick, callerUser, "Items allocated / free: %lu / %lu",						pstats.items_allocated, pstats.items_free);
 		send_notice_to_user(sourceNick, callerUser, "Items per block / block count: %lu / %lu",					pstats.items_per_block, pstats.block_count);

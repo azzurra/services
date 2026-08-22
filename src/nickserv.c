@@ -5868,14 +5868,14 @@ void nickserv_ds_dump(CSTR sourceNick, const User *callerUser, STR request) {
 
 					send_notice_to_user(sourceNick, callerUser, "DUMP: nickname \2%s\2", value);
 
-					send_notice_to_user(sourceNick, callerUser, "Address %p, size %lu B",				ni, sizeof(NickInfo));
+					send_notice_to_user(sourceNick, callerUser, "Address %p, size %zu B",				(void *)ni, sizeof(NickInfo));
 					send_notice_to_user(sourceNick, callerUser, "Name: %s",								ni->nick);
 					send_notice_to_user(sourceNick, callerUser, "Password: [REDACTED]");
-					send_notice_to_user(sourceNick, callerUser, "Last Mask: %p \2[\2%s\2]\2",			ni->last_usermask, str_get_valid_display_value(ni->last_usermask));
-					send_notice_to_user(sourceNick, callerUser, "Last Real Name: %p \2[\2%s\2]\2",		ni->last_realname, str_get_valid_display_value(ni->last_realname));
+					send_notice_to_user(sourceNick, callerUser, "Last Mask: %p \2[\2%s\2]\2",			(void *)ni->last_usermask, str_get_valid_display_value(ni->last_usermask));
+					send_notice_to_user(sourceNick, callerUser, "Last Real Name: %p \2[\2%s\2]\2",		(void *)ni->last_realname, str_get_valid_display_value(ni->last_realname));
 					send_notice_to_user(sourceNick, callerUser, "Registration C-time: %ld",				ni->time_registered);
 					send_notice_to_user(sourceNick, callerUser, "Last seen C-time: %ld",				ni->last_seen);
-					send_notice_to_user(sourceNick, callerUser, "Access count / list: %ld / %p",		ni->accesscount, ni->access);
+					send_notice_to_user(sourceNick, callerUser, "Access count / list: %ld / %p",		ni->accesscount, (void *)ni->access);
 					send_notice_to_user(sourceNick, callerUser, "Flags: %#lx (%s)",						(unsigned long)ni->flags, get_nick_flags(ni->flags));
 					send_notice_to_user(sourceNick, callerUser, "Last Drop Request C-time: %ld",		ni->last_drop_request);
 					send_notice_to_user(sourceNick, callerUser, "Last E-Mail Request C-time: %ld",		ni->last_email_request);
@@ -5883,17 +5883,17 @@ void nickserv_ds_dump(CSTR sourceNick, const User *callerUser, STR request) {
 					send_notice_to_user(sourceNick, callerUser, "Channels count: %d",					ni->channelcount);
 					send_notice_to_user(sourceNick, callerUser, "News check value: %d",					ni->news);
 					send_notice_to_user(sourceNick, callerUser, "Registration E-Mail: %p \2[\2%s\2]\2",	ni->regemail, str_get_valid_display_value(ni->regemail));
-					send_notice_to_user(sourceNick, callerUser, "URL: %p \2[\2%s\2]\2",					ni->url, str_get_valid_display_value(ni->url));
-					send_notice_to_user(sourceNick, callerUser, "New E-Mail: %p \2[\2%s\2]\2",			ni->email, str_get_valid_display_value(ni->email));
-					send_notice_to_user(sourceNick, callerUser, "Memo forwarded to: %p \2[\2%s\2]\2",	ni->forward, str_get_valid_display_value(ni->forward));
-					send_notice_to_user(sourceNick, callerUser, "Hold by: %p \2[\2%s\2]\2",				ni->hold, str_get_valid_display_value(ni->hold));
-					send_notice_to_user(sourceNick, callerUser, "Marked by: %p \2[\2%s\2]\2",			ni->mark, str_get_valid_display_value(ni->mark));
-					send_notice_to_user(sourceNick, callerUser, "Frozen by: %p \2[\2%s\2]\2",			ni->freeze, str_get_valid_display_value(ni->freeze));
-					send_notice_to_user(sourceNick, callerUser, "Forbidden by: %p \2[\2%s\2]\2",		ni->forbid, str_get_valid_display_value(ni->forbid));
+					send_notice_to_user(sourceNick, callerUser, "URL: %p \2[\2%s\2]\2",					(void *)ni->url, str_get_valid_display_value(ni->url));
+					send_notice_to_user(sourceNick, callerUser, "New E-Mail: %p \2[\2%s\2]\2",			(void *)ni->email, str_get_valid_display_value(ni->email));
+					send_notice_to_user(sourceNick, callerUser, "Memo forwarded to: %p \2[\2%s\2]\2",	(void *)ni->forward, str_get_valid_display_value(ni->forward));
+					send_notice_to_user(sourceNick, callerUser, "Hold by: %p \2[\2%s\2]\2",				(void *)ni->hold, str_get_valid_display_value(ni->hold));
+					send_notice_to_user(sourceNick, callerUser, "Marked by: %p \2[\2%s\2]\2",			(void *)ni->mark, str_get_valid_display_value(ni->mark));
+					send_notice_to_user(sourceNick, callerUser, "Frozen by: %p \2[\2%s\2]\2",			(void *)ni->freeze, str_get_valid_display_value(ni->freeze));
+					send_notice_to_user(sourceNick, callerUser, "Forbidden by: %p \2[\2%s\2]\2",		(void *)ni->forbid, str_get_valid_display_value(ni->forbid));
 					send_notice_to_user(sourceNick, callerUser, "Auth code: %lu",						ni->auth);
 					send_notice_to_user(sourceNick, callerUser, "LangID: %d (%u)",						ni->langID, EXTRACT_LANG_ID(ni->langID));
 					send_notice_to_user(sourceNick, callerUser, "reserved[3]: %u %u %u",				ni->reserved[0], ni->reserved[1], ni->reserved[2]);
-					send_notice_to_user(sourceNick, callerUser, "Next / previous record: %p / %p",		ni->next, ni->prev);
+					send_notice_to_user(sourceNick, callerUser, "Next / previous record: %p / %p",		(void *)ni->next, (void *)ni->prev);
 
 					LOG_DEBUG_SNOOP("Command: DUMP NICKSERV NICK %s -- by %s (%s@%s)", value, callerUser->nick, callerUser->username, callerUser->host);
 				}
@@ -5949,7 +5949,7 @@ void nickserv_ds_dump(CSTR sourceNick, const User *callerUser, STR request) {
 			MemoryPoolStats pstats;
 
 			mempool_stats(nickdb_mempool, &pstats);
-			send_notice_to_user(sourceNick, callerUser, "DUMP: NickServ memory pool - Address %p, ID: %u",	nickdb_mempool, pstats.id);
+			send_notice_to_user(sourceNick, callerUser, "DUMP: NickServ memory pool - Address %p, ID: %u",	(void *)nickdb_mempool, pstats.id);
 			send_notice_to_user(sourceNick, callerUser, "Memory allocated / free: %lu B / %lu B",			pstats.memory_allocated, pstats.memory_free);
 			send_notice_to_user(sourceNick, callerUser, "Items allocated / free: %lu / %lu",				pstats.items_allocated, pstats.items_free);
 			send_notice_to_user(sourceNick, callerUser, "Items per block / block count: %lu / %lu",			pstats.items_per_block, pstats.block_count);

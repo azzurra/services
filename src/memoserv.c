@@ -3160,11 +3160,11 @@ void memoserv_ds_dump(CSTR sourceNick, const User *callerUser, STR request) {
 
 					for (memo = ml->memos, memoIdx = 0; memoIdx < ml->n_memos; ++memoIdx, ++memo) {
 
-						send_notice_to_user(sourceNick, callerUser, "%d) Address %p, size %lu B",			(memoIdx + 1), memo, sizeof(Memo));
+						send_notice_to_user(sourceNick, callerUser, "%d) Address %p, size %lu B",			(memoIdx + 1), (void *)memo, sizeof(Memo));
 						send_notice_to_user(sourceNick, callerUser, "Unused: %ld / Time Sent C-time: %ld",	memo->unused, memo->time);
 						send_notice_to_user(sourceNick, callerUser, "Sent by: %s / Flags: %d",				memo->sender, memo->flags);
-						send_notice_to_user(sourceNick, callerUser, "Channel: %p \2[\2%s\2]\2",				memo->chan, str_get_valid_display_value(memo->chan));
-						send_notice_to_user(sourceNick, callerUser, "Text: %p \2[\2%s\2]\2",				memo->text, str_get_valid_display_value(memo->text));
+						send_notice_to_user(sourceNick, callerUser, "Channel: %p \2[\2%s\2]\2",				(void *)memo->chan, str_get_valid_display_value(memo->chan));
+						send_notice_to_user(sourceNick, callerUser, "Text: %p \2[\2%s\2]\2",				(void *)memo->text, str_get_valid_display_value(memo->text));
 						send_notice_to_user(sourceNick, callerUser, "Level: %d",							memo->level);
 						send_notice_to_user(sourceNick, callerUser, "reserved[3]: %ld %ld %ld",				memo->reserved[0], memo->reserved[1], memo->reserved[2]);
 					}
@@ -3180,10 +3180,10 @@ void memoserv_ds_dump(CSTR sourceNick, const User *callerUser, STR request) {
 					for (ignore = ml->ignores; IS_NOT_NULL(ignore); ignore = ignore->next) {
 
 						++idx;
-						send_notice_to_user(sourceNick, callerUser, "%d) Address %p, size %lu B",		idx, ignore, sizeof(MemoIgnore));
-						send_notice_to_user(sourceNick, callerUser, "Ignored Nick: %p \2[\2%s\2]\2",	ignore->ignoredNick, str_get_valid_display_value(ignore->ignoredNick));
+						send_notice_to_user(sourceNick, callerUser, "%d) Address %p, size %lu B",		idx, (void *)ignore, sizeof(MemoIgnore));
+						send_notice_to_user(sourceNick, callerUser, "Ignored Nick: %p \2[\2%s\2]\2",	(void *)ignore->ignoredNick, str_get_valid_display_value(ignore->ignoredNick));
 						send_notice_to_user(sourceNick, callerUser, "Time Added C-time: %ld",			ignore->creationTime);
-						send_notice_to_user(sourceNick, callerUser, "Next / previous record: %p / %p",	ignore->next, ignore->prev);
+						send_notice_to_user(sourceNick, callerUser, "Next / previous record: %p / %p",	(void *)ignore->next, (void *)ignore->prev);
 					}
 
 					LOG_DEBUG_SNOOP("Command: DUMP MEMOSERV NICK %s -- by %s (%s@%s) [Ignores]", value, callerUser->nick, callerUser->username, callerUser->host);
@@ -3192,14 +3192,14 @@ void memoserv_ds_dump(CSTR sourceNick, const User *callerUser, STR request) {
 
 					send_notice_to_user(sourceNick, callerUser, "DUMP: memolist for \2%s\2", value);
 
-					send_notice_to_user(sourceNick, callerUser, "Address %p, size %lu B",			ml, sizeof(MemoList));
+					send_notice_to_user(sourceNick, callerUser, "Address %p, size %lu B",			(void *)ml, sizeof(MemoList));
 					send_notice_to_user(sourceNick, callerUser, "Name: %s",							ml->nick);
-					send_notice_to_user(sourceNick, callerUser, "Memos: %p",						ml->memos);
+					send_notice_to_user(sourceNick, callerUser, "Memos: %p",						(void *)ml->memos);
 					send_notice_to_user(sourceNick, callerUser, "Number of Memos: %ld",				ml->n_memos);
-					send_notice_to_user(sourceNick, callerUser, "Ignores: %p",						ml->ignores);
+					send_notice_to_user(sourceNick, callerUser, "Ignores: %p",						(void *)ml->ignores);
 					send_notice_to_user(sourceNick, callerUser, "Number of Ignores: %ld",			ml->n_ignores);
 					send_notice_to_user(sourceNick, callerUser, "reserved[2]: %ld %ld",				ml->reserved[0], ml->reserved[1]);
-					send_notice_to_user(sourceNick, callerUser, "Next / previous record: %p / %p",	ml->next, ml->prev);
+					send_notice_to_user(sourceNick, callerUser, "Next / previous record: %p / %p",	(void *)ml->next, (void *)ml->prev);
 
 					LOG_DEBUG_SNOOP("Command: DUMP MEMOSERV NICK %s -- by %s (%s@%s)", value, callerUser->nick, callerUser->username, callerUser->host);
 				}
@@ -3213,7 +3213,7 @@ void memoserv_ds_dump(CSTR sourceNick, const User *callerUser, STR request) {
 			MemoryPoolStats pstats;
 
 			mempool_stats(memodb_mempool, &pstats);
-			send_notice_to_user(sourceNick, callerUser, "DUMP: MemoServ memory pool - Address %p, ID: %u",	memodb_mempool, pstats.id);
+			send_notice_to_user(sourceNick, callerUser, "DUMP: MemoServ memory pool - Address %p, ID: %u",	(void *)memodb_mempool, pstats.id);
 			send_notice_to_user(sourceNick, callerUser, "Memory allocated / free: %lu B / %lu B",			pstats.memory_allocated, pstats.memory_free);
 			send_notice_to_user(sourceNick, callerUser, "Items allocated / free: %lu / %lu",				pstats.items_allocated, pstats.items_free);
 			send_notice_to_user(sourceNick, callerUser, "Items per block / block count: %lu / %lu",			pstats.items_per_block, pstats.block_count);

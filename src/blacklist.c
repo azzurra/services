@@ -687,14 +687,14 @@ void blacklist_ds_dump(CSTR sourceNick, const User *callerUser, STR request) {
 			continue;
 		}
 
-		send_notice_to_user(sourceNick, callerUser, "%d) Address %p, size %lu B",	addressIdx, anAddress, sizeof(BlackList));
-		send_notice_to_user(sourceNick, callerUser, "Value: %p \2[\2%s\2]\2",		anAddress->address, str_get_valid_display_value(anAddress->address));
-		send_notice_to_user(sourceNick, callerUser, "Reason: %p \2[\2%s\2]\2",		anAddress->info.reason, str_get_valid_display_value(anAddress->info.reason));
-		send_notice_to_user(sourceNick, callerUser, "Set by: %p \2[\2%s\2]\2",		anAddress->info.creator.name, str_get_valid_display_value(anAddress->info.creator.name));
+		send_notice_to_user(sourceNick, callerUser, "%d) Address %p, size %lu B",	addressIdx, (void *)anAddress, sizeof(BlackList));
+		send_notice_to_user(sourceNick, callerUser, "Value: %p \2[\2%s\2]\2",		(void *)anAddress->address, str_get_valid_display_value(anAddress->address));
+		send_notice_to_user(sourceNick, callerUser, "Reason: %p \2[\2%s\2]\2",		(void *)anAddress->info.reason, str_get_valid_display_value(anAddress->info.reason));
+		send_notice_to_user(sourceNick, callerUser, "Set by: %p \2[\2%s\2]\2",		(void *)anAddress->info.creator.name, str_get_valid_display_value(anAddress->info.creator.name));
 		send_notice_to_user(sourceNick, callerUser, "Time Set C-time: %ld",			anAddress->info.creator.time);
 		send_notice_to_user(sourceNick, callerUser, "Last Used C-time: %ld",		anAddress->lastUsed);
 		send_notice_to_user(sourceNick, callerUser, "Flags: %#x",					anAddress->flags);
-		send_notice_to_user(sourceNick, callerUser, "Next/Prev records: %p / %p",	anAddress->next, anAddress->prev);
+		send_notice_to_user(sourceNick, callerUser, "Next/Prev records: %p / %p",	(void *)anAddress->next, (void *)anAddress->prev);
 
 		if (sentIdx >= endIdx)
 			break;

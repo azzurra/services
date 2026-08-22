@@ -906,14 +906,14 @@ void reserved_ds_dump(CSTR sourceNick, const User *callerUser, STR request) {
 			continue;
 		}
 
-		send_notice_to_user(sourceNick, callerUser, "%d) Address %p, size %lu B",	reservedIdx, aName, sizeof(reservedName));
-		send_notice_to_user(sourceNick, callerUser, "Name: %p \2[\2%s\2]\2",		aName->name, str_get_valid_display_value(aName->name));
-		send_notice_to_user(sourceNick, callerUser, "Creator: %p \2[\2%s\2]\2",		aName->info.creator.name, str_get_valid_display_value(aName->info.creator.name));
-		send_notice_to_user(sourceNick, callerUser, "Reason: %p \2[\2%s\2]\2",		aName->info.reason, str_get_valid_display_value(aName->info.reason));
+		send_notice_to_user(sourceNick, callerUser, "%d) Address %p, size %zu B",	reservedIdx, (void *)aName, sizeof(reservedName));
+		send_notice_to_user(sourceNick, callerUser, "Name: %p \2[\2%s\2]\2",		(void *)aName->name, str_get_valid_display_value(aName->name));
+		send_notice_to_user(sourceNick, callerUser, "Creator: %p \2[\2%s\2]\2",		(void *)aName->info.creator.name, str_get_valid_display_value(aName->info.creator.name));
+		send_notice_to_user(sourceNick, callerUser, "Reason: %p \2[\2%s\2]\2",		(void *)aName->info.reason, str_get_valid_display_value(aName->info.reason));
 		send_notice_to_user(sourceNick, callerUser, "Time Added C-time: %ld",		aName->info.creator.time);
 		send_notice_to_user(sourceNick, callerUser, "Flags: %#lx",					aName->flags);
 		send_notice_to_user(sourceNick, callerUser, "Last Update: %ld",				aName->lastUpdate);
-		send_notice_to_user(sourceNick, callerUser, "Next record: %p",				aName->next);
+		send_notice_to_user(sourceNick, callerUser, "Next record: %p",				(void *)aName->next);
 
 		if (sentIdx >= endIdx)
 			break;
