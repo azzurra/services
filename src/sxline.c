@@ -272,7 +272,7 @@ void sxline_burst_send(void) {
 
 	while (IS_NOT_NULL(aSXLine)) {
 
-		send_cmd("SGLINE %lu :%s:%s", str_len(aSXLine->name), aSXLine->name, aSXLine->info.reason);
+		send_cmd("SGLINE %zu :%s:%s", str_len(aSXLine->name), aSXLine->name, aSXLine->info.reason);
 		aSXLine = aSXLine->next;
 	}
 }
@@ -614,7 +614,7 @@ void handle_sxline(CSTR source, User *callerUser, ServiceCommandData *data) {
 		if (isQLine)
 			send_cmd("SQLINE %s :%s", name, reason);
 		else
-			send_cmd("SGLINE %lu :%s:%s", str_len(name), name, reason);
+			send_cmd("SGLINE %zu :%s:%s", str_len(name), name, reason);
 
 		TRACE_MAIN();
 
@@ -833,7 +833,7 @@ void sxline_ds_dump(CSTR sourceNick, const User *callerUser, STR request) {
 			continue;
 		}
 
-		send_notice_to_user(sourceNick, callerUser, "%d) Address %p, size %lu B",	lineIdx, (void *)aSXLine, sizeof(SXLine));
+		send_notice_to_user(sourceNick, callerUser, "%d) Address %p, size %zu B",	lineIdx, (void *)aSXLine, sizeof(SXLine));
 		send_notice_to_user(sourceNick, callerUser, "Name: %p \2[\2%s\2]\2",		(void *)aSXLine->name, str_get_valid_display_value(aSXLine->name));
 		send_notice_to_user(sourceNick, callerUser, "Creator: %p \2[\2%s\2]\2",		(void *)aSXLine->info.creator.name, str_get_valid_display_value(aSXLine->info.creator.name));
 		send_notice_to_user(sourceNick, callerUser, "Reason: %p \2[\2%s\2]\2",		(void *)aSXLine->info.reason, str_get_valid_display_value(aSXLine->info.reason));

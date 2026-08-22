@@ -3160,7 +3160,7 @@ void memoserv_ds_dump(CSTR sourceNick, const User *callerUser, STR request) {
 
 					for (memo = ml->memos, memoIdx = 0; memoIdx < ml->n_memos; ++memoIdx, ++memo) {
 
-						send_notice_to_user(sourceNick, callerUser, "%d) Address %p, size %lu B",			(memoIdx + 1), (void *)memo, sizeof(Memo));
+						send_notice_to_user(sourceNick, callerUser, "%d) Address %p, size %zu B",			(memoIdx + 1), (void *)memo, sizeof(Memo));
 						send_notice_to_user(sourceNick, callerUser, "Unused: %ld / Time Sent C-time: %ld",	memo->unused, memo->time);
 						send_notice_to_user(sourceNick, callerUser, "Sent by: %s / Flags: %d",				memo->sender, memo->flags);
 						send_notice_to_user(sourceNick, callerUser, "Channel: %p \2[\2%s\2]\2",				(void *)memo->chan, str_get_valid_display_value(memo->chan));
@@ -3180,7 +3180,7 @@ void memoserv_ds_dump(CSTR sourceNick, const User *callerUser, STR request) {
 					for (ignore = ml->ignores; IS_NOT_NULL(ignore); ignore = ignore->next) {
 
 						++idx;
-						send_notice_to_user(sourceNick, callerUser, "%d) Address %p, size %lu B",		idx, (void *)ignore, sizeof(MemoIgnore));
+						send_notice_to_user(sourceNick, callerUser, "%d) Address %p, size %zu B",		idx, (void *)ignore, sizeof(MemoIgnore));
 						send_notice_to_user(sourceNick, callerUser, "Ignored Nick: %p \2[\2%s\2]\2",	(void *)ignore->ignoredNick, str_get_valid_display_value(ignore->ignoredNick));
 						send_notice_to_user(sourceNick, callerUser, "Time Added C-time: %ld",			ignore->creationTime);
 						send_notice_to_user(sourceNick, callerUser, "Next / previous record: %p / %p",	(void *)ignore->next, (void *)ignore->prev);
@@ -3192,7 +3192,7 @@ void memoserv_ds_dump(CSTR sourceNick, const User *callerUser, STR request) {
 
 					send_notice_to_user(sourceNick, callerUser, "DUMP: memolist for \2%s\2", value);
 
-					send_notice_to_user(sourceNick, callerUser, "Address %p, size %lu B",			(void *)ml, sizeof(MemoList));
+					send_notice_to_user(sourceNick, callerUser, "Address %p, size %zu B",			(void *)ml, sizeof(MemoList));
 					send_notice_to_user(sourceNick, callerUser, "Name: %s",							ml->nick);
 					send_notice_to_user(sourceNick, callerUser, "Memos: %p",						(void *)ml->memos);
 					send_notice_to_user(sourceNick, callerUser, "Number of Memos: %ld",				ml->n_memos);

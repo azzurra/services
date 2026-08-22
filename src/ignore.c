@@ -938,7 +938,7 @@ void ignore_ds_dump(CSTR sourceNick, const User *callerUser, STR request) {
 			continue;
 		}
 
-		send_notice_to_user(sourceNick, callerUser, "%d) Address %p, size %lu B",	ignoreIdx, (void *)anIgnore, sizeof(Ignore));
+		send_notice_to_user(sourceNick, callerUser, "%d) Address %p, size %zu B",	ignoreIdx, (void *)anIgnore, sizeof(Ignore));
 		send_notice_to_user(sourceNick, callerUser, "Nick: %p \2[\2%s\2]\2",		(void *)anIgnore->nick, str_get_valid_display_value(anIgnore->nick));
 		send_notice_to_user(sourceNick, callerUser, "Username: %p \2[\2%s\2]\2",	(void *)anIgnore->username, str_get_valid_display_value(anIgnore->username));
 		send_notice_to_user(sourceNick, callerUser, "Host: %p \2[\2%s\2]\2",		(void *)anIgnore->host, str_get_valid_display_value(anIgnore->host));

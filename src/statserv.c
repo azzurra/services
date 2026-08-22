@@ -1436,7 +1436,13 @@ static void do_records(CSTR source, User *callerUser, ServiceCommandData *data) 
 
 	tm = *localtime(&records.maxservers_time);
 	strftime(timebuf, sizeof(timebuf), "%a %d/%m/%Y %H:%M:%S %Z", &tm);
-	send_notice_to_user(s_StatServ, callerUser, "Current Servers: \2%lu\2 [Record: \2%lu\2 on %s]", nservers, records.maxservers, timebuf);
+#ifdef OS_64BIT
+#define NSERVER_SPEC "%lu"
+#else
+#define NSERVER_SPEC "%d"
+#endif
+	send_notice_to_user(s_StatServ, callerUser, "Current Servers: \2" NSERVER_SPEC "\2 [Record: \2%lu\2 on %s]", nservers, records.maxservers, timebuf);
+#undef NSERVER_SPEC
 
 	tm = *localtime(&records.maxconn_time);
 	strftime(timebuf, sizeof(timebuf), "%a %d/%m/%Y", &tm);
@@ -1738,31 +1744,31 @@ static void do_chanstats(CSTR source, User *callerUser, ServiceCommandData *data
 
 		send_notice_to_user(s_StatServ, callerUser, " ");
 
-		send_notice_to_user(s_StatServ, callerUser, "Peak: T: \2%lu\2, M: \2%lu\2, W: \2%lu\2, D: \2%lu\2",
+		send_notice_to_user(s_StatServ, callerUser, "Peak: T: \2%" PRIu64 "\2, M: \2%" PRIu64 "\2, W: \2%" PRIu64 "\2, D: \2%" PRIu64 "\2",
 			cs->totalpeak, cs->monthlypeak, cs->weeklypeak, cs->dailypeak);
-		send_notice_to_user(s_StatServ, callerUser, "Joins: T: \2%lu\2, M: \2%lu\2, W: \2%lu\2, D: \2%lu\2",
+		send_notice_to_user(s_StatServ, callerUser, "Joins: T: \2%" PRIu64 "\2, M: \2%" PRIu64 "\2, W: \2%" PRIu64 "\2, D: \2%" PRIu64 "\2",
 			cs->totaljoins, cs->monthlyjoins, cs->weeklyjoins, cs->dailyjoins);
-		send_notice_to_user(s_StatServ, callerUser, "Parts: T: \2%lu\2, M: \2%lu\2, W: \2%lu\2, D: \2%lu\2",
+		send_notice_to_user(s_StatServ, callerUser, "Parts: T: \2%" PRIu64 "\2, M: \2%" PRIu64 "\2, W: \2%" PRIu64 "\2, D: \2%" PRIu64 "\2",
 			cs->totalparts, cs->monthlyparts, cs->weeklyparts, cs->dailyparts);
-		send_notice_to_user(s_StatServ, callerUser, "Kicks: T: \2%lu\2, M: \2%lu\2, W: \2%lu\2, D: \2%lu\2",
+		send_notice_to_user(s_StatServ, callerUser, "Kicks: T: \2%" PRIu64 "\2, M: \2%" PRIu64 "\2, W: \2%" PRIu64 "\2, D: \2%" PRIu64 "\2",
 			cs->totalkicks, cs->monthlykicks, cs->weeklykicks, cs->dailykicks);
-		send_notice_to_user(s_StatServ, callerUser, "Bans: T: \2%lu\2, M: \2%lu\2, W: \2%lu\2, D: \2%lu\2",
+		send_notice_to_user(s_StatServ, callerUser, "Bans: T: \2%" PRIu64 "\2, M: \2%" PRIu64 "\2, W: \2%" PRIu64 "\2, D: \2%" PRIu64 "\2",
 			cs->totalbans, cs->monthlybans, cs->weeklybans, cs->dailybans);
-		send_notice_to_user(s_StatServ, callerUser, "Oppings: T: \2%lu\2, M: \2%lu\2, W: \2%lu\2, D: \2%lu\2",
+		send_notice_to_user(s_StatServ, callerUser, "Oppings: T: \2%" PRIu64 "\2, M: \2%" PRIu64 "\2, W: \2%" PRIu64 "\2, D: \2%" PRIu64 "\2",
 			cs->totaloppings, cs->monthlyoppings, cs->weeklyoppings, cs->dailyoppings);
-		send_notice_to_user(s_StatServ, callerUser, "Deoppings: T: \2%lu\2, M: \2%lu\2, W: \2%lu\2, D: \2%lu\2",
+		send_notice_to_user(s_StatServ, callerUser, "Deoppings: T: \2%" PRIu64 "\2, M: \2%" PRIu64 "\2, W: \2%" PRIu64 "\2, D: \2%" PRIu64 "\2",
 			cs->totaldeoppings, cs->monthlydeoppings, cs->weeklydeoppings, cs->dailydeoppings);
-		send_notice_to_user(s_StatServ, callerUser, "Halfoppings: T: \2%lu\2, M: \2%lu\2, W: \2%lu\2, D: \2%lu\2",
+		send_notice_to_user(s_StatServ, callerUser, "Halfoppings: T: \2%" PRIu64 "\2, M: \2%" PRIu64 "\2, W: \2%" PRIu64 "\2, D: \2%" PRIu64 "\2",
 			cs->totalhalfoppings, cs->monthlyhalfoppings, cs->weeklyhalfoppings, cs->dailyhalfoppings);
-		send_notice_to_user(s_StatServ, callerUser, "Dehalfoppings: T: \2%lu\2, M: \2%lu\2, W: \2%lu\2, D: \2%lu\2",
+		send_notice_to_user(s_StatServ, callerUser, "Dehalfoppings: T: \2%" PRIu64 "\2, M: \2%" PRIu64 "\2, W: \2%" PRIu64 "\2, D: \2%" PRIu64 "\2",
 			cs->totaldehalfoppings, cs->monthlydehalfoppings, cs->weeklydehalfoppings, cs->dailydehalfoppings);
-		send_notice_to_user(s_StatServ, callerUser, "Voicings: T: \2%lu\2, M: \2%lu\2, W: \2%lu\2, D: \2%lu\2",
+		send_notice_to_user(s_StatServ, callerUser, "Voicings: T: \2%" PRIu64 "\2, M: \2%" PRIu64 "\2, W: \2%" PRIu64 "\2, D: \2%" PRIu64 "\2",
 			cs->totalvoicings, cs->monthlyvoicings, cs->weeklyvoicings, cs->dailyvoicings);
-		send_notice_to_user(s_StatServ, callerUser, "Devoicings: T: \2%lu\2, M: \2%lu\2, W: \2%lu\2, D: \2%lu\2",
+		send_notice_to_user(s_StatServ, callerUser, "Devoicings: T: \2%" PRIu64 "\2, M: \2%" PRIu64 "\2, W: \2%" PRIu64 "\2, D: \2%" PRIu64 "\2",
 			cs->totaldevoicings, cs->monthlydevoicings, cs->weeklydevoicings, cs->dailydevoicings);
-		send_notice_to_user(s_StatServ, callerUser, "Topics: T: \2%lu\2, M: \2%lu\2, W: \2%lu\2, D: \2%lu\2",
+		send_notice_to_user(s_StatServ, callerUser, "Topics: T: \2%" PRIu64 "\2, M: \2%" PRIu64 "\2, W: \2%" PRIu64 "\2, D: \2%" PRIu64 "\2",
 			cs->totaltopics, cs->monthlytopics, cs->weeklytopics, cs->dailytopics);
-		send_notice_to_user(s_StatServ, callerUser, "Modes: T: \2%lu\2 (\2%lu\2+, \2%lu\2-), M: \2%lu\2 (\2%lu\2+, \2%lu\2-), W: \2%lu\2 (\2%lu\2+, \2%lu\2-), D: \2%lu\2 (\2%lu\2+, \2%lu\2-)",
+		send_notice_to_user(s_StatServ, callerUser, "Modes: T: \2%" PRIu64 "\2 (\2%" PRIu64 "\2+, \2%" PRIu64 "\2-), M: \2%" PRIu64 "\2 (\2%" PRIu64 "\2+, \2%" PRIu64 "\2-), W: \2%" PRIu64 "\2 (\2%" PRIu64 "\2+, \2%" PRIu64 "\2-), D: \2%" PRIu64 "\2 (\2%" PRIu64 "\2+, \2%" PRIu64 "\2-)",
 			(cs->totaladdcmodes + cs->totaldelcmodes), cs->totaladdcmodes, cs->totaldelcmodes, (cs->monthlyaddcmodes + cs->monthlydelcmodes), cs->monthlyaddcmodes, cs->monthlydelcmodes, (cs->weeklyaddcmodes + cs->weeklydelcmodes), cs->weeklyaddcmodes, cs->weeklydelcmodes, (cs->dailyaddcmodes + cs->dailydelcmodes), cs->dailyaddcmodes, cs->dailydelcmodes);
 		send_notice_to_user(s_StatServ, callerUser, " ");
 		send_notice_to_user(s_StatServ, callerUser, "\2*** Fine delle Statistiche ***\2");

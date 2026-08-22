@@ -11749,7 +11749,7 @@ void chanserv_ds_dump(CSTR sourceNick, const User *callerUser, STR request) {
 
 					send_notice_to_user(sourceNick, callerUser, "DUMP: channel \2%s\2", value);
 
-					send_notice_to_user(sourceNick, callerUser, "Address %p, size %lu B",						(void *)ci, sizeof(ChannelInfo));
+					send_notice_to_user(sourceNick, callerUser, "Address %p, size %zu B",						(void *)ci, sizeof(ChannelInfo));
 					send_notice_to_user(sourceNick, callerUser, "Name: %s",										ci->name);
 					send_notice_to_user(sourceNick, callerUser, "Founder: %s",									ci->founder);
 					send_notice_to_user(sourceNick, callerUser, "Password: [REDACTED]");
@@ -11825,7 +11825,7 @@ void chanserv_ds_dump(CSTR sourceNick, const User *callerUser, STR request) {
 							break;
 					}
 
-					send_notice_to_user(sourceNick, callerUser, "%d) Address %p, size %lu B", i+1,	(void *)anAccess, sizeof(ChanAccess));
+					send_notice_to_user(sourceNick, callerUser, "%d) Address %p, size %zu B", i+1,	(void *)anAccess, sizeof(ChanAccess));
 					send_notice_to_user(sourceNick, callerUser, "Name: %p \2[\2%s\2]\2",			(void *)anAccess->name, str_get_valid_display_value(anAccess->name));
 					send_notice_to_user(sourceNick, callerUser, "Creator: %p \2[\2%s\2]\2",			(void *)anAccess->creator, str_get_valid_display_value(anAccess->creator));
 					send_notice_to_user(sourceNick, callerUser, "Time Created C-time: %ld",			anAccess->creationTime);
@@ -11853,7 +11853,7 @@ void chanserv_ds_dump(CSTR sourceNick, const User *callerUser, STR request) {
 
 				for (anAkick = ci->akick, i = 0; i < ci->akickcount; ++anAkick, ++i) {
 
-					send_notice_to_user(sourceNick, callerUser, "%d) Address %p, size %lu B", i+1,	(void *)anAkick, sizeof(AutoKick));
+					send_notice_to_user(sourceNick, callerUser, "%d) Address %p, size %zu B", i+1,	(void *)anAkick, sizeof(AutoKick));
 					send_notice_to_user(sourceNick, callerUser, "Name: %p \2[\2%s\2]\2",			(void *)anAkick->name, str_get_valid_display_value(anAkick->name));
 					send_notice_to_user(sourceNick, callerUser, "Creator: %p \2[\2%s\2]\2",			(void *)anAkick->creator, str_get_valid_display_value(anAkick->creator));
 					send_notice_to_user(sourceNick, callerUser, "Reason: %p \2[\2%s\2]\2",			(void *)anAkick->reason, str_get_valid_display_value(anAkick->reason));

@@ -364,7 +364,7 @@ void handle_blacklist(CSTR source, User *callerUser, ServiceCommandData *data) {
 
 		if ((len = str_len(reason)) > 220) {
 
-			send_notice_to_user(s_OperServ, callerUser, "Reason cannot be longer than 220 characters (yours has: %lu).", len);
+			send_notice_to_user(s_OperServ, callerUser, "Reason cannot be longer than 220 characters (yours has: %zu).", len);
 			return;
 		}
 
@@ -687,7 +687,7 @@ void blacklist_ds_dump(CSTR sourceNick, const User *callerUser, STR request) {
 			continue;
 		}
 
-		send_notice_to_user(sourceNick, callerUser, "%d) Address %p, size %lu B",	addressIdx, (void *)anAddress, sizeof(BlackList));
+		send_notice_to_user(sourceNick, callerUser, "%d) Address %p, size %zu B",	addressIdx, (void *)anAddress, sizeof(BlackList));
 		send_notice_to_user(sourceNick, callerUser, "Value: %p \2[\2%s\2]\2",		(void *)anAddress->address, str_get_valid_display_value(anAddress->address));
 		send_notice_to_user(sourceNick, callerUser, "Reason: %p \2[\2%s\2]\2",		(void *)anAddress->info.reason, str_get_valid_display_value(anAddress->info.reason));
 		send_notice_to_user(sourceNick, callerUser, "Set by: %p \2[\2%s\2]\2",		(void *)anAddress->info.creator.name, str_get_valid_display_value(anAddress->info.creator.name));

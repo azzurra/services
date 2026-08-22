@@ -147,6 +147,7 @@ BOOL akill_db_load(void) {
 									break;
 
 								case stgSuccess: // a valid record
+#ifdef OS_64BIT
 									if (!is64Bit) {
 										akill->creator.name = (STR)(uintptr_t) akill32.creator.name;
 										akill->creator.time = akill32.creator.time;
@@ -160,6 +161,7 @@ BOOL akill_db_load(void) {
 										akill->id = akill32.id;
 										akill->type = akill32.type;
 									}
+#endif
 									read_done = TRUE;
 
 									if (akill->username)
@@ -791,7 +793,7 @@ void handle_akill(CSTR source, User *callerUser, ServiceCommandData *data) {
 
 		if ((len = str_len(reason)) > 220) {
 
-			send_notice_to_user(data->agent->nick, callerUser, "Reason cannot be longer than 220 characters (yours has: %lu).", len);
+			send_notice_to_user(data->agent->nick, callerUser, "Reason cannot be longer than 220 characters (yours has: %zu).", len);
 			return;
 		}
 
@@ -1313,7 +1315,7 @@ void akill_ds_dump(CSTR sourceNick, const User *callerUser, STR request) {
 					if (str_match_wild_nocase(user, akill->username) &&
 						str_match_wild_nocase(host, akill->host)) {
 
-						send_notice_to_user(sourceNick, callerUser, "%d) Address %p, size %lu B",	akillIdx, (void *)akill, sizeof(AutoKill) + str_len(akill->username) + str_len(akill->host) + str_len(akill->creator.name) + str_len(akill->reason));
+						send_notice_to_user(sourceNick, callerUser, "%d) Address %p, size %zu B",	akillIdx, (void *)akill, sizeof(AutoKill) + str_len(akill->username) + str_len(akill->host) + str_len(akill->creator.name) + str_len(akill->reason));
 						send_notice_to_user(sourceNick, callerUser, "User: %p \2[\2%s\2]\2",		(void *)akill->username, str_get_valid_display_value(akill->username));
 						send_notice_to_user(sourceNick, callerUser, "Host: %p \2[\2%s\2]\2",		(void *)akill->host, str_get_valid_display_value(akill->host));
 						send_notice_to_user(sourceNick, callerUser, "CIDR: %u/%u",					akill->cidr.ip, akill->cidr.mask);
@@ -1358,7 +1360,7 @@ void akill_ds_dump(CSTR sourceNick, const User *callerUser, STR request) {
 
 								++akillIdx;
 
-								send_notice_to_user(sourceNick, callerUser, "%d) Address %p, size %lu B",	akillIdx, (void *)akill, sizeof(AutoKill) + str_len(akill->username) + str_len(akill->host) + str_len(akill->creator.name) + str_len(akill->reason) + 4);
+								send_notice_to_user(sourceNick, callerUser, "%d) Address %p, size %zu B",	akillIdx, (void *)akill, sizeof(AutoKill) + str_len(akill->username) + str_len(akill->host) + str_len(akill->creator.name) + str_len(akill->reason) + 4);
 								send_notice_to_user(sourceNick, callerUser, "User: %p \2[\2%s\2]\2",		(void *)akill->username, str_get_valid_display_value(akill->username));
 								send_notice_to_user(sourceNick, callerUser, "Host: %p \2[\2%s\2]\2",		(void *)akill->host, str_get_valid_display_value(akill->host));
 								send_notice_to_user(sourceNick, callerUser, "CIDR: %u/%u",					akill->cidr.ip, akill->cidr.mask);

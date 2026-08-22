@@ -4911,7 +4911,7 @@ static void chan_ds_dump_display(CSTR sourceNick, const User *callerUser, const 
 			++ops;
 
 		send_notice_to_user(sourceNick, callerUser, "DUMP: channel \2%s\2", chan->name);
-		send_notice_to_user(sourceNick, callerUser, "Address %p, size %lu B",		(void *)chan, sizeof(chan));
+		send_notice_to_user(sourceNick, callerUser, "Address %p, size %zu B",		(void *)chan, sizeof(chan));
 		send_notice_to_user(sourceNick, callerUser, "Name: %s",						chan->name);
 		send_notice_to_user(sourceNick, callerUser, "Creation C-time: %ld",			chan->creation_time);
 		send_notice_to_user(sourceNick, callerUser, "Last topic: %p \2[\2%s\2]\2",	(void *)chan->topic, str_get_valid_display_value(chan->topic));

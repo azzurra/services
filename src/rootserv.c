@@ -1274,7 +1274,7 @@ static void do_dynconf(CSTR source, User *callerUser, ServiceCommandData *data) 
 						send_notice_to_user(s_RootServ, callerUser, "Welcome Notice has been disabled.");
 					}
 					else if ((len = str_len(message)) > 400)
-						send_notice_to_user(s_RootServ, callerUser, "Welcome Notice cannot be longer than 400 characters (yours has: %lu).", len);
+						send_notice_to_user(s_RootServ, callerUser, "Welcome Notice cannot be longer than 400 characters (yours has: %zu).", len);
 
 					else {
 

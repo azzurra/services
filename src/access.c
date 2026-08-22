@@ -556,7 +556,7 @@ BOOL send_access_info(Access *accessList, CSTR nick, CSTR sourceNick, const User
 
 void access_send_dump(Access *anAccess, CSTR sourceNick, const User *callerUser) {
 
-	send_notice_to_user(sourceNick, callerUser, "Address %p, size %lu B",		(void *)anAccess, sizeof(Access));
+	send_notice_to_user(sourceNick, callerUser, "Address %p, size %zu B",		(void *)anAccess, sizeof(Access));
 	send_notice_to_user(sourceNick, callerUser, "Nick: %p \2[\2%s\2]\2",		(void *)anAccess->nick, str_get_valid_display_value(anAccess->nick));
 	send_notice_to_user(sourceNick, callerUser, "User: %p \2[\2%s\2]\2",		(void *)anAccess->user, str_get_valid_display_value(anAccess->user));
 	send_notice_to_user(sourceNick, callerUser, "User2: %p \2[\2%s\2]\2",		(void *)anAccess->user2, str_get_valid_display_value(anAccess->user2));

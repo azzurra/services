@@ -121,7 +121,7 @@ DATDEST=./data
 CC=
 CC_LIBS=
 CC_FLAGS=bonkle
-CC_LFLAGS=bonkle
+CC_LFLAGS=
 
 OSTYPE=bonkle
 
@@ -261,6 +261,7 @@ echo 'Forcing ILP32 build, DO NOT DO THIS IN PRODUCTION UNLESS YOU KNOW EXACTLY 
 echo '********************************************************************************************'
 LBIT=32
 DEF_CC_FLAGS="-m32 $DEF_CC_FLAGS"
+CC_LFLAGS="-m32"
 else
 LBIT=$(getconf LONG_BIT)
 fi
@@ -300,7 +301,6 @@ if [ "$USER_CC_LFLAGS" != "bonkle" ] ; then
 	log user supplied \`"$CC_LFLAGS'"
 else
 	log using no flags
-	CC_LFLAGS=""
 fi
 
 ###########################################################################

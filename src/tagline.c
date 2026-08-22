@@ -329,7 +329,7 @@ void handle_tagline(CSTR source, User *callerUser, ServiceCommandData *data) {
 
 		if ((len = str_len(text)) > 260) {
 
-			send_notice_to_user(s_OperServ, callerUser, "The maximum length for a tagline is 260 characters. Your tagline has %lu.", len);
+			send_notice_to_user(s_OperServ, callerUser, "The maximum length for a tagline is 260 characters. Your tagline has %zu.", len);
 			return;
 		}
 
