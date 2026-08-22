@@ -329,7 +329,7 @@ void handle_tagline(CSTR source, User *callerUser, ServiceCommandData *data) {
 
 		if ((len = str_len(text)) > 260) {
 
-			send_notice_to_user(s_OperServ, callerUser, "The maximum length for a tagline is 260 characters. Your tagline has %d.", len);
+			send_notice_to_user(s_OperServ, callerUser, "The maximum length for a tagline is 260 characters. Your tagline has %lu.", len);
 			return;
 		}
 
@@ -623,11 +623,11 @@ void tagline_ds_dump(CSTR sourceNick, const User *callerUser, STR request) {
 			continue;
 		}
 
-		send_notice_to_user(sourceNick, callerUser, "%d) Address 0x%08X, size %d B",		taglineIdx, (unsigned long)aTagline, sizeof(Tagline));
-		send_notice_to_user(sourceNick, callerUser, "Text: 0x%08X \2[\2%s\2]\2",			(unsigned long)aTagline->text, str_get_valid_display_value(aTagline->text));
-		send_notice_to_user(sourceNick, callerUser, "Creator: 0x%08X \2[\2%s\2]\2",			(unsigned long)aTagline->creator.name, str_get_valid_display_value(aTagline->creator.name));
-		send_notice_to_user(sourceNick, callerUser, "Time Set C-time: %d",					aTagline->creator.time);
-		send_notice_to_user(sourceNick, callerUser, "Next/Prev records: 0x%08X / 0x%08X",	(unsigned long)aTagline->next, (unsigned long)aTagline->prev);
+		send_notice_to_user(sourceNick, callerUser, "%d) Address %p, size %lu B",	taglineIdx, aTagline, sizeof(Tagline));
+		send_notice_to_user(sourceNick, callerUser, "Text: %p \2[\2%s\2]\2",		aTagline->text, str_get_valid_display_value(aTagline->text));
+		send_notice_to_user(sourceNick, callerUser, "Creator: %p \2[\2%s\2]\2",		aTagline->creator.name, str_get_valid_display_value(aTagline->creator.name));
+		send_notice_to_user(sourceNick, callerUser, "Time Set C-time: %ld",			aTagline->creator.time);
+		send_notice_to_user(sourceNick, callerUser, "Next/Prev records: %p / %p",	aTagline->next, aTagline->prev);
 
 		if (sentIdx >= endIdx)
 			break;
@@ -661,6 +661,6 @@ unsigned long int tagline_mem_report(CSTR sourceNick, const User *callerUser) {
 		aTagline = aTagline->next;
 	}
 
-	send_notice_to_user(sourceNick, callerUser, "Tagline List: \2%d\2 -> \2%d\2 KB (\2%d\2 B)", count, mem / 1024, mem);
+	send_notice_to_user(sourceNick, callerUser, "Tagline List: \2%lu\2 -> \2%lu\2 KB (\2%lu\2 B)", count, mem / 1024, mem);
 	return mem;
 }

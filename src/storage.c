@@ -88,7 +88,7 @@ typedef struct _RecordDescriptor {
 
 #define STORAGE_COMPATIBILITY_VERSION		7
 
-#define STORAGE_RECORD_SIGNATURE_V1			93
+#define STORAGE_RECORD_SIGNATURE_V1			93U
 #define STORAGE_CURRENT_RECORD_SIGNATURE	STORAGE_RECORD_SIGNATURE_V1
 
 // RecordDescriptor.flags
@@ -737,11 +737,7 @@ const char *stg_result_to_string(STG_RESULT result) {
 	return (CSTR) buffer;
 }
 
-
 void stg_report_sysinfo(CSTR sourceNick, const char *caller) {
 
 	send_notice_to_nick(sourceNick, caller, "Storage info: Version \2%d\2 - Compatibility version \2%d\2 - Signature \2%s\2 - Record signature\2 0x%04X\2", STORAGE_CURRENT_VERSION, STORAGE_COMPATIBILITY_VERSION, STORAGE_SIGNATURE, STORAGE_CURRENT_RECORD_SIGNATURE);
 }
-
-
-

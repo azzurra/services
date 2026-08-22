@@ -472,7 +472,7 @@ static User *user_create_user(CSTR nick, BOOL myClient) {
 	if (!myClient) {
 
 		if (IS_NOT_NULL(dynConf.welcomeNotice) && (synched == TRUE))
-			send_notice_to_user(s_GlobalNoticer, user, dynConf.welcomeNotice);
+			send_notice_to_user(s_GlobalNoticer, user, "%s", dynConf.welcomeNotice);
 	}
 
 	user->current_lang = LANG_DEFAULT;
@@ -3737,12 +3737,12 @@ void handle_uinfo(CSTR source, User *callerUser, ServiceCommandData *data) {
 
 		send_notice_to_user(data->agent->nick, callerUser, "\2Language\2: %s (%s)", lang_get_name(user->current_lang, TRUE), lang_get_name(user->current_lang, FALSE));
 
-		send_notice_to_user(data->agent->nick, callerUser, "\2Flood status\2: Level %d / Message count %d / Resets in %d seconds", user->flood_current_level, user->flood_msg_count, (user->flood_reset_time > NOW) ? (user->flood_reset_time - NOW) : 0);
-		send_notice_to_user(data->agent->nick, callerUser, "\2Invalid password status\2: Level %d / Count %d / Resets in %d seconds", user->invalid_pw_current_level, user->invalid_pw_count, (user->invalid_pw_reset_time > NOW) ? (user->invalid_pw_reset_time - NOW) : 0);
+		send_notice_to_user(data->agent->nick, callerUser, "\2Flood status\2: Level %d / Message count %d / Resets in %ld seconds", user->flood_current_level, user->flood_msg_count, (user->flood_reset_time > NOW) ? (user->flood_reset_time - NOW) : 0);
+		send_notice_to_user(data->agent->nick, callerUser, "\2Invalid password status\2: Level %d / Count %d / Resets in %ld seconds", user->invalid_pw_current_level, user->invalid_pw_count, (user->invalid_pw_reset_time > NOW) ? (user->invalid_pw_reset_time - NOW) : 0);
 
 		send_notice_to_user(data->agent->nick, callerUser, "\2Current Server\2: %s", user->server->name);
 
-		send_notice_to_user(data->agent->nick, callerUser, "\2TS Info\2: %lu", user->tsinfo);
+		send_notice_to_user(data->agent->nick, callerUser, "\2TS Info\2: %ld", user->tsinfo);
 		send_notice_to_user(data->agent->nick, callerUser, "\2Online Time (Server pov)\2: %s", convert_time(buffer, sizeof(buffer), (NOW - user->signon), LANG_DEFAULT));
 		send_notice_to_user(data->agent->nick, callerUser, "\2Online Time (Services pov)\2: %s", convert_time(buffer, sizeof(buffer), (NOW - user->my_signon), LANG_DEFAULT));
 
@@ -3807,7 +3807,7 @@ unsigned long user_mem_report(CSTR sourceNick, const User *callerUser) {
 	TRACE();
 	mem_total = mem;
 
-	send_notice_to_user(sourceNick, callerUser, "Online users: \2%d\2 [%d] -> \2%d\2 KB (\2%d\2 B)", count, user_online_user_count, mem / 1024, mem);
+	send_notice_to_user(sourceNick, callerUser, "Online users: \2%lu\2 [%u] -> \2%lu\2 KB (\2%lu\2 B)", count, user_online_user_count, mem / 1024, mem);
 
 	return mem_total;
 }
@@ -3832,50 +3832,50 @@ static void user_ds_dump_display(CSTR sourceNick, const User *callerUser, const 
 	}
 
 	send_notice_to_user(sourceNick, callerUser, "DUMP: user \2%s\2", user->nick);
-	send_notice_to_user(sourceNick, callerUser, "Address 0x%08X, size %d B",				(unsigned long)user, sizeof(User) + str_len(user->username) + str_len(user->host) + str_len(user->maskedHost) + str_len(user->realname) + 4);
-	send_notice_to_user(sourceNick, callerUser, "Nick: %s",									user->nick);
-	send_notice_to_user(sourceNick, callerUser, "Username: 0x%08X \2[\2%s\2]\2",			(unsigned long)user->username, str_get_valid_display_value(user->username));
-	send_notice_to_user(sourceNick, callerUser, "Host: 0x%08X \2[\2%s\2]\2",				(unsigned long)user->host, str_get_valid_display_value(user->host));
+	send_notice_to_user(sourceNick, callerUser, "Address %p, size %lu B",						user, sizeof(User) + str_len(user->username) + str_len(user->host) + str_len(user->maskedHost) + str_len(user->realname) + 4);
+	send_notice_to_user(sourceNick, callerUser, "Nick: %s",										user->nick);
+	send_notice_to_user(sourceNick, callerUser, "Username: %p \2[\2%s\2]\2",					user->username, str_get_valid_display_value(user->username));
+	send_notice_to_user(sourceNick, callerUser, "Host: %p \2[\2%s\2]\2",						user->host, str_get_valid_display_value(user->host));
 
 	#ifdef ENABLE_CAPAB_NICKIP
 	if (FlagUnset(user->flags, USER_FLAG_HAS_IPV6) || FlagSet(user->flags, USER_FLAG_6TO4 | USER_FLAG_TEREDO))
-		send_notice_to_user(sourceNick, callerUser, "IP from NICKIP: 0x%08X \2[\2%lu\2]\2",		user->ip, user->ip);
+		send_notice_to_user(sourceNick, callerUser, "IP from NICKIP: %#lx \2[\2%s\2]\2",		user->ip, get_ip(user->ip));
 	if (FlagSet(user->flags, USER_FLAG_HAS_IPV6))
-		send_notice_to_user(sourceNick, callerUser, "IPv6 from NICKIP: \002[\002%s\002]\002", get_ip6(user->ipv6));
+		send_notice_to_user(sourceNick, callerUser, "IPv6 from NICKIP: \002[\002%s\002]\002",	get_ip6(user->ipv6));
 	#endif
 
-	send_notice_to_user(sourceNick, callerUser, "Masked host: 0x%08X \2[\2%s\2]\2",			(unsigned long)user->maskedHost, str_get_valid_display_value(user->maskedHost));
-	send_notice_to_user(sourceNick, callerUser, "Realname: 0x%08X \2[\2%s\2]\2",			(unsigned long)user->realname, str_get_valid_display_value(user->realname));
-	send_notice_to_user(sourceNick, callerUser, "Server: 0x%08X \2[\2%s\2]\2",				(unsigned long)user->server, str_get_valid_display_value(user->server ? user->server->name : NULL));
-	send_notice_to_user(sourceNick, callerUser, "Username: 0x%08X \2[\2%s\2]\2",			(unsigned long)user->username, str_get_valid_display_value(user->username));
-	send_notice_to_user(sourceNick, callerUser, "TS Info: %lu",								user->tsinfo);
-	send_notice_to_user(sourceNick, callerUser, "Signon (Server POV): %lu",					user->signon);
-	send_notice_to_user(sourceNick, callerUser, "Signon (Services POV): %lu",				user->my_signon);
-	send_notice_to_user(sourceNick, callerUser, "Modes: 0x%08X (%s)",						(unsigned long)user->mode, get_user_modes(user->mode, 0));
-	send_notice_to_user(sourceNick, callerUser, "Flags: 0x%08X (%s)",						(unsigned long)user->flags, get_user_flags(user->flags));
+	send_notice_to_user(sourceNick, callerUser, "Masked host: %p \2[\2%s\2]\2",					user->maskedHost, str_get_valid_display_value(user->maskedHost));
+	send_notice_to_user(sourceNick, callerUser, "Realname: %p \2[\2%s\2]\2",					user->realname, str_get_valid_display_value(user->realname));
+	send_notice_to_user(sourceNick, callerUser, "Server: %p \2[\2%s\2]\2",						user->server, str_get_valid_display_value(user->server ? user->server->name : NULL));
+	send_notice_to_user(sourceNick, callerUser, "Username: %p \2[\2%s\2]\2",					user->username, str_get_valid_display_value(user->username));
+	send_notice_to_user(sourceNick, callerUser, "TS Info: %ld",									user->tsinfo);
+	send_notice_to_user(sourceNick, callerUser, "Signon (Server POV): %ld",						user->signon);
+	send_notice_to_user(sourceNick, callerUser, "Signon (Services POV): %ld",					user->my_signon);
+	send_notice_to_user(sourceNick, callerUser, "Modes: %#lx (%s)",								(unsigned long)user->mode, get_user_modes(user->mode, 0));
+	send_notice_to_user(sourceNick, callerUser, "Flags: %#lx (%s)",								(unsigned long)user->flags, get_user_flags(user->flags));
 
-	send_notice_to_user(sourceNick, callerUser, "Invalid password status: Level / Count / Reset C-time: %d / %d / %d", user->invalid_pw_current_level, user->invalid_pw_count, user->invalid_pw_reset_time);
-	send_notice_to_user(sourceNick, callerUser, "Last memo C-time: %d",						user->lastmemosend);
-	send_notice_to_user(sourceNick, callerUser, "Last nick registration C-time: %d",		user->lastnickreg);
-	send_notice_to_user(sourceNick, callerUser, "Flood status: Level / Message count / Reset C-time: %d / %d / %d", user->flood_current_level, user->flood_msg_count, user->flood_reset_time);
+	send_notice_to_user(sourceNick, callerUser, "Invalid password status: Level / Count / Reset C-time: %u / %u / %ld", user->invalid_pw_current_level, user->invalid_pw_count, user->invalid_pw_reset_time);
+	send_notice_to_user(sourceNick, callerUser, "Last memo C-time: %ld",						user->lastmemosend);
+	send_notice_to_user(sourceNick, callerUser, "Last nick registration C-time: %ld",			user->lastnickreg);
+	send_notice_to_user(sourceNick, callerUser, "Flood status: Level / Message count / Reset C-time: %u / %u / %ld", user->flood_current_level, user->flood_msg_count, user->flood_reset_time);
 
-	send_notice_to_user(sourceNick, callerUser, "NickInfo record: 0x%08X \2[\2%s\2]\2",		(unsigned long)user->ni, user->ni ? str_get_valid_display_value(user->ni->nick) : "NULL");
+	send_notice_to_user(sourceNick, callerUser, "NickInfo record: %p \2[\2%s\2]\2",				user->ni, user->ni ? str_get_valid_display_value(user->ni->nick) : "NULL");
 
-	send_notice_to_user(sourceNick, callerUser, "Next / previous record: 0x%08X / 0x%08X",	(unsigned long)user->next, (unsigned long)user->prev);
+	send_notice_to_user(sourceNick, callerUser, "Next / previous record: %p / %p",				user->next, user->prev);
 
-	send_notice_to_user(sourceNick, callerUser, s_SPACE);
+	send_notice_to_user(sourceNick, callerUser, " ");
 	send_notice_to_user(sourceNick, callerUser, "\2Channel list\2 (name | next / previous record):");
 
 	for (item = user->chans, idx = 1; IS_NOT_NULL(item); ++idx, item = item->next)
-		send_notice_to_user(sourceNick, callerUser, "%d) %s | 0x%08X / 0x%08X", idx, IS_NOT_NULL(item->chan) ? item->chan->name : "NULL pointer", item->next, item->prev);
+		send_notice_to_user(sourceNick, callerUser, "%d) %s | %p / %p", idx, IS_NOT_NULL(item->chan) ? item->chan->name : "NULL pointer", item->next, item->prev);
 
-	send_notice_to_user(sourceNick, callerUser, s_SPACE);
+	send_notice_to_user(sourceNick, callerUser, " ");
 	send_notice_to_user(sourceNick, callerUser, "\2Identified-channel list\2 (name | next / previous record):");
 
 	for (infoItem = user->founder_chans, idx = 1; IS_NOT_NULL(infoItem); ++idx, infoItem = infoItem->next)
-		send_notice_to_user(sourceNick, callerUser, "%d) %s | 0x%08X / 0x%08X", idx, IS_NOT_NULL(infoItem->ci) ? infoItem->ci->name : "NULL pointer", infoItem->next, infoItem->prev);
+		send_notice_to_user(sourceNick, callerUser, "%d) %s | %p / %p", idx, IS_NOT_NULL(infoItem->ci) ? infoItem->ci->name : "NULL pointer", infoItem->next, infoItem->prev);
 
-	send_notice_to_user(sourceNick, callerUser, s_SPACE);
+	send_notice_to_user(sourceNick, callerUser, " ");
 	send_notice_to_user(sourceNick, callerUser, "\2Identified-nick list\2:");
 
 	for (idnicks = user->id_nicks, idx = 0; idx < user->idcount; ++idnicks, ++idx)
@@ -3999,7 +3999,7 @@ void user_ds_dump(CSTR sourceNick, const User *callerUser, STR request) {
 					HASH_FOREACH_BRANCH(idx, ONLINEHOST_HASHSIZE) {
 
 						host_item = hashtable_onlinehost[idx];
-						send_notice_to_user(sourceNick, callerUser, "%d) 0x%X", idx ,host_item);
+						send_notice_to_user(sourceNick, callerUser, "%ld) %p", idx, host_item);
 					}
 				}
 			}
@@ -4014,11 +4014,11 @@ void user_ds_dump(CSTR sourceNick, const User *callerUser, STR request) {
 		MemoryPoolStats pstats;
 
 		mempool_stats(user_mempool, &pstats);
-		send_notice_to_user(sourceNick, callerUser, "DUMP: Users memory pool - Address 0x%08X, ID: %d",	(unsigned long)user_mempool, pstats.id);
-		send_notice_to_user(sourceNick, callerUser, "Memory allocated / free: %d B / %d B",				pstats.memory_allocated, pstats.memory_free);
-		send_notice_to_user(sourceNick, callerUser, "Items allocated / free: %d / %d",					pstats.items_allocated, pstats.items_free);
-		send_notice_to_user(sourceNick, callerUser, "Items per block / block count: %d / %d",			pstats.items_per_block, pstats.block_count);
-		//send_notice_to_user(sourceNick, callerUser, "Avarage use: %.2f%%",								pstats.block_avg_usage);
+		send_notice_to_user(sourceNick, callerUser, "DUMP: Users memory pool - Address %p, ID: %u",	user_mempool, pstats.id);
+		send_notice_to_user(sourceNick, callerUser, "Memory allocated / free: %lu B / %lu B",		pstats.memory_allocated, pstats.memory_free);
+		send_notice_to_user(sourceNick, callerUser, "Items allocated / free: %lu / %lu",			pstats.items_allocated, pstats.items_free);
+		send_notice_to_user(sourceNick, callerUser, "Items per block / block count: %lu / %lu",		pstats.items_per_block, pstats.block_count);
+		//send_notice_to_user(sourceNick, callerUser, "Avarage use: %.2f%%",						pstats.block_avg_usage);
 	}
 	#endif
 

@@ -837,7 +837,7 @@ static BOOL log_search_file(CSTR agentNickname, const User *callerUser, int logT
 					if (line < startLine)
 						continue;
 					
-					send_notice_to_user(agentNickname, callerUser, "LOG(\2%d\2): %s", line, log_buffer);
+					send_notice_to_user(agentNickname, callerUser, "LOG(\2%lu\2): %s", line, log_buffer);
 
 					++count;
 

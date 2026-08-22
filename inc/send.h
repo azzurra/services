@@ -38,7 +38,7 @@ extern void send_cmd(CSTR fmt, ...) ATTRIBUTE_PRINTF(1, 2);
 extern void send_globops(CSTR source, CSTR fmt, ...) ATTRIBUTE_PRINTF(2, 3);
 extern void send_chatops(CSTR source, CSTR fmt, ...) ATTRIBUTE_PRINTF(2, 3);
 extern void send_SPAMOPS(CSTR source, CSTR fmt, ...) ATTRIBUTE_PRINTF(2, 3);
-extern void send_PRIVMSG(CSTR source, CSTR dest, CSTR fmt, ...);
+extern void send_PRIVMSG(CSTR source, CSTR dest, CSTR fmt, ...) ATTRIBUTE_PRINTF(3, 4);
 extern void send_NICK(CSTR nickname, CSTR umode, CSTR username, CSTR hostname, CSTR realname);
 extern void send_KILL(CSTR source, CSTR who, CSTR reason, BOOL killUser);
 extern void send_AKILL(CSTR username, CSTR host, CSTR who, CSTR reason, const unsigned long int id, CSTR type);
@@ -53,9 +53,10 @@ extern void send_SVSNOOP(CSTR server, char action);
 extern void send_SVSNICK(CSTR nick, CSTR newnick);
 extern void send_SHUN(CSTR source, CSTR target, CSTR reason);
 
-extern void send_notice_to_nick(CSTR source, CSTR dest, CSTR fmt, ...);
-extern void send_notice_to_user(CSTR source, const User *dest, CSTR fmt, ...);
+extern void send_notice_to_nick(CSTR source, CSTR dest, CSTR fmt, ...) ATTRIBUTE_PRINTF(3, 4);
+extern void send_notice_to_user(CSTR source, const User *dest, CSTR fmt, ...) ATTRIBUTE_PRINTF(3, 4);
 
+/* TODO: these are going to escape GCC format string diagnostics, remove them if/when we replace the lang subsystem with gettext */
 extern void send_notice_lang_to_nick(CSTR source, CSTR dest, const LANG_ID lang_id, const LANG_MSG_ID msg_id, ...);
 extern void send_notice_lang_to_user(CSTR source, const User *dest, const LANG_ID lang_id, const LANG_MSG_ID msg_id, ...);
 

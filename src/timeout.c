@@ -394,12 +394,12 @@ void timeout_ds_dump(CSTR sourceNick, const User *callerUser, STR request) {
 
 							NickInfo *ni = ntd->ni;
 
-							send_notice_to_user(sourceNick, callerUser, "%d) \2%s\2 [Hash: %ld], Type: NickServ [%s], Created: %d seconds ago", count, ni ? ni->nick : "NULL", to->hash, to->user_type == TOTYPE_NICKSERV_COUNTDOWN ? "Countdown" : to->user_type == TOTYPE_NICKSERV_RELEASE ? "Release" : "Unknown", NOW - to->ts_creation);
+							send_notice_to_user(sourceNick, callerUser, "%d) \2%s\2 [Hash: %lu], Type: NickServ [%s], Created: %ld seconds ago", count, ni ? ni->nick : "NULL", to->hash, to->user_type == TOTYPE_NICKSERV_COUNTDOWN ? "Countdown" : to->user_type == TOTYPE_NICKSERV_RELEASE ? "Release" : "Unknown", NOW - to->ts_creation);
 							send_notice_to_user(sourceNick, callerUser, "Duration: %ds, Repeat: %s, Step: %d, User Online: %s", to->interval, to->repeat ? "Yes" : "No", ntd->step, ntd->user_online ? "Yes" : "No");
 						}
 						else {
 
-							send_notice_to_user(sourceNick, callerUser, "%d) NULL [Hash: %ld], Type: NickServ [%s], Created: %d seconds ago", count, to->hash, to->user_type == TOTYPE_NICKSERV_COUNTDOWN ? "Countdown" : to->user_type == TOTYPE_NICKSERV_RELEASE ? "Release" : "Unknown", NOW - to->ts_creation);
+							send_notice_to_user(sourceNick, callerUser, "%d) NULL [Hash: %lu], Type: NickServ [%s], Created: %ld seconds ago", count, to->hash, to->user_type == TOTYPE_NICKSERV_COUNTDOWN ? "Countdown" : to->user_type == TOTYPE_NICKSERV_RELEASE ? "Release" : "Unknown", NOW - to->ts_creation);
 							send_notice_to_user(sourceNick, callerUser, "Duration: %ds, Repeat: %s, Step: Unknown, User Online: Unknown [Note: to->data is NULL]", to->interval, to->repeat ? "Yes" : "No");
 						}
 						break;
@@ -417,31 +417,31 @@ void timeout_ds_dump(CSTR sourceNick, const User *callerUser, STR request) {
 
 									ChannelInfo *ci = ctd->info.record;
 
-									send_notice_to_user(sourceNick, callerUser, "%d) \2%s\2 [Hash: %ld], Type: ChanServ [%s], Created: %d seconds ago", count, ci ? ci->name : "NULL", to->hash, to->user_type == TOTYPE_CHANSERV_UNBAN ? "Unban" : to->user_type == TOTYPE_CHANSERV_LEAVE ? "Leave" : "Unknown", NOW - to->ts_creation);
+									send_notice_to_user(sourceNick, callerUser, "%d) \2%s\2 [Hash: %lu], Type: ChanServ [%s], Created: %ld seconds ago", count, ci ? ci->name : "NULL", to->hash, to->user_type == TOTYPE_CHANSERV_UNBAN ? "Unban" : to->user_type == TOTYPE_CHANSERV_LEAVE ? "Leave" : "Unknown", NOW - to->ts_creation);
 									send_notice_to_user(sourceNick, callerUser, "Duration: %ds, Repeat: %s", to->interval, to->repeat ? "Yes" : "No");
 									break;
 								}
 								case CTOD_CHAN_NAME:
 
-									send_notice_to_user(sourceNick, callerUser, "%d) \2%s\2 [Hash: %ld], Type: ChanServ [%s], Created: %d seconds ago", count, ctd->info.name ? ctd->info.name : "NULL", to->hash, to->user_type == TOTYPE_CHANSERV_UNBAN ? "Unban" : to->user_type == TOTYPE_CHANSERV_LEAVE ? "Leave" : "Unknown", NOW - to->ts_creation);
+									send_notice_to_user(sourceNick, callerUser, "%d) \2%s\2 [Hash: %lu], Type: ChanServ [%s], Created: %ld seconds ago", count, ctd->info.name ? ctd->info.name : "NULL", to->hash, to->user_type == TOTYPE_CHANSERV_UNBAN ? "Unban" : to->user_type == TOTYPE_CHANSERV_LEAVE ? "Leave" : "Unknown", NOW - to->ts_creation);
 									send_notice_to_user(sourceNick, callerUser, "Duration: %ds, Repeat: %s", to->interval, to->repeat ? "Yes" : "No");
 									break;
 
 								default:
-									send_notice_to_user(sourceNick, callerUser, "%d) \2Unknown\2 [Hash: %ld], Type: ChanServ [%s], Created: %d seconds ago", count, to->hash, to->user_type == TOTYPE_CHANSERV_UNBAN ? "Unban" : to->user_type == TOTYPE_CHANSERV_LEAVE ? "Leave" : "Unknown", NOW - to->ts_creation);
+									send_notice_to_user(sourceNick, callerUser, "%d) \2Unknown\2 [Hash: %lu], Type: ChanServ [%s], Created: %ld seconds ago", count, to->hash, to->user_type == TOTYPE_CHANSERV_UNBAN ? "Unban" : to->user_type == TOTYPE_CHANSERV_LEAVE ? "Leave" : "Unknown", NOW - to->ts_creation);
 									send_notice_to_user(sourceNick, callerUser, "Duration: %ds, Repeat: %s", to->interval, to->repeat ? "Yes" : "No");
 									break;
 							}
 						}
 						else {
 
-							send_notice_to_user(sourceNick, callerUser, "%d) NULL [Hash: %ld], Type: ChanServ [%s], Created: %d seconds ago", count, to->hash, to->user_type == TOTYPE_CHANSERV_UNBAN ? "Unban" : to->user_type == TOTYPE_CHANSERV_LEAVE ? "Leave" : "Unknown", NOW - to->ts_creation);
+							send_notice_to_user(sourceNick, callerUser, "%d) NULL [Hash: %lu], Type: ChanServ [%s], Created: %ld seconds ago", count, to->hash, to->user_type == TOTYPE_CHANSERV_UNBAN ? "Unban" : to->user_type == TOTYPE_CHANSERV_LEAVE ? "Leave" : "Unknown", NOW - to->ts_creation);
 							send_notice_to_user(sourceNick, callerUser, "Duration: %ds, Repeat: %s [Note: to->data is NULL]", to->interval, to->repeat ? "Yes" : "No");
 						}
 						break;
 					}
 					default:
-						send_notice_to_user(sourceNick, callerUser, "%d) NULL [Hash: %ld], Type: Unknown, Created: %d seconds ago", count, to->hash, NOW - to->ts_creation);
+						send_notice_to_user(sourceNick, callerUser, "%d) NULL [Hash: %lu], Type: Unknown, Created: %ld seconds ago", count, to->hash, NOW - to->ts_creation);
 						send_notice_to_user(sourceNick, callerUser, "Duration: %ds, Repeat: %s", to->interval, to->repeat ? "Yes" : "No");
 						break;
 				}
@@ -460,7 +460,7 @@ void timeout_ds_dump(CSTR sourceNick, const User *callerUser, STR request) {
 			timebuf[sizeof(timebuf)-1] = '\0';
 
 			send_notice_to_user(sourceNick, callerUser, "Today values: day: \2%d\2, month: \2%d\2, year: \2%d\2, week day: \2%d\2", time_today_day, time_today_month, time_today_year, time_today_wday);
-			send_notice_to_user(sourceNick, callerUser, "Next midnight TS: \2%d\2 -> \2%s\2", time_next_midnight, timebuf);
+			send_notice_to_user(sourceNick, callerUser, "Next midnight TS: \2%ld\2 -> \2%s\2", time_next_midnight, timebuf);
 
 			LOG_DEBUG_SNOOP("Command: DUMP TIMEOUT TIME -- by %s (%s@%s)", callerUser->nick, callerUser->username, callerUser->host);
 

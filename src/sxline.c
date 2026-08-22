@@ -771,7 +771,7 @@ void sxline_ds_dump(CSTR sourceNick, const User *callerUser, STR request) {
 
 	if (IS_NULL(aSXLine)) {
 
-		send_notice_to_user(sourceNick, callerUser, "DUMP: \2S%c:Line\2 List is empty.", str_char_toupper(request[1]));
+		send_notice_to_user(sourceNick, callerUser, "DUMP: \2S%c:Line\2 List is empty.", (int)str_char_toupper(request[1]));
 		return;
 	}
 
@@ -833,13 +833,13 @@ void sxline_ds_dump(CSTR sourceNick, const User *callerUser, STR request) {
 			continue;
 		}
 
-		send_notice_to_user(sourceNick, callerUser, "%d) Address 0x%08X, size %d B",		lineIdx, (unsigned long)aSXLine, sizeof(SXLine));
-		send_notice_to_user(sourceNick, callerUser, "Name: 0x%08X \2[\2%s\2]\2",			(unsigned long)aSXLine->name, str_get_valid_display_value(aSXLine->name));
-		send_notice_to_user(sourceNick, callerUser, "Creator: 0x%08X \2[\2%s\2]\2",			(unsigned long)aSXLine->info.creator.name, str_get_valid_display_value(aSXLine->info.creator.name));
-		send_notice_to_user(sourceNick, callerUser, "Reason: 0x%08X \2[\2%s\2]\2",			(unsigned long)aSXLine->info.reason, str_get_valid_display_value(aSXLine->info.reason));
-		send_notice_to_user(sourceNick, callerUser, "Time Set C-time: %d",					aSXLine->info.creator.time);
-		send_notice_to_user(sourceNick, callerUser, "Last Used C-time: %d",					aSXLine->lastUsed);
-		send_notice_to_user(sourceNick, callerUser, "Next/Prev records: 0x%08X / 0x%08X",	(unsigned long)aSXLine->next, (unsigned long)aSXLine->prev);
+		send_notice_to_user(sourceNick, callerUser, "%d) Address %p, size %lu B",	lineIdx, aSXLine, sizeof(SXLine));
+		send_notice_to_user(sourceNick, callerUser, "Name: %p \2[\2%s\2]\2",		aSXLine->name, str_get_valid_display_value(aSXLine->name));
+		send_notice_to_user(sourceNick, callerUser, "Creator: %p \2[\2%s\2]\2",		aSXLine->info.creator.name, str_get_valid_display_value(aSXLine->info.creator.name));
+		send_notice_to_user(sourceNick, callerUser, "Reason: %p \2[\2%s\2]\2",		aSXLine->info.reason, str_get_valid_display_value(aSXLine->info.reason));
+		send_notice_to_user(sourceNick, callerUser, "Time Set C-time: %ld",			aSXLine->info.creator.time);
+		send_notice_to_user(sourceNick, callerUser, "Last Used C-time: %ld",		aSXLine->lastUsed);
+		send_notice_to_user(sourceNick, callerUser, "Next/Prev records: %p / %p",	aSXLine->next, aSXLine->prev);
 
 		if (sentIdx >= endIdx)
 			break;
@@ -875,7 +875,7 @@ unsigned long int sxline_mem_report(CSTR sourceNick, const User *callerUser) {
 		aSXLine = aSXLine->next;
 	}
 
-	send_notice_to_user(sourceNick, callerUser, "SQLine List: \2%d\2 -> \2%d\2 KB (\2%d\2 B)", count, mem / 1024, mem);
+	send_notice_to_user(sourceNick, callerUser, "SQLine List: \2%lu\2 -> \2%lu\2 KB (\2%lu\2 B)", count, mem / 1024, mem);
 	total_mem += mem;
 
 
@@ -896,7 +896,7 @@ unsigned long int sxline_mem_report(CSTR sourceNick, const User *callerUser) {
 		aSXLine = aSXLine->next;
 	}
 
-	send_notice_to_user(sourceNick, callerUser, "SGLine List: \2%d\2 -> \2%d\2 KB (\2%d\2 B)", count, mem / 1024, mem);
+	send_notice_to_user(sourceNick, callerUser, "SGLine List: \2%lu\2 -> \2%lu\2 KB (\2%lu\2 B)", count, mem / 1024, mem);
 	total_mem += mem;
 
 	return total_mem;

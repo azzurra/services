@@ -792,8 +792,8 @@ static void do_settings(CSTR source, User *callerUser, ServiceCommandData *data)
 	else
 		LOG_SNOOP(s_OperServ, "OS Se -- by %s (%s@%s) through %s", callerUser->nick, callerUser->username, callerUser->host, data->operName);
 
-	send_notice_to_user(s_OperServ, callerUser, "*** \2Services Settings List\2 ***", s_OperServ);
-	send_notice_to_user(s_OperServ, callerUser, s_SPACE);
+	send_notice_to_user(s_OperServ, callerUser, "*** \2Services Settings List\2 ***");
+	send_notice_to_user(s_OperServ, callerUser, " ");
 
 	send_notice_to_user(s_OperServ, callerUser, "CAPABs enabled: %s", (CAPAB[5] == '\0') ?  "None" : (CAPAB + 6));
 
@@ -802,25 +802,25 @@ static void do_settings(CSTR source, User *callerUser, ServiceCommandData *data)
 	send_notice_to_user(s_OperServ, callerUser, "DataBase Update Frequency: %s", convert_time(buffer, sizeof(buffer), CONF_DATABASE_UPDATE_FREQUENCY, LANG_DEFAULT));
 
 	TRACE_MAIN();
-	send_notice_to_user(s_OperServ, callerUser, "Clones: Trigger: \2%d\2 - Wait Warnings: \2%d\2 - Max Clones: \2%d\2 - Timed: \2%ds\2 - ScanV6: \2%d\2",
+	send_notice_to_user(s_OperServ, callerUser, "Clones: Trigger: \2%d\2 - Wait Warnings: \2%ld\2 - Max Clones: \2%d\2 - Timed: \2%lds\2 - ScanV6: \2%d\2",
 		CONF_CLONE_MIN_USERS, CONF_CLONE_WARNING_DELAY, CONF_AKILL_CLONES, CONF_DEFAULT_CLONEKILL_EXPIRY, CONF_CLONE_SCAN_V6);
 
-	send_notice_to_user(s_OperServ, callerUser, "Default Memo Limit: \2%d\2 - Max Memo Length:\2 450\2 - Memo Send Delay: \2%d\2",
+	send_notice_to_user(s_OperServ, callerUser, "Default Memo Limit: \2%d\2 - Max Memo Length:\2 450\2 - Memo Send Delay: \2%ld\2",
 		CONF_DEF_MAX_MEMOS, CONF_MEMO_SEND_DELAY);
 
 	send_notice_to_user(s_OperServ, callerUser, "Maximums: User Chan Access: \2%d\2 - Access List Entries: \2%d\2 - Chan Access Nicks: \2%d\2 - Chan AutoKicks: \2%d\2",
 		CONF_USER_CHAN_ACCESS_MAX, CONF_USER_ACCESS_MAX, CONF_CHAN_ACCESS_MAX, CONF_AKICK_MAX);
 
-	send_notice_to_user(s_OperServ, callerUser, "Invalid Password Max Attempts: \2%d\2 - Invalid Password Reset Time: \2%d\2 - Return E-Mail: \2%s\2",
+	send_notice_to_user(s_OperServ, callerUser, "Invalid Password Max Attempts: \2%d\2 - Invalid Password Reset Time: \2%ld\2 - Return E-Mail: \2%s\2",
 		CONF_INVALID_PASSWORD_MAX_ATTEMPTS, CONF_INVALID_PASSWORD_RESET, CONF_RETURN_EMAIL);
 
-	send_notice_to_user(s_OperServ, callerUser, "Flood Levels: \2%d\2/\2%d\2/\2%d\2 [MAXMSG:MSGRESET:LEVELRESET]",
+	send_notice_to_user(s_OperServ, callerUser, "Flood Levels: \2%d\2/\2%ld\2/\2%ld\2 [MAXMSG:MSGRESET:LEVELRESET]",
 		CONF_FLOOD_MAX_MESSAGES, CONF_FLOOD_MESSAGE_RESET, CONF_FLOOD_LEVEL_RESET);
 
 	send_notice_to_user(s_OperServ, callerUser, "Snoop Chan: \2%s\2 - Debug Chan: \2%s\2 - AutoKill Percent: \2%.0f\2 - Default Chan Modelock: \2%s\2",
 		CONF_SNOOP_CHAN, CONF_DEBUG_CHAN, CONF_AKILL_PERCENT, get_channel_mode(CONF_DEF_MLOCKON, 0));
 
-	send_notice_to_user(s_OperServ, callerUser, "Nick Release Timeout: \2%ds\2 - ChanServ/NickServ Register Delay: \2%ds\2 - Chan Inhabit: \2%ds\2",
+	send_notice_to_user(s_OperServ, callerUser, "Nick Release Timeout: \2%lds\2 - ChanServ/NickServ Register Delay: \2%lds\2 - Chan Inhabit: \2%lds\2",
 		CONF_RELEASE_TIMEOUT, CONF_REGISTER_DELAY, CONF_CHANNEL_INHABIT);
 
 	send_notice_to_user(s_OperServ, callerUser, "Expiry Times: Nicks: \2%d\2 - Chans: \2%d\2 - Memos: \2%d\2 - Stats: \2%d\2 - Seens: \2%d\2",
@@ -874,11 +874,11 @@ static void do_stats(CSTR source, User *callerUser, ServiceCommandData *data) {
 		LOG_SNOOP(s_OperServ, "OS St -- by %s (%s@%s) through %s", callerUser->nick, callerUser->username, callerUser->host, data->operName);
 
 	send_notice_to_user(s_OperServ, callerUser, "*** \2Services Stats\2 ***");
-	send_notice_to_user(s_OperServ, callerUser, "Current users: \2%d\2 (\2%d\2 ops)",
+	send_notice_to_user(s_OperServ, callerUser, "Current users: \2%u\2 (\2%u\2 ops)",
 		user_online_user_count, user_online_operator_count);
 
 	TRACE_MAIN();
-	send_notice_to_user(s_OperServ, callerUser, "Nicks: \2%d\2/\2%d\2 - Chans: \2%d\2/\2%d\2",
+	send_notice_to_user(s_OperServ, callerUser, "Nicks: \2%lu\2/\2%lu\2 - Chans: \2%lu\2/\2%lu\2",
 		ns_regCount, dynConf.ns_regLimit, cs_regCount, dynConf.cs_regLimit);
 
 	send_notice_to_user(s_OperServ, callerUser, "G:Lines: \2%d\2 - Q:Lines: \2%d\2 - Taglines: \2%d\2",
@@ -1796,12 +1796,12 @@ void operserv_ds_dump(CSTR sourceNick, const User *callerUser, STR request) {
 
 		for (idx = 0; idx < CLONE_DETECT_SIZE; ++idx) {
 
-			send_notice_to_user(sourceNick, callerUser, "%d) Address 0x%08X, size %d B",		idx + 1, (unsigned long)idx, sizeof(CloneWarning));
-			send_notice_to_user(sourceNick, callerUser, "Host: 0x%08X \2[\2%s\2]\2",			(unsigned long)warnings[idx].host, str_get_valid_display_value(warnings[idx].host));
-			send_notice_to_user(sourceNick, callerUser, "IP: %lu \2[\2%s\2]\2",					warnings[idx].ip, get_ip(warnings[idx].ip));
-			send_notice_to_user(sourceNick, callerUser, "Time Set C-time: %d",					warnings[idx].timeAdded);
-			send_notice_to_user(sourceNick, callerUser, "Clone count: %d",						warnings[idx].cloneCount);
-			send_notice_to_user(sourceNick, callerUser, "Flags: %d",							warnings[idx].flags);
+			send_notice_to_user(sourceNick, callerUser, "%lu) Address %p, size %lu B",	idx + 1, &warnings[idx], sizeof(CloneWarning));
+			send_notice_to_user(sourceNick, callerUser, "Host: %p \2[\2%s\2]\2",		warnings[idx].host, str_get_valid_display_value(warnings[idx].host));
+			send_notice_to_user(sourceNick, callerUser, "IP: %lu \2[\2%s\2]\2",			warnings[idx].ip, get_ip(warnings[idx].ip));
+			send_notice_to_user(sourceNick, callerUser, "Time Set C-time: %ld",			warnings[idx].timeAdded);
+			send_notice_to_user(sourceNick, callerUser, "Clone count: %d",				warnings[idx].cloneCount);
+			send_notice_to_user(sourceNick, callerUser, "Flags: %d",					warnings[idx].flags);
 		}
 
 		LOG_DEBUG_SNOOP("Command: DUMP WARNINGS -- by %s (%s@%s)", callerUser->nick, callerUser->username, callerUser->host);
@@ -1838,6 +1838,6 @@ unsigned long int operserv_mem_report(CSTR sourceNick, const User *callerUser) {
 			mem += str_len(warnings[warningIdx].host) + 1;
 	}
 
-	send_notice_to_user(sourceNick, callerUser, "Clone warnings list: \2%d\2 -> \2%d\2 KB (\2%d\2 B)", CLONE_DETECT_SIZE, mem / 1024, mem);
+	send_notice_to_user(sourceNick, callerUser, "Clone warnings list: \2%d\2 -> \2%lu\2 KB (\2%lu\2 B)", CLONE_DETECT_SIZE, mem / 1024, mem);
 	return mem;
 }

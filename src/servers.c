@@ -651,7 +651,7 @@ void send_servers_list(CSTR sourceNick, const User *callerUser) {
 	TRACE_FCLT(FACILITY_SERVERS_SEND_LIST);
 
 	send_notice_to_user(sourceNick, callerUser, "Current servers list:");
-	send_notice_to_user(sourceNick, callerUser, s_SPACE);
+	send_notice_to_user(sourceNick, callerUser, " ");
 
 	for (serverIdx = FIRST_VALID_HOST_CHAR; serverIdx <= LAST_VALID_HOST_CHAR; ++serverIdx) {
 
@@ -669,7 +669,7 @@ void send_servers_list(CSTR sourceNick, const User *callerUser) {
 		}
 	}
 
-	send_notice_to_user(sourceNick, callerUser, s_SPACE);
+	send_notice_to_user(sourceNick, callerUser, " ");
 	send_notice_to_user(sourceNick, callerUser, "\2*** End of Servers ***\2");
 }
 
@@ -793,16 +793,16 @@ void server_ds_dump(CSTR sourceNick, const User *callerUser, STR request) {
 
 				send_notice_to_user(sourceNick, callerUser, "DUMP: Server \2%s\2", value);
 
-				send_notice_to_user(sourceNick, callerUser, "Address 0x%08X, size %d B",						(unsigned long)server, sizeof(Server) + str_len(server->name) + str_len(server->desc) + 2);
-				send_notice_to_user(sourceNick, callerUser, "Name: 0x%08X \2[\2%s\2]\2",						(unsigned long)server->name, str_get_valid_display_value(server->name));
-				send_notice_to_user(sourceNick, callerUser, "Desc: 0x%08X \2[\2%s\2]\2",						(unsigned long)server->desc, str_get_valid_display_value(server->desc));
-				send_notice_to_user(sourceNick, callerUser, "Uplink: 0x%08X \2[\2%s\2]\2",						(unsigned long)server->uplink, str_get_valid_display_value(server->uplink->name));
-				send_notice_to_user(sourceNick, callerUser, "Hops: %u",											server->hops);
-				send_notice_to_user(sourceNick, callerUser, "Users: %u",										server->userCount);
-				send_notice_to_user(sourceNick, callerUser, "Connected C-time: %ld",							server->connected);
-				send_notice_to_user(sourceNick, callerUser, "Flags: %ld",										server->flags);
-				send_notice_to_user(sourceNick, callerUser, "Stats: 0x%08X",									(unsigned long)server->stats);
-				send_notice_to_user(sourceNick, callerUser, "Next / previous record: 0x%08X / 0x%08X",			(unsigned long)server->next, (unsigned long)server->prev);
+				send_notice_to_user(sourceNick, callerUser, "Address %p, size %lu B",			server, sizeof(Server) + str_len(server->name) + str_len(server->desc) + 2);
+				send_notice_to_user(sourceNick, callerUser, "Name: %p \2[\2%s\2]\2",			server->name, str_get_valid_display_value(server->name));
+				send_notice_to_user(sourceNick, callerUser, "Desc: %p \2[\2%s\2]\2",			server->desc, str_get_valid_display_value(server->desc));
+				send_notice_to_user(sourceNick, callerUser, "Uplink: %p \2[\2%s\2]\2",			server->uplink, str_get_valid_display_value(server->uplink->name));
+				send_notice_to_user(sourceNick, callerUser, "Hops: %u",							server->hops);
+				send_notice_to_user(sourceNick, callerUser, "Users: %u",						server->userCount);
+				send_notice_to_user(sourceNick, callerUser, "Connected C-time: %ld",			server->connected);
+				send_notice_to_user(sourceNick, callerUser, "Flags: %d",						server->flags);
+				send_notice_to_user(sourceNick, callerUser, "Stats: %p",						server->stats);
+				send_notice_to_user(sourceNick, callerUser, "Next / previous record: %p / %p",	server->next, server->prev);
 
 				LOG_DEBUG_SNOOP("Command: DUMP SERVER %s -- by %s (%s@%s)", value, callerUser->nick, callerUser->username, callerUser->host);
 			}
@@ -870,6 +870,6 @@ unsigned long server_mem_report(CSTR sourceNick, const User *callerUser) {
 		}
 	}
 
-	send_notice_to_user(sourceNick, callerUser, "Server list: \2%d\2 -> \2%d\2 KB (\2%d\2 B)", count, mem / 1024, mem);
+	send_notice_to_user(sourceNick, callerUser, "Server list: \2%lu\2 -> \2%lu\2 KB (\2%lu\2 B)", count, mem / 1024, mem);
 	return mem;
 }

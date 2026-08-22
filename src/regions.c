@@ -1167,7 +1167,7 @@ void handle_regions(const char *source, User *callerUser, ServiceCommandData *da
 		send_notice_to_user(data->agent->nick, callerUser, "Supported regions:");
 
 		for (region_id = REGION_FIRST; region_id <= REGION_LAST; ++region_id)
-			send_notice_to_user(data->agent->nick, callerUser, "%d) \2%s\2 [%s]", region_id, regions_info[region_id].long_name, regions_info[region_id].short_name);
+			send_notice_to_user(data->agent->nick, callerUser, "%u) \2%s\2 [%s]", region_id, regions_info[region_id].long_name, regions_info[region_id].short_name);
 
 		send_notice_to_user(data->agent->nick, callerUser, "*** \2End of List\2 ***");
 	}

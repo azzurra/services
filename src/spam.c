@@ -592,7 +592,7 @@ void handle_spam(CSTR source, User *callerUser, ServiceCommandData *data) {
 									LOG_SNOOP(data->agent->nick, "%s *SPT %s -- by %s (%s@%s) [Already %d]", data->agent->shortNick, spam->text, callerUser->nick, callerUser->username, callerUser->host, spam->type);
 								else
 									LOG_SNOOP(data->agent->nick, "%s *SPT %s -- by %s (%s@%s) through %s [Already %d]", data->agent->shortNick, spam->text, callerUser->nick, callerUser->username, callerUser->host, data->operName, spam->type);
-								send_notice_to_user(data->agent->nick, callerUser, "Type for SPAM string \2%s\2 is already set to \2%d\2.", spam->text, type);
+								send_notice_to_user(data->agent->nick, callerUser, "Type for SPAM string \2%s\2 is already set to \2%d\2.", spam->text, spam->type);
 							} else {
 								if (data->operMatch) {
 									LOG_SNOOP(data->agent->nick, "%s SPT %s -- by %s (%s@%s) [%d -> %ld]", data->agent->shortNick, spam->text, callerUser->nick, callerUser->username, callerUser->host, spam->type, type);

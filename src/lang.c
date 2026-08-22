@@ -583,12 +583,12 @@ unsigned long lang_mem_report(CSTR sourceNick, const User *callerUser) {
 	TRACE_FCLT(FACILITY_LANG_GET_STATS);
 
 	send_notice_to_user(sourceNick, callerUser, "\2Multi-language support\2:");
-	send_notice_to_user(sourceNick, callerUser, "Language loaded: \2%d\2 -> \2%d\2 KB (\2%d\2 B)", lang_loaded_count, lang_memory_commit / 1024, lang_memory_commit);
+	send_notice_to_user(sourceNick, callerUser, "Language loaded: \2%u\2 -> \2%lu\2 KB (\2%lu\2 B)", lang_loaded_count, lang_memory_commit / 1024, lang_memory_commit);
 
 	for (i = 0; i < LANG_COUNT; i++) {
 
 		if (FlagSet(lang_tables[i].flags, LIF_LOADED))
-			send_notice_to_user(sourceNick, callerUser, "%d) %s : \2%d\2 KB (\2%d\2 B)", i + 1, lang_tables[i].lang_name_loc, lang_tables[i].memory_size / 1024, lang_tables[i].memory_size);
+			send_notice_to_user(sourceNick, callerUser, "%d) %s : \2%lu\2 KB (\2%lu\2 B)", i + 1, lang_tables[i].lang_name_loc, lang_tables[i].memory_size / 1024, lang_tables[i].memory_size);
 	}
 
 	return lang_memory_commit;
@@ -1132,7 +1132,7 @@ void lang_send_list(CSTR source, const User *dest) {
 
 		TRACE();
 		if (FlagSet(table->flags, LIF_LOADED | LIF_LOAD_DEFERRED))
-			send_notice_to_user(source, dest, "%d) %s (%s)", lang_id+1, table->lang_name_loc, table->lang_name_eng);
+			send_notice_to_user(source, dest, "%u) %s (%s)", lang_id+1, table->lang_name_loc, table->lang_name_eng);
 	}
 
 	send_notice_lang_to_user(source, dest, GetCallerLang(), END_OF_LIST);

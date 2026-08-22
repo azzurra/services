@@ -533,7 +533,7 @@ void handle_ignore(CSTR source, User *callerUser, ServiceCommandData *data) {
 
 		if ((idx = str_len(reason)) > 220) {
 
-			send_notice_to_user(s_OperServ, callerUser, "Reason cannot be longer than 220 characters (yours has: %d).", idx);
+			send_notice_to_user(s_OperServ, callerUser, "Reason cannot be longer than 220 characters (yours has: %u).", idx);
 			return;
 		}
 
@@ -938,17 +938,17 @@ void ignore_ds_dump(CSTR sourceNick, const User *callerUser, STR request) {
 			continue;
 		}
 
-		send_notice_to_user(sourceNick, callerUser, "%d) Address 0x%08X, size %d B",		ignoreIdx, (unsigned long)anIgnore, sizeof(Ignore));
-		send_notice_to_user(sourceNick, callerUser, "Nick: 0x%08X \2[\2%s\2]\2",			(unsigned long)anIgnore->nick, str_get_valid_display_value(anIgnore->nick));
-		send_notice_to_user(sourceNick, callerUser, "Username: 0x%08X \2[\2%s\2]\2",		(unsigned long)anIgnore->username, str_get_valid_display_value(anIgnore->username));
-		send_notice_to_user(sourceNick, callerUser, "Host: 0x%08X \2[\2%s\2]\2",			(unsigned long)anIgnore->host, str_get_valid_display_value(anIgnore->host));
-		send_notice_to_user(sourceNick, callerUser, "Creator: 0x%08X \2[\2%s\2]\2",			(unsigned long)anIgnore->info.creator.name, str_get_valid_display_value(anIgnore->info.creator.name));
-		send_notice_to_user(sourceNick, callerUser, "Reason: 0x%08X \2[\2%s\2]\2",			(unsigned long)anIgnore->info.reason, str_get_valid_display_value(anIgnore->info.reason));
-		send_notice_to_user(sourceNick, callerUser, "Time Set C-time: %d",					anIgnore->info.creator.time);
-		send_notice_to_user(sourceNick, callerUser, "Expire C-time: %d",					anIgnore->expireTime);
-		send_notice_to_user(sourceNick, callerUser, "Last Used C-time: %d",					anIgnore->lastUsed);
-		send_notice_to_user(sourceNick, callerUser, "Flags: %d",							anIgnore->flags);
-		send_notice_to_user(sourceNick, callerUser, "Next/Prev records: 0x%08X / 0x%08X",	(unsigned long)anIgnore->next, (unsigned long)anIgnore->prev);
+		send_notice_to_user(sourceNick, callerUser, "%d) Address %p, size %lu B",	ignoreIdx, anIgnore, sizeof(Ignore));
+		send_notice_to_user(sourceNick, callerUser, "Nick: %p \2[\2%s\2]\2",		anIgnore->nick, str_get_valid_display_value(anIgnore->nick));
+		send_notice_to_user(sourceNick, callerUser, "Username: %p \2[\2%s\2]\2",	anIgnore->username, str_get_valid_display_value(anIgnore->username));
+		send_notice_to_user(sourceNick, callerUser, "Host: %p \2[\2%s\2]\2",		anIgnore->host, str_get_valid_display_value(anIgnore->host));
+		send_notice_to_user(sourceNick, callerUser, "Creator: %p \2[\2%s\2]\2",		anIgnore->info.creator.name, str_get_valid_display_value(anIgnore->info.creator.name));
+		send_notice_to_user(sourceNick, callerUser, "Reason: %p \2[\2%s\2]\2",		anIgnore->info.reason, str_get_valid_display_value(anIgnore->info.reason));
+		send_notice_to_user(sourceNick, callerUser, "Time Set C-time: %ld",			anIgnore->info.creator.time);
+		send_notice_to_user(sourceNick, callerUser, "Expire C-time: %ld",			anIgnore->expireTime);
+		send_notice_to_user(sourceNick, callerUser, "Last Used C-time: %ld",		anIgnore->lastUsed);
+		send_notice_to_user(sourceNick, callerUser, "Flags: %d",					anIgnore->flags);
+		send_notice_to_user(sourceNick, callerUser, "Next/Prev records: %p / %p",	anIgnore->next, anIgnore->prev);
 
 		if (ignoreIdx >= endIdx)
 			break;
@@ -991,6 +991,6 @@ unsigned long int ignore_mem_report(CSTR sourceNick, const User *callerUser) {
 		anIgnore = anIgnore->next;
 	}
 
-	send_notice_to_user(sourceNick, callerUser, "Ignore List: \2%d\2 -> \2%d\2 KB (\2%d\2 B)", count, mem / 1024, mem);
+	send_notice_to_user(sourceNick, callerUser, "Ignore List: \2%lu\2 -> \2%lu\2 KB (\2%lu\2 B)", count, mem / 1024, mem);
 	return mem;
 }

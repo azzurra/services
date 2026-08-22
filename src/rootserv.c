@@ -1274,7 +1274,7 @@ static void do_dynconf(CSTR source, User *callerUser, ServiceCommandData *data) 
 						send_notice_to_user(s_RootServ, callerUser, "Welcome Notice has been disabled.");
 					}
 					else if ((len = str_len(message)) > 400)
-						send_notice_to_user(s_RootServ, callerUser, "Welcome Notice cannot be longer than 400 characters (yours has: %d).", len);
+						send_notice_to_user(s_RootServ, callerUser, "Welcome Notice cannot be longer than 400 characters (yours has: %lu).", len);
 
 					else {
 
@@ -1323,7 +1323,7 @@ static void do_dynconf(CSTR source, User *callerUser, ServiceCommandData *data) 
 
 		TRACE_MAIN();
 		send_notice_to_user(s_RootServ, callerUser, "Current \2DynConf\2 settings:");
-		send_notice_to_user(s_RootServ, callerUser, "Registration limits: NS: \2%d\2 - CS: \2%d\2", dynConf.ns_regLimit, dynConf.cs_regLimit);
+		send_notice_to_user(s_RootServ, callerUser, "Registration limits: NS: \2%lu\2 - CS: \2%lu\2", dynConf.ns_regLimit, dynConf.cs_regLimit);
 		send_notice_to_user(s_RootServ, callerUser, "Welcome Notice: %s", dynConf.welcomeNotice ? dynConf.welcomeNotice : "<not set>");
 		send_notice_to_user(s_RootServ, callerUser, "*** \2End of List\2 ***");
 	}
@@ -1389,9 +1389,9 @@ void rootserv_ds_dump(CSTR sourceNick, const User *callerUser, STR request) {
 
 		send_notice_to_user(sourceNick, callerUser, "DUMP: DynConf");
 
-		send_notice_to_user(sourceNick, callerUser, "ChanServ Registration Limit: %d", dynConf.cs_regLimit);
-		send_notice_to_user(sourceNick, callerUser, "NickServ Registration Limit: %d", dynConf.ns_regLimit);
-		send_notice_to_user(sourceNick, callerUser, "Welcome Notice: 0x%08X \2[\2%s\2]\2", (unsigned long)dynConf.welcomeNotice, str_get_valid_display_value(dynConf.welcomeNotice));
+		send_notice_to_user(sourceNick, callerUser, "ChanServ Registration Limit: %lu", dynConf.cs_regLimit);
+		send_notice_to_user(sourceNick, callerUser, "NickServ Registration Limit: %lu", dynConf.ns_regLimit);
+		send_notice_to_user(sourceNick, callerUser, "Welcome Notice: %p \2[\2%s\2]\2", dynConf.welcomeNotice, str_get_valid_display_value(dynConf.welcomeNotice));
 
 		LOG_DEBUG_SNOOP("Command: DUMP ROOTSERV DYNCONF -- by %s (%s@%s)", callerUser->nick, callerUser->username, callerUser->host);
 	}
@@ -1430,7 +1430,7 @@ unsigned long int rootserv_mem_report(CSTR sourceNick, const User *callerUser) {
 	/* Server bot list */
 	mem = access_mem_report(serverBotList, &count);
 
-	send_notice_to_user(sourceNick, callerUser, "Server BOT-list: \2%lu\2 -> \2%lu\2 KB (\2%lu\2 B)", count, mem / 1024, mem);
+	send_notice_to_user(sourceNick, callerUser, "Server BOT-list: \2%d\2 -> \2%lu\2 KB (\2%lu\2 B)", count, mem / 1024, mem);
 
 	return mem;
 }

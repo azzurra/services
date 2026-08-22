@@ -5375,17 +5375,17 @@ static void do_listreg(CSTR source, User *callerUser, ServiceCommandData *data) 
 
 					case LR_OUT_STANDARD:
 						if (FlagSet(ni->flags, NI_FORBIDDEN))
-							send_notice_to_user(s_NickServ, callerUser, "%d) \2%s\2 [Forbidden by %s]", line, ni->nick, ni->forbid);
+							send_notice_to_user(s_NickServ, callerUser, "%lu) \2%s\2 [Forbidden by %s]", line, ni->nick, ni->forbid);
 						else
-							send_notice_to_user(s_NickServ, callerUser, "%d) \2%s\2 [%s]", line, ni->nick, ni->last_usermask);
+							send_notice_to_user(s_NickServ, callerUser, "%lu) \2%s\2 [%s]", line, ni->nick, ni->last_usermask);
 						break;
 					
 					case LR_OUT_REALNAME:
-						send_notice_to_user(s_NickServ, callerUser, "%d) \2%s\2 [%s] [Real Name: %s]", line, ni->nick, ni->last_usermask, ni->last_realname);
+						send_notice_to_user(s_NickServ, callerUser, "%lu) \2%s\2 [%s] [Real Name: %s]", line, ni->nick, ni->last_usermask, ni->last_realname);
 						break;
 
 					case LR_OUT_EMAIL:
-						send_notice_to_user(s_NickServ, callerUser, "%d) \2%s\2 [%s] [E-Mail Address: %s]", line, ni->nick, ni->last_usermask, ni->email);
+						send_notice_to_user(s_NickServ, callerUser, "%lu) \2%s\2 [%s] [E-Mail Address: %s]", line, ni->nick, ni->last_usermask, ni->email);
 						break;
 				}
 
@@ -5868,32 +5868,32 @@ void nickserv_ds_dump(CSTR sourceNick, const User *callerUser, STR request) {
 
 					send_notice_to_user(sourceNick, callerUser, "DUMP: nickname \2%s\2", value);
 
-					send_notice_to_user(sourceNick, callerUser, "Address 0x%08X, size %d B",						(unsigned long)ni, sizeof(NickInfo));
-					send_notice_to_user(sourceNick, callerUser, "Name: %s",											ni->nick);
-					send_notice_to_user(sourceNick, callerUser, "Password: %s",										ni->pass);
-					send_notice_to_user(sourceNick, callerUser, "Last Mask: 0x%08X \2[\2%s\2]\2",					(unsigned long)ni->last_usermask, str_get_valid_display_value(ni->last_usermask));
-					send_notice_to_user(sourceNick, callerUser, "Last Real Name: 0x%08X \2[\2%s\2]\2",				(unsigned long)ni->last_realname, str_get_valid_display_value(ni->last_realname));
-					send_notice_to_user(sourceNick, callerUser, "Registration C-time: %d",							ni->time_registered);
-					send_notice_to_user(sourceNick, callerUser, "Last seen C-time: %d",								ni->last_seen);
-					send_notice_to_user(sourceNick, callerUser, "Access count / list: %d / 0x%08X",					ni->accesscount, (unsigned long)ni->access);
-					send_notice_to_user(sourceNick, callerUser, "Flags: 0x%08X (%s)",								(unsigned long)ni->flags, get_nick_flags(ni->flags));
-					send_notice_to_user(sourceNick, callerUser, "Last Drop Request C-time: %d",						ni->last_drop_request);
-					send_notice_to_user(sourceNick, callerUser, "Last E-Mail Request C-time: %d",					ni->last_email_request);
-					send_notice_to_user(sourceNick, callerUser, "Max memos: %d",									ni->memomax);
-					send_notice_to_user(sourceNick, callerUser, "Channels count: %d",								ni->channelcount);
-					send_notice_to_user(sourceNick, callerUser, "News check value: %d",								ni->news);
-					send_notice_to_user(sourceNick, callerUser, "Registration E-Mail: 0x%08X \2[\2%s\2]\2",			(unsigned long)ni->regemail, str_get_valid_display_value(ni->regemail));
-					send_notice_to_user(sourceNick, callerUser, "URL: 0x%08X \2[\2%s\2]\2",							(unsigned long)ni->url, str_get_valid_display_value(ni->url));
-					send_notice_to_user(sourceNick, callerUser, "New E-Mail: 0x%08X \2[\2%s\2]\2",					(unsigned long)ni->email, str_get_valid_display_value(ni->email));
-					send_notice_to_user(sourceNick, callerUser, "Memo forwarded to: 0x%08X \2[\2%s\2]\2",			(unsigned long)ni->forward, str_get_valid_display_value(ni->forward));
-					send_notice_to_user(sourceNick, callerUser, "Hold by: 0x%08X \2[\2%s\2]\2",						(unsigned long)ni->hold, str_get_valid_display_value(ni->hold));
-					send_notice_to_user(sourceNick, callerUser, "Marked by: 0x%08X \2[\2%s\2]\2",					(unsigned long)ni->mark, str_get_valid_display_value(ni->mark));
-					send_notice_to_user(sourceNick, callerUser, "Frozen by: 0x%08X \2[\2%s\2]\2",					(unsigned long)ni->freeze, str_get_valid_display_value(ni->freeze));
-					send_notice_to_user(sourceNick, callerUser, "Forbidden by: 0x%08X \2[\2%s\2]\2",				(unsigned long)ni->forbid, str_get_valid_display_value(ni->forbid));
-					send_notice_to_user(sourceNick, callerUser, "Auth code: %d",									ni->auth);
-					send_notice_to_user(sourceNick, callerUser, "LangID: %d (%d)",									ni->langID, EXTRACT_LANG_ID(ni->langID));
-					send_notice_to_user(sourceNick, callerUser, "reserved[3]: %d %d %d",							ni->reserved[0], ni->reserved[1], ni->reserved[2]);
-					send_notice_to_user(sourceNick, callerUser, "Next / previous record: 0x%08X / 0x%08X",			(unsigned long)ni->next, (unsigned long)ni->prev);
+					send_notice_to_user(sourceNick, callerUser, "Address %p, size %lu B",				ni, sizeof(NickInfo));
+					send_notice_to_user(sourceNick, callerUser, "Name: %s",								ni->nick);
+					send_notice_to_user(sourceNick, callerUser, "Password: [REDACTED]");
+					send_notice_to_user(sourceNick, callerUser, "Last Mask: %p \2[\2%s\2]\2",			ni->last_usermask, str_get_valid_display_value(ni->last_usermask));
+					send_notice_to_user(sourceNick, callerUser, "Last Real Name: %p \2[\2%s\2]\2",		ni->last_realname, str_get_valid_display_value(ni->last_realname));
+					send_notice_to_user(sourceNick, callerUser, "Registration C-time: %ld",				ni->time_registered);
+					send_notice_to_user(sourceNick, callerUser, "Last seen C-time: %ld",				ni->last_seen);
+					send_notice_to_user(sourceNick, callerUser, "Access count / list: %ld / %p",		ni->accesscount, ni->access);
+					send_notice_to_user(sourceNick, callerUser, "Flags: %#lx (%s)",						(unsigned long)ni->flags, get_nick_flags(ni->flags));
+					send_notice_to_user(sourceNick, callerUser, "Last Drop Request C-time: %ld",		ni->last_drop_request);
+					send_notice_to_user(sourceNick, callerUser, "Last E-Mail Request C-time: %ld",		ni->last_email_request);
+					send_notice_to_user(sourceNick, callerUser, "Max memos: %d",						ni->memomax);
+					send_notice_to_user(sourceNick, callerUser, "Channels count: %d",					ni->channelcount);
+					send_notice_to_user(sourceNick, callerUser, "News check value: %d",					ni->news);
+					send_notice_to_user(sourceNick, callerUser, "Registration E-Mail: %p \2[\2%s\2]\2",	ni->regemail, str_get_valid_display_value(ni->regemail));
+					send_notice_to_user(sourceNick, callerUser, "URL: %p \2[\2%s\2]\2",					ni->url, str_get_valid_display_value(ni->url));
+					send_notice_to_user(sourceNick, callerUser, "New E-Mail: %p \2[\2%s\2]\2",			ni->email, str_get_valid_display_value(ni->email));
+					send_notice_to_user(sourceNick, callerUser, "Memo forwarded to: %p \2[\2%s\2]\2",	ni->forward, str_get_valid_display_value(ni->forward));
+					send_notice_to_user(sourceNick, callerUser, "Hold by: %p \2[\2%s\2]\2",				ni->hold, str_get_valid_display_value(ni->hold));
+					send_notice_to_user(sourceNick, callerUser, "Marked by: %p \2[\2%s\2]\2",			ni->mark, str_get_valid_display_value(ni->mark));
+					send_notice_to_user(sourceNick, callerUser, "Frozen by: %p \2[\2%s\2]\2",			ni->freeze, str_get_valid_display_value(ni->freeze));
+					send_notice_to_user(sourceNick, callerUser, "Forbidden by: %p \2[\2%s\2]\2",		ni->forbid, str_get_valid_display_value(ni->forbid));
+					send_notice_to_user(sourceNick, callerUser, "Auth code: %lu",						ni->auth);
+					send_notice_to_user(sourceNick, callerUser, "LangID: %d (%u)",						ni->langID, EXTRACT_LANG_ID(ni->langID));
+					send_notice_to_user(sourceNick, callerUser, "reserved[3]: %u %u %u",				ni->reserved[0], ni->reserved[1], ni->reserved[2]);
+					send_notice_to_user(sourceNick, callerUser, "Next / previous record: %p / %p",		ni->next, ni->prev);
 
 					LOG_DEBUG_SNOOP("Command: DUMP NICKSERV NICK %s -- by %s (%s@%s)", value, callerUser->nick, callerUser->username, callerUser->host);
 				}
@@ -5919,7 +5919,7 @@ void nickserv_ds_dump(CSTR sourceNick, const User *callerUser, STR request) {
 						send_notice_to_user(sourceNick, callerUser, "DUMP: Access List for nickname \2%s\2", value);
 
 					for (anAccess = ni->access, i = 0; i < ni->accesscount; ++anAccess, ++i)
-						send_notice_to_user(sourceNick, callerUser, "%d) Mask: 0x%08X \2[\2%s\2]\2", i+1, (unsigned long)*anAccess, *anAccess);
+						send_notice_to_user(sourceNick, callerUser, "%ld) Mask: %p \2[\2%s\2]\2", i+1, *anAccess, *anAccess);
 
 					LOG_DEBUG_SNOOP("Command: DUMP NICKSERV ACCESS %s -- by %s (%s@%s)", value, callerUser->nick, callerUser->username, callerUser->host);
 				}
@@ -5928,14 +5928,14 @@ void nickserv_ds_dump(CSTR sourceNick, const User *callerUser, STR request) {
 
 			unsigned int	idx, n;
 
-			send_notice_to_user(sourceNick, callerUser, "DUMP: Guest Used List (\2 0x%08X \2)", nickserv_used_guest_list);
+			send_notice_to_user(sourceNick, callerUser, "DUMP: Guest Used List (\2 %p \2)", nickserv_used_guest_list);
 
 			if (IS_NOT_NULL(nickserv_used_guest_list)) {
 
 				for (idx = 0, n = 0; idx < 99999 - 10000 + 1; ++idx) {
 
 					if (nickserv_used_guest_list[idx] == 1)
-						send_notice_to_user(sourceNick, callerUser, "%d) \2%d\2", n++, idx + 10000);
+						send_notice_to_user(sourceNick, callerUser, "%u) \2%u\2", n++, idx + 10000);
 				}
 			}
 
@@ -5949,10 +5949,10 @@ void nickserv_ds_dump(CSTR sourceNick, const User *callerUser, STR request) {
 			MemoryPoolStats pstats;
 
 			mempool_stats(nickdb_mempool, &pstats);
-			send_notice_to_user(sourceNick, callerUser, "DUMP: NickServ memory pool - Address 0x%08X, ID: %d",	(unsigned long)nickdb_mempool, pstats.id);
-			send_notice_to_user(sourceNick, callerUser, "Memory allocated / free: %d B / %d B",				pstats.memory_allocated, pstats.memory_free);
-			send_notice_to_user(sourceNick, callerUser, "Items allocated / free: %d / %d",					pstats.items_allocated, pstats.items_free);
-			send_notice_to_user(sourceNick, callerUser, "Items per block / block count: %d / %d",			pstats.items_per_block, pstats.block_count);
+			send_notice_to_user(sourceNick, callerUser, "DUMP: NickServ memory pool - Address %p, ID: %u",	nickdb_mempool, pstats.id);
+			send_notice_to_user(sourceNick, callerUser, "Memory allocated / free: %lu B / %lu B",			pstats.memory_allocated, pstats.memory_free);
+			send_notice_to_user(sourceNick, callerUser, "Items allocated / free: %lu / %lu",				pstats.items_allocated, pstats.items_free);
+			send_notice_to_user(sourceNick, callerUser, "Items per block / block count: %lu / %lu",			pstats.items_per_block, pstats.block_count);
 			//send_notice_to_user(sourceNick, callerUser, "Avarage use: %.2f%%",								pstats.block_avg_usage);
 
 		#endif
@@ -6039,7 +6039,7 @@ unsigned long nickserv_mem_report(CSTR sourceNick, const User *callerUser) {
 	}
 
 	total_mem = mem;
-	send_notice_to_user(sourceNick, callerUser, "Record: \2%d\2 [%d] -> \2%d\2 KB (\2%d\2 B)", count, ns_regCount, mem / 1024, mem);
+	send_notice_to_user(sourceNick, callerUser, "Record: \2%lu\2 [%lu] -> \2%lu\2 KB (\2%lu\2 B)", count, ns_regCount, mem / 1024, mem);
 
 	return total_mem;
 }
