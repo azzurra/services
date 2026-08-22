@@ -55,8 +55,8 @@ void send_cmd(CSTR fmt, ...) {
 	++total_sendM;
 
 	va_start(args, fmt);
-
 	len = vsnprintf(cmd_buffer, IRCBUFSIZE, fmt, args);
+	va_end(args);
 
 	if (len < 0)
 		len = IRCBUFSIZE;
@@ -68,8 +68,6 @@ void send_cmd(CSTR fmt, ...) {
 	cmd_buffer[len] = '\0';
 
 	socket_write(cmd_buffer, len);
-
-	va_end(args);
 }
 
 /* Globals */
@@ -79,8 +77,8 @@ void send_globops(CSTR source, CSTR fmt, ...) {
 
 	va_start(args, fmt);
 	vsnprintf(send_local_buffer, IRCBUFSIZE, fmt, args);
-	send_cmd(":%s GLOBOPS :%s", source ? source : CONF_SERVICES_NAME, send_local_buffer);
 	va_end(args);
+	send_cmd(":%s GLOBOPS :%s", source ? source : CONF_SERVICES_NAME, send_local_buffer);
 }
 
 void send_chatops(CSTR source, CSTR fmt, ...) {
@@ -89,8 +87,8 @@ void send_chatops(CSTR source, CSTR fmt, ...) {
 
 	va_start(args, fmt);
 	vsnprintf(send_local_buffer, IRCBUFSIZE, fmt, args);
-	send_cmd(":%s CHATOPS :%s", source ? source : CONF_SERVICES_NAME, send_local_buffer);
 	va_end(args);
+	send_cmd(":%s CHATOPS :%s", source ? source : CONF_SERVICES_NAME, send_local_buffer);
 }
 
 void send_SPAMOPS(CSTR source, CSTR fmt, ...) {
@@ -99,8 +97,8 @@ void send_SPAMOPS(CSTR source, CSTR fmt, ...) {
 
 	va_start(args, fmt);
 	vsnprintf(send_local_buffer, IRCBUFSIZE, fmt, args);
-	send_cmd(":%s SNOTICE :%s", source ? source : CONF_SERVICES_NAME, send_local_buffer);
 	va_end(args);
+	send_cmd(":%s SNOTICE :%s", source ? source : CONF_SERVICES_NAME, send_local_buffer);
 }
 
 
@@ -114,8 +112,8 @@ void send_notice_to_nick(CSTR source, CSTR dest, CSTR fmt, ...) {
 
 	va_start(args, fmt);
 	vsnprintf(send_local_buffer, IRCBUFSIZE, fmt, args);
-	send_cmd(":%s NOTICE %s :%s", source, dest, send_local_buffer);
 	va_end(args);
+	send_cmd(":%s NOTICE %s :%s", source, dest, send_local_buffer);
 }
 
 
@@ -129,8 +127,8 @@ void send_notice_to_user(CSTR source, const User *dest, CSTR fmt, ...) {
 
 	va_start(args, fmt);
 	vsnprintf(send_local_buffer, IRCBUFSIZE, fmt, args);
-	send_cmd(":%s NOTICE %s :%s", source, dest->nick, send_local_buffer);
 	va_end(args);
+	send_cmd(":%s NOTICE %s :%s", source, dest->nick, send_local_buffer);
 }
 
 void send_notice_lang_to_nick(CSTR source, CSTR dest, const LANG_ID lang_id, const LANG_MSG_ID msg_id, ...) {
@@ -144,10 +142,10 @@ void send_notice_lang_to_nick(CSTR source, CSTR dest, const LANG_ID lang_id, con
 	if (nick_is_service(dest)) // non mandiamoci messaggi da soli che non e' il caso ...
 		return;
 	
-	va_start(args, msg_id);
-
 	memset(buffer, 0, sizeof(buffer));
+	va_start(args, msg_id);
 	vsnprintf(buffer, sizeof(buffer), fmt, args);
+	va_end(args);
 
 	row_end = buffer;
 
@@ -161,8 +159,6 @@ void send_notice_lang_to_nick(CSTR source, CSTR dest, const LANG_ID lang_id, con
 
 		send_cmd(":%s NOTICE %s :%s", source, dest, *row ? row : s_SPACE);
 	}
-
-	va_end(args);
 }
 
 void send_notice_lang_to_user(CSTR source, const User *dest, const LANG_ID lang_id, const LANG_MSG_ID msg_id, ...) {
@@ -175,10 +171,10 @@ void send_notice_lang_to_user(CSTR source, const User *dest, const LANG_ID lang_
 	if (user_is_services_client(dest)) // non mandiamoci messaggi da soli che non e' il caso ...
 		return;
 	
-	va_start(args, msg_id);
-
 	memset(buffer, 0, sizeof(buffer));
+	va_start(args, msg_id);
 	vsnprintf(buffer, sizeof(buffer), fmt, args);
+	va_end(args);
 
 	row_end = buffer;
 
@@ -192,8 +188,6 @@ void send_notice_lang_to_user(CSTR source, const User *dest, const LANG_ID lang_
 
 		send_cmd(":%s NOTICE %s :%s", source, dest->nick, *row ? row : s_SPACE);
 	}
-
-	va_end(args);
 }
 
 /* Remove a user from the IRC network. 'source' is the nick which should generate the kill. */
@@ -231,8 +225,8 @@ void send_PRIVMSG(CSTR source, CSTR dest, CSTR fmt, ...) {
 
 	va_start(args, fmt);
 	vsnprintf(send_local_buffer, IRCBUFSIZE, fmt, args);
-	send_cmd(":%s PRIVMSG %s :%s", source, dest, send_local_buffer);
 	va_end(args);
+	send_cmd(":%s PRIVMSG %s :%s", source, dest, send_local_buffer);
 }
 
 /* Send a NICK from services, and fake the client loading. */
@@ -321,7 +315,7 @@ void send_AKILL(CSTR username, CSTR host, CSTR who, CSTR reason, const unsigned 
 
 	snprintf(buffer, sizeof(buffer), "%s [AKill ID: %lu-%s]", reason, id, type);
 
-	send_cmd("AKILL %s %s 0 %s %lu :%s", host, username, who, time(NULL), buffer);
+	send_cmd("AKILL %s %s 0 %s %ld :%s", host, username, who, time(NULL), buffer);
 }
 
 /* Remove an AutoKill. */

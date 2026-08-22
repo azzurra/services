@@ -564,7 +564,7 @@ static void m_whois(CSTR source, const int ac, char **av) {
 
 		send_cmd("311 %s %s %s %s * :%s", source, localUser->nick, localUser->username, localUser->maskedHost, localUser->realname);
 		send_cmd("312 %s %s %s :%s", source, localUser->nick, CONF_SERVICES_NAME, CONF_SERVICES_DESC);
-		send_cmd("317 %s %s %lu %lu :seconds idle, signon time", source, localUser->nick, (NOW - localUser->signon), localUser->signon);
+		send_cmd("317 %s %s %ld %ld :seconds idle, signon time", source, localUser->nick, (NOW - localUser->signon), localUser->signon);
 	}
 
 	send_cmd("318 %s %s :End of /WHOIS list.", source, av[1]);

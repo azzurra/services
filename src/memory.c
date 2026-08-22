@@ -51,7 +51,7 @@ void *mem_malloc(size_t size) {
 	if (IS_NULL(buffer)) {
 
 		log_error(FACILITY_MEMORY, __LINE__, LOG_TYPE_ERROR_SANITY, LOG_SEVERITY_ERROR_QUIT,
-			"mem_malloc(): Out of memory on a %d byte request.", size);
+			"mem_malloc(): Out of memory on a %zu byte request.", size);
 
 		raise(SIG_OUT_OF_MEMORY);
 	}
@@ -80,7 +80,7 @@ void *mem_calloc(size_t count, size_t size) {
 	if (IS_NULL(buffer)) {
 
 		log_error(FACILITY_MEMORY, __LINE__, LOG_TYPE_ERROR_SANITY, LOG_SEVERITY_ERROR_QUIT,
-			"mem_calloc(): Out of memory on a %d byte request.", size * count);
+			"mem_calloc(): Out of memory on a %zu byte request.", size * count);
 
 		raise(SIG_OUT_OF_MEMORY);
 	}
@@ -101,7 +101,7 @@ void *mem_realloc(void *ptr, size_t size) {
 	if (IS_NULL(buffer) && (size != 0)) {
 
 		log_error(FACILITY_MEMORY, __LINE__, LOG_TYPE_ERROR_SANITY, LOG_SEVERITY_ERROR_QUIT,
-			"mem_realloc(): Out of memory on a %d byte request.", size);
+			"mem_realloc(): Out of memory on a %zu byte request.", size);
 
 		raise(SIG_OUT_OF_MEMORY);
 	}
@@ -382,7 +382,7 @@ void mempool_free(MemoryPool *mp, void *mem) {
 				map_region_offset = map_region_offset / MP_MAP_REGION_SIZE;
 
 				if ((ptr->allocation_map[map_region_offset] & map_region_mask) == 0) {
-					log_error(FACILITY_MEMORY, __LINE__, LOG_TYPE_ERROR_SANITY, LOG_SEVERITY_ERROR_WARNING, "mempool_free(): block already free! [PoolID: %d | ptr: 0x%X]", mp->id, mem);
+					log_error(FACILITY_MEMORY, __LINE__, LOG_TYPE_ERROR_SANITY, LOG_SEVERITY_ERROR_WARNING, "mempool_free(): block already free! [PoolID: %u | ptr: %p]", mp->id, mem);
 
 				} else {
 
@@ -431,7 +431,7 @@ void mempool_free2(MemoryPool *mp, void *mem, MEMORYBLOCK_ID mblock_id) {
 				map_region_offset = bd->offset;
 */
 				if ((ptr->allocation_map[map_region_offset] & map_region_mask) == 0) {
-					log_error(FACILITY_MEMORY, __LINE__, LOG_TYPE_ERROR_SANITY, LOG_SEVERITY_ERROR_WARNING, "mempool_free(): block already free! [PoolID: %d | ptr: 0x%X]", mp->id, mem);
+					log_error(FACILITY_MEMORY, __LINE__, LOG_TYPE_ERROR_SANITY, LOG_SEVERITY_ERROR_WARNING, "mempool_free(): block already free! [PoolID: %u | ptr: %p]", mp->id, mem);
 
 				} else {
 

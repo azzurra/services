@@ -312,7 +312,7 @@ BOOL region_list_add(Region *region) {
 		}
 		else
 			log_error(FACILITY_REGION_LIST_ADD, __LINE__, LOG_TYPE_ERROR_SANITY, LOG_SEVERITY_ERROR_PROPAGATED,
-				"region_list_add() - Invalid region-type flag (%d)", region->flags & 0x03);
+				"region_list_add() - Invalid region-type flag (%lu)", region->flags & 0x03);
 			// fall and fail ...
 	}
 
@@ -368,7 +368,7 @@ void region_list_remove(Region *region) {
 		}
 		else
 			log_error(FACILITY_REGION_LIST_REMOVE, __LINE__, LOG_TYPE_ERROR_SANITY, LOG_SEVERITY_ERROR_PROPAGATED,
-				"region_list_remove() - Invalid region-type flag (%d)", region->flags & 0x03);
+				"region_list_remove() - Invalid region-type flag (%lu)", region->flags & 0x03);
 			// fall and fail ...
 	}
 }
@@ -932,9 +932,9 @@ void handle_regions(const char *source, User *callerUser, ServiceCommandData *da
 			if (IS_NOT_NULL(region) && (error.value.cidr_error == cidrSuccess)) {
 
 				if (data->operMatch)
-					send_globops(data->agent->nick, "\2%s\2 removed CIDR for \2%s\2 from region \2%d\2", source, region->host_mask, region->id);
+					send_globops(data->agent->nick, "\2%s\2 removed CIDR for \2%s\2 from region \2%u\2", source, region->host_mask, region->id);
 				else
-					send_globops(data->agent->nick, "\2%s\2 (through \2%s\2) removed CIDR for \2%s\2 from region \2%d\2", source, data->operName, region->host_mask, region->id);
+					send_globops(data->agent->nick, "\2%s\2 (through \2%s\2) removed CIDR for \2%s\2 from region \2%u\2", source, data->operName, region->host_mask, region->id);
 
 				region_list_remove(region);
 				region_delete(region);
@@ -960,9 +960,9 @@ void handle_regions(const char *source, User *callerUser, ServiceCommandData *da
 			if (IS_NOT_NULL(region) && (error.value.host_error == RESULT_SUCCESS)) {
 
 				if (data->operMatch)
-					send_globops(data->agent->nick, "\2%s\2 removed host \2%s\2 from region \2%d\2", source, region->host_mask, region->id);
+					send_globops(data->agent->nick, "\2%s\2 removed host \2%s\2 from region \2%u\2", source, region->host_mask, region->id);
 				else
-					send_globops(data->agent->nick, "\2%s\2 (through \2%s\2) removed host \2%s\2 from region \2%d\2", source, data->operName, region->host_mask, region->id);
+					send_globops(data->agent->nick, "\2%s\2 (through \2%s\2) removed host \2%s\2 from region \2%u\2", source, data->operName, region->host_mask, region->id);
 
 				region_list_remove(region);
 				region_delete(region);
@@ -1167,7 +1167,7 @@ void handle_regions(const char *source, User *callerUser, ServiceCommandData *da
 		send_notice_to_user(data->agent->nick, callerUser, "Supported regions:");
 
 		for (region_id = REGION_FIRST; region_id <= REGION_LAST; ++region_id)
-			send_notice_to_user(data->agent->nick, callerUser, "%d) \2%s\2 [%s]", region_id, regions_info[region_id].long_name, regions_info[region_id].short_name);
+			send_notice_to_user(data->agent->nick, callerUser, "%u) \2%s\2 [%s]", region_id, regions_info[region_id].long_name, regions_info[region_id].short_name);
 
 		send_notice_to_user(data->agent->nick, callerUser, "*** \2End of List\2 ***");
 	}

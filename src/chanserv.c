@@ -1032,7 +1032,7 @@ void load_suspend_db(void) {
 		}
 #else
 		if (fread(name, sizeof(ChannelSuspendData), 1, f) != 1)
-			fatal_error(FACILITY_CHANSERV_LOAD_SUSPEND_DB, __LINE__, "Read error on %s at entry %d", SUSPEND_DB, i);ù
+			fatal_error(FACILITY_CHANSERV_LOAD_SUSPEND_DB, __LINE__, "Read error on %s at entry %d", SUSPEND_DB, i);
 
 #endif
 		TRACE();
@@ -1288,9 +1288,9 @@ void expire_chans() {
 
 	TRACE();
 	if (CONF_DISPLAY_UPDATES)
-		send_globops(NULL, "Completed Channel Expire (\2%d\2/\2%d\2/\2%d\2)", xcount, rcount, count);
+		send_globops(NULL, "Completed Channel Expire (\2%ld\2/\2%ld\2/\2%ld\2)", xcount, rcount, count);
 	else
-		LOG_SNOOP(s_OperServ, "Completed Channel Expire (\2%d\2/\2%d\2/\2%d\2)", xcount, rcount, count);
+		LOG_SNOOP(s_OperServ, "Completed Channel Expire (\2%ld\2/\2%ld\2/\2%ld\2)", xcount, rcount, count);
 }
 
 /*********************************************************/
@@ -1350,9 +1350,9 @@ void chanserv_daily_expire() {
 
 	TRACE();
 	if (CONF_DISPLAY_UPDATES)
-		send_globops(NULL, "Completed Daily Channel Expire (Channels in database: \2%d\2)", count);
+		send_globops(NULL, "Completed Daily Channel Expire (Channels in database: \2%ld\2)", count);
 	else
-		LOG_SNOOP(s_OperServ, "Completed Daily Channel Expire (Channels in database: \2%d\2)", count);
+		LOG_SNOOP(s_OperServ, "Completed Daily Channel Expire (Channels in database: \2%ld\2)", count);
 }
 
 
@@ -1705,7 +1705,7 @@ static int masskick_channel(CSTR chan_name, LANG_MSG_ID reason) {
 			AddFlag(chan->mode, CMODE_CS);
 		}
 
-		send_cmd(":%s MODE %s +b *!*@* %lu", s_ChanServ, chan_name, NOW);
+		send_cmd(":%s MODE %s +b *!*@* %ld", s_ChanServ, chan_name, NOW);
 
 		for (item = chan->users; item; item = next_item) {
 
@@ -1854,7 +1854,7 @@ void check_modelock(Channel *chan, User *changedBy) {
 
 	/* Some sanity checks (to be removed?). */
 	if (addKey && removeKey)
-		LOG_DEBUG_SNOOP("check_modelock() for channel %s has both addKey and removeKey!");
+		LOG_DEBUG_SNOOP("check_modelock() for channel %s has both addKey and removeKey!", chan->name);
 
 	/* No changes? Don't do anything. */
 	if (modeIdx == 0)
@@ -2423,7 +2423,7 @@ kick:
 
 	/* If this ban is not already present and can be added (i.e. banlist is not full) send it. */
 	if (!chan_has_ban(chan, mask, NULL) && chan_add_ban(chan, mask))
-		send_cmd(":%s MODE %s +b %s %lu", s_ChanServ, chan->name, mask, NOW);
+		send_cmd(":%s MODE %s +b %s %ld", s_ChanServ, chan->name, mask, NOW);
 
 	TRACE();
 	send_cmd(":%s KICK %s %s :%s", s_ChanServ, chan->name, user->nick, reason);
@@ -2494,7 +2494,7 @@ void restore_topic(Channel *chan) {
 
 	TRACE();
 	if (IS_NOT_NULL(chan->topic))
-		send_cmd(":%s TOPIC %s %s %lu :%s", s_ChanServ, chan->name, chan->topic_setter, chan->topic_time, chan->topic ? chan->topic : "");
+		send_cmd(":%s TOPIC %s %s %ld :%s", s_ChanServ, chan->name, chan->topic_setter, chan->topic_time, chan->topic ? chan->topic : "");
 }
 
 /*********************************************************/
@@ -2529,7 +2529,7 @@ BOOL check_topiclock(const User *user, Channel *chan) {
 	str_copy_checked(ci->last_topic_setter, chan->topic_setter, NICKMAX);
 	chan->topic_time = ci->last_topic_time;
 
-	send_cmd(":%s TOPIC %s %s %lu :%s", s_ChanServ, chan->name, chan->topic_setter, chan->topic_time, chan->topic ? chan->topic : "");
+	send_cmd(":%s TOPIC %s %s %ld :%s", s_ChanServ, chan->name, chan->topic_setter, chan->topic_time, chan->topic ? chan->topic : "");
 	return TRUE;
 }
 
@@ -2619,7 +2619,7 @@ void cs_remove_nick(CSTR nick) {
 
 					/* Log this action. */
 					LOG_SNOOP(s_OperServ, "CS XF! %s [%s -> %s] [P: %s -> %s-%lu]", ci->name, ci->founder, ci->successor, ci->founderpass, CRYPT_NETNAME, randID);
-					log_services(LOG_SERVICES_CHANSERV_GENERAL, "XF! %s [%s -> %s] [P: %s -> %lu]", ci->name, ci->founder, ci->successor, ci->founderpass, CRYPT_NETNAME, randID);
+					log_services(LOG_SERVICES_CHANSERV_GENERAL, "XF! %s [%s -> %s] [P: %s -> %s-%lu]", ci->name, ci->founder, ci->successor, ci->founderpass, CRYPT_NETNAME, randID);
 
 					/* Change the channel password to the new (random) one. */
 					snprintf(ci->founderpass, sizeof(ci->founderpass), "%s-%lu", CRYPT_NETNAME, randID);
@@ -2901,14 +2901,14 @@ static void do_register(CSTR source, User *callerUser, ServiceCommandData *data)
 
 		if (dynConf.cs_regLimit <= cs_regCount) {
 
-			send_globops(NULL, "\2%s\2 hit the maximum number of registrations allowed (\2%d\2/\2%d\2)",
+			send_globops(NULL, "\2%s\2 hit the maximum number of registrations allowed (\2%lu\2/\2%lu\2)",
 				s_ChanServ, cs_regCount, dynConf.cs_regLimit);
 			send_notice_lang_to_user(s_ChanServ, callerUser, GetCallerLang(), CSNS_ERROR_MAX_REG_REACHED);
 			return;
 		}
 		else if (dynConf.cs_regLimit <= (cs_regCount + 10)) {
 
-			send_globops(NULL, "\2%s\2 is about to hit the maximum number of registrations allowed (\2%d\2/\2%d\2)",
+			send_globops(NULL, "\2%s\2 is about to hit the maximum number of registrations allowed (\2%lu\2/\2%lu\2)",
 				s_ChanServ, cs_regCount, dynConf.cs_regLimit);
 		}
 	}
@@ -3160,23 +3160,32 @@ static void do_sendcode(CSTR source, User *callerUser, ServiceCommandData *data)
 	}	
 	if (IS_NULL(ci = cs_findchan(chan))) {
 
-		LOG_SNOOP(s_OperServ, "CS *SC %s -- by %s (%s@%s) [Not Registered]", chan, callerUser->nick, callerUser->username, callerUser->host);
+		if (data->operMatch)
+			LOG_SNOOP(s_OperServ, "CS *SC %s -- by %s (%s@%s) [Not Registered]", chan, callerUser->nick, callerUser->username, callerUser->host);
+		else
+			LOG_SNOOP(s_OperServ, "CS *SC %s -- by %s (%s@%s) through %s [Not Registered]", chan, callerUser->nick, callerUser->username, callerUser->host, data->operName);
 
 		send_notice_lang_to_user(s_ChanServ, callerUser, GetCallerLang(), ERROR_CHAN_NOT_REG, chan);
 		return;
 	}
 	
 	if(!ci->auth) {
-		
-		LOG_SNOOP(s_OperServ, "CS *SC -- by %s (%s@%s) [NO Dropping requests]", callerUser->nick, callerUser->username, callerUser->host, data->operName, NICKMAX);
+
+		if (data->operMatch)
+			LOG_SNOOP(s_OperServ, "CS *SC -- by %s (%s@%s) [NO Dropping requests]", callerUser->nick, callerUser->username, callerUser->host);
+		else
+			LOG_SNOOP(s_OperServ, "CS *SC -- by %s (%s@%s) through %s [NO Dropping requests]", callerUser->nick, callerUser->username, callerUser->host, data->operName);
 
 		send_notice_lang_to_user(s_ChanServ, callerUser, GetCallerLang(), CS_DROP_ERROR_NOT_DROPPING, ci->name);
 		return;
 	}	
 	
 	if(FlagSet(ci->flags,  CI_MARKCHAN)) {
-		
-		LOG_SNOOP(s_OperServ, "CS *SC -- by %s (%s@%s) [Marked]", callerUser->nick, callerUser->username, callerUser->host, data->operName, NICKMAX);
+
+		if (data->operMatch)
+			LOG_SNOOP(s_OperServ, "CS *SC -- by %s (%s@%s) [Marked]", callerUser->nick, callerUser->username, callerUser->host);
+		else
+			LOG_SNOOP(s_OperServ, "CS *SC -- by %s (%s@%s) through %s [Marked]", callerUser->nick, callerUser->username, callerUser->host, data->operName);
 
 		send_notice_lang_to_user(s_ChanServ, callerUser, GetCallerLang(), OPER_CS_ERROR_CHAN_MARKED, ci->name);
 		return;
@@ -3212,8 +3221,13 @@ static void do_sendcode(CSTR source, User *callerUser, ServiceCommandData *data)
 			
 		send_notice_lang_to_user(s_ChanServ, callerUser, GetCallerLang(), CSNS_SENDCODE_CODE_SENT, ni->nick, ni->email);
 		send_globops(s_ChanServ, "\2%s\2 used SENDCODE on channel \2%s\2 [DROP]", callerUser->nick, ci->name);
-		LOG_SNOOP(s_OperServ, "CS SC %s -- by %s (%s@%s)", ci->name, callerUser->nick, callerUser->username, callerUser->host);
-		log_services(LOG_SERVICES_CHANSERV_GENERAL, "SC %s -- by %s (%s@%s)", ci->name, callerUser->nick, callerUser->username, callerUser->host);
+		if (data->operMatch) {
+			LOG_SNOOP(s_OperServ, "CS SC %s -- by %s (%s@%s)", ci->name, callerUser->nick, callerUser->username, callerUser->host);
+			log_services(LOG_SERVICES_CHANSERV_GENERAL, "SC %s -- by %s (%s@%s)", ci->name, callerUser->nick, callerUser->username, callerUser->host);
+		} else {
+			LOG_SNOOP(s_OperServ, "CS SC %s -- by %s (%s@%s) through %s", ci->name, callerUser->nick, callerUser->username, callerUser->host, data->operName);
+			log_services(LOG_SERVICES_CHANSERV_GENERAL, "SC %s -- by %s (%s@%s) through %s", ci->name, callerUser->nick, callerUser->username, callerUser->host, data->operName);
+		}
 	
 	}	
 	else
@@ -4359,7 +4373,7 @@ static void do_set_topic(User *callerUser, ChannelInfo *ci, CSTR param, const in
 		str_copy_checked(accessName, chan->topic_setter, NICKMAX);
 		chan->topic_time = NOW;
 
-		send_cmd(":%s TOPIC %s %s %lu :%s", s_ChanServ, ci->name, accessName, NOW, param);
+		send_cmd(":%s TOPIC %s %s %ld :%s", s_ChanServ, ci->name, accessName, NOW, param);
 		send_notice_lang_to_user(s_ChanServ, callerUser, GetCallerLang(), CS_SET_TOPIC_CHANGED, ci->name);
 
 		if (CSMatchVerbose(ci->settings, CI_NOTICE_VERBOSE_SET)) {
@@ -6088,14 +6102,14 @@ static void do_info(CSTR source, User *callerUser, ServiceCommandData *data) {
 				if (ci->mlock_key) {
 
 					if (ci->mlock_limit)
-						send_notice_to_user(s_ChanServ, callerUser, "Modelock: %s %s %d", get_channel_mode(ci->mlock_on, ci->mlock_off), ci->mlock_key, ci->mlock_limit);
+						send_notice_to_user(s_ChanServ, callerUser, "Modelock: %s %s %ld", get_channel_mode(ci->mlock_on, ci->mlock_off), ci->mlock_key, ci->mlock_limit);
 					else
 						send_notice_to_user(s_ChanServ, callerUser, "Modelock: %s %s", get_channel_mode(ci->mlock_on, ci->mlock_off), ci->mlock_key);
 				}
 				else {
 
 					if (ci->mlock_limit)
-						send_notice_to_user(s_ChanServ, callerUser, "Modelock: %s %d", get_channel_mode(ci->mlock_on, ci->mlock_off), ci->mlock_limit);
+						send_notice_to_user(s_ChanServ, callerUser, "Modelock: %s %ld", get_channel_mode(ci->mlock_on, ci->mlock_off), ci->mlock_limit);
 					else
 						send_notice_lang_to_user(s_ChanServ, callerUser, GetCallerLang(), CS_INFO_MODELOCK, get_channel_mode(ci->mlock_on, ci->mlock_off));
 				}
@@ -10618,7 +10632,7 @@ static void do_chanset(CSTR source, User *callerUser, ServiceCommandData *data) 
 			BOOL was_on_list = FALSE;
 			int idx;
 			User *newUser;
-			long int randID;
+			long unsigned int randID;
 			char memoText[512];
 
 
@@ -10653,7 +10667,7 @@ static void do_chanset(CSTR source, User *callerUser, ServiceCommandData *data) 
 			else {
 
 				LOG_SNOOP(s_OperServ, "CS T %s -- by %s (%s@%s) through %s [F: %s -> %s]", ci->name, callerUser->nick, callerUser->username, callerUser->host, data->operName, ci->founder, ni->nick);
-				log_services(LOG_SERVICES_CHANSERV_GENERAL, "T %s -- by %s (%s@%s) through %s [F: %s -> %s] [P: %s -> %lu]", ci->name, callerUser->nick, callerUser->username, callerUser->host, data->operName, ci->founder, ni->nick, ci->founderpass, CRYPT_NETNAME, randID);
+				log_services(LOG_SERVICES_CHANSERV_GENERAL, "T %s -- by %s (%s@%s) through %s [F: %s -> %s] [P: %s -> %s-%lu]", ci->name, callerUser->nick, callerUser->username, callerUser->host, data->operName, ci->founder, ni->nick, ci->founderpass, CRYPT_NETNAME, randID);
 
 				send_globops(s_ChanServ, "\2%s\2 (through \2%s\2) changed the founder of \2%s\2 to \2%s\2", callerUser->nick, data->operName, ci->name, ni->nick);
 			}
@@ -10821,7 +10835,7 @@ static void do_chanset(CSTR source, User *callerUser, ServiceCommandData *data) 
 				str_copy_checked(s_ChanServ, channel->topic_setter, NICKMAX);
 				channel->topic_time = NOW;
 
-				send_cmd(":%s TOPIC %s %s %lu :%s", s_ChanServ, chan, s_ChanServ, channel->topic_time, new_topic);
+				send_cmd(":%s TOPIC %s %s %ld :%s", s_ChanServ, chan, s_ChanServ, channel->topic_time, new_topic);
 			}
 
 			if (data->operMatch) {
@@ -10879,15 +10893,15 @@ static void do_chanset(CSTR source, User *callerUser, ServiceCommandData *data) 
 
 		if (data->operMatch) {
 
-			LOG_SNOOP(s_OperServ, "CS T %s -- by %s (%s@%s) [R: %lu -> %lu]", ci->name, callerUser->nick, callerUser->username, callerUser->host, ci->time_registered, newTime);
-			log_services(LOG_SERVICES_CHANSERV_GENERAL, "T %s -- by %s (%s@%s) [R: %lu -> %lu]", ci->name, callerUser->nick, callerUser->username, callerUser->host, ci->time_registered, newTime);
+			LOG_SNOOP(s_OperServ, "CS T %s -- by %s (%s@%s) [R: %ld -> %ld]", ci->name, callerUser->nick, callerUser->username, callerUser->host, ci->time_registered, newTime);
+			log_services(LOG_SERVICES_CHANSERV_GENERAL, "T %s -- by %s (%s@%s) [R: %ld -> %ld]", ci->name, callerUser->nick, callerUser->username, callerUser->host, ci->time_registered, newTime);
 
 			send_globops(s_ChanServ, "\2%s\2 changed registration date for \2%s\2 to: %s (was: %s)", callerUser->nick, ci->name, newtimebuf, timebuf);
 		}
 		else {
 
-			LOG_SNOOP(s_OperServ, "CS T %s -- by %s (%s@%s) through %s [D: %lu -> %lu]", ci->name, callerUser->nick, callerUser->username, callerUser->host, data->operName, ci->time_registered, newTime);
-			log_services(LOG_SERVICES_CHANSERV_GENERAL, "T %s -- by %s (%s@%s) through %s [D: %lu -> %lu]", ci->name, callerUser->nick, callerUser->username, callerUser->host, data->operName, ci->time_registered, newTime);
+			LOG_SNOOP(s_OperServ, "CS T %s -- by %s (%s@%s) through %s [D: %ld -> %ld]", ci->name, callerUser->nick, callerUser->username, callerUser->host, data->operName, ci->time_registered, newTime);
+			log_services(LOG_SERVICES_CHANSERV_GENERAL, "T %s -- by %s (%s@%s) through %s [D: %ld -> %ld]", ci->name, callerUser->nick, callerUser->username, callerUser->host, data->operName, ci->time_registered, newTime);
 
 			send_globops(s_ChanServ, "\2%s\2 (through \2%s\2) changed registration date for \2%s\2 to: %s (was: %s)", callerUser->nick, data->operName, ci->name, newtimebuf, timebuf);
 		}
@@ -11340,9 +11354,9 @@ static void do_listreg(CSTR source, User *callerUser, ServiceCommandData *data) 
 					continue;
 
 				if (FlagSet(ci->flags, CI_FORBIDDEN))
-					send_notice_to_user(s_ChanServ, callerUser, "%d) \2%s\2 [Forbidden by: %s]", line, ci->name, ci->forbid);
+					send_notice_to_user(s_ChanServ, callerUser, "%lu) \2%s\2 [Forbidden by: %s]", line, ci->name, ci->forbid);
 				else
-					send_notice_to_user(s_ChanServ, callerUser, "%d) \2%s\2 [Founder: %s]", line, ci->name, ci->founder);
+					send_notice_to_user(s_ChanServ, callerUser, "%lu) \2%s\2 [Founder: %s]", line, ci->name, ci->founder);
 
 				if (line >= end_line) {
 
@@ -11735,35 +11749,35 @@ void chanserv_ds_dump(CSTR sourceNick, const User *callerUser, STR request) {
 
 					send_notice_to_user(sourceNick, callerUser, "DUMP: channel \2%s\2", value);
 
-					send_notice_to_user(sourceNick, callerUser, "Address 0x%08X, size %d B",						(unsigned long)ci, sizeof(ChannelInfo));
-					send_notice_to_user(sourceNick, callerUser, "Name: %s",											ci->name);
-					send_notice_to_user(sourceNick, callerUser, "Founder: %s",										ci->founder);
-					send_notice_to_user(sourceNick, callerUser, "Password: %s",										ci->founderpass);
-					send_notice_to_user(sourceNick, callerUser, "Description: 0x%08X \2[\2%s\2]\2",					(unsigned long)ci->desc, str_get_valid_display_value(ci->desc));
-					send_notice_to_user(sourceNick, callerUser, "Registration C-time: %d",							ci->time_registered);
-					send_notice_to_user(sourceNick, callerUser, "Last used C-time: %d",								ci->last_used);
-					send_notice_to_user(sourceNick, callerUser, "Access count / list: %d / 0x%08X",					ci->accesscount, (unsigned long)ci->access);
-					send_notice_to_user(sourceNick, callerUser, "AKICK count / list: %d / 0x%08X",					ci->akickcount, (unsigned long)ci->akick);
-					send_notice_to_user(sourceNick, callerUser, "ModeLock ON/OFF: %d/%d (%s)",						ci->mlock_on, ci->mlock_off, get_channel_mode(ci->mlock_on, ci->mlock_off));
-					send_notice_to_user(sourceNick, callerUser, "MLOCK +l/+k values: %d / 0x%08X \2[\2%s\2]\2",		ci->mlock_limit, (unsigned long)ci->mlock_key, str_get_valid_display_value(ci->mlock_key));
-					send_notice_to_user(sourceNick, callerUser, "Last topic: 0x%08X \2[\2%s\2]\2",					(unsigned long)ci->last_topic, str_get_valid_display_value(ci->last_topic));
-					send_notice_to_user(sourceNick, callerUser, "Last topic setter: %s",							ci->last_topic_setter);
-					send_notice_to_user(sourceNick, callerUser, "Last topic C-time: %d",							ci->last_topic_time);
-					send_notice_to_user(sourceNick, callerUser, "Flags: %d",										ci->flags);
-					send_notice_to_user(sourceNick, callerUser, "Successor: 0x%08X \2[\2%s\2]\2",					(unsigned long)ci->successor, str_get_valid_display_value(ci->successor));
-					send_notice_to_user(sourceNick, callerUser, "URL: 0x%08X \2[\2%s\2]\2",							(unsigned long)ci->url, str_get_valid_display_value(ci->url));
-					send_notice_to_user(sourceNick, callerUser, "e-mail: 0x%08X \2[\2%s\2]\2",						(unsigned long)ci->email, str_get_valid_display_value(ci->email));
-					send_notice_to_user(sourceNick, callerUser, "Welcome notice: 0x%08X \2[\2%s\2]\2",				(unsigned long)ci->welcome, str_get_valid_display_value(ci->welcome));
-					send_notice_to_user(sourceNick, callerUser, "Hold by: 0x%08X \2[\2%s\2]\2",						(unsigned long)ci->hold, str_get_valid_display_value(ci->hold));
-					send_notice_to_user(sourceNick, callerUser, "Marked by: 0x%08X \2[\2%s\2]\2",					(unsigned long)ci->mark, str_get_valid_display_value(ci->mark));
-					send_notice_to_user(sourceNick, callerUser, "Frozen by: 0x%08X \2[\2%s\2]\2",					(unsigned long)ci->freeze, str_get_valid_display_value(ci->freeze));
-					send_notice_to_user(sourceNick, callerUser, "Forbidden by: 0x%08X \2[\2%s\2]\2",				(unsigned long)ci->forbid, str_get_valid_display_value(ci->forbid));
-					send_notice_to_user(sourceNick, callerUser, "Auth code: %d",									ci->auth);
-					send_notice_to_user(sourceNick, callerUser, "Settings: %d",										ci->settings);
-					send_notice_to_user(sourceNick, callerUser, "Real founder: 0x%08X \2[\2%s\2]\2",				(unsigned long)ci->real_founder, str_get_valid_display_value(ci->real_founder));
-					send_notice_to_user(sourceNick, callerUser, "Ban Type: %d",										(int)ci->banType);
-					send_notice_to_user(sourceNick, callerUser, "reserved[2]: %d %d",								ci->reserved[0], ci->reserved[1]);
-					send_notice_to_user(sourceNick, callerUser, "Next / previous record: 0x%08X / 0x%08X",			(unsigned long)ci->next, (unsigned long)ci->prev);
+					send_notice_to_user(sourceNick, callerUser, "Address %p, size %zu B",						(void *)ci, sizeof(ChannelInfo));
+					send_notice_to_user(sourceNick, callerUser, "Name: %s",										ci->name);
+					send_notice_to_user(sourceNick, callerUser, "Founder: %s",									ci->founder);
+					send_notice_to_user(sourceNick, callerUser, "Password: [REDACTED]");
+					send_notice_to_user(sourceNick, callerUser, "Description: %p \2[\2%s\2]\2",					(void *)ci->desc, str_get_valid_display_value(ci->desc));
+					send_notice_to_user(sourceNick, callerUser, "Registration C-time: %ld",						ci->time_registered);
+					send_notice_to_user(sourceNick, callerUser, "Last used C-time: %ld",						ci->last_used);
+					send_notice_to_user(sourceNick, callerUser, "Access count / list: %ld / %p",				ci->accesscount, (void *)ci->access);
+					send_notice_to_user(sourceNick, callerUser, "AKICK count / list: %ld / %p",					ci->akickcount, (void *)ci->akick);
+					send_notice_to_user(sourceNick, callerUser, "ModeLock ON/OFF: %#lx/%#lx (%s)",				ci->mlock_on, ci->mlock_off, get_channel_mode(ci->mlock_on, ci->mlock_off));
+					send_notice_to_user(sourceNick, callerUser, "MLOCK +l/+k values: %ld / %p \2[\2%s\2]\2",	ci->mlock_limit, (void *)ci->mlock_key, str_get_valid_display_value(ci->mlock_key));
+					send_notice_to_user(sourceNick, callerUser, "Last topic: %p \2[\2%s\2]\2",					(void *)ci->last_topic, str_get_valid_display_value(ci->last_topic));
+					send_notice_to_user(sourceNick, callerUser, "Last topic setter: %s",						ci->last_topic_setter);
+					send_notice_to_user(sourceNick, callerUser, "Last topic C-time: %ld",						ci->last_topic_time);
+					send_notice_to_user(sourceNick, callerUser, "Flags: %#lx",									ci->flags);
+					send_notice_to_user(sourceNick, callerUser, "Successor: %p \2[\2%s\2]\2",					(void *)ci->successor, str_get_valid_display_value(ci->successor));
+					send_notice_to_user(sourceNick, callerUser, "URL: %p \2[\2%s\2]\2",							(void *)ci->url, str_get_valid_display_value(ci->url));
+					send_notice_to_user(sourceNick, callerUser, "e-mail: %p \2[\2%s\2]\2",						(void *)ci->email, str_get_valid_display_value(ci->email));
+					send_notice_to_user(sourceNick, callerUser, "Welcome notice: %p \2[\2%s\2]\2",				(void *)ci->welcome, str_get_valid_display_value(ci->welcome));
+					send_notice_to_user(sourceNick, callerUser, "Hold by: %p \2[\2%s\2]\2",						(void *)ci->hold, str_get_valid_display_value(ci->hold));
+					send_notice_to_user(sourceNick, callerUser, "Marked by: %p \2[\2%s\2]\2",					(void *)ci->mark, str_get_valid_display_value(ci->mark));
+					send_notice_to_user(sourceNick, callerUser, "Frozen by: %p \2[\2%s\2]\2",					(void *)ci->freeze, str_get_valid_display_value(ci->freeze));
+					send_notice_to_user(sourceNick, callerUser, "Forbidden by: %p \2[\2%s\2]\2",				(void *)ci->forbid, str_get_valid_display_value(ci->forbid));
+					send_notice_to_user(sourceNick, callerUser, "Auth code: %lu",								ci->auth);
+					send_notice_to_user(sourceNick, callerUser, "Settings: %#lx",								(long unsigned int)ci->settings);
+					send_notice_to_user(sourceNick, callerUser, "Real founder: %p \2[\2%s\2]\2",				(void *)ci->real_founder, str_get_valid_display_value(ci->real_founder));
+					send_notice_to_user(sourceNick, callerUser, "Ban Type: %d",									(int)ci->banType);
+					send_notice_to_user(sourceNick, callerUser, "reserved[2]: %d %d",							ci->reserved[0], ci->reserved[1]);
+					send_notice_to_user(sourceNick, callerUser, "Next / previous record: %p / %p",				(void *)ci->next, (void *)ci->prev);
 
 					LOG_DEBUG_SNOOP("Command: DUMP CHANSERV CHAN %s -- by %s (%s@%s)", value, callerUser->nick, callerUser->username, callerUser->host);
 				}
@@ -11811,13 +11825,13 @@ void chanserv_ds_dump(CSTR sourceNick, const User *callerUser, STR request) {
 							break;
 					}
 
-					send_notice_to_user(sourceNick, callerUser, "%d) Address 0x%08X, size %d B", i+1,	(unsigned long)anAccess, sizeof(ChanAccess));
-					send_notice_to_user(sourceNick, callerUser, "Name: 0x%08X \2[\2%s\2]\2",			(unsigned long)anAccess->name, str_get_valid_display_value(anAccess->name));
-					send_notice_to_user(sourceNick, callerUser, "Creator: 0x%08X \2[\2%s\2]\2",			(unsigned long)anAccess->creator, str_get_valid_display_value(anAccess->creator));
-					send_notice_to_user(sourceNick, callerUser, "Time Created C-time: %d",				anAccess->creationTime);
-					send_notice_to_user(sourceNick, callerUser, "Level: %d \2[\2%s\2]\2",				anAccess->level, level_name);
-					send_notice_to_user(sourceNick, callerUser, "Status: %d \2[\2%s\2]\2",				anAccess->status, access_type);
-					send_notice_to_user(sourceNick, callerUser, "Flags: %d",							anAccess->flags);
+					send_notice_to_user(sourceNick, callerUser, "%d) Address %p, size %zu B", i+1,	(void *)anAccess, sizeof(ChanAccess));
+					send_notice_to_user(sourceNick, callerUser, "Name: %p \2[\2%s\2]\2",			(void *)anAccess->name, str_get_valid_display_value(anAccess->name));
+					send_notice_to_user(sourceNick, callerUser, "Creator: %p \2[\2%s\2]\2",			(void *)anAccess->creator, str_get_valid_display_value(anAccess->creator));
+					send_notice_to_user(sourceNick, callerUser, "Time Created C-time: %ld",			anAccess->creationTime);
+					send_notice_to_user(sourceNick, callerUser, "Level: %d \2[\2%s\2]\2",			anAccess->level, level_name);
+					send_notice_to_user(sourceNick, callerUser, "Status: %d \2[\2%s\2]\2",			anAccess->status, access_type);
+					send_notice_to_user(sourceNick, callerUser, "Flags: %d",						anAccess->flags);
 				}
 
 				LOG_DEBUG_SNOOP("Command: DUMP CHANSERV CHAN %s -- by %s (%s@%s) [ACCESS]", value, callerUser->nick, callerUser->username, callerUser->host);
@@ -11839,13 +11853,13 @@ void chanserv_ds_dump(CSTR sourceNick, const User *callerUser, STR request) {
 
 				for (anAkick = ci->akick, i = 0; i < ci->akickcount; ++anAkick, ++i) {
 
-					send_notice_to_user(sourceNick, callerUser, "%d) Address 0x%08X, size %d B", i+1,	(unsigned long)anAkick, sizeof(AutoKick));
-					send_notice_to_user(sourceNick, callerUser, "Name: 0x%08X \2[\2%s\2]\2",			(unsigned long)anAkick->name, str_get_valid_display_value(anAkick->name));
-					send_notice_to_user(sourceNick, callerUser, "Creator: 0x%08X \2[\2%s\2]\2",			(unsigned long)anAkick->creator, str_get_valid_display_value(anAkick->creator));
-					send_notice_to_user(sourceNick, callerUser, "Reason: 0x%08X \2[\2%s\2]\2",			(unsigned long)anAkick->reason, str_get_valid_display_value(anAkick->reason));
-					send_notice_to_user(sourceNick, callerUser, "Time Created C-time: %d",				anAkick->creationTime);
-					send_notice_to_user(sourceNick, callerUser, "banType / isNick: %d/%d",				anAkick->banType, anAkick->isNick);
-					send_notice_to_user(sourceNick, callerUser, "Flags: %d",							anAkick->flags);
+					send_notice_to_user(sourceNick, callerUser, "%d) Address %p, size %zu B", i+1,	(void *)anAkick, sizeof(AutoKick));
+					send_notice_to_user(sourceNick, callerUser, "Name: %p \2[\2%s\2]\2",			(void *)anAkick->name, str_get_valid_display_value(anAkick->name));
+					send_notice_to_user(sourceNick, callerUser, "Creator: %p \2[\2%s\2]\2",			(void *)anAkick->creator, str_get_valid_display_value(anAkick->creator));
+					send_notice_to_user(sourceNick, callerUser, "Reason: %p \2[\2%s\2]\2",			(void *)anAkick->reason, str_get_valid_display_value(anAkick->reason));
+					send_notice_to_user(sourceNick, callerUser, "Time Created C-time: %ld",			anAkick->creationTime);
+					send_notice_to_user(sourceNick, callerUser, "banType / isNick: %d/%d",			anAkick->banType, anAkick->isNick);
+					send_notice_to_user(sourceNick, callerUser, "Flags: %d",						anAkick->flags);
 				}
 
 				LOG_DEBUG_SNOOP("Command: DUMP CHANSERV CHAN %s -- by %s (%s@%s) [AKICK]", value, callerUser->nick, callerUser->username, callerUser->host);
@@ -11859,10 +11873,10 @@ void chanserv_ds_dump(CSTR sourceNick, const User *callerUser, STR request) {
 			MemoryPoolStats pstats;
 
 			mempool_stats(chandb_mempool, &pstats);
-			send_notice_to_user(sourceNick, callerUser, "DUMP: ChanServ memory pool - Address 0x%08X, ID: %d",	(unsigned long)chandb_mempool, pstats.id);
-			send_notice_to_user(sourceNick, callerUser, "Memory allocated / free: %d B / %d B",				pstats.memory_allocated, pstats.memory_free);
-			send_notice_to_user(sourceNick, callerUser, "Items allocated / free: %d / %d",					pstats.items_allocated, pstats.items_free);
-			send_notice_to_user(sourceNick, callerUser, "Items per block / block count: %d / %d",			pstats.items_per_block, pstats.block_count);
+			send_notice_to_user(sourceNick, callerUser, "DUMP: ChanServ memory pool - Address %p, ID: %u",	(void *)chandb_mempool, pstats.id);
+			send_notice_to_user(sourceNick, callerUser, "Memory allocated / free: %lu B / %lu B",			pstats.memory_allocated, pstats.memory_free);
+			send_notice_to_user(sourceNick, callerUser, "Items allocated / free: %lu / %lu",				pstats.items_allocated, pstats.items_free);
+			send_notice_to_user(sourceNick, callerUser, "Items per block / block count: %lu / %lu",			pstats.items_per_block, pstats.block_count);
 			//send_notice_to_user(sourceNick, callerUser, "Avarage use: %.2f%%",								pstats.block_avg_usage);
 
 		#endif
@@ -11948,7 +11962,7 @@ unsigned long chanserv_mem_report(CSTR sourceNick, const User *callerUser) {
 		}
 	}
 
-	send_notice_to_user(sourceNick, callerUser, "Record: \2%d\2 [%d] -> \2%d\2 KB (\2%d\2 B)", count, cs_regCount, mem / 1024, mem);
+	send_notice_to_user(sourceNick, callerUser, "Record: \2%lu\2 [%lu] -> \2%lu\2 KB (\2%lu\2 B)", count, cs_regCount, mem / 1024, mem);
 
 	return mem;
 }

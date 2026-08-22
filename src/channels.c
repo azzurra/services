@@ -373,7 +373,7 @@ void chan_handle_SJOIN(CSTR source, const int ac, char **av) {
 			UserListItem *item, *next;
 
 
-			LOG_DEBUG("Received SJOIN for %s at %ld (-%ds) by %s, resetting channel.", chan_name, timestamp, (chan->creation_time - timestamp), nick_token_ptr);
+			LOG_DEBUG("Received SJOIN for %s at %ld (-%lds) by %s, resetting channel.", chan_name, timestamp, (chan->creation_time - timestamp), nick_token_ptr);
 
 			/* Reset channel modes. */
 			chan->mode = 0;
@@ -2543,7 +2543,7 @@ void chan_handle_TOPIC(const char *source, const int ac, char **av) {
 				str_copy_checked(ci->last_topic_setter, chan->topic_setter, NICKMAX);
 				chan->topic_time = ci->last_topic_time;
 
-				send_cmd(":%s TOPIC %s %s %lu :%s", s_ChanServ, chan->name, chan->topic_setter, chan->topic_time, chan->topic ? chan->topic : "");
+				send_cmd(":%s TOPIC %s %s %ld :%s", s_ChanServ, chan->name, chan->topic_setter, chan->topic_time, chan->topic ? chan->topic : "");
 				return;
 			}
 		}
@@ -2635,7 +2635,7 @@ void synch_topics() {
 
 				TRACE();
 				if (IS_NOT_NULL(chan->topic))
-					send_cmd(":%s TOPIC %s %s %lu :%s", s_ChanServ, chan->name, chan->topic_setter, chan->topic_time, chan->topic ? chan->topic : "");
+					send_cmd(":%s TOPIC %s %s %ld :%s", s_ChanServ, chan->name, chan->topic_setter, chan->topic_time, chan->topic ? chan->topic : "");
 			}
 		}
 	}
@@ -3638,7 +3638,7 @@ void handle_masscmds(CSTR source, User *callerUser, ServiceCommandData *data) {
 				AddFlag(chan->mode, CMODE_CS);
 			}
 
-			send_cmd(":%s MODE %s +b *!*@* %lu", s_ChanServ, chan_name, NOW);
+			send_cmd(":%s MODE %s +b *!*@* %ld", s_ChanServ, chan_name, NOW);
 
 			for (item = chan->users; item; item = next_item) {
 
@@ -3995,7 +3995,7 @@ void handle_mode(CSTR source, User *callerUser, ServiceCommandData *data) {
 							}
 
 							chan_add_ban(chan, token);
-							send_cmd(":%s MODE %s +b %s %lu", s_OperServ, chan->name, token, NOW);
+							send_cmd(":%s MODE %s +b %s %ld", s_OperServ, chan->name, token, NOW);
 
 							send_notice_to_user(s_OperServ, callerUser, "Channel ban on \2%s\2 added on \2%s\2.", token, chan->name);
 						}
@@ -4851,7 +4851,7 @@ void handle_mode(CSTR source, User *callerUser, ServiceCommandData *data) {
 					send_globops(data->agent->nick, "\2%s\2 changed mode for user \2%s\2 to: \2%s\2", source, user->nick, modebuf);
 
 					LOG_SNOOP(s_OperServ, "%s M %s -- by %s (%s@%s) [%s]", data->agent->shortNick, user->nick, callerUser->nick, callerUser->username, callerUser->host, modebuf);
-					log_services(data->agent->logID, "M %s -- by %s (%s@%s) [%s]", data->agent->shortNick, user->nick, callerUser->nick, callerUser->username, callerUser->host, modebuf);
+					log_services(data->agent->logID, "M %s -- by %s (%s@%s) [%s]", user->nick, callerUser->nick, callerUser->username, callerUser->host, modebuf);
 				}
 				else {
 
@@ -4911,23 +4911,23 @@ static void chan_ds_dump_display(CSTR sourceNick, const User *callerUser, const 
 			++ops;
 
 		send_notice_to_user(sourceNick, callerUser, "DUMP: channel \2%s\2", chan->name);
-		send_notice_to_user(sourceNick, callerUser, "Address 0x%08X, size %d B",				(unsigned long)chan, sizeof(chan));
-		send_notice_to_user(sourceNick, callerUser, "Name: %s",									chan->name);
-		send_notice_to_user(sourceNick, callerUser, "Creation C-time: %d",						chan->creation_time);
-		send_notice_to_user(sourceNick, callerUser, "Last topic: 0x%08X \2[\2%s\2]\2",			(unsigned long)chan->topic, str_get_valid_display_value(chan->topic));
-		send_notice_to_user(sourceNick, callerUser, "Last topic setter: %s",					chan->topic_setter);
-		send_notice_to_user(sourceNick, callerUser, "Last topic C-time: %d",					chan->topic_time);
+		send_notice_to_user(sourceNick, callerUser, "Address %p, size %zu B",		(void *)chan, sizeof(chan));
+		send_notice_to_user(sourceNick, callerUser, "Name: %s",						chan->name);
+		send_notice_to_user(sourceNick, callerUser, "Creation C-time: %ld",			chan->creation_time);
+		send_notice_to_user(sourceNick, callerUser, "Last topic: %p \2[\2%s\2]\2",	(void *)chan->topic, str_get_valid_display_value(chan->topic));
+		send_notice_to_user(sourceNick, callerUser, "Last topic setter: %s",		chan->topic_setter);
+		send_notice_to_user(sourceNick, callerUser, "Last topic C-time: %ld",		chan->topic_time);
 
-		send_notice_to_user(sourceNick, callerUser, "Mode: %d (%s)",							chan->mode, get_channel_mode(chan->mode, 0));
-		send_notice_to_user(sourceNick, callerUser, "Mode +l/+k values: %d / 0x%08X \2[\2%s\2]\2",	chan->limit, (unsigned long)chan->key, str_get_valid_display_value(chan->key));
+		send_notice_to_user(sourceNick, callerUser, "Mode: %#lx (%s)",							(long unsigned int)chan->mode, get_channel_mode(chan->mode, 0));
+		send_notice_to_user(sourceNick, callerUser, "Mode +l/+k values: %ld / %p \2[\2%s\2]\2",	chan->limit, (void *)chan->key, str_get_valid_display_value(chan->key));
 
-		send_notice_to_user(sourceNick, callerUser, "Bans count / list size / list head: %d / %d / 0x%08X",			chan->bancount, chan->bansize, (unsigned long)chan->bans);
+		send_notice_to_user(sourceNick, callerUser, "Bans count / list size / list head: %d / %d / %p",			chan->bancount, chan->bansize, (void *)chan->bans);
 		send_notice_to_user(sourceNick, callerUser, "Users [%d/%d] / ops [%d] / halfops [%d] / voices [%d]",	chan->userCount, users, ops, halfops, voices);
-		send_notice_to_user(sourceNick, callerUser, "List heads: 0x%08X / 0x%08X / 0x%08X / 0x%08X",		(unsigned long)chan->users, (unsigned long)chan->chanops, (unsigned long)chan->halfops, (unsigned long)chan->voices);
+		send_notice_to_user(sourceNick, callerUser, "List heads: %p / %p / %p / %p",							(void *)chan->users, (void *)chan->chanops, (void *)chan->halfops, (void *)chan->voices);
 
-		send_notice_to_user(sourceNick, callerUser, "ChanInfo record: 0x%08X \2[\2%s\2]\2",		(unsigned long)chan->ci, chan->ci ? str_get_valid_display_value(chan->ci->name) : "NULL");
+		send_notice_to_user(sourceNick, callerUser, "ChanInfo record: %p \2[\2%s\2]\2", (void *)chan->ci, chan->ci ? str_get_valid_display_value(chan->ci->name) : "NULL");
 
-		send_notice_to_user(sourceNick, callerUser, "Next / previous record: 0x%08X / 0x%08X",	(unsigned long)chan->next, (unsigned long)chan->prev);
+		send_notice_to_user(sourceNick, callerUser, "Next / previous record: %p / %p", (void *)chan->next, (void *)chan->prev);
 	}
 	else if (str_equals_nocase(what, "USER") || str_equals_nocase(what, "OP") || str_equals_nocase(what, "HALFOP")|| str_equals_nocase(what, "VOICE")) {
 
@@ -5054,10 +5054,10 @@ void chan_ds_dump(CSTR sourceNick, const User *callerUser, STR request) {
 			MemoryPoolStats pstats;
 
 			mempool_stats(channels_mempool, &pstats);
-			send_notice_to_user(sourceNick, callerUser, "DUMP: Channels memory pool - Address 0x%08X, ID: %d",	(unsigned long)channels_mempool, pstats.id);
-			send_notice_to_user(sourceNick, callerUser, "Memory allocated / free: %d B / %d B",				pstats.memory_allocated, pstats.memory_free);
-			send_notice_to_user(sourceNick, callerUser, "Items allocated / free: %d / %d",					pstats.items_allocated, pstats.items_free);
-			send_notice_to_user(sourceNick, callerUser, "Items per block / block count: %d / %d",			pstats.items_per_block, pstats.block_count);
+			send_notice_to_user(sourceNick, callerUser, "DUMP: Channels memory pool - Address %p, ID: %u",	(void *)channels_mempool, pstats.id);
+			send_notice_to_user(sourceNick, callerUser, "Memory allocated / free: %lu B / %lu B",			pstats.memory_allocated, pstats.memory_free);
+			send_notice_to_user(sourceNick, callerUser, "Items allocated / free: %lu / %lu",				pstats.items_allocated, pstats.items_free);
+			send_notice_to_user(sourceNick, callerUser, "Items per block / block count: %lu / %lu",			pstats.items_per_block, pstats.block_count);
 			//send_notice_to_user(sourceNick, callerUser, "Avarage use: %.2f%%",								pstats.block_avg_usage);
 
 		#endif
@@ -5137,7 +5137,7 @@ unsigned long chan_mem_report(CSTR sourceNick, const User *callerUser) {
 	}
 
 	TRACE();
-	send_notice_to_user(sourceNick, callerUser, "Open channels: \2%d\2 [%d] -> \2%d\2 KB (\2%d\2 B)", count, stats_open_channels_count, mem / 1024, mem);
+	send_notice_to_user(sourceNick, callerUser, "Open channels: \2%lu\2 [%u] -> \2%lu\2 KB (\2%lu\2 B)", count, stats_open_channels_count, mem / 1024, mem);
 
 	return mem;
 }

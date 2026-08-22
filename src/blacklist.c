@@ -364,7 +364,7 @@ void handle_blacklist(CSTR source, User *callerUser, ServiceCommandData *data) {
 
 		if ((len = str_len(reason)) > 220) {
 
-			send_notice_to_user(s_OperServ, callerUser, "Reason cannot be longer than 220 characters (yours has: %d).", len);
+			send_notice_to_user(s_OperServ, callerUser, "Reason cannot be longer than 220 characters (yours has: %zu).", len);
 			return;
 		}
 
@@ -687,14 +687,14 @@ void blacklist_ds_dump(CSTR sourceNick, const User *callerUser, STR request) {
 			continue;
 		}
 
-		send_notice_to_user(sourceNick, callerUser, "%d) Address 0x%08X, size %d B",		addressIdx, (unsigned long)anAddress, sizeof(BlackList));
-		send_notice_to_user(sourceNick, callerUser, "Value: 0x%08X \2[\2%s\2]\2",			(unsigned long)anAddress->address, str_get_valid_display_value(anAddress->address));
-		send_notice_to_user(sourceNick, callerUser, "Reason: 0x%08X \2[\2%s\2]\2",			(unsigned long)anAddress->info.reason, str_get_valid_display_value(anAddress->info.reason));
-		send_notice_to_user(sourceNick, callerUser, "Set by: 0x%08X \2[\2%s\2]\2",			(unsigned long)anAddress->info.creator.name, str_get_valid_display_value(anAddress->info.creator.name));
-		send_notice_to_user(sourceNick, callerUser, "Time Set C-time: %ld",					anAddress->info.creator.time);
-		send_notice_to_user(sourceNick, callerUser, "Last Used C-time: %ld",				anAddress->lastUsed);
-		send_notice_to_user(sourceNick, callerUser, "Flags: %d",							anAddress->flags);
-		send_notice_to_user(sourceNick, callerUser, "Next/Prev records: 0x%08X / 0x%08X",	(unsigned long)anAddress->next, (unsigned long)anAddress->prev);
+		send_notice_to_user(sourceNick, callerUser, "%d) Address %p, size %zu B",	addressIdx, (void *)anAddress, sizeof(BlackList));
+		send_notice_to_user(sourceNick, callerUser, "Value: %p \2[\2%s\2]\2",		(void *)anAddress->address, str_get_valid_display_value(anAddress->address));
+		send_notice_to_user(sourceNick, callerUser, "Reason: %p \2[\2%s\2]\2",		(void *)anAddress->info.reason, str_get_valid_display_value(anAddress->info.reason));
+		send_notice_to_user(sourceNick, callerUser, "Set by: %p \2[\2%s\2]\2",		(void *)anAddress->info.creator.name, str_get_valid_display_value(anAddress->info.creator.name));
+		send_notice_to_user(sourceNick, callerUser, "Time Set C-time: %ld",			anAddress->info.creator.time);
+		send_notice_to_user(sourceNick, callerUser, "Last Used C-time: %ld",		anAddress->lastUsed);
+		send_notice_to_user(sourceNick, callerUser, "Flags: %#x",					anAddress->flags);
+		send_notice_to_user(sourceNick, callerUser, "Next/Prev records: %p / %p",	(void *)anAddress->next, (void *)anAddress->prev);
 
 		if (sentIdx >= endIdx)
 			break;
@@ -729,6 +729,6 @@ unsigned long int blacklist_mem_report(CSTR sourceNick, const User *callerUser) 
 		anAddress = anAddress->next;
 	}
 
-	send_notice_to_user(sourceNick, callerUser, "BlackListed addresses: \2%d\2 -> \2%d\2 KB (\2%d\2 B)", count, mem / 1024, mem);
+	send_notice_to_user(sourceNick, callerUser, "BlackListed addresses: \2%lu\2 -> \2%lu\2 KB (\2%lu\2 B)", count, mem / 1024, mem);
 	return mem;
 }

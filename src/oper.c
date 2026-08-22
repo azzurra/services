@@ -640,7 +640,7 @@ static void send_oper_list(const char *sourceNick, const User *target, int acces
 	if (last)
 		send_notice_to_user(sourceNick, target, "*** \2End of List\2 ***");
 	else if (need_header == FALSE)
-		send_notice_to_user(sourceNick, target, s_SPACE);
+		send_notice_to_user(sourceNick, target, " ");
 }
 
 /*********************************************************/
@@ -1708,14 +1708,14 @@ void oper_ds_dump(CSTR sourceNick, const User *callerUser, STR request) {
 
 					send_notice_to_user(sourceNick, callerUser, "DUMP: Oper entry for \2%s\2", nick);
 
-					send_notice_to_user(sourceNick, callerUser, "Address 0x%08X, size %d B",						(unsigned long)oper, sizeof(Oper));
-					send_notice_to_user(sourceNick, callerUser, "Nick: 0x%08X \2[\2%s\2]\2",						(unsigned long)oper->nick, str_get_valid_display_value(oper->nick));
-					send_notice_to_user(sourceNick, callerUser, "Creator: 0x%08X \2[\2%s\2]\2",						(unsigned long)oper->creator.name, str_get_valid_display_value(oper->creator.name));
-					send_notice_to_user(sourceNick, callerUser, "Time Added C-time: %ld",							oper->creator.time);
-					send_notice_to_user(sourceNick, callerUser, "Last Update C-time: %ld",							oper->lastUpdate);
-					send_notice_to_user(sourceNick, callerUser, "Level: %d \2[\2%s\2]\2",							oper->level, get_access_name(oper->level, FALSE));
-					send_notice_to_user(sourceNick, callerUser, "Flags: %ld",										oper->flags);
-					send_notice_to_user(sourceNick, callerUser, "Next/Previous record: 0x%08X / 0x%08X",			(unsigned long)oper->next, (unsigned long)oper->prev);
+					send_notice_to_user(sourceNick, callerUser, "Address %p, size %zu B",			(void *)oper, sizeof(Oper));
+					send_notice_to_user(sourceNick, callerUser, "Nick: %p \2[\2%s\2]\2",			(void *)oper->nick, str_get_valid_display_value(oper->nick));
+					send_notice_to_user(sourceNick, callerUser, "Creator: %p \2[\2%s\2]\2",			(void *)oper->creator.name, str_get_valid_display_value(oper->creator.name));
+					send_notice_to_user(sourceNick, callerUser, "Time Added C-time: %ld",			oper->creator.time);
+					send_notice_to_user(sourceNick, callerUser, "Last Update C-time: %ld",			oper->lastUpdate);
+					send_notice_to_user(sourceNick, callerUser, "Level: %d \2[\2%s\2]\2",			oper->level, get_access_name(oper->level, FALSE));
+					send_notice_to_user(sourceNick, callerUser, "Flags: %#lx",						oper->flags);
+					send_notice_to_user(sourceNick, callerUser, "Next/Previous record: %p / %p",	(void *)oper->next, (void *)oper->prev);
 
 					LOG_DEBUG_SNOOP("Command: DUMP OPER NICK %s -- by %s (%s@%s)", nick, callerUser->nick, callerUser->username, callerUser->host);
 				}
@@ -1733,7 +1733,7 @@ void oper_ds_dump(CSTR sourceNick, const User *callerUser, STR request) {
 			for (i = FIRST_VALID_NICK_CHAR; i <= LAST_VALID_NICK_CHAR; ++i) {
 
 				for (oper = opers[i]; IS_NOT_NULL(oper); oper = oper->next)
-					send_notice_to_user(sourceNick, callerUser, "%d) \2%s\2 [Added by %s]", ++count, oper->nick, oper->creator);
+					send_notice_to_user(sourceNick, callerUser, "%d) \2%s\2 [Added by %s]", ++count, oper->nick, str_get_valid_display_value(oper->creator.name));
 			}
 					
 			LOG_DEBUG_SNOOP("Command: DUMP OPER LIST -- by %s (%s@%s)", callerUser->nick, callerUser->username, callerUser->host);
@@ -1778,7 +1778,7 @@ unsigned long oper_mem_report(CSTR sourceNick, const User *callerUser) {
 	}
 
 	total_mem += mem;
-	send_notice_to_user(sourceNick, callerUser, "Records: \2%lu\2 -> \2%lu\2 KB (\2%lu\2 B)", count, mem / 1024, mem);
+	send_notice_to_user(sourceNick, callerUser, "Records: \2%d\2 -> \2%lu\2 KB (\2%lu\2 B)", count, mem / 1024, mem);
 
 	return total_mem;
 }

@@ -1207,7 +1207,7 @@ static void do_map(CSTR source, User *callerUser, ServiceCommandData *data) {
 		int count = 0;
 
 		send_notice_to_user(s_StatServ, callerUser, "\2Server Listing:\2");
-		send_notice_to_user(s_StatServ, callerUser, s_SPACE);
+		send_notice_to_user(s_StatServ, callerUser, " ");
 
 		TRACE_MAIN();
 
@@ -1221,7 +1221,7 @@ static void do_map(CSTR source, User *callerUser, ServiceCommandData *data) {
 		}
 
 		TRACE_MAIN();
-		send_notice_to_user(s_StatServ, callerUser, s_SPACE);
+		send_notice_to_user(s_StatServ, callerUser, " ");
 		send_notice_to_user(s_StatServ, callerUser, "*** \2End of List\2 ***");
 	}
 	else if (!CheckOperAccess(data->userLevel, CMDLEVEL_SOP))
@@ -1376,27 +1376,27 @@ static void do_netstats(CSTR source, User *callerUser, ServiceCommandData *data)
 	TRACE_MAIN_FCLT(FACILITY_STATSERV_HANDLE_NETSTATS);
 
 	send_notice_to_user(s_StatServ, callerUser, "\2*** Global Network Statistics ***\2");
-	send_notice_to_user(s_StatServ, callerUser, s_SPACE);
+	send_notice_to_user(s_StatServ, callerUser, " ");
 
-	send_notice_to_user(s_StatServ, callerUser, "Nick Changes: T: \2%ld\2, M: \2%ld\2, W: \2%ld\2, D:\2%ld\2", total.nicks, monthly.nicks, weekly.nicks, daily.nicks);
-	send_notice_to_user(s_StatServ, callerUser, "Kills: T: \2%ld\2, M: \2%ld\2, W: \2%ld\2, D:\2%ld\2", total.kills, monthly.kills, weekly.kills, daily.kills);
-	send_notice_to_user(s_StatServ, callerUser, "Service Kills: T: \2%ld\2, M: \2%ld\2, W: \2%ld\2, D:\2%ld\2", total.skills, monthly.skills, weekly.skills, daily.skills);
-	send_notice_to_user(s_StatServ, callerUser, "Channel Joins: T: \2%ld\2, M: \2%ld\2, W: \2%ld\2, D:\2%ld\2", total.joins, monthly.joins, weekly.joins, daily.joins);
-	send_notice_to_user(s_StatServ, callerUser, "Channel Parts: T: \2%ld\2, M: \2%ld\2, W: \2%ld\2, D:\2%ld\2", total.parts, monthly.parts, weekly.parts, daily.parts);
-	send_notice_to_user(s_StatServ, callerUser, "Quits: T: \2%ld\2, M: \2%ld\2, W: \2%ld\2, D:\2%ld\2", total.quits, monthly.quits, weekly.quits, daily.quits);
-	send_notice_to_user(s_StatServ, callerUser, "Kicks: T: \2%ld\2, M: \2%ld\2, W: \2%ld\2, D:\2%ld\2", total.kicks, monthly.kicks, weekly.kicks, daily.kicks);
-	send_notice_to_user(s_StatServ, callerUser, "Bans: T: \2%ld\2, M: \2%ld\2, W: \2%ld\2, D:\2%ld\2", total.bans, monthly.bans, weekly.bans, daily.bans);
-	send_notice_to_user(s_StatServ, callerUser, "Channel Modes: T: \2%ld\2 (\2%d\2+, \2%d\2-), M: \2%ld\2 (\2%d\2+, \2%d\2-), W: \2%ld\2 (\2%d\2+, \2%d\2-), D:\2%ld\2 (\2%d\2+, \2%d\2-)", (total.addcmodes + total.delcmodes), total.addcmodes, total.delcmodes, (monthly.addcmodes + monthly.delcmodes), monthly.addcmodes, monthly.delcmodes, (weekly.addcmodes + weekly.delcmodes), weekly.addcmodes, weekly.delcmodes, (daily.addcmodes + daily.delcmodes), daily.addcmodes, daily.delcmodes);
-	send_notice_to_user(s_StatServ, callerUser, "Connections: T: \2%ld\2, M: \2%ld\2, W: \2%ld\2, D:\2%ld\2", total.connections, monthly.connections, weekly.connections, daily.connections);
-	send_notice_to_user(s_StatServ, callerUser, "Oppings: T: \2%ld\2, M: \2%ld\2, W: \2%ld\2, D:\2%ld\2", total.oppings, monthly.oppings, weekly.oppings, daily.oppings);
-	send_notice_to_user(s_StatServ, callerUser, "Deoppings: T: \2%ld\2, M: \2%ld\2, W: \2%ld\2, D:\2%ld\2", total.deoppings, monthly.deoppings, weekly.deoppings, daily.deoppings);
-	send_notice_to_user(s_StatServ, callerUser, "Halfoppings: T: \2%ld\2, M: \2%ld\2, W: \2%ld\2, D:\2%ld\2", total.halfoppings, monthly.halfoppings, weekly.halfoppings, daily.halfoppings);
-	send_notice_to_user(s_StatServ, callerUser, "Dehalfoppings: T: \2%ld\2, M: \2%ld\2, W: \2%ld\2, D:\2%ld\2", total.dehalfoppings, monthly.dehalfoppings, weekly.dehalfoppings, daily.dehalfoppings);
-	send_notice_to_user(s_StatServ, callerUser, "Voicings: T: \2%ld\2, M: \2%ld\2, W: \2%ld\2, D:\2%ld\2", total.voicings, monthly.voicings, weekly.voicings, daily.voicings);
-	send_notice_to_user(s_StatServ, callerUser, "Devoicings: T: \2%ld\2, M: \2%ld\2, W: \2%ld\2, D:\2%ld\2", total.devoicings, monthly.devoicings, weekly.devoicings, daily.devoicings);
-	send_notice_to_user(s_StatServ, callerUser, "Topics: T: \2%ld\2, M: \2%ld\2, W: \2%ld\2, D:\2%ld\2", total.topics, monthly.topics, weekly.topics, daily.topics);
+	send_notice_to_user(s_StatServ, callerUser, "Nick Changes: T: \2%lu\2, M: \2%lu\2, W: \2%lu\2, D:\2%lu\2", total.nicks, monthly.nicks, weekly.nicks, daily.nicks);
+	send_notice_to_user(s_StatServ, callerUser, "Kills: T: \2%lu\2, M: \2%lu\2, W: \2%lu\2, D:\2%lu\2", total.kills, monthly.kills, weekly.kills, daily.kills);
+	send_notice_to_user(s_StatServ, callerUser, "Service Kills: T: \2%lu\2, M: \2%lu\2, W: \2%lu\2, D:\2%lu\2", total.skills, monthly.skills, weekly.skills, daily.skills);
+	send_notice_to_user(s_StatServ, callerUser, "Channel Joins: T: \2%lu\2, M: \2%lu\2, W: \2%lu\2, D:\2%lu\2", total.joins, monthly.joins, weekly.joins, daily.joins);
+	send_notice_to_user(s_StatServ, callerUser, "Channel Parts: T: \2%lu\2, M: \2%lu\2, W: \2%lu\2, D:\2%lu\2", total.parts, monthly.parts, weekly.parts, daily.parts);
+	send_notice_to_user(s_StatServ, callerUser, "Quits: T: \2%lu\2, M: \2%lu\2, W: \2%lu\2, D:\2%lu\2", total.quits, monthly.quits, weekly.quits, daily.quits);
+	send_notice_to_user(s_StatServ, callerUser, "Kicks: T: \2%lu\2, M: \2%lu\2, W: \2%lu\2, D:\2%lu\2", total.kicks, monthly.kicks, weekly.kicks, daily.kicks);
+	send_notice_to_user(s_StatServ, callerUser, "Bans: T: \2%lu\2, M: \2%lu\2, W: \2%lu\2, D:\2%lu\2", total.bans, monthly.bans, weekly.bans, daily.bans);
+	send_notice_to_user(s_StatServ, callerUser, "Channel Modes: T: \2%lu\2 (\2%lu\2+, \2%lu\2-), M: \2%lu\2 (\2%lu\2+, \2%lu\2-), W: \2%lu\2 (\2%lu\2+, \2%lu\2-), D:\2%lu\2 (\2%lu\2+, \2%lu\2-)", (total.addcmodes + total.delcmodes), total.addcmodes, total.delcmodes, (monthly.addcmodes + monthly.delcmodes), monthly.addcmodes, monthly.delcmodes, (weekly.addcmodes + weekly.delcmodes), weekly.addcmodes, weekly.delcmodes, (daily.addcmodes + daily.delcmodes), daily.addcmodes, daily.delcmodes);
+	send_notice_to_user(s_StatServ, callerUser, "Connections: T: \2%lu\2, M: \2%lu\2, W: \2%lu\2, D:\2%lu\2", total.connections, monthly.connections, weekly.connections, daily.connections);
+	send_notice_to_user(s_StatServ, callerUser, "Oppings: T: \2%lu\2, M: \2%lu\2, W: \2%lu\2, D:\2%lu\2", total.oppings, monthly.oppings, weekly.oppings, daily.oppings);
+	send_notice_to_user(s_StatServ, callerUser, "Deoppings: T: \2%lu\2, M: \2%lu\2, W: \2%lu\2, D:\2%lu\2", total.deoppings, monthly.deoppings, weekly.deoppings, daily.deoppings);
+	send_notice_to_user(s_StatServ, callerUser, "Halfoppings: T: \2%lu\2, M: \2%lu\2, W: \2%lu\2, D:\2%lu\2", total.halfoppings, monthly.halfoppings, weekly.halfoppings, daily.halfoppings);
+	send_notice_to_user(s_StatServ, callerUser, "Dehalfoppings: T: \2%lu\2, M: \2%lu\2, W: \2%lu\2, D:\2%lu\2", total.dehalfoppings, monthly.dehalfoppings, weekly.dehalfoppings, daily.dehalfoppings);
+	send_notice_to_user(s_StatServ, callerUser, "Voicings: T: \2%lu\2, M: \2%lu\2, W: \2%lu\2, D:\2%lu\2", total.voicings, monthly.voicings, weekly.voicings, daily.voicings);
+	send_notice_to_user(s_StatServ, callerUser, "Devoicings: T: \2%lu\2, M: \2%lu\2, W: \2%lu\2, D:\2%lu\2", total.devoicings, monthly.devoicings, weekly.devoicings, daily.devoicings);
+	send_notice_to_user(s_StatServ, callerUser, "Topics: T: \2%lu\2, M: \2%lu\2, W: \2%lu\2, D:\2%lu\2", total.topics, monthly.topics, weekly.topics, daily.topics);
 
-	send_notice_to_user(s_StatServ, callerUser, s_SPACE);
+	send_notice_to_user(s_StatServ, callerUser, " ");
 	send_notice_to_user(s_StatServ, callerUser, "*** \2End of Net Stats\2 ***");
 }
 
@@ -1420,35 +1420,41 @@ static void do_records(CSTR source, User *callerUser, ServiceCommandData *data) 
 	strftime(timebuf, sizeof(timebuf), "%a %d/%m/%Y %H:%M:%S %Z", &tm);
 	send_notice_to_user(s_StatServ, callerUser, "Current time: %s", timebuf);
 
-	send_notice_to_user(s_StatServ, callerUser, s_SPACE);
+	send_notice_to_user(s_StatServ, callerUser, " ");
 
 	tm = *localtime(&records.maxusers_time);
 	strftime(timebuf, sizeof(timebuf), "%a %d/%m/%Y %H:%M:%S %Z", &tm);
-	send_notice_to_user(s_StatServ, callerUser, "Current Users: \2%u\2 [Record: \2%u\2 on %s]", user_online_user_count, records.maxusers, timebuf);
+	send_notice_to_user(s_StatServ, callerUser, "Current Users: \2%u\2 [Record: \2%lu\2 on %s]", user_online_user_count, records.maxusers, timebuf);
 
 	tm = *localtime(&records.maxchannels_time);
 	strftime(timebuf, sizeof(timebuf), "%a %d/%m/%Y %H:%M:%S %Z", &tm);
-	send_notice_to_user(s_StatServ, callerUser, "Current Chans: \2%u\2 [Record: \2%u\2 on %s]", stats_open_channels_count, records.maxchannels, timebuf);
+	send_notice_to_user(s_StatServ, callerUser, "Current Chans: \2%u\2 [Record: \2%lu\2 on %s]", stats_open_channels_count, records.maxchannels, timebuf);
 
 	tm = *localtime(&records.maxopers_time);
 	strftime(timebuf, sizeof(timebuf), "%a %d/%m/%Y %H:%M:%S %Z", &tm);
-	send_notice_to_user(s_StatServ, callerUser, "Current Opers: \2%u\2 [Record: \2%u\2 on %s]", user_online_operator_count, records.maxopers, timebuf);
+	send_notice_to_user(s_StatServ, callerUser, "Current Opers: \2%u\2 [Record: \2%lu\2 on %s]", user_online_operator_count, records.maxopers, timebuf);
 
 	tm = *localtime(&records.maxservers_time);
 	strftime(timebuf, sizeof(timebuf), "%a %d/%m/%Y %H:%M:%S %Z", &tm);
-	send_notice_to_user(s_StatServ, callerUser, "Current Servers: \2%u\2 [Record: \2%u\2 on %s]", nservers, records.maxservers, timebuf);
+#ifdef OS_64BIT
+#define NSERVER_SPEC "%lu"
+#else
+#define NSERVER_SPEC "%d"
+#endif
+	send_notice_to_user(s_StatServ, callerUser, "Current Servers: \2" NSERVER_SPEC "\2 [Record: \2%lu\2 on %s]", nservers, records.maxservers, timebuf);
+#undef NSERVER_SPEC
 
 	tm = *localtime(&records.maxconn_time);
 	strftime(timebuf, sizeof(timebuf), "%a %d/%m/%Y", &tm);
-	send_notice_to_user(s_StatServ, callerUser, "Current Connections: \2%u\2 [Record: \2%u\2 on %s]", daily.connections, records.maxconn, timebuf);
+	send_notice_to_user(s_StatServ, callerUser, "Current Connections: \2%lu\2 [Record: \2%lu\2 on %s]", daily.connections, records.maxconn, timebuf);
 
 	TRACE_MAIN();
 
-	send_notice_to_user(s_StatServ, callerUser, s_SPACE);
+	send_notice_to_user(s_StatServ, callerUser, " ");
 	send_notice_to_user(s_StatServ, callerUser, "\2Average Statistics\2:");
 	send_notice_to_user(s_StatServ, callerUser, "Average Users/Chans: %.2f/%.2f", uavg, cavg);
 	send_notice_to_user(s_StatServ, callerUser, "Average Servers/Opers: %.2f/%.2f", savg, oavg);
-	send_notice_to_user(s_StatServ, callerUser, s_SPACE);
+	send_notice_to_user(s_StatServ, callerUser, " ");
 
 	tm = *localtime(&NOW);
 	strftime(timebuf, sizeof(timebuf), "%d/%m/%Y", &tm);
@@ -1530,7 +1536,7 @@ static void do_listreg(CSTR source, User *callerUser, ServiceCommandData *data) 
 				if (line < start_line)
 					continue;
 
-				send_notice_to_user(s_StatServ, callerUser, "%d) %s", line, cs->name);
+				send_notice_to_user(s_StatServ, callerUser, "%lu) %s", line, cs->name);
 				++count;
 
 				if (line >= end_line)
@@ -1540,7 +1546,7 @@ static void do_listreg(CSTR source, User *callerUser, ServiceCommandData *data) 
 	}
 
 	TRACE_MAIN();
-	send_notice_to_user(s_StatServ, callerUser, "\2*** End of Search. Channel%s found: %d ***\2", count == 1 ? "" : "s", count);
+	send_notice_to_user(s_StatServ, callerUser, "\2*** End of Search. Channel%s found: %lu ***\2", count == 1 ? "" : "s", count);
 }
 
 /*********************************************************/
@@ -1562,7 +1568,7 @@ static void do_delete(CSTR source, User *callerUser, ServiceCommandData *data) {
 	if (IS_NULL(channel = strtok(NULL, " "))) {
 
 		send_notice_to_user(s_StatServ, callerUser, "Syntax: \2DELETE\2 #channel");
-		send_notice_to_user(s_StatServ, callerUser, "Type \2/st OHELP %s\2 for more information.");
+		send_notice_to_user(s_StatServ, callerUser, "Type \2/st OHELP DELETE\2 for more information.");
 		return;
 	}
 
@@ -1639,7 +1645,7 @@ static void do_server(CSTR source, User *callerUser, ServiceCommandData *data) {
 	TRACE_MAIN();
 
 	send_notice_to_user(s_StatServ, callerUser, "\2Server Information\2 for \2%s\2:", ss->name);
-	send_notice_to_user(s_StatServ, callerUser, s_SPACE);
+	send_notice_to_user(s_StatServ, callerUser, " ");
 
 	tm = *localtime(&NOW);
 	strftime(timebuf, sizeof(timebuf), "%a %m/%d/%Y %H:%M:%S %Z", &tm);
@@ -1648,7 +1654,7 @@ static void do_server(CSTR source, User *callerUser, ServiceCommandData *data) {
 	tm = *localtime(&ss->time_added);
 	strftime(timebuf, sizeof(timebuf), "%a %m/%d/%Y %H:%M:%S %Z", &tm);
 	send_notice_to_user(s_StatServ, callerUser, "Stats From: %s", timebuf);
-	send_notice_to_user(s_StatServ, callerUser, s_SPACE);
+	send_notice_to_user(s_StatServ, callerUser, " ");
 
 	if (FlagUnset(ss->flags, STATS_SERVER_ONLINE)) {
 
@@ -1663,7 +1669,7 @@ static void do_server(CSTR source, User *callerUser, ServiceCommandData *data) {
 		send_notice_to_user(s_StatServ, callerUser, "Server is \2Online\2. [Connected on %s]", timebuf);
 	}
 
-	send_notice_to_user(s_StatServ, callerUser, s_SPACE);
+	send_notice_to_user(s_StatServ, callerUser, " ");
 
 	tm = *localtime(&ss->maxclients_time);
 	strftime(timebuf, sizeof(timebuf), "%a %m/%d/%Y %H:%M:%S %Z", &tm);
@@ -1678,13 +1684,13 @@ static void do_server(CSTR source, User *callerUser, ServiceCommandData *data) {
 	send_notice_to_user(s_StatServ, callerUser, "Average Users/Opers: \2%.2f\2/\2%.2f\2",
 		ss->users_average, ss->opers_average);
 
-	send_notice_to_user(s_StatServ, callerUser, s_SPACE);
-	send_notice_to_user(s_StatServ, callerUser, "Server Hits: \2%d\2", ss->hits);
-	send_notice_to_user(s_StatServ, callerUser, "Server Messages: \2%d\2", ss->msgs);
+	send_notice_to_user(s_StatServ, callerUser, " ");
+	send_notice_to_user(s_StatServ, callerUser, "Server Hits: \2%lu\2", ss->hits);
+	send_notice_to_user(s_StatServ, callerUser, "Server Messages: \2%lu\2", ss->msgs);
 	send_notice_to_user(s_StatServ, callerUser, "Oper/Server Kills: \2%d\2/\2%d\2", ss->operkills, ss->servkills);
 	send_notice_to_user(s_StatServ, callerUser, "Splits: T: \2%d\2, M: \2%d\2, W: \2%d\2, D: \2%d\2", ss->totalsplits, ss->monthlysplits, ss->weeklysplits, ss->dailysplits);
 
-	send_notice_to_user(s_StatServ, callerUser, s_SPACE);
+	send_notice_to_user(s_StatServ, callerUser, " ");
 	send_notice_to_user(s_StatServ, callerUser, "\2*** End of Server Information ***\2");
 }
 
@@ -1724,7 +1730,7 @@ static void do_chanstats(CSTR source, User *callerUser, ServiceCommandData *data
 
 		TRACE_MAIN();
 		send_notice_to_user(s_StatServ, callerUser, "Statistiche di \2%s\2:", cs->name);
-		send_notice_to_user(s_StatServ, callerUser, s_SPACE);
+		send_notice_to_user(s_StatServ, callerUser, " ");
 
 		send_notice_to_user(s_StatServ, callerUser, "Data di inizio: %s", timebuf);
 
@@ -1736,35 +1742,35 @@ static void do_chanstats(CSTR source, User *callerUser, ServiceCommandData *data
 		strftime(timebuf, sizeof(timebuf), "%d/%m/%Y %H:%M:%S", &tm);
 		send_notice_to_user(s_StatServ, callerUser, "Ora corrente: %s", timebuf);
 
-		send_notice_to_user(s_StatServ, callerUser, s_SPACE);
+		send_notice_to_user(s_StatServ, callerUser, " ");
 
-		send_notice_to_user(s_StatServ, callerUser, "Peak: T: \2%ld\2, M: \2%ld\2, W: \2%ld\2, D: \2%ld\2",
+		send_notice_to_user(s_StatServ, callerUser, "Peak: T: \2%" PRIu64 "\2, M: \2%" PRIu64 "\2, W: \2%" PRIu64 "\2, D: \2%" PRIu64 "\2",
 			cs->totalpeak, cs->monthlypeak, cs->weeklypeak, cs->dailypeak);
-		send_notice_to_user(s_StatServ, callerUser, "Joins: T: \2%ld\2, M: \2%ld\2, W: \2%ld\2, D: \2%ld\2",
+		send_notice_to_user(s_StatServ, callerUser, "Joins: T: \2%" PRIu64 "\2, M: \2%" PRIu64 "\2, W: \2%" PRIu64 "\2, D: \2%" PRIu64 "\2",
 			cs->totaljoins, cs->monthlyjoins, cs->weeklyjoins, cs->dailyjoins);
-		send_notice_to_user(s_StatServ, callerUser, "Parts: T: \2%ld\2, M: \2%ld\2, W: \2%ld\2, D: \2%ld\2",
+		send_notice_to_user(s_StatServ, callerUser, "Parts: T: \2%" PRIu64 "\2, M: \2%" PRIu64 "\2, W: \2%" PRIu64 "\2, D: \2%" PRIu64 "\2",
 			cs->totalparts, cs->monthlyparts, cs->weeklyparts, cs->dailyparts);
-		send_notice_to_user(s_StatServ, callerUser, "Kicks: T: \2%ld\2, M: \2%ld\2, W: \2%ld\2, D: \2%ld\2",
+		send_notice_to_user(s_StatServ, callerUser, "Kicks: T: \2%" PRIu64 "\2, M: \2%" PRIu64 "\2, W: \2%" PRIu64 "\2, D: \2%" PRIu64 "\2",
 			cs->totalkicks, cs->monthlykicks, cs->weeklykicks, cs->dailykicks);
-		send_notice_to_user(s_StatServ, callerUser, "Bans: T: \2%ld\2, M: \2%ld\2, W: \2%ld\2, D: \2%ld\2",
+		send_notice_to_user(s_StatServ, callerUser, "Bans: T: \2%" PRIu64 "\2, M: \2%" PRIu64 "\2, W: \2%" PRIu64 "\2, D: \2%" PRIu64 "\2",
 			cs->totalbans, cs->monthlybans, cs->weeklybans, cs->dailybans);
-		send_notice_to_user(s_StatServ, callerUser, "Oppings: T: \2%ld\2, M: \2%ld\2, W: \2%ld\2, D: \2%ld\2",
+		send_notice_to_user(s_StatServ, callerUser, "Oppings: T: \2%" PRIu64 "\2, M: \2%" PRIu64 "\2, W: \2%" PRIu64 "\2, D: \2%" PRIu64 "\2",
 			cs->totaloppings, cs->monthlyoppings, cs->weeklyoppings, cs->dailyoppings);
-		send_notice_to_user(s_StatServ, callerUser, "Deoppings: T: \2%ld\2, M: \2%ld\2, W: \2%ld\2, D: \2%ld\2",
+		send_notice_to_user(s_StatServ, callerUser, "Deoppings: T: \2%" PRIu64 "\2, M: \2%" PRIu64 "\2, W: \2%" PRIu64 "\2, D: \2%" PRIu64 "\2",
 			cs->totaldeoppings, cs->monthlydeoppings, cs->weeklydeoppings, cs->dailydeoppings);
-		send_notice_to_user(s_StatServ, callerUser, "Halfoppings: T: \2%ld\2, M: \2%ld\2, W: \2%ld\2, D: \2%ld\2",
+		send_notice_to_user(s_StatServ, callerUser, "Halfoppings: T: \2%" PRIu64 "\2, M: \2%" PRIu64 "\2, W: \2%" PRIu64 "\2, D: \2%" PRIu64 "\2",
 			cs->totalhalfoppings, cs->monthlyhalfoppings, cs->weeklyhalfoppings, cs->dailyhalfoppings);
-		send_notice_to_user(s_StatServ, callerUser, "Dehalfoppings: T: \2%ld\2, M: \2%ld\2, W: \2%ld\2, D: \2%ld\2",
+		send_notice_to_user(s_StatServ, callerUser, "Dehalfoppings: T: \2%" PRIu64 "\2, M: \2%" PRIu64 "\2, W: \2%" PRIu64 "\2, D: \2%" PRIu64 "\2",
 			cs->totaldehalfoppings, cs->monthlydehalfoppings, cs->weeklydehalfoppings, cs->dailydehalfoppings);
-		send_notice_to_user(s_StatServ, callerUser, "Voicings: T: \2%ld\2, M: \2%ld\2, W: \2%ld\2, D: \2%ld\2",
+		send_notice_to_user(s_StatServ, callerUser, "Voicings: T: \2%" PRIu64 "\2, M: \2%" PRIu64 "\2, W: \2%" PRIu64 "\2, D: \2%" PRIu64 "\2",
 			cs->totalvoicings, cs->monthlyvoicings, cs->weeklyvoicings, cs->dailyvoicings);
-		send_notice_to_user(s_StatServ, callerUser, "Devoicings: T: \2%ld\2, M: \2%ld\2, W: \2%ld\2, D: \2%ld\2",
+		send_notice_to_user(s_StatServ, callerUser, "Devoicings: T: \2%" PRIu64 "\2, M: \2%" PRIu64 "\2, W: \2%" PRIu64 "\2, D: \2%" PRIu64 "\2",
 			cs->totaldevoicings, cs->monthlydevoicings, cs->weeklydevoicings, cs->dailydevoicings);
-		send_notice_to_user(s_StatServ, callerUser, "Topics: T: \2%ld\2, M: \2%ld\2, W: \2%ld\2, D: \2%ld\2",
+		send_notice_to_user(s_StatServ, callerUser, "Topics: T: \2%" PRIu64 "\2, M: \2%" PRIu64 "\2, W: \2%" PRIu64 "\2, D: \2%" PRIu64 "\2",
 			cs->totaltopics, cs->monthlytopics, cs->weeklytopics, cs->dailytopics);
-		send_notice_to_user(s_StatServ, callerUser, "Modes: T: \2%ld\2 (\2%ld\2+, \2%ld\2-), M: \2%ld\2 (\2%ld\2+, \2%ld\2-), W: \2%ld\2 (\2%ld\2+, \2%ld\2-), D: \2%ld\2 (\2%ld\2+, \2%ld\2-)",
+		send_notice_to_user(s_StatServ, callerUser, "Modes: T: \2%" PRIu64 "\2 (\2%" PRIu64 "\2+, \2%" PRIu64 "\2-), M: \2%" PRIu64 "\2 (\2%" PRIu64 "\2+, \2%" PRIu64 "\2-), W: \2%" PRIu64 "\2 (\2%" PRIu64 "\2+, \2%" PRIu64 "\2-), D: \2%" PRIu64 "\2 (\2%" PRIu64 "\2+, \2%" PRIu64 "\2-)",
 			(cs->totaladdcmodes + cs->totaldelcmodes), cs->totaladdcmodes, cs->totaldelcmodes, (cs->monthlyaddcmodes + cs->monthlydelcmodes), cs->monthlyaddcmodes, cs->monthlydelcmodes, (cs->weeklyaddcmodes + cs->weeklydelcmodes), cs->weeklyaddcmodes, cs->weeklydelcmodes, (cs->dailyaddcmodes + cs->dailydelcmodes), cs->dailyaddcmodes, cs->dailydelcmodes);
-		send_notice_to_user(s_StatServ, callerUser, s_SPACE);
+		send_notice_to_user(s_StatServ, callerUser, " ");
 		send_notice_to_user(s_StatServ, callerUser, "\2*** Fine delle Statistiche ***\2");
 	}
 	else
@@ -2519,11 +2525,11 @@ void statserv_ds_dump(CSTR sourceNick, const User *callerUser, STR request) {
 
 				send_notice_to_user(sourceNick, callerUser, "DUMP: Stats record for \2%s\2:", chan_name);
 
-				send_notice_to_user(sourceNick, callerUser, "Address 0x%08X, size %d B",						(unsigned long)cs, sizeof(ChannelStats) + str_len(cs->name) + 1);
-				send_notice_to_user(sourceNick, callerUser, "Name: 0x%08X \2[\2%s\2]\2",						(unsigned long)cs->name, str_get_valid_display_value(cs->name));
-				send_notice_to_user(sourceNick, callerUser, "Time Added C-time: %d",							cs->time_added);
-				send_notice_to_user(sourceNick, callerUser, "Last Change C-time: %d",							cs->last_change);
-				send_notice_to_user(sourceNick, callerUser, "Next / previous record: 0x%08X / 0x%08X",			(unsigned long)cs->next, (unsigned long)cs->prev);
+				send_notice_to_user(sourceNick, callerUser, "Address %p, size %zu B",			(void *)cs, sizeof(ChannelStats) + str_len(cs->name) + 1);
+				send_notice_to_user(sourceNick, callerUser, "Name: %p \2[\2%s\2]\2",			(void *)cs->name, str_get_valid_display_value(cs->name));
+				send_notice_to_user(sourceNick, callerUser, "Time Added C-time: %ld",			cs->time_added);
+				send_notice_to_user(sourceNick, callerUser, "Last Change C-time: %ld",			cs->last_change);
+				send_notice_to_user(sourceNick, callerUser, "Next / previous record: %p / %p",	(void *)cs->next, (void *)cs->prev);
 
 				LOG_DEBUG_SNOOP("Command: DUMP STATSERV CHAN %s -- by %s (%s@%s)", chan_name, callerUser->nick, callerUser->username, callerUser->host);
 			}
@@ -2579,10 +2585,10 @@ void statserv_ds_dump(CSTR sourceNick, const User *callerUser, STR request) {
 			for (idx = 0, cs = hashtable_chanstats[hashIdx]; IS_NOT_NULL(cs) && (idx <= endIdx); ++idx, cs = cs->next) {
 
 				if (idx >= startIdx)
-					send_notice_to_user(sourceNick, callerUser, "%05d) ADR\2 0x%08X\2 - NXT\2 0x%08X\2 - PRV\2 0x%08X\2 - KEY \2%s\2", idx, (unsigned long)cs, (unsigned long)cs->next, (unsigned long)cs->prev, str_get_valid_display_value(cs->name));
+					send_notice_to_user(sourceNick, callerUser, "%05ld) ADR\2 %p\2 - NXT\2 %p\2 - PRV\2 %p\2 - KEY \2%s\2", idx, (void *)cs, (void *)cs->next, (void *)cs->prev, str_get_valid_display_value(cs->name));
 			}
 
-			LOG_DEBUG_SNOOP("Command: DUMP STATSERV HASHTABLE %d %d %d -- by %s (%s@%s)", hashIdx, startIdx, endIdx, callerUser->nick, callerUser->username, callerUser->host);
+			LOG_DEBUG_SNOOP("Command: DUMP STATSERV HASHTABLE %ld %ld %ld -- by %s (%s@%s)", hashIdx, startIdx, endIdx, callerUser->nick, callerUser->username, callerUser->host);
 		}
 		else
 			needSyntax = TRUE;
@@ -2594,11 +2600,11 @@ void statserv_ds_dump(CSTR sourceNick, const User *callerUser, STR request) {
 		MemoryPoolStats pstats;
 
 		mempool_stats(stats_chan_mempool, &pstats);
-		send_notice_to_user(sourceNick, callerUser, "DUMP: StatServ chanstat memory pool - Address 0x%08X, ID: %d",	(unsigned long)stats_chan_mempool, pstats.id);
-		send_notice_to_user(sourceNick, callerUser, "Memory allocated / free: %d B / %d B",							pstats.memory_allocated, pstats.memory_free);
-		send_notice_to_user(sourceNick, callerUser, "Items allocated / free: %d / %d",								pstats.items_allocated, pstats.items_free);
-		send_notice_to_user(sourceNick, callerUser, "Items per block / block count: %d / %d",						pstats.items_per_block, pstats.block_count);
-		//send_notice_to_user(sourceNick, callerUser, "Avarage use: %.2f%%",										pstats.block_avg_usage);
+		send_notice_to_user(sourceNick, callerUser, "DUMP: StatServ chanstat memory pool - Address %p, ID: %u",	(void *)stats_chan_mempool, pstats.id);
+		send_notice_to_user(sourceNick, callerUser, "Memory allocated / free: %lu B / %lu B",					pstats.memory_allocated, pstats.memory_free);
+		send_notice_to_user(sourceNick, callerUser, "Items allocated / free: %lu / %lu",						pstats.items_allocated, pstats.items_free);
+		send_notice_to_user(sourceNick, callerUser, "Items per block / block count: %lu / %lu",					pstats.items_per_block, pstats.block_count);
+		//send_notice_to_user(sourceNick, callerUser, "Avarage use: %.2f%%",									pstats.block_avg_usage);
 
 		LOG_DEBUG_SNOOP("Command: DUMP STATSERV POOLSTAT -- by %s (%s@%s)", callerUser->nick, callerUser->username, callerUser->host);
 	}
@@ -2638,7 +2644,7 @@ unsigned long statserv_mem_report(CSTR sourceNick, const User *callerUser) {
 
 	/* Global stats */
 	mem_total = (sizeof(GlobalStats) * 4);
-	send_notice_to_user(sourceNick, callerUser, "Global stats: \2%d\2 -> \2%d\2 KB (\2%d\2 B)", 4, mem_total / 1024, mem_total);
+	send_notice_to_user(sourceNick, callerUser, "Global stats: \2%d\2 -> \2%lu\2 KB (\2%lu\2 B)", 4, mem_total / 1024, mem_total);
 
 
 	/* Channel stats */
@@ -2654,7 +2660,7 @@ unsigned long statserv_mem_report(CSTR sourceNick, const User *callerUser) {
 	mem += (sizeof(ChannelStats) * count);
 
 	TRACE();
-	send_notice_to_user(sourceNick, callerUser, "Channel stats records: \2%d\2 -> \2%d\2 KB (\2%d\2 B)", count, mem / 1024, mem);
+	send_notice_to_user(sourceNick, callerUser, "Channel stats records: \2%lu\2 -> \2%lu\2 KB (\2%lu\2 B)", count, mem / 1024, mem);
 	mem_total += mem;
 
 
@@ -2669,7 +2675,7 @@ unsigned long statserv_mem_report(CSTR sourceNick, const User *callerUser) {
 	}
 
 	TRACE();
-	send_notice_to_user(sourceNick, callerUser, "Server records: \2%d\2 -> \2%d\2 KB (\2%d\2 B)", count, mem / 1024, mem);
+	send_notice_to_user(sourceNick, callerUser, "Server records: \2%lu\2 -> \2%lu\2 KB (\2%lu\2 B)", count, mem / 1024, mem);
 	mem_total += mem;
 
 	return mem_total;

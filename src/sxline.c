@@ -7,7 +7,7 @@
 * details.
 *
 * sxline.c - Services G:/Q:/Z:Lines
-* 
+*
 */
 
 
@@ -272,7 +272,7 @@ void sxline_burst_send(void) {
 
 	while (IS_NOT_NULL(aSXLine)) {
 
-		send_cmd("SGLINE %d :%s:%s", str_len(aSXLine->name), aSXLine->name, aSXLine->info.reason);
+		send_cmd("SGLINE %zu :%s:%s", str_len(aSXLine->name), aSXLine->name, aSXLine->info.reason);
 		aSXLine = aSXLine->next;
 	}
 }
@@ -568,7 +568,7 @@ void handle_sxline(CSTR source, User *callerUser, ServiceCommandData *data) {
 			}
 			else {
 
-				send_globops(s_OperServ, "\2%s\2 (through \2%s\2) tried to S%c:Line \2%.3f%s\2 of the network! (Limit: %.3f%s)", source, data->commandName[1], data->operName, percent, "%", CONF_AKILL_PERCENT, "%");
+				send_globops(s_OperServ, "\2%s\2 (through \2%s\2) tried to S%c:Line \2%.3f%s\2 of the network! (Limit: %.3f%s)", source, data->operName, data->commandName[1], percent, "%", CONF_AKILL_PERCENT, "%");
 
 				LOG_SNOOP(s_OperServ, "OS +S%c* %s -- by %s (%s@%s) through %s [%.3f%s > %.3f%s]", data->commandName[1], name, callerUser->nick, callerUser->username, callerUser->host, data->operName, percent, "%", CONF_AKILL_PERCENT, "%");
 				log_services(LOG_SERVICES_OPERSERV, "+S%c* %s -- by %s (%s@%s) through %s [%.3f%s > %.3f%s]", data->commandName[1], name, callerUser->nick, callerUser->username, callerUser->host, data->operName, percent, "%", CONF_AKILL_PERCENT, "%");
@@ -614,7 +614,7 @@ void handle_sxline(CSTR source, User *callerUser, ServiceCommandData *data) {
 		if (isQLine)
 			send_cmd("SQLINE %s :%s", name, reason);
 		else
-			send_cmd("SGLINE %d :%s:%s", str_len(name), name, reason);
+			send_cmd("SGLINE %zu :%s:%s", str_len(name), name, reason);
 
 		TRACE_MAIN();
 
@@ -771,7 +771,7 @@ void sxline_ds_dump(CSTR sourceNick, const User *callerUser, STR request) {
 
 	if (IS_NULL(aSXLine)) {
 
-		send_notice_to_user(sourceNick, callerUser, "DUMP: \2S%c:Line\2 List is empty.", str_char_toupper(request[1]));
+		send_notice_to_user(sourceNick, callerUser, "DUMP: \2S%c:Line\2 List is empty.", (int)str_char_toupper(request[1]));
 		return;
 	}
 
@@ -804,14 +804,14 @@ void sxline_ds_dump(CSTR sourceNick, const User *callerUser, STR request) {
 		endIdx = (startIdx + 5);
 
 	if (IS_NULL(request)) {
-
-		send_notice_to_user(sourceNick, callerUser, "DUMP: \2S%c:Line\2 List (showing entries %d-%d):", str_char_toupper(request[1]), startIdx, endIdx);
-		LOG_DEBUG_SNOOP("Command: DUMP S%cLINE %d-%d -- by %s (%s@%s)", str_char_toupper(request[1]), startIdx, endIdx, callerUser->nick, callerUser->username, callerUser->host);
+		/* FIXME: str_char_toupper should return a signed int, not an unsigned one! */
+		send_notice_to_user(sourceNick, callerUser, "DUMP: \2S%c:Line\2 List (showing entries %d-%d):", (int)str_char_toupper(request[1]), startIdx, endIdx);
+		LOG_DEBUG_SNOOP("Command: DUMP S%cLINE %d-%d -- by %s (%s@%s)", (int)str_char_toupper(request[1]), startIdx, endIdx, callerUser->nick, callerUser->username, callerUser->host);
 	}
 	else {
-
-		send_notice_to_user(sourceNick, callerUser, "DUMP: \2S%c:Line\2 List (showing entries %d-%d matching %s):", str_char_toupper(request[1]), startIdx, endIdx, request);
-		LOG_DEBUG_SNOOP("Command: DUMP S%cLINE %d-%d -- by %s (%s@%s) [Pattern: %s]", str_char_toupper(request[1]), startIdx, endIdx, callerUser->nick, callerUser->username, callerUser->host, request);
+		/* FIXME: str_char_toupper should return a signed int, not an unsigned one! */
+		send_notice_to_user(sourceNick, callerUser, "DUMP: \2S%c:Line\2 List (showing entries %d-%d matching %s):", (int)str_char_toupper(request[1]), startIdx, endIdx, request);
+		LOG_DEBUG_SNOOP("Command: DUMP S%cLINE %d-%d -- by %s (%s@%s) [Pattern: %s]", (int)str_char_toupper(request[1]), startIdx, endIdx, callerUser->nick, callerUser->username, callerUser->host, request);
 	}
 
 	while (IS_NOT_NULL(aSXLine)) {
@@ -833,13 +833,13 @@ void sxline_ds_dump(CSTR sourceNick, const User *callerUser, STR request) {
 			continue;
 		}
 
-		send_notice_to_user(sourceNick, callerUser, "%d) Address 0x%08X, size %d B",		lineIdx, (unsigned long)aSXLine, sizeof(SXLine));
-		send_notice_to_user(sourceNick, callerUser, "Name: 0x%08X \2[\2%s\2]\2",			(unsigned long)aSXLine->name, str_get_valid_display_value(aSXLine->name));
-		send_notice_to_user(sourceNick, callerUser, "Creator: 0x%08X \2[\2%s\2]\2",			(unsigned long)aSXLine->info.creator.name, str_get_valid_display_value(aSXLine->info.creator.name));
-		send_notice_to_user(sourceNick, callerUser, "Reason: 0x%08X \2[\2%s\2]\2",			(unsigned long)aSXLine->info.reason, str_get_valid_display_value(aSXLine->info.reason));
-		send_notice_to_user(sourceNick, callerUser, "Time Set C-time: %d",					aSXLine->info.creator.time);
-		send_notice_to_user(sourceNick, callerUser, "Last Used C-time: %d",					aSXLine->lastUsed);
-		send_notice_to_user(sourceNick, callerUser, "Next/Prev records: 0x%08X / 0x%08X",	(unsigned long)aSXLine->next, (unsigned long)aSXLine->prev);
+		send_notice_to_user(sourceNick, callerUser, "%d) Address %p, size %zu B",	lineIdx, (void *)aSXLine, sizeof(SXLine));
+		send_notice_to_user(sourceNick, callerUser, "Name: %p \2[\2%s\2]\2",		(void *)aSXLine->name, str_get_valid_display_value(aSXLine->name));
+		send_notice_to_user(sourceNick, callerUser, "Creator: %p \2[\2%s\2]\2",		(void *)aSXLine->info.creator.name, str_get_valid_display_value(aSXLine->info.creator.name));
+		send_notice_to_user(sourceNick, callerUser, "Reason: %p \2[\2%s\2]\2",		(void *)aSXLine->info.reason, str_get_valid_display_value(aSXLine->info.reason));
+		send_notice_to_user(sourceNick, callerUser, "Time Set C-time: %ld",			aSXLine->info.creator.time);
+		send_notice_to_user(sourceNick, callerUser, "Last Used C-time: %ld",		aSXLine->lastUsed);
+		send_notice_to_user(sourceNick, callerUser, "Next/Prev records: %p / %p",	(void *)aSXLine->next, (void *)aSXLine->prev);
 
 		if (sentIdx >= endIdx)
 			break;
@@ -875,7 +875,7 @@ unsigned long int sxline_mem_report(CSTR sourceNick, const User *callerUser) {
 		aSXLine = aSXLine->next;
 	}
 
-	send_notice_to_user(sourceNick, callerUser, "SQLine List: \2%d\2 -> \2%d\2 KB (\2%d\2 B)", count, mem / 1024, mem);
+	send_notice_to_user(sourceNick, callerUser, "SQLine List: \2%lu\2 -> \2%lu\2 KB (\2%lu\2 B)", count, mem / 1024, mem);
 	total_mem += mem;
 
 
@@ -896,7 +896,7 @@ unsigned long int sxline_mem_report(CSTR sourceNick, const User *callerUser) {
 		aSXLine = aSXLine->next;
 	}
 
-	send_notice_to_user(sourceNick, callerUser, "SGLine List: \2%d\2 -> \2%d\2 KB (\2%d\2 B)", count, mem / 1024, mem);
+	send_notice_to_user(sourceNick, callerUser, "SGLine List: \2%lu\2 -> \2%lu\2 KB (\2%lu\2 B)", count, mem / 1024, mem);
 	total_mem += mem;
 
 	return total_mem;

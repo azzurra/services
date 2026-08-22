@@ -1546,30 +1546,30 @@ void handle_set(const char *source, User *callerUser, ServiceCommandData *data) 
 
 			TRACE_MAIN();
 			if (data->operMatch)
-				LOG_SNOOP(data->agent->nick, "%s +SET* SCANV6 -- by %s (%s@%s) [Already set to %d]", data->agent->shortNick, callerUser->nick, callerUser->username, callerUser->host, value);
+				LOG_SNOOP(data->agent->nick, "%s +SET* SCANV6 -- by %s (%s@%s) [Already set to %ld]", data->agent->shortNick, callerUser->nick, callerUser->username, callerUser->host, value);
 			else
-				LOG_SNOOP(data->agent->nick, "%s +SET* SCANV6 -- by %s (%s@%s) through %s [Already set to %d]", data->agent->shortNick, callerUser->nick, callerUser->username, callerUser->host, data->operName, value);
+				LOG_SNOOP(data->agent->nick, "%s +SET* SCANV6 -- by %s (%s@%s) through %s [Already set to %ld]", data->agent->shortNick, callerUser->nick, callerUser->username, callerUser->host, data->operName, value);
 
-			send_notice_to_user(data->agent->nick, callerUser, "SCANV6 is already set to \2%d\2.", value);
+			send_notice_to_user(data->agent->nick, callerUser, "SCANV6 is already set to \2%ld\2.", value);
 		}
 		else {
 
 			if (data->operMatch) {
 
-				LOG_SNOOP(data->agent->nick, "%s +SET SCANV6 -- by %s (%s@%s) [%d -> %d]", data->agent->shortNick, callerUser->nick, callerUser->username, callerUser->host, CONF_CLONE_SCAN_V6, value);
-				log_services(data->agent->logID, "+SET SCANV6 -- by %s (%s@%s) [%d -> %d]", callerUser->nick, callerUser->username, callerUser->host, CONF_CLONE_SCAN_V6, value);
+				LOG_SNOOP(data->agent->nick, "%s +SET SCANV6 -- by %s (%s@%s) [%d -> %ld]", data->agent->shortNick, callerUser->nick, callerUser->username, callerUser->host, CONF_CLONE_SCAN_V6, value);
+				log_services(data->agent->logID, "+SET SCANV6 -- by %s (%s@%s) [%d -> %ld]", callerUser->nick, callerUser->username, callerUser->host, CONF_CLONE_SCAN_V6, value);
 
-				send_globops(data->agent->nick, "\2%s\2 enabled V6 Clone Detection at field \2%d\2", source, value);
+				send_globops(data->agent->nick, "\2%s\2 enabled V6 Clone Detection at field \2%ld\2", source, value);
 			}
 			else {
 
-				LOG_SNOOP(data->agent->nick, "%s +SET SCANV6 -- by %s (%s@%s) through %s [%d -> %d]", data->agent->shortNick, callerUser->nick, callerUser->username, callerUser->host, data->operName, CONF_CLONE_SCAN_V6, value);
-				log_services(data->agent->logID, "+SET SCANV6 -- by %s (%s@%s) through %s [%d -> %d]", callerUser->nick, callerUser->username, callerUser->host, data->operName, CONF_CLONE_SCAN_V6, value);
+				LOG_SNOOP(data->agent->nick, "%s +SET SCANV6 -- by %s (%s@%s) through %s [%d -> %ld]", data->agent->shortNick, callerUser->nick, callerUser->username, callerUser->host, data->operName, CONF_CLONE_SCAN_V6, value);
+				log_services(data->agent->logID, "+SET SCANV6 -- by %s (%s@%s) through %s [%d -> %ld]", callerUser->nick, callerUser->username, callerUser->host, data->operName, CONF_CLONE_SCAN_V6, value);
 
-				send_globops(data->agent->nick, "\2%s\2 (through \2%s\2) enabled V6 Clone Detection at field \2%d\2", source, data->operName, value);
+				send_globops(data->agent->nick, "\2%s\2 (through \2%s\2) enabled V6 Clone Detection at field \2%ld\2", source, data->operName, value);
 			}
 
-			send_notice_to_user(data->agent->nick, callerUser, "Services is now V6 Clone Detecting at field \2%d\2.", value);
+			send_notice_to_user(data->agent->nick, callerUser, "Services is now V6 Clone Detecting at field \2%ld\2.", value);
 
 			CONF_CLONE_SCAN_V6 = value;
 		}

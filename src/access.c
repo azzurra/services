@@ -556,26 +556,26 @@ BOOL send_access_info(Access *accessList, CSTR nick, CSTR sourceNick, const User
 
 void access_send_dump(Access *anAccess, CSTR sourceNick, const User *callerUser) {
 
-	send_notice_to_user(sourceNick, callerUser, "Address 0x%08X, size %d B",		(unsigned long)anAccess, sizeof(Access));
-	send_notice_to_user(sourceNick, callerUser, "Nick: 0x%08X \2[\2%s\2]\2",		(unsigned long)anAccess->nick, str_get_valid_display_value(anAccess->nick));
-	send_notice_to_user(sourceNick, callerUser, "User: 0x%08X \2[\2%s\2]\2",		(unsigned long)anAccess->user, str_get_valid_display_value(anAccess->user));
-	send_notice_to_user(sourceNick, callerUser, "User2: 0x%08X \2[\2%s\2]\2",		(unsigned long)anAccess->user2, str_get_valid_display_value(anAccess->user2));
-	send_notice_to_user(sourceNick, callerUser, "User3: 0x%08X \2[\2%s\2]\2",		(unsigned long)anAccess->user3, str_get_valid_display_value(anAccess->user3));
-	send_notice_to_user(sourceNick, callerUser, "Host: 0x%08X \2[\2%s\2]\2",		(unsigned long)anAccess->host, str_get_valid_display_value(anAccess->host));
-	send_notice_to_user(sourceNick, callerUser, "Host2: 0x%08X \2[\2%s\2]\2",		(unsigned long)anAccess->host2, str_get_valid_display_value(anAccess->host2));
-	send_notice_to_user(sourceNick, callerUser, "Host3: 0x%08X \2[\2%s\2]\2",		(unsigned long)anAccess->host3, str_get_valid_display_value(anAccess->host3));
-	send_notice_to_user(sourceNick, callerUser, "Server: 0x%08X \2[\2%s\2]\2",		(unsigned long)anAccess->server, str_get_valid_display_value(anAccess->server));
-	send_notice_to_user(sourceNick, callerUser, "Server2: 0x%08X \2[\2%s\2]\2",		(unsigned long)anAccess->server2, str_get_valid_display_value(anAccess->server2));
-	send_notice_to_user(sourceNick, callerUser, "Server3: 0x%08X \2[\2%s\2]\2",		(unsigned long)anAccess->server3, str_get_valid_display_value(anAccess->server3));
-	send_notice_to_user(sourceNick, callerUser, "Flags: %ld",						anAccess->flags);
+	send_notice_to_user(sourceNick, callerUser, "Address %p, size %zu B",		(void *)anAccess, sizeof(Access));
+	send_notice_to_user(sourceNick, callerUser, "Nick: %p \2[\2%s\2]\2",		(void *)anAccess->nick, str_get_valid_display_value(anAccess->nick));
+	send_notice_to_user(sourceNick, callerUser, "User: %p \2[\2%s\2]\2",		(void *)anAccess->user, str_get_valid_display_value(anAccess->user));
+	send_notice_to_user(sourceNick, callerUser, "User2: %p \2[\2%s\2]\2",		(void *)anAccess->user2, str_get_valid_display_value(anAccess->user2));
+	send_notice_to_user(sourceNick, callerUser, "User3: %p \2[\2%s\2]\2",		(void *)anAccess->user3, str_get_valid_display_value(anAccess->user3));
+	send_notice_to_user(sourceNick, callerUser, "Host: %p \2[\2%s\2]\2",		(void *)anAccess->host, str_get_valid_display_value(anAccess->host));
+	send_notice_to_user(sourceNick, callerUser, "Host2: %p \2[\2%s\2]\2",		(void *)anAccess->host2, str_get_valid_display_value(anAccess->host2));
+	send_notice_to_user(sourceNick, callerUser, "Host3: %p \2[\2%s\2]\2",		(void *)anAccess->host3, str_get_valid_display_value(anAccess->host3));
+	send_notice_to_user(sourceNick, callerUser, "Server: %p \2[\2%s\2]\2",		(void *)anAccess->server, str_get_valid_display_value(anAccess->server));
+	send_notice_to_user(sourceNick, callerUser, "Server2: %p \2[\2%s\2]\2",		(void *)anAccess->server2, str_get_valid_display_value(anAccess->server2));
+	send_notice_to_user(sourceNick, callerUser, "Server3: %p \2[\2%s\2]\2",		(void *)anAccess->server3, str_get_valid_display_value(anAccess->server3));
+	send_notice_to_user(sourceNick, callerUser, "Flags: %ld",					anAccess->flags);
 
-	send_notice_to_user(sourceNick, callerUser, "Modes ON: %ld \2[\2%s\2]\2",		anAccess->modes_on, get_user_modes(anAccess->modes_on, 0));
-	send_notice_to_user(sourceNick, callerUser, "Modes OFF: %ld \2[\2%s\2]\2",		anAccess->modes_off, get_user_modes(0, anAccess->modes_off));
+	send_notice_to_user(sourceNick, callerUser, "Modes ON: %ld \2[\2%s\2]\2",	anAccess->modes_on, get_user_modes(anAccess->modes_on, 0));
+	send_notice_to_user(sourceNick, callerUser, "Modes OFF: %ld \2[\2%s\2]\2",	anAccess->modes_off, get_user_modes(0, anAccess->modes_off));
 
-	send_notice_to_user(sourceNick, callerUser, "Created by: 0x%08X \2[\2%s\2]\2",	(unsigned long)anAccess->creator.name, str_get_valid_display_value(anAccess->creator.name));
-	send_notice_to_user(sourceNick, callerUser, "Time Added C-time: %ld",			anAccess->creator.time);
-	send_notice_to_user(sourceNick, callerUser, "Last Update C-time: %ld",			anAccess->lastUpdate);
-	send_notice_to_user(sourceNick, callerUser, "Next record: 0x%08X",				(unsigned long)anAccess->next);
+	send_notice_to_user(sourceNick, callerUser, "Created by: %p \2[\2%s\2]\2",	(void *)anAccess->creator.name, str_get_valid_display_value(anAccess->creator.name));
+	send_notice_to_user(sourceNick, callerUser, "Time Added C-time: %ld",		anAccess->creator.time);
+	send_notice_to_user(sourceNick, callerUser, "Last Update C-time: %ld",		anAccess->lastUpdate);
+	send_notice_to_user(sourceNick, callerUser, "Next record: %p",				(void *)anAccess->next);
 }
 
 /*********************************************************/

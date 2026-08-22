@@ -344,9 +344,9 @@ static void do_mem(const char *source, User *callerUser, ServiceCommandData *dat
 		return;
 	}
 
-	send_notice_to_user(s_DebugServ, callerUser, s_SPACE);
-	send_notice_to_user(s_DebugServ, callerUser, "Memory usage: \2%d\2 KB (\2%d\2 B)", total_memory / 1024, total_memory);
-	send_notice_to_user(s_DebugServ, callerUser, s_SPACE);
+	send_notice_to_user(s_DebugServ, callerUser, " ");
+	send_notice_to_user(s_DebugServ, callerUser, "Memory usage: \2%lu\2 KB (\2%lu\2 B)", total_memory / 1024, total_memory);
+	send_notice_to_user(s_DebugServ, callerUser, " ");
 	send_notice_to_user(s_DebugServ, callerUser, "*** \2End of MEM Stats\2 ***");
 
 	LOG_DEBUG_SNOOP("Command: MEM -- by %s", source);
@@ -405,7 +405,7 @@ static void do_show(const char *source, User *callerUser, ServiceCommandData *da
 		TRACE_MAIN();
 		send_notice_to_user(s_DebugServ, callerUser, "Last error input buffer:");
 		send_notice_to_user(s_DebugServ, callerUser, "%s %s %s", log_get_last_error_timestamp(), log_get_last_error_signature(), log_get_last_error_trace());
-		send_notice_to_user(s_DebugServ, callerUser, log_get_last_error_buffer());
+		send_notice_to_user(s_DebugServ, callerUser, "%s", log_get_last_error_buffer());
 		LOG_DEBUG_SNOOP("Command: SHOW LASTERRBUF -- by %s", source);
 	
 	} else if (str_equals_nocase(what, "TS")) {
@@ -500,8 +500,8 @@ static void do_set(const char *source, User *callerUser, ServiceCommandData *dat
 						conf_monitor_inputbuffer = TRUE;
 
 						snprintf(misc_buffer, sizeof(misc_buffer), s_DS_IBD_ACTIVATED, source);
-						send_notice_to_user(s_DebugServ, callerUser, misc_buffer);
-						LOG_DEBUG_SNOOP(misc_buffer);
+						send_notice_to_user(s_DebugServ, callerUser, "%s", misc_buffer);
+						LOG_DEBUG_SNOOP("%s", misc_buffer);
 						log_debug_direct(misc_buffer);
 
 						if (IS_NOT_NULL(debug_monitor_inputbuffer_filter))
@@ -521,8 +521,8 @@ static void do_set(const char *source, User *callerUser, ServiceCommandData *dat
 						conf_monitor_inputbuffer = FALSE;
 
 						snprintf(misc_buffer, sizeof(misc_buffer), s_DS_IBD_DEACTIVATED, source);
-						send_notice_to_user(s_DebugServ, callerUser, misc_buffer);
-						LOG_DEBUG_SNOOP(misc_buffer);
+						send_notice_to_user(s_DebugServ, callerUser, "%s", misc_buffer);
+						LOG_DEBUG_SNOOP("%s", misc_buffer);
 						log_debug_direct(misc_buffer);
 
 						if (IS_NOT_NULL(debug_monitor_inputbuffer_filter)) {
@@ -546,6 +546,10 @@ static void do_set(const char *source, User *callerUser, ServiceCommandData *dat
  * /msg DebugServ CRYPT                                  *
  *********************************************************/
 
+#ifdef __GNUC__
+#pragma GCC diagnostic push
+#pragma GCC diagnostic warning "-Wformat"
+#endif /* __GNUC__ */
 static void do_crypt(const char *source, User *callerUser, ServiceCommandData *data) {
 	STR		type = strtok(NULL, s_SPACE);
 	STR		what = strtok(NULL, s_SPACE);
@@ -585,7 +589,9 @@ static void do_crypt(const char *source, User *callerUser, ServiceCommandData *d
 		LOG_DEBUG_SNOOP("Command: CRYPT FNV %s -- by %s", what, source);
 	}
 }
-
+#ifdef __GNUC__
+#pragma GCC diagnostic pop
+#endif /* __GNUC__ */
 
 /*********************************************************
  * /msg DebugServ DUMP                                   *
@@ -713,7 +719,7 @@ static void do_inject(const char *source, User *callerUser, ServiceCommandData *
 	else {
 
 		LOG_DEBUG_SNOOP("\2%s\2 had me INJECT the following command:", source);
-		LOG_DEBUG_SNOOP(command);
+		LOG_DEBUG_SNOOP("%s", command);
 		log_debug_direct(command);
 
 		if (store_flag == 'Y') {
@@ -1140,7 +1146,7 @@ static void do_sysinfo(const char *source, User *callerUser, ServiceCommandData 
 			);
 	
 	// Database options
-	send_notice_to_user(s_DebugServ, callerUser, "Database options: Read-only \2%s\2 - No-expire \2%s\2 - Backup \2%s\2 - Update frequency: \2%d\2 secs",
+	send_notice_to_user(s_DebugServ, callerUser, "Database options: Read-only \2%s\2 - No-expire \2%s\2 - Backup \2%s\2 - Update frequency: \2%ld\2 secs",
 		CONF_SET_READONLY ? s_ENABLED : s_DISABLED, CONF_SET_NOEXPIRE ? s_ENABLED : s_DISABLED, CONF_DATABASE_BACKUP_FREQUENCY ? s_ENABLED : s_DISABLED, CONF_DATABASE_UPDATE_FREQUENCY);
 
 	stg_report_sysinfo(s_DebugServ, callerUser->nick);
@@ -1157,7 +1163,7 @@ static void do_sysinfo(const char *source, User *callerUser, ServiceCommandData 
 		CONF_SET_DEBUG ? s_ENABLED : s_DISABLED, CONF_DEBUG_CHAN, conf_monitor_inputbuffer ? s_ENABLED : s_DISABLED, conf_monitor_inputbuffer ? debug_monitor_inputbuffer_filter : s_NULL, debug_inject ? s_ON : s_OFF);
 
 	// misc options
-	send_notice_to_user(s_DebugServ, callerUser, "Misc options: Timeout-check frequency \2%d\2 secs", CONF_TIMEOUT_CHECK);
+	send_notice_to_user(s_DebugServ, callerUser, "Misc options: Timeout-check frequency \2%ld\2 secs", CONF_TIMEOUT_CHECK);
 
 	#ifndef NEW_SOCK
 	send_notice_to_user(s_DebugServ, callerUser, "Timeout-check startup delta \2%d\2 secs", CONF_TIMEOUT_STARTUP_DELTA);

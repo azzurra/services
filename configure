@@ -80,7 +80,7 @@ test_function () {
     #include <stdio.h>
     #include <string.h>
 	int main() {
-		extern int $func$proto;
+		extern $rettype $func$proto;
 		$TEST
 	}
 EOT
@@ -121,7 +121,7 @@ DATDEST=./data
 CC=
 CC_LIBS=
 CC_FLAGS=bonkle
-CC_LFLAGS=bonkle
+CC_LFLAGS=
 
 OSTYPE=bonkle
 
@@ -156,6 +156,7 @@ USER_CC=
 USER_CC_FLAGS=bonkle
 USER_CC_LFLAGS=bonkle
 USER_CC_LIBS=
+FORCE_M32=no
 
 export USER_CC USER_CC_FLAGS USER_CC_LFLAGS USER_CC_LIBS
 
@@ -172,6 +173,8 @@ while [ $# -gt 0 ] ; do
 	elif [ "$1" = "-libs" ] ; then
 		shift
 		USER_CC_LIBS=$1
+	elif [ "$1" = "-m32" ] ; then
+		FORCE_M32=yes
 	else
 		if [ "$1" != "-help" -a "$1" != "-h" -a "$1" != "--help" ]; then
 			echo >&2 Unknown option/parameter: "$1"
@@ -181,11 +184,12 @@ while [ $# -gt 0 ] ; do
 		fi
 		cat >&2 <<EOT
 Available options:
-	-cc			Specify C compiler to use (overrides check)
-	-cflags		Specify compilation flags (defaults: -O2 for gcc,
-			    -O for other compilers; overrides check)
-	-lflags		Specify link flags for C compiler (default: none)
-	-libs		Specify extra link libraries to use (default: none)
+    -cc     Specify C compiler to use (overrides check)
+    -cflags Specify compilation flags (defaults: -O2 for gcc,
+            -O for other compilers; overrides check)
+    -lflags Specify link flags for C compiler (default: none)
+    -libs   Specify extra link libraries to use (default: none)
+    -m32    Force ILP32 build on LP64 systems (DANGEROUS, use with care!)
 EOT
 		exit $exitval
 	fi
@@ -216,7 +220,7 @@ if [ "$USER_CC" ] ; then
 elif run gcc --version ; then
 	echo "great, found gcc!"
 	CC=gcc
-	DEF_CC_FLAGS=-O2
+	DEF_CC_FLAGS=-O0
 	log using \`gcc\'
 else
 	echo "gcc not found."
@@ -251,12 +255,25 @@ EOT
 	DEF_CC_FLAGS=-O
 fi
 
+if [ "x$FORCE_M32" = "xyes" ]; then
+echo '************************************** /!\ DANGER /!\ **************************************'
+echo 'Forcing ILP32 build, DO NOT DO THIS IN PRODUCTION UNLESS YOU KNOW EXACTLY WHAT YOU ARE DOING'
+echo '********************************************************************************************'
+LBIT=32
+DEF_CC_FLAGS="-m32 $DEF_CC_FLAGS"
+CC_LFLAGS="-m32"
+else
+LBIT=$(getconf LONG_BIT)
+fi
 
 # Test compiler options.
 
 MODE="find_ccopts     "
 if [ "$USER_CC_FLAGS" != bonkle ] ; then
 	CC_FLAGS="$USER_CC_FLAGS"
+	if [ "x$FORCE_M32" = 'xyes' ]; then
+		CC_FLAGS="-m32 $CC_FLAGS"
+	fi
 	echo "Compiler flags supplied: $CC_FLAGS"
 	log user supplied flags: \`"$CC_FLAGS'"
 else
@@ -284,10 +301,12 @@ fi
 MODE="find_lflags     "
 if [ "$USER_CC_LFLAGS" != "bonkle" ] ; then
 	CC_LFLAGS=$USER_CC_LFLAGS
+	if [ "x$FORCE_M32" = 'xyes' ]; then
+		CC_LFLAGS="-m32 $CC_LFLAGS"
+	fi
 	log user supplied \`"$CC_LFLAGS'"
 else
 	log using no flags
-	CC_LFLAGS=""
 fi
 
 ###########################################################################
@@ -394,7 +413,7 @@ TEST='
 	}
 
 	return 0;'
-if test_function int snprintf "(char *, long unsigned int, const char *, ...)" ; then : ; else
+if test_function int snprintf "(char *, size_t, const char *, ...)" ; then : ; else
 	echo2 "snprintf "
 	echo ""
 	echo "Your snprintf() is not compatible with services' needs."
@@ -438,6 +457,8 @@ cat >inc/sysconf.h <<EOT
 #define SERVICES_BIN		"$BINDEST/services"
 #define SERVICES_DIR		"$DATDEST"
 
+#define OS_${LBIT}BIT
+
 EOT
 
 if [ "$OSTYPE" != "bonkle" ] ; then cat >>inc/sysconf.h <<EOT ; fi
@@ -465,7 +486,6 @@ fi
 echo "done."
 
 echo2 "Creating Makefile.inc... "
-LBIT=$(getconf LONG_BIT)
 cat >Makefile.inc <<EOT
 # This file is generated automatically by "configure".  Any changes made
 # to it will be erased next time "configure" is run.
@@ -478,8 +498,6 @@ LIBS=$CC_LIBS
 PROGRAM=services
 BINDEST=$BINDEST
 DATDEST=$DATDEST
-LBIT=$LBIT
-CFLAGS += -DOS_${LBIT}BIT
 
 EOT
 echo "done."

@@ -36,6 +36,7 @@
 #include <sys/time.h>
 #include <ctype.h>
 #include <fcntl.h>
+#include <inttypes.h>
 
 /* Services headers */
 #include "xrefs.h"

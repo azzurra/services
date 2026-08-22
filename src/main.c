@@ -376,7 +376,7 @@ static BOOL initialize() {
 
 	send_cmd("PASS %s :TS", CONF_REMOTE_PASSWORD);
 	send_cmd("SVINFO 5 3 0 :%ld", time(NULL));
-	send_cmd(CAPAB);
+	send_cmd("%s", CAPAB);
 	send_cmd("SERVER %s 1 :%s", CONF_SERVICES_NAME, CONF_SERVICES_DESC);
 
 	TRACE_MAIN();
@@ -484,9 +484,9 @@ static void timeout_check_handler(int sig_unused) {
 void database_expire(const time_t now) {
 
 	if (CONF_DISPLAY_UPDATES)
-		send_globops(NULL, "Running Database Store & Expire #%d", expire_count);
+		send_globops(NULL, "Running Database Store & Expire #%lu", expire_count);
 	else
-		LOG_SNOOP(s_OperServ, "Running Database Store & Expire #%d", expire_count);
+		LOG_SNOOP(s_OperServ, "Running Database Store & Expire #%lu", expire_count);
 
 	++expire_count;
 

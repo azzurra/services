@@ -53,21 +53,21 @@ static void remove_trigger(Trigger *aTrigger, const User *callerUser, BOOL operM
 
 	if (operMatch) {
 
-		send_globops(s_OperServ, "\2%s\2 reset Trigger for \2%s@%s\2", callerUser->nick, aTrigger->username ?: "*", aTrigger->host);
+		send_globops(s_OperServ, "\2%s\2 reset Trigger for \2%s@%s\2", callerUser->nick, aTrigger->username ? aTrigger->username : "*", aTrigger->host);
 
-		LOG_SNOOP(s_OperServ, "OS -T %s@%s -- by %s (%s@%s)", aTrigger->username ?: "*", aTrigger->host, callerUser->nick, callerUser->username, callerUser->host);
-		log_services(LOG_SERVICES_OPERSERV, "-T %s@%s -- by %s (%s@%s)", aTrigger->username ?: "*", aTrigger->host, callerUser->nick, callerUser->username, callerUser->host);
+		LOG_SNOOP(s_OperServ, "OS -T %s@%s -- by %s (%s@%s)", aTrigger->username ? aTrigger->username : "*", aTrigger->host, callerUser->nick, callerUser->username, callerUser->host);
+		log_services(LOG_SERVICES_OPERSERV, "-T %s@%s -- by %s (%s@%s)", aTrigger->username ? aTrigger->username : "*", aTrigger->host, callerUser->nick, callerUser->username, callerUser->host);
 	}
 	else {
 
-		send_globops(s_OperServ, "\2%s\2 (through \2%s\2) reset Trigger for \2%s@%s\2", callerUser->nick, operName, aTrigger->username ?: "*", aTrigger->host);
+		send_globops(s_OperServ, "\2%s\2 (through \2%s\2) reset Trigger for \2%s@%s\2", callerUser->nick, operName, aTrigger->username ? aTrigger->username : "*", aTrigger->host);
 
-		LOG_SNOOP(s_OperServ, "OS -T %s@%s -- by %s (%s@%s) through %s", aTrigger->username ?: "*", aTrigger->host, callerUser->nick, callerUser->username, callerUser->host, operName);
-		log_services(LOG_SERVICES_OPERSERV, "-T %s@%s -- by %s (%s@%s) through %s", aTrigger->username ?: "*", aTrigger->host, callerUser->nick, callerUser->username, callerUser->host, operName);
+		LOG_SNOOP(s_OperServ, "OS -T %s@%s -- by %s (%s@%s) through %s", aTrigger->username ? aTrigger->username : "*", aTrigger->host, callerUser->nick, callerUser->username, callerUser->host, operName);
+		log_services(LOG_SERVICES_OPERSERV, "-T %s@%s -- by %s (%s@%s) through %s", aTrigger->username ? aTrigger->username : "*", aTrigger->host, callerUser->nick, callerUser->username, callerUser->host, operName);
 	}
 
 	TRACE_MAIN();
-	send_notice_to_user(s_OperServ, callerUser, "Trigger for \2%s@%s\2 has been reset.", aTrigger->username ?: "*", aTrigger->host);
+	send_notice_to_user(s_OperServ, callerUser, "Trigger for \2%s@%s\2 has been reset.", aTrigger->username ? aTrigger->username : "*", aTrigger->host);
 
 	/* Link around it. */
 	if (IS_NOT_NULL(aTrigger->next))
@@ -915,7 +915,7 @@ void handle_trigger(CSTR source, User *callerUser, ServiceCommandData *data) {
 					((ip == INADDR_NONE) && str_match_wild_nocase(aTrigger->host, host)) :
 					((ip != INADDR_NONE) && cidr_match(&(aTrigger->cidr), ip))) {
 
-					send_notice_to_user(s_OperServ, callerUser, "Mask \2%s@%s\2 is covered by trigger on \2%s@%s\2 [%s]", username, host, aTrigger->username ?: "*", aTrigger->host, FlagSet(aTrigger->flags, TRIGGER_FLAG_HOST) ? "Host" : "CIDR");
+					send_notice_to_user(s_OperServ, callerUser, "Mask \2%s@%s\2 is covered by trigger on \2%s@%s\2 [%s]", username, host, aTrigger->username ? aTrigger->username : "*", aTrigger->host, FlagSet(aTrigger->flags, TRIGGER_FLAG_HOST) ? "Host" : "CIDR");
 					return;
 				}
 			}
@@ -1140,7 +1140,7 @@ void handle_trigger(CSTR source, User *callerUser, ServiceCommandData *data) {
 			/* The requested mask is not already triggered. */
 			if (isADD == FALSE) {
 
-				send_notice_to_user(s_OperServ, callerUser, "Mask \2%s\2 is not triggered.", mask, tval);
+				send_notice_to_user(s_OperServ, callerUser, "Mask \2%s\2 is not triggered.", mask);
 
 				if (data->operMatch)
 					LOG_SNOOP(s_OperServ, "OS -T* %s -- by %s (%s@%s) [Not Found]", mask, callerUser->nick, callerUser->username, callerUser->host);
@@ -1320,17 +1320,17 @@ void trigger_ds_dump(CSTR sourceNick, const User *callerUser, STR request) {
 			continue;
 		}
 
-		send_notice_to_user(sourceNick, callerUser, "%d) Address 0x%08X, size %d B",		triggerIdx, (unsigned long)aTrigger, sizeof(Trigger));
-		send_notice_to_user(sourceNick, callerUser, "Username: 0x%08X \2[\2%s\2]\2",		(unsigned long)aTrigger->username, str_get_valid_display_value(aTrigger->username));
-		send_notice_to_user(sourceNick, callerUser, "Host: 0x%08X \2[\2%s\2]\2",			(unsigned long)aTrigger->host, str_get_valid_display_value(aTrigger->host));
-		send_notice_to_user(sourceNick, callerUser, "Reason: 0x%08X \2[\2%s\2]\2",			(unsigned long)aTrigger->info.reason, str_get_valid_display_value(aTrigger->info.reason));
-		send_notice_to_user(sourceNick, callerUser, "Set by: 0x%08X \2[\2%s\2]\2",			(unsigned long)aTrigger->info.creator.name, str_get_valid_display_value(aTrigger->info.creator.name));
-		send_notice_to_user(sourceNick, callerUser, "Time Set C-time: %ld",					aTrigger->info.creator.time);
-		send_notice_to_user(sourceNick, callerUser, "Last Used C-time: %ld",				aTrigger->lastUsed);
-		send_notice_to_user(sourceNick, callerUser, "Expire C-time: %ld",					aTrigger->expireTime);
-		send_notice_to_user(sourceNick, callerUser, "Flags: %d",							aTrigger->flags);
-		send_notice_to_user(sourceNick, callerUser, "Value: %d",							aTrigger->value);
-		send_notice_to_user(sourceNick, callerUser, "Next/Prev records: 0x%08X / 0x%08X",	(unsigned long)aTrigger->next, (unsigned long)aTrigger->prev);
+		send_notice_to_user(sourceNick, callerUser, "%d) Address %p, size %zu B",	triggerIdx, (void *)aTrigger, sizeof(Trigger));
+		send_notice_to_user(sourceNick, callerUser, "Username: %p \2[\2%s\2]\2",	(void *)aTrigger->username, str_get_valid_display_value(aTrigger->username));
+		send_notice_to_user(sourceNick, callerUser, "Host: %p \2[\2%s\2]\2",		(void *)aTrigger->host, str_get_valid_display_value(aTrigger->host));
+		send_notice_to_user(sourceNick, callerUser, "Reason: %p \2[\2%s\2]\2",		(void *)aTrigger->info.reason, str_get_valid_display_value(aTrigger->info.reason));
+		send_notice_to_user(sourceNick, callerUser, "Set by: %p \2[\2%s\2]\2",		(void *)aTrigger->info.creator.name, str_get_valid_display_value(aTrigger->info.creator.name));
+		send_notice_to_user(sourceNick, callerUser, "Time Set C-time: %ld",			aTrigger->info.creator.time);
+		send_notice_to_user(sourceNick, callerUser, "Last Used C-time: %ld",		aTrigger->lastUsed);
+		send_notice_to_user(sourceNick, callerUser, "Expire C-time: %ld",			aTrigger->expireTime);
+		send_notice_to_user(sourceNick, callerUser, "Flags: %d",					aTrigger->flags);
+		send_notice_to_user(sourceNick, callerUser, "Value: %u",					aTrigger->value);
+		send_notice_to_user(sourceNick, callerUser, "Next/Prev records: %p / %p",	(void *)aTrigger->next, (void *)aTrigger->prev);
 
 		if (sentIdx >= endIdx)
 			break;
@@ -1369,7 +1369,7 @@ unsigned long int trigger_mem_report(CSTR sourceNick, const User *callerUser) {
 		aTrigger = aTrigger->next;
 	}
 
-	send_notice_to_user(sourceNick, callerUser, "Trigger List: \2%d\2 -> \2%d\2 KB (\2%d\2 B)", count, mem / 1024, mem);
+	send_notice_to_user(sourceNick, callerUser, "Trigger List: \2%lu\2 -> \2%lu\2 KB (\2%lu\2 B)", count, mem / 1024, mem);
 	total_mem += mem;
 
 	/* Exempt List */
@@ -1389,7 +1389,7 @@ unsigned long int trigger_mem_report(CSTR sourceNick, const User *callerUser) {
 		anExempt = anExempt->next;
 	}
 
-	send_notice_to_user(sourceNick, callerUser, "Exempt List: \2%d\2 -> \2%d\2 KB (\2%d\2 B)", count, mem / 1024, mem);
+	send_notice_to_user(sourceNick, callerUser, "Exempt List: \2%lu\2 -> \2%lu\2 KB (\2%lu\2 B)", count, mem / 1024, mem);
 	total_mem += mem;
 
 	return total_mem;

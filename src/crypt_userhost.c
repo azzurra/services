@@ -168,10 +168,10 @@ void handle_cryptkey(CSTR source, User *callerUser, ServiceCommandData *data) {
 		send_notice_to_user(data->agent->nick, callerUser, "Syntax: \2CRYPTKEY\2 newkey");
 
 	else if ((keyLen = str_len(newKey)) < HIDEHOST_MIN_KEY_LEN)
-		send_notice_to_user(data->agent->nick, callerUser, "The key is too short [%d < %d]", keyLen, HIDEHOST_MIN_KEY_LEN);
+		send_notice_to_user(data->agent->nick, callerUser, "The key is too short [%zu < %d]", keyLen, HIDEHOST_MIN_KEY_LEN);
 
 	else if (keyLen > HIDEHOST_MAX_KEY_LEN)
-		send_notice_to_user(data->agent->nick, callerUser, "The key is too long [%d > %d]", keyLen, HIDEHOST_MAX_KEY_LEN);
+		send_notice_to_user(data->agent->nick, callerUser, "The key is too long [%zu > %d]", keyLen, HIDEHOST_MAX_KEY_LEN);
 
 	else {
 
@@ -270,7 +270,8 @@ STR crypt_userhost(CSTR real, HOST_TYPE htype, short int dotsCount) {
 
 	size_t			len, virlen;
 	int32_t			hash;
-	char			*ptr, *expanded_real = real;
+	char			*ptr;
+	CSTR expanded_real = real;
 	char expanded_real_buf[40];
 
 	#define MAX_DSN_HOST_LEN	64
@@ -386,13 +387,13 @@ void crypt_ds_dump(CSTR sourceNick, const User *callerUser, STR request) {
 			// HELP !
 
 		} else if (str_equals_nocase(cmd, "HOSTBUFF")) {
-			send_notice_to_user(sourceNick, callerUser, "DUMP: [%d] %s", hidehost_buffer_size, str_get_valid_display_value(hidehost_buffer));
+			send_notice_to_user(sourceNick, callerUser, "DUMP: [%zu] %s", hidehost_buffer_size, str_get_valid_display_value(hidehost_buffer));
 
 		} else if (str_equals_nocase(cmd, "HOSTCRYPT")) {
-			send_notice_to_user(sourceNick, callerUser, "DUMP: [%d] %s", hidehost_crypt_buffer_size, str_get_valid_display_value(hidehost_crypt_buffer));
+			send_notice_to_user(sourceNick, callerUser, "DUMP: [%zu] %s", hidehost_crypt_buffer_size, str_get_valid_display_value(hidehost_crypt_buffer));
 
 		} else if (str_equals_nocase(cmd, "KEY")) {
-			send_notice_to_user(sourceNick, callerUser, "DUMP: [%d] %s", hidehost_key_size, str_get_valid_display_value(hidehost_key));
+			send_notice_to_user(sourceNick, callerUser, "DUMP: [%zu] %s", hidehost_key_size, str_get_valid_display_value(hidehost_key));
 
 		} else
 			needSyntax = TRUE;

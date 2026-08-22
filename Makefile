@@ -20,29 +20,24 @@
 RM=/bin/rm
 
 # Compile flags
-CFLAGS += -pipe -Wall -O0 -g -Wshadow -Wcast-align -Wsign-compare
+CFLAGS = $(BASE_CFLAGS)
+CFLAGS += -pipe -Wall -Wpedantic -g -Wshadow -Wcast-align -Wsign-compare -Wformat -Wformat-signedness -Wformat-security -Werror=format -Werror=format-security
 # linker flags.
 LDFLAGS=
 
 SHELL=/bin/sh
 SUBDIRS=src
-
-MAKE=make 'CFLAGS=${CFLAGS}' 'INSTALL=${INSTALL}' 'LDFLAGS=${LDFLAGS}'
+MAKE=make 'CFLAGS=${CFLAGS}' 'LDFLAGS=${LDFLAGS}'
 
 all:	build
 
-build:
-	-@if [ ! -f inc/sysconf.h ] ; then \
-		echo "Hmm... doesn't look like you've run configure..."; \
-		echo "Doing so now."; \
-		sh configure; \
-	fi
-	@for i in $(SUBDIRS); do \
-		echo "Building $$i";\
-		cd $$i;\
-		${MAKE} build; cd ..;\
-	done
-	@echo "All done!"
+build: inc/sysconf.h $(SUBDIRS)
+
+inc/sysconf.h:
+	@$(SHELL) configure
+
+$(SUBDIRS): | inc/sysconf.h
+	$(MAKE) -C $@
 
 clean:
 	@${RM} -f services
@@ -55,3 +50,5 @@ distclean:
 	@${RM} -f Makefile.inc configure.log services
 	@cd inc; ${RM} -f sysconf.h; cd ..
 	@cd src; ${RM} -f *.o services; cd ..
+
+.PHONY: all build clean distclean $(SUBDIRS)

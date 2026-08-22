@@ -154,7 +154,7 @@ void handle_jupe(CSTR source, User *callerUser, ServiceCommandData *data) {
 
 		if ((len = str_len(reason)) > SERVER_DESC_MAX) {
 
-			send_notice_to_user(s_OperServ, callerUser, "Maximum length for a jupe reason is %d characters. Yours has: %u", SERVER_DESC_MAX, len);
+			send_notice_to_user(s_OperServ, callerUser, "Maximum length for a jupe reason is %d characters. Yours has: %zu", SERVER_DESC_MAX, len);
 			return;
 		}
 
@@ -383,7 +383,7 @@ void handle_jupe(CSTR source, User *callerUser, ServiceCommandData *data) {
 
 		if ((len = str_len(reason)) > SERVER_DESC_MAX) {
 
-			send_notice_to_user(s_OperServ, callerUser, "Maximum length for a jupe reason is %d characters. Yours has: %u", SERVER_DESC_MAX, len);
+			send_notice_to_user(s_OperServ, callerUser, "Maximum length for a jupe reason is %d characters. Yours has: %zu", SERVER_DESC_MAX, len);
 			return;
 		}
 
@@ -573,12 +573,12 @@ void jupe_ds_dump(CSTR sourceNick, const User *callerUser, STR request) {
 			continue;
 		}
 
-		send_notice_to_user(sourceNick, callerUser, "%d) Address 0x%08X, size %d B",		jupeIdx, (unsigned long)aJupe, sizeof(Jupe));
-		send_notice_to_user(sourceNick, callerUser, "Server: 0x%08X \2[\2%s\2]\2",			(unsigned long)aJupe->name, str_get_valid_display_value(aJupe->name));
-		send_notice_to_user(sourceNick, callerUser, "Creator: 0x%08X \2[\2%s\2]\2",			(unsigned long)aJupe->info.creator.name, str_get_valid_display_value(aJupe->info.creator.name));
-		send_notice_to_user(sourceNick, callerUser, "Reason: 0x%08X \2[\2%s\2]\2",			(unsigned long)aJupe->info.reason, str_get_valid_display_value(aJupe->info.reason));
-		send_notice_to_user(sourceNick, callerUser, "Time Set C-time: %d",					aJupe->info.creator.time);
-		send_notice_to_user(sourceNick, callerUser, "Next/Prev records: 0x%08X / 0x%08X",	(unsigned long)aJupe->next, (unsigned long)aJupe->prev);
+		send_notice_to_user(sourceNick, callerUser, "%d) Address %p, size %zu B",	jupeIdx, (void *)aJupe, sizeof(Jupe));
+		send_notice_to_user(sourceNick, callerUser, "Server: %p \2[\2%s\2]\2",		(void *)aJupe->name, str_get_valid_display_value(aJupe->name));
+		send_notice_to_user(sourceNick, callerUser, "Creator: %p \2[\2%s\2]\2",		(void *)aJupe->info.creator.name, str_get_valid_display_value(aJupe->info.creator.name));
+		send_notice_to_user(sourceNick, callerUser, "Reason: %p \2[\2%s\2]\2",		(void *)aJupe->info.reason, str_get_valid_display_value(aJupe->info.reason));
+		send_notice_to_user(sourceNick, callerUser, "Time Set C-time: %ld",			aJupe->info.creator.time);
+		send_notice_to_user(sourceNick, callerUser, "Next/Prev records: %p / %p",	(void *)aJupe->next, (void *)aJupe->prev);
 
 		if (sentIdx >= endIdx)
 			break;
@@ -613,6 +613,6 @@ unsigned long int jupe_mem_report(CSTR sourceNick, const User *callerUser) {
 		aJupe = aJupe->next;
 	}
 
-	send_notice_to_user(sourceNick, callerUser, "Jupe List: \2%d\2 -> \2%d\2 KB (\2%d\2 B)", count, mem / 1024, mem);
+	send_notice_to_user(sourceNick, callerUser, "Jupe List: \2%lu\2 -> \2%lu\2 KB (\2%lu\2 B)", count, mem / 1024, mem);
 	return mem;
 }
