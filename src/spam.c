@@ -52,7 +52,6 @@ struct _SpamItem {
 	unsigned char	pad;
 };
 
-#ifdef OS_64BIT
 typedef	struct _SpamItem_32	SpamItem32;
 #pragma pack(push, 4)
 struct _SpamItem_32 {
@@ -69,7 +68,6 @@ struct _SpamItem_32 {
 	unsigned char	pad;
 };
 #pragma pack(pop)
-#endif
 
 
 /*********************************************************
@@ -264,7 +262,7 @@ BOOL spam_db_load(void) {
 					do {
 
 						spam = mem_malloc(sizeof(SpamItem));
-#ifdef OS_64BIT
+
 						BOOL is64bit = stg_is64bit(stg);
 						if (is64bit)
 							result = stg_read_record(stg, (PBYTE)spam, sizeof(SpamItem));
@@ -279,9 +277,6 @@ BOOL spam_db_load(void) {
 							spam->reason = (STR)(uintptr_t)si32.reason;
 							spam->pad = si32.pad;
 						}
-#else
-						result = stg_read_record(stg, (PBYTE)spam, sizeof(SpamItem));
-#endif
 
 						switch (result) {
 

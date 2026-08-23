@@ -62,7 +62,6 @@ struct _access_V10 {
 
 #define Access Access_V10
 
-#ifdef OS_64BIT
 typedef struct _access_V10_32 Access_V10_32;
 
 struct _access_V10_32 {
@@ -91,7 +90,6 @@ struct _access_V10_32 {
 
 
 typedef Access_V10_32 Access32;
-#endif
 
 
 /*********************************************************

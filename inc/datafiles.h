@@ -16,11 +16,8 @@
 #ifndef SRV_DATAFILES_H
 #define SRV_DATAFILES_H
 
-#ifdef OS_64BIT
 #define DATAFILE64 0x80
-#else
-#define DATAFILE64 0
-#endif
+
 /*********************************************************
  * Public code                                           *
  *********************************************************/

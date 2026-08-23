@@ -41,7 +41,7 @@ struct _dynConfig {
    // notice on-connect
    char             *welcomeNotice;
 };
-#ifdef OS_64BIT
+
 typedef struct _dynConfig32 dynConfig32;
 struct __attribute__((packed)) _dynConfig32  {
 
@@ -52,7 +52,7 @@ struct __attribute__((packed)) _dynConfig32  {
     // notice on-connect
     int32_t          welcomeNotice;
 };
-#endif
+
 /*********************************************************
  * Global variables                                      *
  *********************************************************/

@@ -62,9 +62,7 @@ STG_RESULT stg_create(CSTR path, flags_t flags, STGVERSION version, STGHANDLE *h
 STG_RESULT stg_close(STGHANDLE handle, CSTR path);
 
 STGVERSION stg_data_version(STGHANDLE handle);
-#ifdef OS_64BIT
 BOOL stg_is64bit(STGHANDLE handle);
-#endif
 STG_RESULT stg_start_section(STGHANDLE handle);
 STG_RESULT stg_end_section(STGHANDLE handle);
 

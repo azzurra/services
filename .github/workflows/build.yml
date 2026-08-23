@@ -49,43 +49,6 @@ jobs:
           path: src/services
           retention-days: 7
 
-  build32:
-    name: build with forced ILP32 (${{ matrix.container }})
-    runs-on: ubuntu-latest
-    container: ${{ matrix.container }}
-    strategy:
-      fail-fast: false
-      matrix:
-        container:
-          - debian:trixie
-          - debian:bookworm
-          - ubuntu:24.04
-
-    steps:
-      - name: install build deps
-        run: |
-          dpkg --add-architecture i386
-          apt-get update
-          apt-get install -y --no-install-recommends \
-            build-essential libc6-dev ca-certificates git python3 \
-            gcc-multilib g++-multilib libc6-dev:i386
-
-      - uses: actions/checkout@v4
-
-      - name: compile language files
-        run: python3 lang/langcomp.py
-
-      - name: configure
-        run: ./configure -m32
-
-      - name: build
-        run: make
-
-      - name: verify binary
-        run: |
-          test -x ./src/services
-          ls -la ./src/services
-
   docker:
     name: docker build
     runs-on: ubuntu-latest

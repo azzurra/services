@@ -48,7 +48,6 @@ struct _channelsuspenddata {
 	time_t expires;
 };
 
-#ifdef OS_64BIT
 typedef struct _channelsuspenddata_32 ChannelSuspendData32;
 
 struct _channelsuspenddata_32 {
@@ -59,7 +58,7 @@ struct _channelsuspenddata_32 {
 	char who[NICKMAX];
 	uint32_t expires;
 };
-#endif
+
 /*********************************************************
  * Global variables                                      *
  *********************************************************/
@@ -92,9 +91,7 @@ unsigned long int cs_regCount;
  * Prototypes                                            *
  *********************************************************/
 
-#ifdef OS_64BIT
 static void channelinfo32_to64(ChannelInfo32 *ci32, ChannelInfo *ci);
-#endif
 static void database_insert_chan(ChannelInfo *ci);
 static void delchan(ChannelInfo *ci);
 
@@ -434,12 +431,6 @@ void load_cs_dbase(void) {
 
 
 	case CHANSERV_DB_CURRENT_VERSION:
-#ifndef OS_64BIT
-		if (flags & DATAFILE64) {
-			fatal_error(FACILITY_NICKSERV_LOAD_NS_DB, __LINE__, "Unsupported 64bit datafile: %s", NICKSERV_DB);
-			break;
-		}
-#endif
 		for (i = 0; i < 256; ++i) {
 
 			while (fgetc(f) == 1) {
@@ -454,10 +445,7 @@ void load_cs_dbase(void) {
 				#else
 				ci = mem_malloc(sizeof(ChannelInfo));
 				#endif
-#ifndef OS_64BIT
-				if (fread(ci, sizeof(ChannelInfo), 1, f) != 1)
-					fatal_error(FACILITY_CHANSERV_LOAD_CS_DB, __LINE__, "Read error on %s", CHANSERV_DB);
-#else
+
 				if (flags & DATAFILE64) {
 					if (fread(ci, sizeof(ChannelInfo), 1, f) != 1)
 						fatal_error(FACILITY_CHANSERV_LOAD_CS_DB, __LINE__, "Read error on %s", CHANSERV_DB);
@@ -467,7 +455,7 @@ void load_cs_dbase(void) {
 						fatal_error(FACILITY_CHANSERV_LOAD_CS_DB, __LINE__, "Read error on %s", CHANSERV_DB);
 					channelinfo32_to64(&ci32, ci);
 				}
-#endif
+
 				RemoveFlag(ci->flags, CI_NOENTRY);
 				RemoveFlag(ci->flags, CI_TIMEOUT);
 
@@ -594,7 +582,6 @@ void load_cs_dbase(void) {
 					ci->access = anAccess;
 
 					TRACE();
-#ifdef OS_64BIT
 					ChanAccess32 *access32 = NULL;
 					if (flags & DATAFILE64) {
 						if ((signed)fread(anAccess, sizeof(ChanAccess), ci->accesscount, f) != ci->accesscount)
@@ -613,10 +600,6 @@ void load_cs_dbase(void) {
 						}
 						free(access32);
 					}
-#else
-					if ((signed)fread(anAccess, sizeof(ChanAccess), ci->accesscount, f) != ci->accesscount)
-						fatal_error(FACILITY_CHANSERV_LOAD_CS_DB, __LINE__, "Read error on %s", CHANSERV_DB);
-#endif
 
 					for (accessIdx = 0; accessIdx < ci->accesscount; ++accessIdx, ++anAccess) {
 
@@ -717,7 +700,7 @@ void load_cs_dbase(void) {
 					TRACE();
 					anAkick = mem_malloc(sizeof(AutoKick) * ci->akickcount);
 					ci->akick = anAkick;
-#ifdef OS_64BIT
+
 					AutoKick32 *anAkick32 = NULL;
 					if (flags & DATAFILE64) {
 						if ((signed)fread(anAkick, sizeof(AutoKick), ci->akickcount, f) != ci->akickcount)
@@ -737,10 +720,6 @@ void load_cs_dbase(void) {
 						}
 						mem_free(anAkick32);
 					}
-#else
-					if ((signed)fread(anAkick, sizeof(AutoKick), ci->akickcount, f) != ci->akickcount)
-						fatal_error(FACILITY_CHANSERV_LOAD_CS_DB, __LINE__, "Read error on %s", CHANSERV_DB);
-#endif
 
 					TRACE();
 					for (akickIdx = 0; akickIdx < ci->akickcount; ++akickIdx, ++anAkick) {
@@ -817,7 +796,6 @@ void load_cs_dbase(void) {
 	close_db(f, CHANSERV_DB);
 }
 
-#ifdef OS_64BIT
 static void channelinfo32_to64(ChannelInfo32 *ci32, ChannelInfo *ci) {
 	ci->next = (ChannelInfo *)(uintptr_t)ci32->next;
 	ci->prev = (ChannelInfo *)(uintptr_t)ci32->prev;
@@ -856,7 +834,6 @@ static void channelinfo32_to64(ChannelInfo32 *ci32, ChannelInfo *ci) {
 	ci->banType = ci32->banType;
 	memset(ci->reserved, 0, sizeof(ci->reserved));
 }
-#endif
 
 /*********************************************************/
 
@@ -1017,7 +994,6 @@ void load_suspend_db(void) {
 		name = mem_malloc(sizeof(ChannelSuspendData));
 
 		TRACE();
-#ifdef OS_64BIT
 		if (flags & DATAFILE64) {
 			if (fread(name, sizeof(ChannelSuspendData), 1, f) != 1)
 				fatal_error(FACILITY_CHANSERV_LOAD_SUSPEND_DB, __LINE__, "Read error on %s at entry %d", SUSPEND_DB, i);
@@ -1030,11 +1006,7 @@ void load_suspend_db(void) {
 			memcpy(name->name, name32.name, CHANMAX);
 			memcpy(name->who, name32.who, NICKMAX);
 		}
-#else
-		if (fread(name, sizeof(ChannelSuspendData), 1, f) != 1)
-			fatal_error(FACILITY_CHANSERV_LOAD_SUSPEND_DB, __LINE__, "Read error on %s at entry %d", SUSPEND_DB, i);
 
-#endif
 		TRACE();
 		name->next = ChannelSuspendList;
 		ChannelSuspendList = name;

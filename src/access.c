@@ -74,7 +74,7 @@ BOOL access_db_load(Access **accessList, CSTR database, BOOL *ListLoadComplete) 
 							anAccess = mem_malloc(sizeof(Access));
 
 							++recordIdx;
-#ifdef OS_64BIT
+
 							BOOL is64Bit = stg_is64bit(stg);
 							if (is64Bit) {
 								result = stg_read_record(stg, (PBYTE)anAccess, sizeof(Access));
@@ -98,9 +98,7 @@ BOOL access_db_load(Access **accessList, CSTR database, BOOL *ListLoadComplete) 
 								anAccess->modes_off = acc32.modes_off;
 								anAccess->modes_on = acc32.modes_on;
 							}
-#else
-							result = stg_read_record(stg, (PBYTE)anAccess, sizeof(Access));
-#endif
+
 							switch (result) {
 
 								case stgEndOfSection: // end-of-section

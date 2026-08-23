@@ -115,10 +115,9 @@ static void do_netstats(const char *source, User *callerUser, ServiceCommandData
 static void do_records(const char *source, User *callerUser, ServiceCommandData *data);
 static void do_server(const char *source, User *callerUser, ServiceCommandData *data);
 static void do_who(const char *source, User *callerUser, ServiceCommandData *data);
-#ifdef OS_64BIT
 static STG_RESULT read_global_stats32(STGHANDLE stg, GlobalStats * monthly);
 static STG_RESULT read_record_stats32(STGHANDLE stg, RecordStats * dst);
-#endif
+
 /*********************************************************
  * Initialization/cleanup routines                       *
  *********************************************************/
@@ -316,7 +315,6 @@ void statserv(const char *source, User *callerUser, char *buf) {
 /*********************************************************
  * Database functions                                    *
  *********************************************************/
-#ifdef OS_64BIT
 static STG_RESULT read_global_stats32(STGHANDLE stg, GlobalStats *dst) {
 	GlobalStats32 gs32;
 	STG_RESULT result = stg_read_record(stg, (PBYTE) &gs32, sizeof(GlobalStats32));
@@ -346,6 +344,7 @@ static STG_RESULT read_global_stats32(STGHANDLE stg, GlobalStats *dst) {
 
 	return result;
 }
+
 static STG_RESULT  read_record_stats32(STGHANDLE stg, RecordStats * dst) {
 	RecordStats32 rs32;
 	STG_RESULT result = stg_read_record(stg, (PBYTE) &rs32, sizeof(RecordStats32));
@@ -412,7 +411,6 @@ void convert_channelstats_32to64(ChannelStats_V10 * dst, ChannelStats32 * src) {
 
 #undef M_CS
 }
-#endif
 
 
 BOOL statserv_chanstats_db_load(void) {
@@ -447,7 +445,6 @@ BOOL statserv_chanstats_db_load(void) {
 					ChannelStats_V10	*cs;
 
 					// Load global statistics
-#ifdef OS_64BIT
 					BOOL is64bit = stg_is64bit(stg);
 					if (is64bit) {
 						if (stg_read_record(stg, NULL, 0) != stgBeginOfSection ||
@@ -475,19 +472,6 @@ BOOL statserv_chanstats_db_load(void) {
 								stg_result_to_string(stg_get_last_error()));
 						}
 					}
-#else
-					if (stg_read_record(stg, NULL, 0) != stgBeginOfSection ||
-						stg_read_record(stg, (PBYTE)&total,   sizeof(GlobalStats_V10)) != stgSuccess ||
-						stg_read_record(stg, (PBYTE)&monthly, sizeof(GlobalStats_V10)) != stgSuccess ||
-						stg_read_record(stg, (PBYTE)&weekly,  sizeof(GlobalStats_V10)) != stgSuccess ||
-						stg_read_record(stg, (PBYTE)&daily,   sizeof(GlobalStats_V10)) != stgSuccess ||
-						stg_read_record(stg, (PBYTE)&records, sizeof(RecordStats_V10)) != stgSuccess ||
-						stg_read_record(stg, NULL, 0) != stgEndOfSection) {
-
-						stg_close(stg, STATSERV_DB);
-						fatal_error(FACILITY_STATSERV_CHANSTATS_DB_LOAD, __LINE__, "Read error on %s - %s", STATSERV_DB, stg_result_to_string(stg_get_last_error()));
-					}
-#endif
 
 					// channels stats
 					for (idx = 0; idx < CHANSTATS_HASHSIZE; ++idx) {
@@ -505,7 +489,6 @@ BOOL statserv_chanstats_db_load(void) {
 								cs = mem_malloc(sizeof(ChannelStats_V10));
 								#endif
 
-#ifdef OS_64BIT
 								if (is64bit) {
 									result = stg_read_record(stg, (PBYTE)cs, sizeof(ChannelStats_V10));
 								} else {
@@ -513,9 +496,7 @@ BOOL statserv_chanstats_db_load(void) {
 									result = stg_read_record(stg, (PBYTE)&cs32, sizeof(ChannelStats32));
 									convert_channelstats_32to64(cs, &cs32);
 								}
-#else
-								result = stg_read_record(stg, (PBYTE)cs, sizeof(ChannelStats_V10));
-#endif
+
 								switch (result) {
 
 									case stgEndOfSection: // end-of-section
@@ -605,7 +586,6 @@ BOOL statserv_servstats_db_load(void) {
 							
 							ss = mem_malloc(sizeof(ServerStats_V10));
 
-#ifdef OS_64BIT
 							BOOL is64bit = stg_is64bit(stg);
 							if (is64bit)
 								result = stg_read_record(stg, (PBYTE)ss, sizeof(ServerStats_V10));
@@ -634,9 +614,7 @@ BOOL statserv_servstats_db_load(void) {
 								ss->totalsplits = ss32.totalsplits;
 								ss->flags = ss32.flags;
 							}
-#else
-							result = stg_read_record(stg, (PBYTE)ss, sizeof(ServerStats_V10));
-#endif
+
 							if (result == stgSuccess) {
 								if (IS_NOT_NULL(ss->name) && (stg_read_string(stg, &(ss->name), NULL) != stgSuccess))
 									fatal_error(FACILITY_STATSERV_SERVSTATS_DB_LOAD, __LINE__, "Read error on %s (2) - %s", SEENSERV_DB, stg_result_to_string(result));
@@ -1436,13 +1414,7 @@ static void do_records(CSTR source, User *callerUser, ServiceCommandData *data) 
 
 	tm = *localtime(&records.maxservers_time);
 	strftime(timebuf, sizeof(timebuf), "%a %d/%m/%Y %H:%M:%S %Z", &tm);
-#ifdef OS_64BIT
-#define NSERVER_SPEC "%lu"
-#else
-#define NSERVER_SPEC "%d"
-#endif
-	send_notice_to_user(s_StatServ, callerUser, "Current Servers: \2" NSERVER_SPEC "\2 [Record: \2%lu\2 on %s]", nservers, records.maxservers, timebuf);
-#undef NSERVER_SPEC
+	send_notice_to_user(s_StatServ, callerUser, "Current Servers: \2%lu\2 [Record: \2%lu\2 on %s]", nservers, records.maxservers, timebuf);
 
 	tm = *localtime(&records.maxconn_time);
 	strftime(timebuf, sizeof(timebuf), "%a %d/%m/%Y", &tm);

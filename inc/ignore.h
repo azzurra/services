@@ -48,7 +48,7 @@ struct _ignore_V10 {
 
 // Current struct version
 typedef	Ignore_V10		Ignore;
-#ifdef OS_64BIT
+
 typedef struct _ignore_V10_32		Ignore_V10_32;
 struct _ignore_V10_32 {
 
@@ -69,8 +69,7 @@ struct _ignore_V10_32 {
 };
 
 // Current struct version
-typedef	Ignore_V10		Ignore;
-#endif
+typedef	Ignore_V10_32		Ignore32;
 
 
 /*********************************************************

@@ -21,16 +21,13 @@ From the repository root:
 
     ./configure
 
-The configure script probes for a compiler (gcc preferred), detects
-whether the system is 32-bit or 64-bit via `getconf LONG_BIT`, checks
-for `sys/resource.h`, `strerror` / `sys_errlist`, `snprintf`,
-`strsignal`, `gethostbyname`, and tries a handful of link libraries
-(`-lnsl`, `-lsocket`, `-lresolv`, `-lbsd`) to see which are needed.
+The configure script probes for a compiler (gcc preferred), checks whether the
+system is 64-bit via `getconf LONG_BIT` **and fails otherwise**, checks for
+`sys/resource.h`, `strerror` / `sys_errlist`, `snprintf`, `strsignal`,
+`gethostbyname`, and tries a handful of link libraries (`-lnsl`, `-lsocket`,
+`-lresolv`, `-lbsd`) to see which are needed.
 
-Output: `inc/sysconf.h` and `Makefile.inc`.  The latter sets
-`-DOS_32BIT` or `-DOS_64BIT` automatically based on `LONG_BIT`, which
-selects the on-disk layout for `.clng` language files and the database
-format.
+Output: `inc/sysconf.h` and `Makefile.inc`.
 
 Options (all optional):
 
@@ -120,6 +117,8 @@ transition; a backup before upgrading is still advised.
 ## Troubleshooting
 
 * `configure` aborts on `snprintf` — your libc is too old, upgrade.
+* `configure` aborts on `long int bit size` — 32-bit systems are no longer
+  supported, sorry.
 * `make` warnings about shadowed locals are expected; `-Wshadow` is on
   by default and the codebase has a few surviving hits.
 * Services refuses to start with a corrupt `.clng` — rerun

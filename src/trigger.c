@@ -132,7 +132,6 @@ BOOL trigger_db_load(void) {
 						while (in_section) {
 
 							aTrigger = mem_malloc(sizeof(Trigger_V10));
-#ifdef OS_64BIT
 							BOOL is64Bit = stg_is64bit(stg);
 							if (is64Bit)
 								result = stg_read_record(stg, (PBYTE)aTrigger, sizeof(Trigger_V10));
@@ -150,9 +149,6 @@ BOOL trigger_db_load(void) {
 								aTrigger->info.reason = (STR)(uintptr_t)tr.info.reason;
 								aTrigger->pad = tr.pad;
 							}
-#else
-							result = stg_read_record(stg, (PBYTE)aTrigger, sizeof(Trigger_V10));
-#endif
 
 							switch (result) {
 

@@ -102,7 +102,6 @@ BOOL sxline_db_load(const int type) {
 						while (in_section) {
 
 							aSXLine = mem_malloc(sizeof(SXLine_V10));
-#ifdef OS_64BIT
 							BOOL is64Bit = stg_is64bit(stg);
 							if (is64Bit)
 								result = stg_read_record(stg, (PBYTE)aSXLine, sizeof(SXLine_V10));
@@ -115,9 +114,6 @@ BOOL sxline_db_load(const int type) {
 								aSXLine->info.reason = (STR)(uintptr_t)sxl32.info.reason;
 								aSXLine->lastUsed = sxl32.lastUsed;
 							}
-#else
-							result = stg_read_record(stg, (PBYTE)aSXLine, sizeof(SXLine_V10));
-#endif
 
 							switch (result) {
 

@@ -151,7 +151,7 @@ BOOL reserved_db_load(void) {
 
 						while (in_section) {
 							aName = mem_malloc(sizeof(reservedName_V10));
-#ifdef OS_64BIT
+
 							BOOL is64bit = stg_is64bit(stg);
 							if (is64bit)
 								result = stg_read_record(stg, (PBYTE)aName, sizeof(reservedName_V10));
@@ -165,9 +165,6 @@ BOOL reserved_db_load(void) {
 								aName->info.reason = (STR)(uintptr_t)rsv32.info.reason;
 								aName->lastUpdate = rsv32.lastUpdate;
 							}
-#else
-							result = stg_read_record(stg, (PBYTE)aName, sizeof(reservedName_V10));
-#endif
 
 							switch (result) {
 

@@ -175,7 +175,6 @@ BOOL ignore_db_load(void) {
 						while (in_section) {
 
 							anIgnore = mem_malloc(sizeof(Ignore_V10));
-#ifdef OS_64BIT
 							Ignore_V10_32 ignore32;
 							BOOL is64Bit = stg_is64bit(stg);
 							if (is64Bit)
@@ -193,10 +192,6 @@ BOOL ignore_db_load(void) {
 								anIgnore->lastUsed = ignore32.lastUsed;
 								anIgnore->flags = ignore32.flags;
 							}
-#else
-							result = stg_read_record(stg, (PBYTE)anIgnore, sizeof(Ignore_V10));
-#endif
-
 
 							switch (result) {
 

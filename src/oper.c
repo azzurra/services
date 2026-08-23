@@ -94,7 +94,6 @@ BOOL oper_db_load(void) {
 
 								anOper = mem_malloc(sizeof(Oper));
 
-#ifdef OS_64BIT
 								BOOL is64Bit = stg_is64bit(stg);
 								if (is64Bit)
 									result = stg_read_record(stg, (PBYTE)anOper, sizeof(Oper));
@@ -108,10 +107,6 @@ BOOL oper_db_load(void) {
 									anOper->flags = oper32.flags;
 									anOper->level = oper32.level;
 								}
-#else
-								result = stg_read_record(stg, (PBYTE)anOper, sizeof(Oper));
-#endif
-
 
 								switch (result) {
 

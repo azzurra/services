@@ -79,7 +79,7 @@ struct _MemoList_V7 {
 
 // Current structs version
 typedef	MemoList_V7		MemoList;
-#ifdef OS_64BIT
+
 // a single memo
 typedef struct _Memo_V7_32		Memo_V7_32;
 struct _Memo_V7_32 {
@@ -127,7 +127,6 @@ struct _MemoList_V7_32 {
 	uint32_t reserved[2];					/* For future expansion - set to 0 */
 };
 typedef	MemoList_V7_32		MemoList32;
-#endif
 
 
 /*********************************************************

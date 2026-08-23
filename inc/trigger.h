@@ -48,7 +48,6 @@ struct _trigger_V10 {
 
 // Current struct version
 typedef	Trigger_V10		Trigger;
-#ifdef OS_64BIT
 
 typedef struct _trigger_V10_32		Trigger_V10_32;
 struct _trigger_V10_32 {
@@ -71,7 +70,6 @@ struct _trigger_V10_32 {
 
 // Current struct version
 typedef	Trigger_V10_32		Trigger32;
-#endif
 
 enum _TRIGGER_RESULT { triggerFound = 0, triggerNotFound, triggerExempt, triggerInvalidData};
 typedef enum _TRIGGER_RESULT	TRIGGER_RESULT;

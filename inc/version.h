@@ -50,11 +50,7 @@
 #define VERS_BF_TRACE		""
 #endif
 
-#ifdef OS_64BIT
 #define VERS_BIT		"64"
-#else
-#define VERS_BIT		"32"
-#endif
 
 // capabs
 

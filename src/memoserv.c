@@ -273,7 +273,7 @@ void load_ms_dbase(void) {
 					#else
 					ml = mem_malloc(sizeof(MemoList));
 					#endif
-#ifdef OS_64BIT
+
 					if (flags & DATAFILE64) {
 						if (fread(ml, sizeof(MemoList), 1, f) != 1)
 							fatal_error(FACILITY_MEMOSERV_LOAD_MS_DB, __LINE__, "Read error (1) on %s", MEMOSERV_DB);
@@ -290,10 +290,7 @@ void load_ms_dbase(void) {
 						ml->prev = (void *)(uintptr_t)memoList32.prev;
 						memset(ml->reserved, 0, sizeof(ml->reserved));
 					}
-#else
-					if (fread(ml, sizeof(MemoList), 1, f) != 1)
-						fatal_error(FACILITY_MEMOSERV_LOAD_MS_DB, __LINE__, "Read error (1) on %s", MEMOSERV_DB);
-#endif
+
 					TRACE();
 					database_insert_memolist(ml);
 
@@ -302,7 +299,7 @@ void load_ms_dbase(void) {
 						ml->memos = mem_malloc(sizeof(Memo) * ml->n_memos);
 
 						TRACE();
-#ifdef OS_64BIT
+
 						if (flags & DATAFILE64) {
 							if (fread(ml->memos, sizeof(Memo), ml->n_memos, f) != (size_t) ml->n_memos)
 								fatal_error(FACILITY_MEMOSERV_LOAD_MS_DB, __LINE__, "Read error (2) on %s", MEMOSERV_DB);
@@ -323,10 +320,7 @@ void load_ms_dbase(void) {
 							}
 							mem_free(memos32);
 						}
-#else
-						if (fread(ml->memos, sizeof(Memo), ml->n_memos, f) != (size_t) ml->n_memos)
-							fatal_error(FACILITY_MEMOSERV_LOAD_MS_DB, __LINE__, "Read error (2) on %s", MEMOSERV_DB);
-#endif
+
 						for (memo = ml->memos, memoIdx = 0; memoIdx < ml->n_memos; ++memoIdx, ++memo) {
 
 							memo->text = read_string(f, MEMOSERV_DB);
@@ -347,7 +341,7 @@ void load_ms_dbase(void) {
 
 							ignore = mem_malloc(sizeof(MemoIgnore));
 
-#ifdef OS_64BIT
+							TRACE();
 							if (flags & DATAFILE64) {
 								if (fread(ignore, sizeof(MemoIgnore), 1, f) != 1)
 									fatal_error(FACILITY_MEMOSERV_LOAD_MS_DB, __LINE__, "Read error (3) on %s", MEMOSERV_DB);
@@ -358,11 +352,7 @@ void load_ms_dbase(void) {
 								ignore->creationTime = ignore32.creationTime;
 								ignore->ignoredNick = (void *)(uintptr_t)ignore32.ignoredNick;
 							}
-#else
-							TRACE();
-							if (fread(ignore, sizeof(MemoIgnore), 1, f) != 1)
-								fatal_error(FACILITY_MEMOSERV_LOAD_MS_DB, __LINE__, "Read error (3) on %s", MEMOSERV_DB);
-#endif
+
 							if (IS_NOT_NULL(ignore->ignoredNick))
 								ignore->ignoredNick = read_string(f, MEMOSERV_DB);
 

@@ -278,7 +278,6 @@ BOOL seenserv_db_load(void) {
 								#else
 								si = mem_malloc(sizeof(SeenInfo_V10));
 								#endif
-#ifdef OS_64BIT
 								BOOL is64Bit = stg_is64bit(stg);
 								if (is64Bit)
 									result = stg_read_record(stg, (PBYTE)si, sizeof(SeenInfo_V10));
@@ -296,9 +295,7 @@ BOOL seenserv_db_load(void) {
 									si->tempnick = (STR)(uintptr_t) (seen32.tempnick);
 									si->quitmsg = (STR)(uintptr_t) (seen32.quitmsg);
 								}
-#else
-								result = stg_read_record(stg, (PBYTE)si, sizeof(SeenInfo_V10));
-#endif
+
 								switch (result) {
 
 									case stgEndOfSection: // end-of-section

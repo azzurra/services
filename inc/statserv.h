@@ -70,7 +70,6 @@ struct _ChannelStats_V10 {
 // Current struct version
 typedef ChannelStats_V10	ChannelStats;
 
-#ifdef OS_64BIT
 #pragma pack(push, 4) // just tell the compiler we want a 4byte alignment to be sure
 typedef struct _ChannelStats_V10_32	ChannelStats_V10_32;
 struct _ChannelStats_V10_32 {
@@ -104,7 +103,6 @@ struct _ChannelStats_V10_32 {
 #pragma pack(pop)
 // Current struct version
 typedef ChannelStats_V10_32	ChannelStats32;
-#endif
 
 
 // servers statistics
@@ -148,8 +146,6 @@ struct _ServerStats_V10 {
 // Current struct version
 typedef ServerStats_V10		ServerStats;
 
-#ifdef OS_64BIT
-
 typedef struct _ServerStats_V10_32		ServerStats_V10_32;
 struct _ServerStats_V10_32 {
 
@@ -188,12 +184,9 @@ struct _ServerStats_V10_32 {
 
 // Current struct version
 typedef ServerStats_V10_32		ServerStats32;
-#endif
-
 
 
 // current records
-#ifdef OS_64BIT
 /*We are not saving any memory using short or char followed by time_t that is 64bit today, just go with uint64_t*/
 typedef struct _RecordStats_V10 {
 
@@ -215,33 +208,10 @@ typedef struct _RecordStats_V10 {
 	time_t				maxconn_time;
 
 } RecordStats_V10;
-#else
-typedef struct _RecordStats_V10 {
-
-	time_t			started;
-
-	unsigned short int	maxusers;
-	time_t				maxusers_time;
-
-	unsigned short int	maxchannels;
-	time_t				maxchannels_time;
-
-	unsigned char		maxopers;
-	time_t				maxopers_time;
-
-	unsigned char		maxservers;
-	time_t				maxservers_time;
-
-	unsigned long int	maxconn;
-	time_t				maxconn_time;
-
-} RecordStats_V10;
-#endif
 
 // Current structs version
 typedef RecordStats_V10		RecordStats;
 
-#ifdef OS_64BIT
 /*Fuck who ever wrote this...this is a fucking padding nightmare!
  Like the 25% of the space is wasted in padding. --Sonic
  */
@@ -268,8 +238,6 @@ typedef struct _RecordStats_V10_32 {
 #pragma pack(pop)
 // Current structs version
 typedef RecordStats_V10_32		RecordStats32;
-#endif
-
 
 // Global stats
 typedef struct _GlobalStats_V10 {
@@ -301,7 +269,6 @@ typedef struct _GlobalStats_V10 {
 // Current structs version
 typedef GlobalStats_V10		GlobalStats;
 
-#ifdef OS_64BIT
 typedef struct _GlobalStats_V10_32 {
 
 	int32_t				last_update;
@@ -328,7 +295,6 @@ typedef struct _GlobalStats_V10_32 {
 
 } GlobalStats_V10_32;
 typedef GlobalStats_V10_32		GlobalStats32;
-#endif
 
 /*********************************************************
  * Constants                                             *

@@ -95,12 +95,7 @@ extern Message messages[];
 
 /* my uplink CAPAB */
 extern unsigned int		uplink_capab;
-
-#ifdef OS_64BIT
 extern uint64_t nservers;
-#else
-extern int nservers;
-#endif
 
 /*********************************************************
  * Public code                                           *

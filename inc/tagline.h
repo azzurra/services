@@ -38,7 +38,6 @@ struct _tagline_V10 {
 // Current struct version
 typedef	Tagline_V10		Tagline;
 
-#ifdef OS_64BIT
 typedef struct _tagline_V10_32		Tagline_V10_32;
 struct _tagline_V10_32 {
 
@@ -50,7 +49,6 @@ struct _tagline_V10_32 {
 
 // Current struct version
 typedef	Tagline_V10_32		Tagline32;
-#endif
 
 
 /*********************************************************

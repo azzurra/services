@@ -62,7 +62,6 @@ struct _NickInfo_V7 {
 	unsigned char		reserved[3];		/* For future expansion -- decrease! */
 };
 
-#ifdef OS_64BIT
 struct _NickInfo_V7_32 {
 
 	int					next, prev; //we read it has 32bit pointers
@@ -93,14 +92,11 @@ struct _NickInfo_V7_32 {
 
 	unsigned char		reserved[3];		/* For future expansion -- decrease! */
 };
-#endif
 
 
 // Current structs version
 typedef NickInfo_V7		NickInfo;
-#ifdef OS_64BIT
 typedef struct _NickInfo_V7_32		NickInfo32;
-#endif
 
 
 // NickServ timeout data

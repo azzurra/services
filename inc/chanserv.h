@@ -52,7 +52,6 @@ typedef struct {
 
 } ChanAccess_V7;
 
-#ifdef OS_64BIT
 typedef struct _ChanAccess_V7_32 {
 		short	level;
 		short	status:4; /* See ACCESS_ENTRY_* below */
@@ -66,7 +65,7 @@ typedef struct _ChanAccess_V7_32 {
 
 } ChanAccess_V7_32;
 typedef ChanAccess_V7_32 ChanAccess32;
-#endif
+
 // Current structs version
 typedef	ChanAccess_V7	ChanAccess;
 
@@ -89,7 +88,6 @@ struct _AutoKick_V7 {
 	time_t			creationTime;
 };
 
-#ifdef OS_64BIT
 typedef struct _AutoKick_V7_32		AutoKick_V7_32;
 struct _AutoKick_V7_32 {
 	unsigned short	isNick:1;
@@ -104,7 +102,6 @@ struct _AutoKick_V7_32 {
 	uint32_t			creationTime;
 };
 typedef	AutoKick_V7_32		AutoKick32;
-#endif
 
 // Current structs version
 typedef	AutoKick_V7		AutoKick;
@@ -155,7 +152,6 @@ struct _ChannelInfo_V8 {
 // Current structs version
 typedef	ChannelInfo_V8	ChannelInfo;
 
-#ifdef OS_64BIT
 typedef struct _ChannelInfo_V8_32		ChannelInfo_V8_32;
 struct _ChannelInfo_V8_32 {
 
@@ -198,8 +194,6 @@ struct _ChannelInfo_V8_32 {
 
 // Current structs version
 typedef	ChannelInfo_V8_32	ChannelInfo32;
-#endif
-
 
 
 // ChanServ timeout data

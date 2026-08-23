@@ -50,7 +50,7 @@ struct _AutoKill_V10 {
 
 // Current structs version
 typedef	AutoKill_V10		AutoKill;
-#ifdef OS_64BIT
+
 typedef struct _AutoKill_V10_32		AutoKill_V10_32;
 struct __attribute__((packed)) _AutoKill_V10_32 {
 
@@ -75,7 +75,6 @@ struct __attribute__((packed)) _AutoKill_V10_32 {
 
 // Current structs version
 typedef	AutoKill_V10_32		AutoKill32;
-#endif
 
 /*********************************************************
  * Constants                                             *

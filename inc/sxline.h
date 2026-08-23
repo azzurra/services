@@ -40,7 +40,7 @@ struct _SXLine_V10 {
 
 // Current struct version
 typedef	SXLine_V10	SXLine;
-#ifdef OS_64BIT
+
 typedef struct _SXLine_V10_32		SXLine_V10_32;
 struct _SXLine_V10_32 {
 	int32_t			prev, next;
@@ -49,7 +49,6 @@ struct _SXLine_V10_32 {
 	int32_t			lastUsed;
 };
 typedef	SXLine_V10_32	SXLine32;
-#endif
 
 /*********************************************************
  * Constants                                             *

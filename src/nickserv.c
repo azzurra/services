@@ -73,9 +73,7 @@ static Agent a_NickServ;
 
 unsigned char	*nickserv_used_guest_list = NULL;
 
-#ifdef OS_64BIT
 static void nickinfo32_to64(NickInfo32 * ni32, NickInfo * ni);
-#endif
 
 static void timeout_start_collide(NickInfo *ni, int type);
 static void timeout_collide_countdown(Timeout *t);
@@ -328,7 +326,6 @@ void nickserv(CSTR source, User *callerUser, char *buf) {
 }
 
 /*********************************************************/
-#ifdef OS_64BIT
 static void nickinfo32_to64(NickInfo32 * ni32, NickInfo *ni) {
 	//we don't care about valid pointer, we just make sure NULL stays NULL and not NULL stays NOT NULL
 	//eventually they will get overwritten with a valid pointer later
@@ -360,7 +357,6 @@ static void nickinfo32_to64(NickInfo32 * ni32, NickInfo *ni) {
 	ni->langID = ni32->langID;
 	memset(ni->reserved, 0, sizeof(ni->reserved));
 }
-#endif
 
 /* Load/save data files. */
 void load_ns_dbase(void) {
@@ -385,14 +381,6 @@ void load_ns_dbase(void) {
 	switch (ver = get_file_version(f, NICKSERV_DB, &flags)) {
 
 		case NICKSERV_DB_CURRENT_VERSION:
-			if (flags & DATAFILE64) {
-#ifndef OS_64BIT
-			fatal_error(FACILITY_NICKSERV_LOAD_NS_DB, __LINE__, "Unsupported 64bit datafile: %s", NICKSERV_DB);
-			break;
-#endif
-
-			}
-
 			for (i = 65; i < 126; ++i) {
 
 				while (fgetc(f) == 1) {
@@ -408,7 +396,6 @@ void load_ns_dbase(void) {
 					#else
 					ni = mem_malloc(sizeof(NickInfo));
 					#endif
-#ifdef OS_64BIT
 					if (flags & DATAFILE64) {
 						//64bit datafile on a 64bit machine, nothing to do
 						if (fread(ni, sizeof(NickInfo), 1, f) != 1)
@@ -421,15 +408,10 @@ void load_ns_dbase(void) {
 						nickinfo32_to64(ni32, ni);
 						mem_free(ni32);
 					}
-#else
-					if (fread(ni, sizeof(NickInfo), 1, f) != 1)
-						fatal_error(FACILITY_NICKSERV_LOAD_NS_DB, __LINE__, "Read error on %s", NICKSERV_DB);
-#endif
 					TRACE();
-					// crashfix
-					if (ni->langID == LANG_DE)
-						ni->langID = LANG_ES;
-
+					// Reset language id to default for languages that aren't supported anymore
+					if (ni->langID == LANG_DE || ni->langID == LANG_JP)
+						ni->langID = LANG_DEFAULT;
 
 					RemoveFlag(ni->flags, NI_TIMEOUT | NI_ENFORCE | NI_ENFORCED);
 

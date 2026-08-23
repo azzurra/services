@@ -54,7 +54,6 @@ struct _SeenInfo_V10 {
 // Current structs version
 typedef SeenInfo_V10	SeenInfo;
 
-#ifdef OS_64BIT
 typedef struct _SeenInfo_V10_32	SeenInfo_V10_32;
 struct _SeenInfo_V10_32 {
 
@@ -81,7 +80,6 @@ struct _SeenInfo_V10_32 {
 
 // Current structs version
 typedef SeenInfo_V10_32	SeenInfo32;
-#endif
 
 /*********************************************************
  * Constants                                             *

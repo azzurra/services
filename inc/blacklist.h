@@ -43,7 +43,6 @@ struct _blacklist_V10 {
 // Current struct version
 typedef	BlackList_V10		BlackList;
 
-#ifdef OS_64BIT
 typedef struct _BlackList_V10_32		BlackList_V10_32;
 struct _BlackList_V10_32 {
 	int32_t			prev, next;
@@ -57,7 +56,6 @@ struct _BlackList_V10_32 {
 	uint16_t		pad;
 };
 typedef	BlackList_V10_32		BlackList32;
-#endif
 
 
 /*********************************************************

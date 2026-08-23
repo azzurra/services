@@ -282,7 +282,6 @@ static BOOL dynconf_db_load(void) {
 					result = stg_read_record(stg, NULL, 0);
 
 					if (result == stgBeginOfSection) {
-#ifdef OS_64BIT
 						dynConfig32 cfg32;
 						BOOL is64Bit = stg_is64bit(stg);
 						if (is64Bit)
@@ -294,9 +293,6 @@ static BOOL dynconf_db_load(void) {
 							dynConf.ns_regLimit = cfg32.ns_regLimit;
 						}
 
-#else
-						result = stg_read_record(stg, (PBYTE)&dynConf, sizeof(dynConfig));
-#endif
 						if (result != stgSuccess)
 							fatal_error(FACILITY_ROOTSERV_DYNCONF_DB_LOAD, __LINE__, "Read error on %s - %s", DYNCONF_DB, stg_result_to_string(result));
 
