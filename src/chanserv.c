@@ -462,9 +462,9 @@ void load_cs_dbase(void) {
 				// Fix
 				RemoveFlag(ci->settings, CI_ACCCESS_CFOUNDER_LOCK);
 
-				// crashfix
-				if (ci->langID == LANG_DE)
-					ci->langID = LANG_ES;
+				// Reset language id to default for languages that aren't supported anymore
+				if (ci->langID == LANG_DE || ci->langID == LANG_JP)
+					ci->langID = LANG_DEFAULT;
 
 				#ifdef FIX_FLAGS
 				RemoveFlag(ci->flags, CI_NEVEROP);
