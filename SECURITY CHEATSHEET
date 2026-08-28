@@ -170,8 +170,6 @@ OS +S{G|Q}                           SQLINE/SGLINE ADD
 OS +S{G|Q}*                          SQLINE/SGLINE ADD fallito
 OS +T                                TRIGGER ADD
 OS +T*                               TRIGGER ADD fallito
-OS +TE                               TRIGGER EXEMPT ADD
-OS +TE*                              TRIGGER EXAMPT ADD fallito
 OS +TG                               TAGLINE ADD
 OS +TG*                              TAGLINE ADD fallito
 OS +{MST|CDR|SRA|SA|SOP|HOP}         OPER ADD
@@ -192,7 +190,6 @@ OS -S{G|Q}                           SGLINE/SQLINE DEL
 OS -S{G|Q}*                          SGLINE/SQLINE DEL fallito
 OS -T                                TRIGGER DEL
 OS -T*                               TRIGGER DEL fallito
-OS -TE                               TRIGGER EXEMPT DEL
 OS -TG                               TAGLINE DEL
 OS -TG*                              TAGLINE DEL fallito
 OS -{MST|CDR|SRA|SA|SOP|HOP}         OPER DEL

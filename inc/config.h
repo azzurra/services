@@ -58,8 +58,7 @@ typedef	int	agentid_t;
 
 /* Database filenames */
 
-#define OPERACCESS_DB		"operacc.db"
-#define OPER_DB			"oper.db"
+#define OPER_DB		"oper.db"
 
 #define NICKSERV_DB		"nick.db"
 #define CHANSERV_DB		"chan.db"
@@ -75,7 +74,6 @@ typedef	int	agentid_t;
 #define DYNCONF_DB		"dynconf.db"
 #define LANGMATCH_DB		"langmatch.db"
 #define SUSPEND_DB		"suspend.db"
-#define EXEMPT_DB		"exempt.db"
 #define STATSERV_DB		"statserv.db"
 #define SERVSTATS_DB	"servstats.db"
 #define SEENSERV_DB		"seenserv.db"

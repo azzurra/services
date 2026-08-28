@@ -310,11 +310,6 @@ void check_clones(const User *newUser) {
 				user_is_services_agent(user) || user_is_services_client(user))
 				nick_oper = TRUE;
 
-			/*
-			if (exempt_match(user->realname, &position))
-				nick_exempt = TRUE;
-			*/
-
 			if (!too_many_clone_nicks) {
 
 				const char *nickPtr = user->nick;

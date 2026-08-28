@@ -74,23 +74,6 @@ typedef	Trigger_V10_32		Trigger32;
 enum _TRIGGER_RESULT { triggerFound = 0, triggerNotFound, triggerExempt, triggerInvalidData};
 typedef enum _TRIGGER_RESULT	TRIGGER_RESULT;
 
-
-typedef struct _exempt_V10		Exempt_V10;
-struct _exempt_V10 {
-
-	Exempt_V10		*prev, *next;
-
-	char			*realname;
-
-	CreationInfo	info;
-
-	time_t			lastUsed;
-	time_t			expireTime;
-};
-
-// Current struct version
-typedef	Exempt_V10		Exempt;
-
 /*********************************************************
  * Constants                                             *
  *********************************************************/
@@ -102,11 +85,6 @@ typedef	Exempt_V10		Exempt;
 #define TRIGGER_FLAG_HOST		0x0002
 #define TRIGGER_FLAG_REALNAME	0x0004
 
-
-#define	EXEMPT_DB_CURRENT_VERSION		10
-#define EXEMPT_DB_SUPPORTED_VERSION		"10"
-
-
 /*********************************************************
  * Public code                                           *
  *********************************************************/
@@ -116,10 +94,6 @@ extern void handle_trigger(CSTR source, User *callerUser, ServiceCommandData *da
 extern BOOL trigger_db_load(void);
 extern BOOL trigger_db_save(void);
 extern TRIGGER_RESULT trigger_match(CSTR username, CSTR host, const unsigned long int ip, const int cloneCount, char **reason, int *position);
-
-extern BOOL exempt_db_load(void);
-extern BOOL exempt_db_save(void);
-extern BOOL exempt_match(CSTR realname, int *position);
 
 extern void trigger_ds_dump(CSTR sourceNick, const User *callerUser, STR request);
 extern unsigned long int trigger_mem_report(CSTR sourceNick, const User *callerUser);
