@@ -25,12 +25,14 @@ jobs:
           apt-get update
           apt-get install -y --no-install-recommends \
             build-essential libc6-dev ca-certificates git python3 \
-            autoconf gettext pkg-config automake libtool libssl-dev zlib1g-dev
+            autoconf gettext pkg-config automake libtool libssl-dev \
+            libargon2-dev libgcrypt20-dev libgettextpo-dev libsodium-dev
 
-      - uses: actions/checkout@v4
-
-      - name: rebuild configure
-        run: ./autogen.sh
+      - name: Checkout sources
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          submodules: recursive
 
       - name: configure
         run: ./configure --enable-nls
