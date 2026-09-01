@@ -38,7 +38,9 @@ jobs:
         run: ./configure --enable-nls
 
       - name: build
-        run: make
+        run: |
+          git config --global --add safe.directory "$GITHUB_WORKSPACE"
+          make
 
       - name: verify binary
         run: |
