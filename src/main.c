@@ -18,7 +18,7 @@
  *********************************************************/
 
 #include "../inc/common.h"
-#include "../inc/strings.h"
+#include "../inc/svcstrings.h"
 #include "../inc/messages.h"
 #include "../inc/logging.h"
 #include "../inc/memory.h"
@@ -202,9 +202,9 @@ static BOOL initialize() {
 	TRACE_MAIN_FCLT(FACILITY_MAIN_INIT);
 
 	/* Chdir to Services data directory. */
-	if (chdir(SERVICES_DIR) < 0) {
+	if (chdir(DATADIR) < 0) {
 
-		fprintf(stderr, "chdir(%s): %s\n", SERVICES_DIR, strerror(errno));
+		fprintf(stderr, "chdir(%s): %s\n", DATADIR, strerror(errno));
 		return FALSE;
 	}
 
@@ -788,12 +788,11 @@ int main(int ac, char **av, char **envp) {
 
 		socket_disconnect();
 
-		if (chdir("..") < 0)
-			fatal_error(FACILITY_MAIN, __LINE__, "Unknown error in directory structure (attemped re-loading binary)");
-
 		TRACE_MAIN();
 
-		execve(SERVICES_BIN, av, envp);
+#ifdef HAVE_EXECVE
+		execve(BINDIR "/services", av, envp);
+#endif
 
 		TRACE_MAIN();
 

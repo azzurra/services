@@ -18,7 +18,7 @@
  *********************************************************/
 
 #include "../inc/common.h"
-#include "../inc/strings.h"
+#include "../inc/svcstrings.h"
 #include "../inc/messages.h"
 #include "../inc/regions.h"
 #include "../inc/logging.h"

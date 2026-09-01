@@ -19,7 +19,7 @@
  * Headers                                               *
  *********************************************************/
 
-#include "../inc/strings.h"
+#include "../inc/svcstrings.h"
 #include "../inc/cidr.h"
 
 

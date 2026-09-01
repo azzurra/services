@@ -16,7 +16,7 @@
  *********************************************************/
 
 #include "../inc/common.h"
-#include "../inc/strings.h"
+#include "../inc/svcstrings.h"
 #include "../inc/messages.h"
 #include "../inc/process.h"
 #include "../inc/memory.h"

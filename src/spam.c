@@ -20,7 +20,7 @@
 #include <arpa/inet.h>
 
 #include "../inc/common.h"
-#include "../inc/strings.h"
+#include "../inc/svcstrings.h"
 #include "../inc/messages.h"
 #include "../inc/memory.h"
 #include "../inc/main.h"

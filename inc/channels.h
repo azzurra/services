@@ -20,7 +20,7 @@
  * Headers                                               *
  *********************************************************/
 
-#include "strings.h"
+#include "svcstrings.h"
 #include "users.h"
 #include "chanserv.h"
 

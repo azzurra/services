@@ -21,7 +21,7 @@
  * Headers                                               *
  *********************************************************/
 
-#include "strings.h"
+#include "svcstrings.h"
 #include "cidr.h"
 #include "lang.h"
 #include "oper.h"

@@ -1,0 +1,120 @@
+# SPDX-License-Identifier: ISC
+# SPDX-URL: https://spdx.org/licenses/ISC.html
+#
+# Copyright (C) 2010-2014 William Pitcock <nenolod@dereferenced.org>
+# Copyright (C) 2010 Stephen Bennett <spb@exherbo.org>
+# Copyright (C) 2012 Nathan Phillip Brink <binki@gentoo.org>
+# Copyright (C) 2017 Wade Cline <wadecline@hotmail.com>
+# Copyright (C) 2017-2021 Aaron M. D. Jones <me@aaronmdjones.net>
+#
+# This file should only contain variables that are *not* in buildsys.mk.in,
+# *and* that are needed by one (or more) of the codebase Makefiles, *OR*
+# variables that are needed at the *top level* of one (or more) of the
+# codebase Makefiles, regardless of whether they're also in buildsys.mk.in.
+#
+#   -- amdj
+
+# Programs used by the build system
+#
+SED                             ?= @SED@
+
+# Misc
+#
+LIB_PREFIX                      ?= @LIB_PREFIX@
+LIB_SUFFIX                      ?= @LIB_SUFFIX@
+PACKAGE_BUGREPORT               ?= @PACKAGE_BUGREPORT@
+PACKAGE_BUGREPORT_I18N          ?= @PACKAGE_BUGREPORT_I18N@
+PACKAGE_NAME                    ?= @PACKAGE_NAME@
+PACKAGE_STRING                  ?= @PACKAGE_STRING@
+PACKAGE_TARNAME                 ?= @PACKAGE_TARNAME@
+PACKAGE_URL                     ?= @PACKAGE_URL@
+PACKAGE_VERSION                 ?= @PACKAGE_VERSION@
+PROG_SUFFIX                     ?= @EXEEXT@
+USE_NLS                         ?= @USE_NLS@
+VENDOR_STRING                   ?= @VENDOR_STRING@
+
+# Autoconf Directories
+#
+prefix                          ?= @prefix@
+exec_prefix                     ?= @exec_prefix@
+datarootdir                     ?= @datarootdir@
+datadir                         ?= @datadir@
+bindir                          ?= @bindir@
+docdir                          ?= @docdir@
+dvidir                          ?= @dvidir@
+htmldir                         ?= @htmldir@
+includedir                      ?= @includedir@
+infodir                         ?= @infodir@
+libdir                          ?= @libdir@
+libexecdir                      ?= @libexecdir@
+localedir                       ?= @localedir@
+localstatedir                   ?= @localstatedir@
+mandir                          ?= @mandir@
+pdfdir                          ?= @pdfdir@
+psdir                           ?= @psdir@
+sbindir                         ?= @sbindir@
+sharedstatedir                  ?= @sharedstatedir@
+sysconfdir                      ?= @sysconfdir@
+
+# Our Directories
+#
+DATADIR                         ?= @DATADIR@
+DOCDIR                          ?= @docdir@
+LOCALEDIR                       ?= @LOCALEDIR@
+LOGDIR                          ?= @LOGDIR@
+MODDIR                          ?= @MODDIR@
+RUNDIR                          ?= @RUNDIR@
+SHAREDIR                        ?= @SHAREDIR@
+
+# Special Libraries
+#
+# These are the ones required by various parts of the core codebase. Their
+# detection is not optional; there is no --without-libfoo option provided.
+#
+CLOCK_GETTIME_LIBS              ?= @CLOCK_GETTIME_LIBS@
+LIBDL_LIBS                      ?= @LIBDL_LIBS@
+LIBMATH_LIBS                    ?= @LIBMATH_LIBS@
+LIBSOCKET_LIBS                  ?= @LIBSOCKET_LIBS@
+
+# Detected Libraries
+#
+# Some of these variables, in particular the _CFLAGS variables, will always
+# be empty, for one or more of the following reasons:
+#
+# 1) The library tests use pkg-config, but the upstream pkg-config files
+#    distributed by those libraries never export a value for CFLAGS.
+#
+# 2) The library tests don't use pkg-config, usually because the libraries
+#    don't distribute a pkg-config file, but we've replicated the names of
+#    the variables in case they start doing so in the future, so that it is
+#    easier to switch to using pkg-config for detection when they do.
+#
+# 3) The library is not available for your machine architecture, and so can
+#    never be detected by the configure script.
+#
+LIBARGON2_CFLAGS                ?= @LIBARGON2_CFLAGS@
+LIBARGON2_LIBS                  ?= @LIBARGON2_LIBS@
+LIBCRYPT_CFLAGS                 ?= @LIBCRYPT_CFLAGS@
+LIBCRYPT_LIBS                   ?= @LIBCRYPT_LIBS@
+LIBCRYPTO_CFLAGS                ?= @LIBCRYPTO_CFLAGS@
+LIBCRYPTO_LIBS                  ?= @LIBCRYPTO_LIBS@
+LIBGCRYPT_CFLAGS                ?= @LIBGCRYPT_CFLAGS@
+LIBGCRYPT_LIBS                  ?= @LIBGCRYPT_LIBS@
+LIBMOWGLI_CFLAGS                ?= @LIBMOWGLI_CFLAGS@
+LIBMOWGLI_LIBS                  ?= @LIBMOWGLI_LIBS@
+LIBNETTLE_CFLAGS                ?= @LIBNETTLE_CFLAGS@
+LIBNETTLE_LIBS                  ?= @LIBNETTLE_LIBS@
+LIBSODIUM_CFLAGS                ?= @LIBSODIUM_CFLAGS@
+LIBSODIUM_LIBS                  ?= @LIBSODIUM_LIBS@
+
+# Conditionally-Compiled Files
+#
+QRCODE_COND_C                   ?= @QRCODE_COND_C@
+
+# Conditionally-Compiled Directories
+#
+PODIR_COND_D                    ?= @PODIR_COND_D@
+
+# Conditionally-Compiled Submodules
+#
+SUBMODULE_LIBMOWGLI             ?= @SUBMODULE_LIBMOWGLI@

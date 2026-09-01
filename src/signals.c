@@ -16,7 +16,7 @@
  *********************************************************/
 
 #include "../inc/common.h"
-#include "../inc/strings.h"
+#include "../inc/svcstrings.h"
 #include "../inc/messages.h"
 #include "../inc/logging.h"
 #include "../inc/signals.h"
@@ -233,35 +233,6 @@ static void signals_handler(int signum) {
 	/* R.I.P. */
 }
 
-/*********************************************************/
-
-void signals_save_last_core(void) {
-
-	CSTR	ts = log_get_compact_timestamp(0);
-	BOOL	core_found = TRUE;
-
-	#define EXE_NAME	"services"
-	#define CORE_NAME	"./services.core"
-	#define CORE_FMT	"./services.core-%s"
-
-	// "./core"
-	snprintf(misc_buffer, sizeof(misc_buffer), CORE_FMT, ts);
-	if (rename("./core", misc_buffer) != 0)
-		// ./core non esiste, provare con ./<programname>.core (FreeBSD)
-		core_found = rename(CORE_NAME, misc_buffer) == 0;
-
-	if (core_found) {
-
-		snprintf(misc_buffer, sizeof(misc_buffer), "cp ../%s ./%s-%s", EXE_NAME, EXE_NAME, ts);
-		system(misc_buffer);
-	}
-
-	#undef EXE_NAME
-	#undef CORE_NAME
-	#undef CORE_FMT
-}
-
-
 /*********************************************************
  * Public code                                           *
  *********************************************************/
@@ -293,6 +264,4 @@ void signals_init(void) {
 	signal(SIGWINCH, SIG_IGN);		// Window size change
 	signal(SIGPIPE, SIG_IGN);		// Broken pipe /* We don't care about broken pipes */
 	signal(SIGTSTP, SIG_IGN);
-
-	signals_save_last_core();
 }

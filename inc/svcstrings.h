@@ -11,8 +11,8 @@
 */
 
 
-#ifndef SRV_STRINGS_H
-#define SRV_STRINGS_H
+#ifndef SVC_STRINGS_H
+#define SVC_STRINGS_H
 
 
 /*********************************************************
@@ -247,4 +247,4 @@ extern void str_creationinfo_free(CreationInfo *info);
 extern BOOL str_settingsinfo_add(SettingsInfo **infoList, unsigned long int type, CSTR creator, CSTR reason);
 extern BOOL str_settingsinfo_remove(SettingsInfo **infoList, unsigned long int type);
 
-#endif /* SRV_STRINGS_H */
+#endif /* SVC_STRINGS_H */

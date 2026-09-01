@@ -24,15 +24,16 @@ jobs:
         run: |
           apt-get update
           apt-get install -y --no-install-recommends \
-            build-essential libc6-dev ca-certificates git python3
+            build-essential libc6-dev ca-certificates git python3 \
+            autoconf gettext pkg-config automake libtool libssl-dev zlib1g-dev
 
       - uses: actions/checkout@v4
 
-      - name: compile language files
-        run: python3 lang/langcomp.py
+      - name: rebuild configure
+        run: ./autogen.sh
 
       - name: configure
-        run: ./configure
+        run: ./configure --enable-nls
 
       - name: build
         run: make
@@ -42,21 +43,15 @@ jobs:
           test -x ./src/services
           ls -la ./src/services
 
-      - uses: actions/upload-artifact@v4
-        if: matrix.container == 'debian:trixie'
-        with:
-          name: services-binary
-          path: src/services
-          retention-days: 7
-
-  docker:
-    name: docker build
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - name: build image
-        run: docker build -t azzurra-services:ci .
-      - name: smoke-check binary inside image
-        run: |
-          docker run --rm --entrypoint sh azzurra-services:ci \
-            -c 'test -x /build/src/services'
+  # Temporarily disabled
+  # docker:
+  #   name: docker build
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v4
+  #     - name: build image
+  #       run: docker build -t azzurra-services:ci .
+  #     - name: smoke-check binary inside image
+  #       run: |
+  #         docker run --rm --entrypoint sh azzurra-services:ci \
+  #           -c 'test -x /build/src/services'

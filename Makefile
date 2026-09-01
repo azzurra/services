@@ -1,54 +1,29 @@
-#************************************************************************
-#*   IRC - Internet Relay Chat, Makefile
-#*   Copyright (C) 1990, Jarkko Oikarinen
-#*
-#*   This program is free software; you can redistribute it and/or modify
-#*   it under the terms of the GNU General Public License as published by
-#*   the Free Software Foundation; either version 1, or (at your option)
-#*   any later version.
-#*
-#*   This program is distributed in the hope that it will be useful,
-#*   but WITHOUT ANY WARRANTY; without even the implied warranty of
-#*   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#*   GNU General Public License for more details.
-#*
-#*   You should have received a copy of the GNU General Public License
-#*   along with this program; if not, write to the Free Software
-#*   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-#*/
--include Makefile.inc
-RM=/bin/rm
+# SPDX-License-Identifier: ISC
+# SPDX-URL: https://spdx.org/licenses/ISC.html
+#
+# Copyright (C) 2003-2004 E. Will, et al.
+# Copyright (C) 2010-2012 William Pitcock <nenolod@atheme.org>
+# Copyright (C) 2010 Jilles Tjoelker <jilles@stack.nl>
+# Copyright (C) 2011-2012 JD Horelick <jdhore1@gmail.com>
+# Copyright (C) 2018-2020 Aaron M. D. Jones <me@aaronmdjones.net>
+# Copyright (C) 2026 Azzurra IRC Network (https://www.azzurra.chat/)
 
-# Compile flags
-CFLAGS = $(BASE_CFLAGS)
-CFLAGS += -pipe -Wall -Wpedantic -g -Wshadow -Wcast-align -Wsign-compare -Wformat -Wformat-signedness -Wformat-security -Werror=format -Werror=format-security
-# linker flags.
-LDFLAGS=
+-include extra.mk
 
-SHELL=/bin/sh
-SUBDIRS=src
-MAKE=make 'CFLAGS=${CFLAGS}' 'LDFLAGS=${LDFLAGS}'
+SUBDIRS =                   \
+    ${SUBMODULE_LIBMOWGLI}  \
+    inc                     \
+    src
 
-all:	build
+CLEANDIRS = ${SUBDIRS}
+DISTCLEAN = buildsys.mk config.log config.status extra.mk
 
-build: inc/sysconf.h $(SUBDIRS)
+-include buildsys.mk
 
-inc/sysconf.h:
-	@$(SHELL) configure
+buildsys.mk:
+	@echo "Fatal Error -- The buildsys.mk file is missing."
+	@echo "Please check whether you have run the configure script."
+	@exit 1
 
-$(SUBDIRS): | inc/sysconf.h
-	$(MAKE) -C $@
-
-clean:
-	@${RM} -f services
-	@cd src; ${RM} -f *.o services; cd ..
-	-@if [ -f inc/sysconf.h ] ; then \
-	echo "To really restart installation, make distclean" ; \
-	fi
-
-distclean:
-	@${RM} -f Makefile.inc configure.log services
-	@cd inc; ${RM} -f sysconf.h; cd ..
-	@cd src; ${RM} -f *.o services; cd ..
-
-.PHONY: all build clean distclean $(SUBDIRS)
+# Explicit dependencies need to be expressed to ensure parallel builds don't die
+src: ${SUBMODULE_LIBMOWGLI} inc

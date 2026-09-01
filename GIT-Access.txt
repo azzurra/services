@@ -1,0 +1,47 @@
+Downloading the Git repository
+------------------------------
+
+Azzurra IRC Services's Git repository is available at the following address:
+<https://github.com/azzurra/services/>
+
+If you have a modern version of Git (1.6.5 or newer), you can recursively
+clone the repository:
+
+    $ git clone --recursive 'https://github.com/azzurra/services/' services-devel
+    $ cd services-devel
+
+If you have an older version of Git, you must clone the repository, and then
+fetch its submodules:
+
+    $ git clone 'https://github.com/azzurra/services/' services-devel
+    $ cd services-devel
+    $ git submodule init
+    $ git submodule update
+
+
+
+Building from the Git repository
+--------------------------------
+
+If you have already checked out the Services Git repository, but you have
+been instructed to read this file when configuring Services, then you did not
+follow the advice above. Use the following commands to resolve the error:
+
+    $ git submodule init
+    $ git submodule update
+
+
+
+Building from release tarballs
+------------------------------
+
+If you did not obtain this software via Git, but received the GIT-Access.txt
+error when configuring Services anyway, this means you downloaded the wrong
+source archive.
+
+When downloading releases from GitHub, you MUST use the *attached* archive:
+
+    services-2.6.x.tar.bz2    (or .tar.xz)
+
+DO NOT use the "Download ZIP" button or the "Source code" links, as they are
+missing the required submodules.

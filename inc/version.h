@@ -19,7 +19,7 @@
  *********************************************************/
 
 #include "branch.h"
-
+#include "serno.h"
 
 /*********************************************************
  * Constants                                             *
@@ -118,6 +118,7 @@ extern STDSTR	s_vers_name;
 extern STDSTR	s_vers_build_name;
 extern STDSTR	s_vers_version;
 extern STDSTR	s_vers_buildtime;
+extern STDSTR	s_vers_serno;
 extern STDSTR	s_vers_codedby;
 
 

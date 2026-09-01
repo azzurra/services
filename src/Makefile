@@ -1,76 +1,157 @@
-# Makefile for Services
+# SPDX-License-Identifier: GPL-2.0-or-later
+# SPDX-URL: https://spdx.org/licenses/GPL-2.0-or-later.html
+#
+# Copyright (C) 2026 Azzurra IRC Network (https://www.azzurra.chat/)
 
-include ../Makefile.inc
+include ../extra.mk
 
-OBJS =	access.o akill.o blacklist.o channels.o chanserv.o compat.o conf.o cidr.o crypt_shs1.o crypt_userhost.o \
-	datafiles.o debugserv.o helpserv.o ignore.o jupe.o lang.o logging.o main.o memory.o memoserv.o messages.o misc.o \
-	nickserv.o oper.o operserv.o process.o regions.o reserved.o rootserv.o seenserv.o send.o servers.o signals.o \
-	sockutil.o spam.o statserv.o storage.o strings.o sxline.o tagline.o timeout.o trigger.o users.o version.o
+LANG_SRCS = ../lang/English.lang ../lang/French.lang ../lang/Italian.lang ../lang/Spanish.lang
 
-SRCS =	access.c akill.c blacklist.c channels.c chanserv.c compat.c conf.c cidr.c crypt_shs1.c crypt_userhost.c \
-	datafiles.c debugserv.c helpserv.c ignore.c jupe.c lang.c logging.c main.c memory.c memoserv.c messages.c misc.c \
-	nickserv.c oper.c operserv.c process.c regions.c reserved.c rootserv.c seenserv.c send.c servers.c signals.c \
-	sockutil.c spam.c statserv.c storage.c strings.c sxline.c tagline.c timeout.c trigger.c users.c version.c
+HELP_LINGUAS = es fr it us
 
-build: services
+PROG = ${PACKAGE_TARNAME}${PROG_SUFFIX}
+SRCS =               \
+    access.c         \
+    akill.c          \
+    blacklist.c      \
+    channels.c       \
+    chanserv.c       \
+    cidr.c           \
+    compat.c         \
+    conf.c           \
+    crypt_shs1.c     \
+    crypt_userhost.c \
+    datafiles.c      \
+    debugserv.c      \
+    helpserv.c       \
+    ignore.c         \
+    jupe.c           \
+    lang.c           \
+    logging.c        \
+    main.c           \
+    memory.c         \
+    memoserv.c       \
+    messages.c       \
+    misc.c           \
+    nickserv.c       \
+    oper.c           \
+    operserv.c       \
+    process.c        \
+    regions.c        \
+    reserved.c       \
+    rootserv.c       \
+    seenserv.c       \
+    send.c           \
+    servers.c        \
+    signals.c        \
+    sockutil.c       \
+    spam.c           \
+    statserv.c       \
+    storage.c        \
+    strings.c        \
+    sxline.c         \
+    tagline.c        \
+    timeout.c        \
+    trigger.c        \
+    users.c          \
+    version.c
 
+include ../buildsys.mk
 
-########
+CPPFLAGS += -I../inc
 
+CFLAGS +=                           \
+    ${LIBCRYPTO_CFLAGS}             \
+    ${LIBGCRYPT_CFLAGS}             \
+    ${LIBMBEDCRYPTO_CFLAGS}         \
+    ${LIBNETTLE_CFLAGS}             \
+    ${LIBQRENCODE_CFLAGS}           \
+    ${LIBSODIUM_CFLAGS}
 
-services: ../inc/version.h $(OBJS)
-	$(CC) $(LFLAGS) $(LIBS) $(OBJS) -o $@
+LIBS +=                             \
+    ${LIBCRYPTO_LIBS}               \
+    ${LIBGCRYPT_LIBS}               \
+    ${LIBMBEDCRYPTO_LIBS}           \
+    ${LIBNETTLE_LIBS}               \
+    ${LIBQRENCODE_LIBS}             \
+    ${LIBSODIUM_LIBS}               \
+    ${LIBDL_LIBS}                   \
+    ${LIBSOCKET_LIBS}
 
-.c.o:
-	$(CC) $(CFLAGS) -c $<
+.PHONY: clng
 
-access.o:			access.c 
-akill.o:			akill.c
-blacklist.o:			blacklist.c			../inc/blacklist.h
-channels.o:			channels.c
-chanserv.o:			chanserv.c			../inc/lang.h ../inc/lang_msg.h ../inc/timeout.h ../inc/options.h
-compat.o:			compat.c
-cidr.o:				cidr.c				../inc/cidr.h
-conf.o:				conf.c
-crypt_shs1.o:			crypt_shs1.c 			../inc/crypt_shs1.h
-crypt_userhost.o:		crypt_userhost.c		../inc/crypt_shs1.h
-datafiles.o:			datafiles.c
-debugserv.o: 			debugserv.c 			../inc/lang.h ../inc/options.h
-helpserv.o:			helpserv.c			../inc/lang.h
-ignore.o:			ignore.c			../inc/ignore.h
-jupe.o:				jupe.c				../inc/jupe.h
-lang.o:				lang.c 				../inc/lang.h ../inc/lang_msg.h
-logging.o:			logging.c 			../inc/lang.h
-main.o:				main.c				../inc/lang.h ../inc/timeout.h ../inc/options.h
-memory.o:			memory.c			../inc/options.h
-memoserv.o:			memoserv.c			 ../inc/lang.h ../inc/lang_msg.h ../inc/options.h
-messages.o:			messages.c			../inc/lang.h ../inc/lang_msg.h
-misc.o:				misc.c
-nickserv.o:			nickserv.c			../inc/lang.h ../inc/lang_msg.h ../inc/timeout.h ../inc/options.h
-oper.o:				oper.c
-operserv.o:			operserv.c			../inc/lang.h ../inc/lang_msg.h ../inc/options.h
-process.o:			process.c			../inc/version.h
-regions.o:			regions.c			../inc/regions.h
-reserved.o:			reserved.c			../inc/reserved.h
-rootserv.o:			rootserv.c  			../inc/lang.h ../inc/lang_msg.h ../inc/options.h
-seenserv.o:			seenserv.c			../inc/options.h
-send.o:				send.c				../inc/lang.h ../inc/lang_msg.h
-servers.o:			servers.c
-signals.o:			signals.c
-sockutil.o:			sockutil.c			../inc/options.h
-spam.o:				spam.c				../inc/spam.h ../inc/common.h ../inc/send.h
-statserv.o:			statserv.c			../inc/options.h
-storage.o:			storage.c			../inc/storage.h
-strings.o:			strings.c
-sxline.o:			sxline.c			../inc/sxline.h
-tagline.o:			tagline.c			../inc/tagline.h
-timeout.o:			timeout.c			../inc/timeout.h
-trigger.o:			trigger.c			../inc/trigger.h
-users.o:			users.c				../inc/lang.h ../inc/lang_msg.h
-version.o:			version.c 			../inc/version.h ../inc/branch.h
+build: depend all clng
 
+# This sucks, gettext will make it suck slightly less...
+clng: ../lang/langcomp.py ${LANG_SRCS}
+	(cd ../lang; python3 langcomp.py --out-dir=. --no-header)
 
-config.h: ../inc/sysconf.h
-	touch $@
-
-version.h: Makefile $(SRCS)
+install-extra: clng
+	-${INSTALL} -m 755 -d ${DESTDIR}${prefix}
+	-${INSTALL} -m 755 -d ${DESTDIR}${bindir}
+	-${INSTALL} -m 755 -d ${DESTDIR}${sysconfdir}
+	-${INSTALL} -m 755 -d ${DESTDIR}${localstatedir}
+	-${INSTALL} -m 755 -d ${DESTDIR}${DOCDIR}
+	-${INSTALL} -m 755 -d ${DESTDIR}${LOGDIR}
+	-${INSTALL} -m 755 -d ${DESTDIR}${RUNDIR}
+	-${INSTALL} -m 755 -d ${DESTDIR}${DATADIR}
+	-${INSTALL} -m 755 -d ${DESTDIR}${DATADIR}/lang
+	-${INSTALL} -m 755 -d ${DESTDIR}${SHAREDIR}/helpfiles
+	-${INSTALL} -m 755 -d ${DESTDIR}${SHAREDIR}/ohelpfiles
+	${INSTALL} -m 644 -c ../doc/lang.conf.example ${DESTDIR}${sysconfdir}
+	${INSTALL} -m 644 -c ../doc/services.motd.example ${DESTDIR}${sysconfdir}
+	${INSTALL} -m 600 -c ../doc/crypt.key.example ${DESTDIR}${sysconfdir}
+	${INSTALL} -m 600 -c ../doc/services.conf.example ${DESTDIR}${sysconfdir}
+	[ -r ${DESTDIR}${sysconfdir}/services.motd ] || ${INSTALL} -m 644 -c ../doc/services.motd.example ${DESTDIR}${sysconfdir}/services.motd || :
+	(cd ../lang; for i in *.clng; do \
+		[ -f $$i ] && ${INSTALL} -m 644 -c $$i ${DESTDIR}${DATADIR}/lang; \
+	done)
+	(for lingua in ${HELP_LINGUAS}; do \
+		${INSTALL} -m 755 -d ${DESTDIR}${SHAREDIR}/helpfiles/$$lingua; \
+		(cd ../run/data/helpfiles/$$lingua; for i in *; do \
+			[ -f $$i ] && ${INSTALL} -m 644 -c $$i ${DESTDIR}${SHAREDIR}/helpfiles/$$lingua; \
+			if [ -d $$i ]; then \
+				cd $$i; \
+				${INSTALL} -m 755 -d ${DESTDIR}${SHAREDIR}/helpfiles/$$lingua/$$i; \
+				for j in *; do \
+					[ -f $$j ] && ${INSTALL} -m 644 -c $$j ${DESTDIR}${SHAREDIR}/helpfiles/$$lingua/$$i; \
+					if [ -d $$j ]; then \
+						cd $$j; \
+						${INSTALL} -m 755 -d ${DESTDIR}${SHAREDIR}/helpfiles/$$lingua/$$i/$$j; \
+						for k in *; do \
+							[ -f $$k ] && ${INSTALL} -m 644 -c $$k ${DESTDIR}${SHAREDIR}/helpfiles/$$lingua/$$i/$$j; \
+						done; \
+						cd ..; \
+					fi; \
+				done; \
+				cd ..; \
+			fi; \
+		done); \
+	done)
+	(for lingua in ${HELP_LINGUAS}; do \
+		${INSTALL} -m 755 -d ${DESTDIR}${SHAREDIR}/ohelpfiles/$$lingua; \
+		(cd ../run/data/ohelpfiles/$$lingua; for i in *; do \
+			[ -f $$i ] && ${INSTALL} -m 644 -c $$i ${DESTDIR}${SHAREDIR}/ohelpfiles/$$lingua; \
+			if [ -d $$i ]; then \
+				cd $$i; \
+				${INSTALL} -m 755 -d ${DESTDIR}${SHAREDIR}/ohelpfiles/$$lingua/$$i; \
+				for j in *; do \
+					[ -f $$j ] && ${INSTALL} -m 644 -c $$j ${DESTDIR}${SHAREDIR}/ohelpfiles/$$lingua/$$i; \
+					if [ -d $$j ]; then \
+						cd $$j; \
+						${INSTALL} -m 755 -d ${DESTDIR}${SHAREDIR}/ohelpfiles/$$lingua/$$i/$$j; \
+						for k in *; do \
+							[ -f $$k ] && ${INSTALL} -m 644 -c $$k ${DESTDIR}${SHAREDIR}/ohelpfiles/$$lingua/$$i/$$j; \
+						done; \
+						cd ..; \
+					fi; \
+				done; \
+				cd ..; \
+			fi; \
+		done); \
+	done)
+	@echo " "
+	@echo "----------------------------------------------------------------------"
+	@echo ">>> Remember to cd to ${DESTDIR}${prefix} and edit your config file.";
+	@echo "----------------------------------------------------------------------"
+	@echo " "

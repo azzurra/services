@@ -44,7 +44,7 @@
 #include "options.h"
 #include "config.h"
 #include "macros.h"
-
+#include "instpaths.h"
 
 
 #endif /* SRV_COMMON_H */
