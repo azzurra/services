@@ -239,7 +239,7 @@ static void m_version(CSTR source, const int ac, char **av) {
 	LOG_SNOOP(s_Snooper, "VERSION requested by \2%s\2", source);
 
 	if (IS_NOT_NULL(source))
-		send_cmd("351 %s %s (%s) :%s", source, s_vers_name, s_vers_build_name, s_vers_version);
+		send_cmd("351 %s %s :%s", source, s_vers_name, s_vers_version);
 }
 
 /*********************************************************/

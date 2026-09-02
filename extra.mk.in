@@ -71,7 +71,6 @@ SHAREDIR                        ?= @SHAREDIR@
 # These are the ones required by various parts of the core codebase. Their
 # detection is not optional; there is no --without-libfoo option provided.
 #
-CLOCK_GETTIME_LIBS              ?= @CLOCK_GETTIME_LIBS@
 LIBDL_LIBS                      ?= @LIBDL_LIBS@
 LIBMATH_LIBS                    ?= @LIBMATH_LIBS@
 LIBSOCKET_LIBS                  ?= @LIBSOCKET_LIBS@
@@ -106,10 +105,6 @@ LIBNETTLE_CFLAGS                ?= @LIBNETTLE_CFLAGS@
 LIBNETTLE_LIBS                  ?= @LIBNETTLE_LIBS@
 LIBSODIUM_CFLAGS                ?= @LIBSODIUM_CFLAGS@
 LIBSODIUM_LIBS                  ?= @LIBSODIUM_LIBS@
-
-# Conditionally-Compiled Files
-#
-QRCODE_COND_C                   ?= @QRCODE_COND_C@
 
 # Conditionally-Compiled Directories
 #

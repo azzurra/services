@@ -96,6 +96,7 @@ install-extra: clng
 	-${INSTALL} -m 755 -d ${DESTDIR}${RUNDIR}
 	-${INSTALL} -m 755 -d ${DESTDIR}${DATADIR}
 	-${INSTALL} -m 755 -d ${DESTDIR}${DATADIR}/lang
+	-${INSTALL} -m 755 -d ${DESTDIR}${DATADIR}/backup
 	-${INSTALL} -m 755 -d ${DESTDIR}${SHAREDIR}/helpfiles
 	-${INSTALL} -m 755 -d ${DESTDIR}${SHAREDIR}/ohelpfiles
 	${INSTALL} -m 644 -c ../doc/lang.conf.example ${DESTDIR}${sysconfdir}

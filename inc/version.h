@@ -108,14 +108,9 @@
 #define VERS_CP_DKEY		""
 #endif
 
-#define VERS_BUILDNAME	"Core Services"
-#define VERS_MAJOR	"2"
-#define VERS_MINOR	"5"
-#define VERS_REVISION	"1"
-#define VERS_CODENAME	"Kronos"
+#define VERS_CODENAME	"Drax"
 
 extern STDSTR	s_vers_name;
-extern STDSTR	s_vers_build_name;
 extern STDSTR	s_vers_version;
 extern STDSTR	s_vers_buildtime;
 extern STDSTR	s_vers_serno;

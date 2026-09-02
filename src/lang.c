@@ -42,7 +42,7 @@ LANG_ID		current_caller_lang;
 * Local variables                                       *
 *********************************************************/
 
-#define CLNG_FILE_FORMAT	"lang/svc%u.clng"
+#define CLNG_FILE_FORMAT	DATADIR "/lang/svc%u.clng"
 
 // Tabella lingue
 
@@ -136,7 +136,7 @@ static void					lang_unload(LANG_ID lang_id);
 static LANG_ITEM 			*lang_get_table(LANG_ID lang_id);
 
 
-#define	LANG_CONF_FILE	"../lang.conf"
+#define	LANG_CONF_FILE	SYSCONFDIR "/lang.conf"
 
 
 /*********************************************************
@@ -347,7 +347,7 @@ BOOL lang_load_conf(void) {
 
 BOOL lang_check_data_file(LANG_ID lang_id) {
 
-	char				filename[24];
+	char				filename[MAX_PATH];
 	LANG_FILE_HEADER	header;
 	FILE				*f;
 
@@ -392,7 +392,7 @@ static BOOL lang_load(LANG_ID lang_id) {
 
 		// tabella allocata, caricare i messaggi
 
-		char				filename[24];
+		char				filename[MAX_PATH];
 		LANG_FILE_HEADER	header;
 		FILE				*f;
 

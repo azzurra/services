@@ -63,6 +63,14 @@ void handle_help(CSTR source, User *callerUser, ServiceCommandData *data) {
 		topic = data->commandName;
 	}
 
+	/* This is silly... */
+	ptr = path;
+	while (*ptr) {
+		if (*ptr == c_SLASH)
+			*ptr = c_SPACE;
+		++ptr;
+	}
+
 	*ptr++ = c_SPACE;							/* Verra' poi sostituito da un '/' */
 
 	/* Cartella della lingua. */
@@ -87,7 +95,7 @@ void handle_help(CSTR source, User *callerUser, ServiceCommandData *data) {
 
 	*ptr = '\0';
 
-	str_tolower(path); 
+	str_tolower(path);
 
 	/* Eliminazione caratteri non validi. */
 	ptr = path;

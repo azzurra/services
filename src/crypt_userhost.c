@@ -90,7 +90,7 @@ BOOL crypt_load_key() {
 	BOOL	errors = TRUE;
 
 
-	if ((file = open("../crypt.key", O_RDONLY))) {
+	if ((file = open(SYSCONFDIR "/crypt.key", O_RDONLY))) {
 		
 		struct stat		st;
 		STR				key;
@@ -135,7 +135,7 @@ BOOL crypt_save_key() {
 	BOOL	errors = FALSE;
 
 
-	file = fopen("../crypt.key", s_OPENMODE_WRITEONLY);
+	file = fopen(SYSCONFDIR "/crypt.key", s_OPENMODE_WRITEONLY);
 
 	if (IS_NOT_NULL(file)) {
 

@@ -203,21 +203,8 @@ static BOOL initialize() {
 
 	/* Chdir to Services data directory. */
 	if (chdir(DATADIR) < 0) {
-
 		fprintf(stderr, "chdir(%s): %s\n", DATADIR, strerror(errno));
 		return FALSE;
-	}
-
-	if (chdir("./logs") < 0)
-		system("mkdir ./logs");
-
-	else {
-
-		if (chdir("..") < 0) {
-
-			fprintf(stderr, "Directory Structure Error... Aborting\n");
-			return FALSE;
-		}
 	}
 
 	time_init();
@@ -576,21 +563,6 @@ int main(int ac, char **av, char **envp) {
 		setrlimit(RLIMIT_CORE, &rlim);
 	}
 	#endif
-
-	/* Were we run with a path? */
-	if (av[0][0] != '.' && strchr(av[0], '/')) {
-
-		char *ptr;
-		char buf[MAX_PATH];
-
-		str_copy_checked(av[0], buf, sizeof(buf));
-
-		ptr = strrchr(buf, '/');
-
-		*ptr = '\0';
-
-		chdir(buf);
-	}
 
 	/* Parse the handful of flags we accept. Keep this trivial: services has
 	 * historically taken no arguments. */

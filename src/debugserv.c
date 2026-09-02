@@ -1038,8 +1038,9 @@ static void do_command(const char *source, User *callerUser, ServiceCommandData 
 static void do_sysinfo(const char *source, User *callerUser, ServiceCommandData *data) {
 
 	send_notice_to_user(s_DebugServ, callerUser, "*** System Informations ***");
-	send_notice_to_user(s_DebugServ, callerUser, "%s - \2%s\2", s_vers_name, s_vers_build_name);
+	send_notice_to_user(s_DebugServ, callerUser, "%s", s_vers_name);
 	send_notice_to_user(s_DebugServ, callerUser, "Version: %s", s_vers_version);
+	send_notice_to_user(s_DebugServ, callerUser, "Git commit hash: %s", s_vers_serno);
 	send_notice_to_user(s_DebugServ, callerUser, "Build time: %s", s_vers_buildtime);
 
 	// build options

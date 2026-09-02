@@ -8,7 +8,7 @@
 AC_PREREQ([2.69])
 
 AC_LANG([C])
-AC_INIT([Azzurra IRC Services],[2.6.0-alpha1],[https://github.com/azzurra/services/issues/],[services],[https://www.azzurra.chat/])
+AC_INIT([Azzurra IRC Services],[3.0.0-alpha1],[https://github.com/azzurra/services/issues/],[services],[https://www.azzurra.chat/])
 
 AC_CONFIG_AUX_DIR([build-aux])
 AC_CONFIG_FILES([buildsys.mk extra.mk])

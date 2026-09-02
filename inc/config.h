@@ -13,6 +13,7 @@
 #ifndef SRV_CONFIG_H
 #define SRV_CONFIG_H
 
+#include "instpaths.h"
 
 /*********************************************************
  * Data types                                            *
@@ -27,6 +28,7 @@ typedef	int	agentid_t;
 
 #define CRYPT_NETNAME		"Azzurra"
 #define CRYPT_NETNAME_LEN	7			/* strlen(CRYPT_NETNAME) */
+_Static_assert(CRYPT_NETNAME_LEN == sizeof(CRYPT_NETNAME) - 1, "CRYPT_NETNAME_LEN is not strlen(CRYPT_NETNAME), what the hell did you do?!?");
 
 #define AGENTID_UNKNOWN		(agentid_t) 0
 #define AGENTID_NICKSERV	(agentid_t) 1
@@ -47,14 +49,14 @@ typedef	int	agentid_t;
 
 /******* General configuration *******/
 
-#define CONFIG_FILE 	"../services.conf"
-#define MOTD_FILENAME   "../services.motd"
-#define PID_FILE	"../services.pid"
+#define CONFIG_FILE 	SYSCONFDIR "/services.conf"
+#define MOTD_FILENAME	SYSCONFDIR "/services.motd"
+#define PID_FILE	RUNDIR "/services.pid"
 
 /******* End of runtime-configurable options. *******/
 
-#define HELPSERV_DIR		"helpfiles"
-#define HELPSERV_OPER_DIR	"ohelpfiles"
+#define HELPSERV_DIR		SHAREDIR "/helpfiles"
+#define HELPSERV_OPER_DIR	SHAREDIR "/ohelpfiles"
 
 /* Database filenames */
 

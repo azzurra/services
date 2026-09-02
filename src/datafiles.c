@@ -188,15 +188,8 @@ void close_db(FILE *dbfile, const char *filename) {
 /*********************************************************/
 
 void backup_database() {
-
-	if (chdir("./backup") < 0) {
-
-		system("mkdir ./backup");
-		chdir("./backup");
-	}
-
-	system("cp -f ../*.db .");
-	chdir("..");
+	// Oh god...
+	system("cp -f " DATADIR "/*.db " DATADIR "/backup");
 
 	send_globops(NULL, "Database Back-Up Complete");
 	return;

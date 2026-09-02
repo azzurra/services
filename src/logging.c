@@ -130,13 +130,13 @@ static FILE *log_open_file(unsigned int type, BOOL readonly, int day, int month,
 
 	if (!readonly) {
 
-		snprintf(path, sizeof(path), "./logs/%s", folder);
+		snprintf(path, sizeof(path), LOGDIR "/%s", folder);
 
 		if ((mkdir(path, S_IRWXU) == -1) && (errno != EEXIST))
 			return NULL;
 	}
 
-	snprintf(path, sizeof(path), "./logs/%s/%s.log", folder, log_files[type].filename);
+	snprintf(path, sizeof(path), LOGDIR "/%s/%s.log", folder, log_files[type].filename);
 	
 	file = fopen(path, readonly ? s_OPENMODE_READONLY : s_OPENMODE_APPEND);
 

@@ -608,15 +608,8 @@ STG_RESULT stg_write_strings(STGHANDLE handle, char **strings, size_t strings_co
 
 
 STG_RESULT stg_run_backup(void) {
-
-	if (chdir("./backup") < 0) {
-
-		system("mkdir ./backup");
-		chdir("./backup");
-	}
-
-	system("cp -f ../*.db .");
-	chdir("..");
+	// Oh god...
+	system("cp -f " DATADIR "/*.db " DATADIR "/backup");
 
 	send_globops(NULL, "Database Back-Up Complete");
 
