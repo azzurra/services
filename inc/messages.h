@@ -101,6 +101,8 @@ extern uint64_t nservers;
  * Public code                                           *
  *********************************************************/
 
+extern void message_init();
+extern void message_terminate();
 extern Message *find_message(CSTR name);
 
 

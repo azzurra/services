@@ -817,36 +817,32 @@ Message messages[] = {
 	{ NULL }
 };
 
+mowgli_patricia_t *message_tree = NULL;
+
 /*********************************************************/
 
-static __inline__ int message_str_compare(CSTR string1, CSTR string2) {
+static void msg_canonize(char *key) {
+	/* noop */
+	return;
+}
 
-	register const unsigned char	*str1 = (const unsigned char *) string1;
-	register const unsigned char	*str2 = (const unsigned char *) string2;
-	register unsigned char			ch1, ch2;
+void message_init() {
+	Message *msg;
 
+	message_tree = mowgli_patricia_create(msg_canonize);
 
-	if (IS_NULL(str1) || IS_NULL(str2))
-		return (int)(str1 - str2);
+	for (msg = messages; msg->name; ++msg) {
+		mowgli_patricia_add(message_tree, msg->name, msg);
+	}
+}
 
-	do {
-		ch1 = (unsigned char) *str1++;
-		ch2 = (unsigned char) *str2++;
-	} while ((ch1 != c_NULL) && (ch1 == ch2));
-	return ch1 - ch2;
+void message_terminate() {
+	mowgli_patricia_destroy(message_tree, NULL, NULL);
+	message_tree = NULL;
 }
 
 /*********************************************************/
 
 Message *find_message(const char *name) {
-
-	Message *m;
-
-	for (m = messages; m->name; ++m) {
-
-		if (message_str_compare(name, m->name) == 0)
-			return m;
-	}
-
-	return NULL;
+	return (Message *)mowgli_patricia_retrieve(message_tree, name);
 }
