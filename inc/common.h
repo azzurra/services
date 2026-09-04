@@ -38,6 +38,9 @@
 #include <fcntl.h>
 #include <inttypes.h>
 
+/* Libmowgli */
+#include <mowgli.h>
+
 /* Services headers */
 #include "xrefs.h"
 #include "sysconf.h"

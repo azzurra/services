@@ -553,7 +553,10 @@ void database_store() {
 
 int main(int ac, char **av, char **envp) {
 
-	#ifdef HAVE_SYS_RESOURCE_H
+	/* Disable libmowgli thread support */
+	mowgli_thread_set_policy(MOWGLI_THREAD_POLICY_DISABLED);
+
+	#ifdef HAVE_GETRLIMIT
 	struct rlimit rlim; /* Resource limits. */
 
 	/* Set corefilesize to maximum. */
