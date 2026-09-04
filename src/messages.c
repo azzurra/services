@@ -219,7 +219,7 @@ static void m_version(CSTR source, const int ac, char **av) {
 	if (IS_NULL(user = hash_onlineuser_find(source))) {
 
 		log_error(FACILITY_MESSAGES, __LINE__, LOG_TYPE_ERROR_ASSERTION, LOG_SEVERITY_ERROR_HALTED, 
-			"m_version: Version from nonexistent user %s", source);
+			"m_version: VERSION from nonexistent user %s", source);
 
 		return;
 	}
@@ -426,7 +426,7 @@ static void m_stats(CSTR source, const int ac, char **av) {
 	if (IS_NULL(user = hash_onlineuser_find(source))) {
 
 		log_error(FACILITY_MESSAGES, __LINE__, LOG_TYPE_ERROR_ASSERTION, LOG_SEVERITY_ERROR_HALTED, 
-			"m_stats: Stats from nonexistent user %s", source);
+			"m_stats: STATS from nonexistent user %s", source);
 
 		return;
 	}
@@ -535,7 +535,7 @@ static void m_whois(CSTR source, const int ac, char **av) {
 	if (IS_NULL(user = hash_onlineuser_find(source))) {
 
 		log_error(FACILITY_MESSAGES, __LINE__, LOG_TYPE_ERROR_ASSERTION, LOG_SEVERITY_ERROR_HALTED, 
-			"m_whois: Whois from nonexistent user %s", source);
+			"m_whois: WHOIS from nonexistent user %s", source);
 
 		return;
 	}
@@ -557,7 +557,7 @@ static void m_whois(CSTR source, const int ac, char **av) {
 
 	else {
 
-		send_cmd("311 %s %s %s %s * :%s", source, localUser->nick, localUser->username, localUser->maskedHost, localUser->realname);
+		send_cmd("311 %s %s %s %s * :%s", source, localUser->nick, localUser->username, FlagSet(localUser->mode, UMODE_x) ? localUser->maskedHost : localUser->host, localUser->realname);
 		send_cmd("312 %s %s %s :%s", source, localUser->nick, CONF_SERVICES_NAME, CONF_SERVICES_DESC);
 		send_cmd("317 %s %s %ld %ld :seconds idle, signon time", source, localUser->nick, (NOW - localUser->signon), localUser->signon);
 	}
@@ -574,7 +574,7 @@ static void m_admin(CSTR source, const int ac, char **av) {
 	if (IS_NULL(user = hash_onlineuser_find(source))) {
 
 		log_error(FACILITY_MESSAGES, __LINE__, LOG_TYPE_ERROR_ASSERTION, LOG_SEVERITY_ERROR_HALTED, 
-			"m_whois: Whois from nonexistent user %s", source);
+			"m_admin: ADMIN from nonexistent user %s", source);
 
 		return;
 	}
@@ -607,7 +607,7 @@ static void m_time(CSTR source, const int ac, char **av) {
 	if (IS_NULL(user = hash_onlineuser_find(source))) {
 
 		log_error(FACILITY_MESSAGES, __LINE__, LOG_TYPE_ERROR_ASSERTION, LOG_SEVERITY_ERROR_HALTED, 
-			"m_whois: Whois from nonexistent user %s", source);
+			"m_time: TIME from nonexistent user %s", source);
 
 		return;
 	}
