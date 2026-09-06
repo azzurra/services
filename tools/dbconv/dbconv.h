@@ -17,5 +17,6 @@
 #include "lang.h"
 #include "nickserv.h"
 #include "chanserv.h"
+#include "memoserv.h"
 
 #endif /* DBCONV_DBCONV_H */

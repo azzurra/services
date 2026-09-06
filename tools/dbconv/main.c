@@ -47,11 +47,14 @@ int main(int argc, char *argv[]) {
 
     nickserv_init();
     chanserv_init();
+    memoserv_init();
 
     load_ns_dbase();
     load_cs_dbase();
     load_suspend_db();
+    load_ms_dbase();
 
+    memoserv_terminate();
     chanserv_terminate();
     nickserv_terminate();
 

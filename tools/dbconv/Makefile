@@ -11,6 +11,7 @@ SRCS =          \
     common.c    \
     datafiles.c \
     main.c      \
+    memoserv.c  \
     nickserv.c  \
     storage.c
 
