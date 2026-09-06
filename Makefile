@@ -13,7 +13,8 @@
 SUBDIRS =                   \
     ${SUBMODULE_LIBMOWGLI}  \
     inc                     \
-    src
+    src                     \
+    tools
 
 CLEANDIRS = ${SUBDIRS}
 DISTCLEAN = buildsys.mk config.log config.status extra.mk
@@ -27,3 +28,4 @@ buildsys.mk:
 
 # Explicit dependencies need to be expressed to ensure parallel builds don't die
 src: ${SUBMODULE_LIBMOWGLI} inc
+tools: ${SUBMODULE_LIBMOWGLI} inc
