@@ -14,12 +14,50 @@ static mowgli_patricia_t *nicktree;
 static void nickinfo32_to64(NickInfo32 *ni32, NickInfo *ni);
 
 void nickserv_init(void) {
-    nickdb_heap = mowgli_heap_create(sizeof(NickInfo), 10000, BH_NOW);
+    nickdb_heap = mowgli_heap_create(sizeof(NickInfo), 2, BH_NOW);
     nicktree = mowgli_patricia_create_named("nicktree", &strcasecanon);
 }
 
+static void nickinfo_destroy_cb(const char *key, void *data, void *privdata) {
+    NickInfo *ni = (NickInfo *)data;
+
+    if (ni == NULL)
+        return;
+
+    if (ni->url)
+        mowgli_free(ni->url);
+    if (ni->email)
+        mowgli_free(ni->email);
+    if (ni->forward)
+        mowgli_free(ni->forward);
+    if (ni->hold)
+        mowgli_free(ni->hold);
+    if (ni->mark)
+        mowgli_free(ni->mark);
+    if (ni->forbid)
+        mowgli_free(ni->forbid);
+    if (ni->freeze)
+        mowgli_free(ni->freeze);
+    if (ni->regemail)
+        mowgli_free(ni->regemail);
+
+    mowgli_free(ni->last_usermask);
+    mowgli_free(ni->last_realname);
+
+    if (ni->accesscount) {
+        int i;
+
+        for (i = 0; i < ni->accesscount; i++)
+            mowgli_free(ni->access[i]);
+
+        mowgli_free(ni->access);
+    }
+
+    mowgli_heap_free(nickdb_heap, ni);
+}
+
 void nickserv_terminate(void) {
-    mowgli_patricia_destroy(nicktree, NULL, NULL);
+    mowgli_patricia_destroy(nicktree, &nickinfo_destroy_cb, NULL);
     mowgli_heap_destroy(nickdb_heap);
 }
 
@@ -107,6 +145,8 @@ void dump_ns_dbase(void) {
     MOWGLI_PATRICIA_FOREACH(elem, &state, nicktree) {
         NickInfo *ni = (NickInfo *)elem;
         mowgli_log(" %d) %s", ++i, ni->nick);
+        if (ni->flags & NI_HOLD)
+            mowgli_log("   * HELD by %s", ni->hold ? ni->hold : "<NULL>");
     }
 }
 
