@@ -9,7 +9,7 @@
 #include "dbconv.h"
 
 static mowgli_heap_t *nickdb_heap;
-static mowgli_patricia_t *nicktree;
+mowgli_patricia_t *nicktree;
 
 static void nickinfo32_to64(NickInfo32 *ni32, NickInfo *ni);
 
@@ -133,21 +133,6 @@ void load_ns_dbase(void) {
     }
 
     close_db(f, NICKSERV_DB);
-}
-
-void dump_ns_dbase(void) {
-    mowgli_patricia_iteration_state_t state;
-    void *elem;
-    unsigned int i = 0;
-
-    mowgli_log("******* DUMPING NickServ Database *******");
-
-    MOWGLI_PATRICIA_FOREACH(elem, &state, nicktree) {
-        NickInfo *ni = (NickInfo *)elem;
-        mowgli_log(" %d) %s", ++i, ni->nick);
-        if (ni->flags & NI_HOLD)
-            mowgli_log("   * HELD by %s", ni->hold ? ni->hold : "<NULL>");
-    }
 }
 
 static void nickinfo32_to64(NickInfo32 * ni32, NickInfo *ni) {

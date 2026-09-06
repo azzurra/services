@@ -133,6 +133,7 @@ extern void nickserv_init(void);
 extern void nickserv_terminate(void);
 
 extern void load_ns_dbase(void);
-extern void dump_ns_dbase(void); /* TODO: replace with actual writing routines*/
+
+extern mowgli_patricia_t *nicktree;
 
 #endif /* DBCONV_NICKSERV_H */

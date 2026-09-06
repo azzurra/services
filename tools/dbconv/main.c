@@ -47,7 +47,6 @@ int main(int argc, char *argv[]) {
 
     nickserv_init();
     load_ns_dbase();
-    dump_ns_dbase();
 
     nickserv_terminate();
 
