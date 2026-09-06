@@ -7,6 +7,7 @@ include ../../extra.mk
 
 PROG = dbconv${PROG_SUFFIX}
 SRCS =          \
+    chanserv.c  \
     common.c    \
     datafiles.c \
     main.c      \

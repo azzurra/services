@@ -46,8 +46,13 @@ int main(int argc, char *argv[]) {
     }
 
     nickserv_init();
-    load_ns_dbase();
+    chanserv_init();
 
+    load_ns_dbase();
+    load_cs_dbase();
+    load_suspend_db();
+
+    chanserv_terminate();
     nickserv_terminate();
 
     if (svc_master != NULL)
