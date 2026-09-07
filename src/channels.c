@@ -714,8 +714,16 @@ void chan_handle_SJOIN(CSTR source, const int ac, char **av) {
 
 			/* Restore the topic if it's a new channel, or if it has been reset, or if someone has just been
 			   kicked by services (AutoKick, Restrict, etc) and ChanServ is alone in the channel. */
-			if (synched && (newChannel || resetTS || (FlagSet(chan->mode, CMODE_CS) && (chan->userCount == 1))))
-				restore_topic(chan);
+			if (synched && (newChannel || resetTS || (FlagSet(chan->mode, CMODE_CS) && (chan->userCount == 1)))) {
+
+				/* If this SJOIN is part of a remote server's burst (netsplit heal), defer the topic
+				   restore until burst-end — see issue #1. The subsequent TOPIC message from the
+				   same burst would otherwise trigger a second ChanServ TOPIC send. */
+				Server *src_server = findserver(source);
+
+				if (IS_NULL(src_server) || FlagUnset(src_server->flags, SERVER_FLAG_BURSTING))
+					restore_topic(chan);
+			}
 		}
 	}
 }
@@ -2481,6 +2489,7 @@ void chan_clear_bans(Channel *chan) {
 
 void chan_handle_TOPIC(const char *source, const int ac, char **av) {
 	Channel *chan;
+	BOOL src_bursting = FALSE;
 
 	ChannelStats *cs;
 
@@ -2522,12 +2531,17 @@ void chan_handle_TOPIC(const char *source, const int ac, char **av) {
 		/* This is a server topic. We are going to treat server topics just like normal topics
 		   during normal operation for now. */
 
-		if (synched == TRUE) {
+		Server *src_server = findserver(source);
+
+		if (IS_NOT_NULL(src_server) && FlagSet(src_server->flags, SERVER_FLAG_BURSTING))
+			src_bursting = TRUE;
+
+		if ((synched == TRUE) && !src_bursting) {
 
 			ChannelInfo *ci = chan->ci;
 
 			if (IS_NOT_NULL(ci) && FlagSet(ci->flags, CI_TOPICLOCK)) {
-					
+
 				/* This is a server topic and channel has topiclock on, block this TOPIC
 				   and replace it with ours (code taken from check_topiclock()) */
 
@@ -2547,6 +2561,10 @@ void chan_handle_TOPIC(const char *source, const int ac, char **av) {
 				return;
 			}
 		}
+
+		/* If src_bursting: fall through to the normal store path. The topic saved below reflects
+		   the remote server's current topic; we defer the TOPICLOCK override (and record_topic)
+		   to the burst-end pass so only one ChanServ TOPIC is emitted. See issue #1. */
 	}
 
 	TRACE_MAIN();
@@ -2586,9 +2604,11 @@ void chan_handle_TOPIC(const char *source, const int ac, char **av) {
 	TRACE_MAIN();
 
 	/* If we aren't synched this is a server topic, we save it in the channel struct but wait
-	   for synch_topics() to record it if it is the case. */
+	   for synch_topics() to record it if it is the case. Similarly, when the source server is
+	   still bursting (post-netsplit), defer the record until burst-end to preserve ci->last_topic
+	   against the incoming remote topic. See issue #1. */
 
-	if ((synched == TRUE) && IS_NOT_NULL(chan->ci))
+	if ((synched == TRUE) && !src_bursting && IS_NOT_NULL(chan->ci))
 		record_topic(chan);
 }
 
