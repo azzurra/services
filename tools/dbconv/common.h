@@ -19,4 +19,6 @@ typedef	unsigned int        result_t;
 
 extern void strcasecanon(char *str);
 
+extern time_t NOW;
+
 #endif /* DBCONV_COMMON_H */

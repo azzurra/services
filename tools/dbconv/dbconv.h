@@ -18,5 +18,6 @@
 #include "nickserv.h"
 #include "chanserv.h"
 #include "memoserv.h"
+#include "operdb.h"
 
 #endif /* DBCONV_DBCONV_H */

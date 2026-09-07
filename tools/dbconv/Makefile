@@ -13,6 +13,7 @@ SRCS =          \
     main.c      \
     memoserv.c  \
     nickserv.c  \
+    operdb.c    \
     storage.c
 
 include ../../buildsys.mk

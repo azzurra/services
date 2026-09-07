@@ -8,6 +8,8 @@
 
 #include "dbconv.h"
 
+time_t NOW;
+
 void strcasecanon(char *str) {
     while (*str) {
         *str = tolower((unsigned char)*str);

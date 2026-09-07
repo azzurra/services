@@ -45,15 +45,20 @@ int main(int argc, char *argv[]) {
         mowgli_log_fatal("Could not change directory to %s: %s", DATADIR, strerror(errno));
     }
 
+    time(&NOW);
+
     nickserv_init();
     chanserv_init();
     memoserv_init();
+    operdb_init();
 
     load_ns_dbase();
     load_cs_dbase();
     load_suspend_db();
     load_ms_dbase();
+    operdb_load();
 
+    operdb_terminate();
     memoserv_terminate();
     chanserv_terminate();
     nickserv_terminate();
