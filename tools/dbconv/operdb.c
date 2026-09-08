@@ -9,6 +9,7 @@
 #include "dbconv.h"
 
 mowgli_list_t *serverBotList = NULL;
+mowgli_list_t *spam_list = NULL;
 dynConfig dynConf = {
     .cs_regLimit = 0,
     .ns_regLimit = 0,
@@ -19,6 +20,7 @@ static void access_destroy(Access *anAccess);
 static void rootserv_db_load(void);
 static bool access_db_load(mowgli_list_t *accessList, const char *database);
 static bool dynconf_db_load(void);
+static bool spam_db_load(void);
 
 static void str_creator_init(Creator *creator);
 static bool str_creator_set(Creator *creator, const char *name, time_t time_set);
@@ -34,10 +36,24 @@ static bool str_settingsinfo_remove(SettingsInfo **infoList, unsigned long int t
 void operdb_init(void) {
     /* RootServ */
     serverBotList = mowgli_list_create();
+    /* Spam */
+    spam_list = mowgli_list_create();
 }
 
 void operdb_terminate(void) {
     mowgli_node_t *n, *tn;
+
+    /* Spam */
+    MOWGLI_LIST_FOREACH_SAFE(n, tn, spam_list->head) {
+        SpamItem *spam = (SpamItem *)n->data;
+        mowgli_node_delete(n, spam_list);
+        mowgli_free(spam->text);
+        mowgli_free(spam->reason);
+        str_creator_free(&(spam->creator));
+        mowgli_free(spam);
+        mowgli_node_free(n);
+    }
+    mowgli_list_free(spam_list);
 
     /* RootServ */
     MOWGLI_LIST_FOREACH_SAFE(n, tn, serverBotList->head) {
@@ -45,6 +61,7 @@ void operdb_terminate(void) {
         access_destroy((Access *)n->data);
         mowgli_node_free(n);
     }
+    mowgli_list_free(serverBotList);
     if (dynConf.welcomeNotice) {
         mowgli_free(dynConf.welcomeNotice);
         dynConf.welcomeNotice = NULL;
@@ -185,8 +202,8 @@ static bool access_db_load(mowgli_list_t *accessList, const char *database) {
 }
 
 static bool dynconf_db_load(void) {
-    STGHANDLE	stg = 0;
-    STG_RESULT	result;
+    STGHANDLE   stg = 0;
+    STG_RESULT  result;
 
     result = stg_open(DYNCONF_DB, &stg);
     switch (result) {
@@ -247,6 +264,90 @@ static bool dynconf_db_load(void) {
             stg_close(stg, DYNCONF_DB);
 
             mowgli_log_fatal("Error opening %s - %s", DYNCONF_DB, stg_result_to_string(result));
+            return false;
+    }
+}
+
+static bool spam_db_load(void) {
+    STGHANDLE   stg = STG_INVALID_HANDLE;
+    STG_RESULT  result;
+    SpamItem    *spam;
+
+    result = stg_open(SPAM_DB, &stg);
+    switch (result) {
+        case stgSuccess: { // OK -> loading data
+            STGVERSION  version;
+
+            version = stg_data_version(stg);
+            bool is64bit = stg_is64bit(stg);
+            switch (version) {
+                case SPAM_DB_CURRENT_VERSION: {
+                    bool    read_done, data_available = true;
+
+                    do {
+                        spam = mowgli_alloc(sizeof(SpamItem));
+
+                        if (is64bit)
+                            result = stg_read_record(stg, (unsigned char *)spam, sizeof(SpamItem));
+                        else {
+                            SpamItem32 si32;
+                            result = stg_read_record(stg, (unsigned char *)&si32, sizeof(SpamItem32));
+                            spam->text = (char *)(uintptr_t)si32.text;
+                            spam->flags = si32.flags;
+                            spam->type = si32.type;
+                            spam->creator.name = (char *)(uintptr_t)si32.creator.name;
+                            spam->creator.time = si32.creator.time;
+                            spam->reason = (char *)(uintptr_t)si32.reason;
+                            spam->pad = si32.pad;
+                        }
+
+                        switch (result) {
+                            case stgSuccess: // a valid item
+                                read_done = true;
+                                if (spam->text)
+                                    read_done &= (result = stg_read_string(stg, &(spam->text), NULL)) == stgSuccess;
+
+                                if (read_done && spam->creator.name != NULL)
+                                    read_done &= (result = stg_read_string(stg, &(spam->creator.name), NULL)) == stgSuccess;
+
+                                if (read_done && spam->reason != NULL)
+                                    read_done &= (result = stg_read_string(stg, &(spam->reason), NULL)) == stgSuccess;
+
+                                if (!read_done)
+                                    mowgli_log_fatal("Read error on %s (2) - %s", SPAM_DB, stg_result_to_string(result));
+
+                                spam->next = NULL;
+                                mowgli_node_add(spam, mowgli_node_create(), spam_list);
+                                break;
+
+                            case stgEndOfData:
+                                data_available = false;
+                                mowgli_free(spam);
+                                break;
+
+                            default: // some error
+                                mowgli_log_fatal("Read error on %s - %s", SPAM_DB, stg_result_to_string(result));
+                                return false;
+                        }
+                    } while (data_available);
+
+                    stg_close(stg, SPAM_DB);
+                    return true;
+                }
+
+                default:
+                    mowgli_log_fatal("Unsupported version number (%d) on %s", version, SPAM_DB);
+                    return false;
+            }
+        }
+
+        case stgNotFound: // no data to load
+            return true;
+
+        default: // error!
+            stg_close(stg, SPAM_DB);
+
+            mowgli_log_fatal("Error opening %s - %s", SPAM_DB, stg_result_to_string(result));
             return false;
     }
 }

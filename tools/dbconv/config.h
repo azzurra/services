@@ -80,6 +80,7 @@ _Static_assert(CRYPT_NETNAME_LEN == sizeof(CRYPT_NETNAME) - 1, "CRYPT_NETNAME_LE
 #define SERVSTATS_DB    "servstats.db"
 #define SEENSERV_DB     "seenserv.db"
 #define AKILL_DB        "akill.db"
+#define SPAM_DB         "spam.db"
 
 /******* OperServ configuration *******/
 
