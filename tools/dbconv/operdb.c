@@ -11,6 +11,7 @@
 mowgli_list_t *serverBotList = NULL;
 mowgli_list_t *spam_list = NULL;
 mowgli_list_t *trigger_list = NULL;
+mowgli_list_t *ignore_list = NULL;
 
 dynConfig dynConf = {
     .cs_regLimit = 0,
@@ -24,6 +25,7 @@ static bool access_db_load(mowgli_list_t *accessList, const char *database);
 static bool dynconf_db_load(void);
 static bool spam_db_load(void);
 static bool trigger_db_load(void);
+static bool ignore_db_load(void);
 
 static void str_creator_init(Creator *creator);
 static bool str_creator_set(Creator *creator, const char *name, time_t time_set);
@@ -43,10 +45,28 @@ void operdb_init(void) {
     spam_list = mowgli_list_create();
     /* Trigger */
     trigger_list = mowgli_list_create();
+    /* Ignore */
+    ignore_list = mowgli_list_create();
 }
 
 void operdb_terminate(void) {
     mowgli_node_t *n, *tn;
+
+    /* Ignore */
+    MOWGLI_LIST_FOREACH_SAFE(n, tn, ignore_list->head) {
+        Ignore *ignore = (Ignore *)n->data;
+        mowgli_node_delete(n, ignore_list);
+        if (ignore->nick)
+            mowgli_free(ignore->nick);
+        if (ignore->username)
+            mowgli_free(ignore->username);
+        if (ignore->host)
+            mowgli_free(ignore->host);
+        str_creationinfo_free(&(ignore->info));
+        mowgli_free(ignore);
+        mowgli_node_free(n);
+    }
+    mowgli_list_free(ignore_list);
 
     /* Trigger */
     MOWGLI_LIST_FOREACH_SAFE(n, tn, trigger_list->head) {
@@ -90,6 +110,7 @@ void operdb_load(void) {
     rootserv_db_load();
     spam_db_load();
     trigger_db_load();
+    ignore_db_load();
 }
 
 static void rootserv_db_load(void) {
@@ -466,6 +487,109 @@ static bool trigger_db_load(void) {
         default: // error!
             stg_close(stg, TRIGGER_DB);
             mowgli_log_fatal("Error opening %s - %s", TRIGGER_DB, stg_result_to_string(result));
+            return false;
+    }
+}
+
+static bool ignore_db_load(void) {
+    STGHANDLE   stg = 0;
+    STG_RESULT  result;
+
+    result = stg_open(IGNORE_DB, &stg);
+
+    switch (result) {
+        case stgSuccess: { // OK -> loading data
+            STGVERSION  version;
+            bool        in_section;
+            bool        read_done;
+            bool        is64Bit;
+
+            version = stg_data_version(stg);
+            is64Bit = stg_is64bit(stg);
+
+            switch (version) {
+                case IGNORE_DB_CURRENT_VERSION: {
+                    Ignore_V10 *anIgnore;
+
+                    // start-of-section marker
+                    result = stg_read_record(stg, NULL, 0);
+
+                    if (result == stgBeginOfSection) {
+                        in_section = true;
+
+                        while (in_section) {
+                            anIgnore = mowgli_alloc(sizeof(Ignore_V10));
+                            Ignore_V10_32 ignore32;
+                            if (is64Bit)
+                                result = stg_read_record(stg, (unsigned char *)anIgnore, sizeof(Ignore_V10));
+                            else {
+                                result = stg_read_record(stg, (unsigned char *)&ignore32, sizeof(Ignore_V10_32));
+                                anIgnore->nick = (char *)(uintptr_t) ignore32.nick;
+                                anIgnore->username = (char *)(uintptr_t) ignore32.username;
+                                anIgnore->host = (char *)(uintptr_t) ignore32.host;
+                                memcpy(&anIgnore->cidr, &ignore32.cidr, sizeof(CIDR_IP));
+                                anIgnore->info.creator.name = (char *)(uintptr_t) ignore32.info.creator.name;
+                                anIgnore->info.creator.time = ignore32.info.creator.time;
+                                anIgnore->info.reason = (char *)(uintptr_t) ignore32.info.reason;
+                                anIgnore->expireTime = ignore32.expireTime;
+                                anIgnore->lastUsed = ignore32.lastUsed;
+                                anIgnore->flags = ignore32.flags;
+                            }
+
+                            switch (result) {
+
+                                case stgEndOfSection: // end-of-section
+                                    in_section = false;
+                                    mowgli_free(anIgnore);
+                                    break;
+
+                                case stgSuccess: // a valid record
+                                    read_done = true;
+
+                                    if (anIgnore->nick)
+                                        read_done &= (result = stg_read_string(stg, &(anIgnore->nick), NULL)) == stgSuccess;
+
+                                    if (read_done && anIgnore->username != NULL)
+                                        read_done &= (result = stg_read_string(stg, &(anIgnore->username), NULL)) == stgSuccess;
+
+                                    if (read_done && anIgnore->host != NULL)
+                                        read_done &= (result = stg_read_string(stg, &(anIgnore->host), NULL)) == stgSuccess;
+
+                                    if (read_done && anIgnore->info.creator.name != NULL)
+                                        read_done &= (result = stg_read_string(stg, &(anIgnore->info.creator.name), NULL)) == stgSuccess;
+
+                                    if (read_done && anIgnore->info.reason != NULL)
+                                        read_done &= (result = stg_read_string(stg, &(anIgnore->info.reason), NULL)) == stgSuccess;
+
+                                    if (!read_done)
+                                        mowgli_log_fatal("Read error on %s (2) - %s", IGNORE_DB, stg_result_to_string(result));
+
+                                    mowgli_node_add(anIgnore, mowgli_node_create(), ignore_list);
+                                    break;
+
+                                default: // some error
+                                    mowgli_log_fatal("Read error on %s - %s", IGNORE_DB, stg_result_to_string(result));
+                            }
+                        }
+                    }
+                    else
+                        mowgli_log_fatal("Read error on %s : invalid format", IGNORE_DB);
+
+                    stg_close(stg, IGNORE_DB);
+                    return true;
+                }
+
+                default:
+                    mowgli_log_fatal("Unsupported version number (%d) on %s", version, IGNORE_DB);
+            }
+        }
+
+        case stgNotFound: // no data to load
+            return true;
+
+        default: // error!
+            stg_close(stg, IGNORE_DB);
+            mowgli_log_fatal("Error opening %s - %s", IGNORE_DB, stg_result_to_string(result));
             return false;
     }
 }

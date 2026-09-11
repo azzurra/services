@@ -19,6 +19,10 @@
 #define DYNCONF_DB_SUPPORTED_VERSION    "10"
 #define SPAM_DB_CURRENT_VERSION         10
 #define SPAM_DB_SUPPORTED_VERSION       "10"
+#define TRIGGER_DB_CURRENT_VERSION      10
+#define TRIGGER_DB_SUPPORTED_VERSION    "10"
+#define IGNORE_DB_CURRENT_VERSION       10
+#define IGNORE_DB_SUPPORTED_VERSION     "10"
 
 /*********************************************************
  * Data types                                            *
@@ -220,8 +224,49 @@ struct _trigger_V10_32 {
 // Current struct version
 typedef Trigger_V10_32      Trigger32;
 
-enum _TRIGGER_RESULT { triggerFound = 0, triggerNotFound, triggerExempt, triggerInvalidData};
-typedef enum _TRIGGER_RESULT    TRIGGER_RESULT;
+typedef struct _ignore_V10      Ignore_V10;
+struct _ignore_V10 {
+
+    Ignore_V10 *prev, *next;
+
+    char *nick;
+    char *username;
+    char *host;
+
+    CIDR_IP cidr;
+
+    CreationInfo info;
+
+    time_t expireTime;
+    time_t lastUsed;
+
+    tiny_flags_t flags;
+};
+
+// Current struct version
+typedef Ignore_V10 Ignore;
+
+typedef struct _ignore_V10_32 Ignore_V10_32;
+struct _ignore_V10_32 {
+
+    int32_t     prev, next;
+
+    int32_t     nick;
+    int32_t     username;
+    int32_t     host;
+
+    CIDR_IP cidr;
+
+    CreationInfo32 info;
+
+    int32_t expireTime;
+    int32_t lastUsed;
+
+    tiny_flags_t flags;
+};
+
+// Current struct version
+typedef Ignore_V10_32 Ignore32;
 
 /*********************************************************
  * Constants                                             *
@@ -237,12 +282,14 @@ typedef enum _TRIGGER_RESULT    TRIGGER_RESULT;
 #define SPF_ENABLED 0x00000001
 #define SPAM_REASON_MAXLEN 200
 
-#define TRIGGER_DB_CURRENT_VERSION      10
-#define TRIGGER_DB_SUPPORTED_VERSION    "10"
-
 #define TRIGGER_FLAG_CIDR       0x0001
 #define TRIGGER_FLAG_HOST       0x0002
 #define TRIGGER_FLAG_REALNAME   0x0004
+
+#define IGNORE_FLAG_MANUAL      0x0001
+#define IGNORE_FLAG_TEMPORARY   0x0002
+#define IGNORE_FLAG_PERMANENT   0x0004
+#define IGNORE_FLAG_WITHCIDR    0x0008
 
 /*********************************************************
  * Public code                                           *
@@ -256,6 +303,7 @@ extern void operdb_load(void);
 extern mowgli_list_t *serverBotList;
 extern mowgli_list_t *spam_list;
 extern mowgli_list_t *trigger_list;
+extern mowgli_list_t *ignore_list;
 
 extern dynConfig dynConf;
 
