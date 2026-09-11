@@ -23,6 +23,8 @@
 #define TRIGGER_DB_SUPPORTED_VERSION    "10"
 #define IGNORE_DB_CURRENT_VERSION       10
 #define IGNORE_DB_SUPPORTED_VERSION     "10"
+#define SXLINE_DB_CURRENT_VERSION       10
+#define SXLINE_DB_SUPPORTED_VERSION     "10"
 
 /*********************************************************
  * Data types                                            *
@@ -268,6 +270,30 @@ struct _ignore_V10_32 {
 // Current struct version
 typedef Ignore_V10_32 Ignore32;
 
+typedef struct _SXLine_V10 SXLine_V10;
+struct _SXLine_V10 {
+
+    SXLine_V10      *prev, *next;
+
+    char            *name;      /* Realname if it's a G:Line, nick/channel if it's a Q:Line. */
+
+    CreationInfo    info;
+
+    time_t          lastUsed;
+};
+
+// Current struct version
+typedef SXLine_V10  SXLine;
+
+typedef struct _SXLine_V10_32       SXLine_V10_32;
+struct _SXLine_V10_32 {
+    int32_t         prev, next;
+    uint32_t        name;
+    CreationInfo32  info;
+    int32_t         lastUsed;
+};
+typedef SXLine_V10_32   SXLine32;
+
 /*********************************************************
  * Constants                                             *
  *********************************************************/
@@ -291,6 +317,9 @@ typedef Ignore_V10_32 Ignore32;
 #define IGNORE_FLAG_PERMANENT   0x0004
 #define IGNORE_FLAG_WITHCIDR    0x0008
 
+#define SXLINE_TYPE_GLINE   1
+#define SXLINE_TYPE_QLINE   2
+
 /*********************************************************
  * Public code                                           *
  *********************************************************/
@@ -304,6 +333,8 @@ extern mowgli_list_t *serverBotList;
 extern mowgli_list_t *spam_list;
 extern mowgli_list_t *trigger_list;
 extern mowgli_list_t *ignore_list;
+extern mowgli_list_t *sqline_list;
+extern mowgli_list_t *sgline_list;
 
 extern dynConfig dynConf;
 

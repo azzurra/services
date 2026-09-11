@@ -12,6 +12,8 @@ mowgli_list_t *serverBotList = NULL;
 mowgli_list_t *spam_list = NULL;
 mowgli_list_t *trigger_list = NULL;
 mowgli_list_t *ignore_list = NULL;
+mowgli_list_t *sqline_list = NULL;
+mowgli_list_t *sgline_list = NULL;
 
 dynConfig dynConf = {
     .cs_regLimit = 0,
@@ -26,6 +28,7 @@ static bool dynconf_db_load(void);
 static bool spam_db_load(void);
 static bool trigger_db_load(void);
 static bool ignore_db_load(void);
+static bool sxline_db_load(const int type);
 
 static void str_creator_init(Creator *creator);
 static bool str_creator_set(Creator *creator, const char *name, time_t time_set);
@@ -47,10 +50,36 @@ void operdb_init(void) {
     trigger_list = mowgli_list_create();
     /* Ignore */
     ignore_list = mowgli_list_create();
+    /* SQLine */
+    sqline_list = mowgli_list_create();
+    /* SGLine */
+    sgline_list = mowgli_list_create();
 }
 
 void operdb_terminate(void) {
     mowgli_node_t *n, *tn;
+
+    /* SQLine */
+    MOWGLI_LIST_FOREACH_SAFE(n, tn, sqline_list->head) {
+        SXLine *sqline = (SXLine *)n->data;
+        mowgli_node_delete(n, sqline_list);
+        mowgli_free(sqline->name);
+        str_creationinfo_free(&(sqline->info));
+        mowgli_free(sqline);
+        mowgli_node_free(n);
+    }
+    mowgli_list_free(sqline_list);
+
+    /* SGLine */
+    MOWGLI_LIST_FOREACH_SAFE(n, tn, sqline_list->head) {
+        SXLine *sgline = (SXLine *)n->data;
+        mowgli_node_delete(n, sgline_list);
+        mowgli_free(sgline->name);
+        str_creationinfo_free(&(sgline->info));
+        mowgli_free(sgline);
+        mowgli_node_free(n);
+    }
+    mowgli_list_free(sgline_list);
 
     /* Ignore */
     MOWGLI_LIST_FOREACH_SAFE(n, tn, ignore_list->head) {
@@ -111,6 +140,8 @@ void operdb_load(void) {
     spam_db_load();
     trigger_db_load();
     ignore_db_load();
+    sxline_db_load(SXLINE_TYPE_GLINE);
+    sxline_db_load(SXLINE_TYPE_QLINE);
 }
 
 static void rootserv_db_load(void) {
@@ -590,6 +621,115 @@ static bool ignore_db_load(void) {
         default: // error!
             stg_close(stg, IGNORE_DB);
             mowgli_log_fatal("Error opening %s - %s", IGNORE_DB, stg_result_to_string(result));
+            return false;
+    }
+}
+
+static bool sxline_db_load(const int type) {
+    STGHANDLE       stg = 0;
+    STG_RESULT      result;
+    char            *database;
+    mowgli_list_t   *sxline_list;
+
+    switch (type) {
+
+        default:
+        case SXLINE_TYPE_GLINE:
+            database = GLINE_DB;
+            sxline_list = sgline_list;
+            break;
+
+        case SXLINE_TYPE_QLINE:
+            database = QLINE_DB;
+            sxline_list = sqline_list;
+            break;
+    }
+
+    result = stg_open(database, &stg);
+
+    switch (result) {
+
+        case stgSuccess: { // OK -> loading data
+
+            STGVERSION  version;
+            bool        in_section;
+            bool        read_done;
+            bool        is64Bit;
+
+            version = stg_data_version(stg);
+            is64Bit = stg_is64bit(stg);
+
+            switch (version) {
+                case SXLINE_DB_CURRENT_VERSION: {
+                    SXLine_V10 *aSXLine;
+
+                    // start-of-section marker
+                    result = stg_read_record(stg, NULL, 0);
+
+                    if (result == stgBeginOfSection) {
+                        in_section = true;
+
+                        while (in_section) {
+                            aSXLine = mowgli_alloc(sizeof(SXLine_V10));
+                            if (is64Bit)
+                                result = stg_read_record(stg, (unsigned char *)aSXLine, sizeof(SXLine_V10));
+                            else {
+                                SXLine32 sxl32;
+                                result = stg_read_record(stg, (unsigned char *)&sxl32, sizeof(SXLine32));
+                                aSXLine->name = (char *)(uintptr_t)sxl32.name;
+                                aSXLine->info.creator.name = (char *)(uintptr_t)sxl32.info.creator.name;
+                                aSXLine->info.creator.time = sxl32.info.creator.time;
+                                aSXLine->info.reason = (char *)(uintptr_t)sxl32.info.reason;
+                                aSXLine->lastUsed = sxl32.lastUsed;
+                            }
+
+                            switch (result) {
+                                case stgEndOfSection: // end-of-section
+                                    in_section = false;
+                                    mowgli_free(aSXLine);
+                                    break;
+
+                                case stgSuccess: // a valid record
+
+                                    read_done = true;
+
+                                    read_done &= (result = stg_read_string(stg, &(aSXLine->name), NULL)) == stgSuccess;
+
+                                    if (read_done && aSXLine->info.creator.name != NULL)
+                                        read_done &= (result = stg_read_string(stg, &(aSXLine->info.creator.name), NULL)) == stgSuccess;
+
+                                    if (read_done && aSXLine->info.reason != NULL)
+                                        read_done &= (result = stg_read_string(stg, &(aSXLine->info.reason), NULL)) == stgSuccess;
+
+                                    if (!read_done)
+                                        mowgli_log_fatal("Read error on %s (2) - %s", database, stg_result_to_string(result));
+
+                                    mowgli_node_add(aSXLine, mowgli_node_create(), sxline_list);
+                                    break;
+
+                                default: // some error
+                                    mowgli_log_fatal("Read error on %s - %s", database, stg_result_to_string(result));
+                            }
+                        }
+                    }
+                    else
+                        mowgli_log_fatal("Read error on %s : invalid format", database);
+
+                    stg_close(stg, database);
+                    return true;
+                }
+
+                default:
+                    mowgli_log_fatal("Unsupported version number (%d) on %s", version, database);
+            }
+        }
+
+        case stgNotFound: // no data to load
+            return true;
+
+        default: // error!
+            stg_close(stg, database);
+            mowgli_log_fatal("Error opening %s - %s", database, stg_result_to_string(result));
             return false;
     }
 }
