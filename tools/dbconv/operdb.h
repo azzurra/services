@@ -24,6 +24,13 @@
  * Data types                                            *
  *********************************************************/
 
+struct _CIDR_IP {
+    uint32_t ip;
+    uint32_t mask;
+};
+
+typedef struct _CIDR_IP CIDR_IP;
+
 typedef struct _Creator {
 
     char        *name;
@@ -169,6 +176,53 @@ struct _SpamItem_32 {
 };
 #pragma pack(pop)
 
+typedef struct _trigger_V10     Trigger_V10;
+struct _trigger_V10 {
+
+    Trigger_V10     *prev, *next;
+
+    char            *username;
+    char            *host;
+    CIDR_IP         cidr;
+
+    unsigned char   pad;            /* Not used. */
+    unsigned char   value;
+    tiny_flags_t    flags;
+
+    CreationInfo    info;
+
+    time_t          lastUsed;
+    time_t          expireTime;
+};
+
+// Current struct version
+typedef Trigger_V10     Trigger;
+
+typedef struct _trigger_V10_32      Trigger_V10_32;
+struct _trigger_V10_32 {
+
+    uint32_t        prev, next;
+
+    uint32_t        username;
+    uint32_t        host;
+    CIDR_IP         cidr;
+
+    unsigned char   pad;            /* Not used. */
+    unsigned char   value;
+    tiny_flags_t    flags;
+
+    CreationInfo32  info;
+
+    int32_t         lastUsed;
+    int32_t         expireTime;
+};
+
+// Current struct version
+typedef Trigger_V10_32      Trigger32;
+
+enum _TRIGGER_RESULT { triggerFound = 0, triggerNotFound, triggerExempt, triggerInvalidData};
+typedef enum _TRIGGER_RESULT    TRIGGER_RESULT;
+
 /*********************************************************
  * Constants                                             *
  *********************************************************/
@@ -183,6 +237,13 @@ struct _SpamItem_32 {
 #define SPF_ENABLED 0x00000001
 #define SPAM_REASON_MAXLEN 200
 
+#define TRIGGER_DB_CURRENT_VERSION      10
+#define TRIGGER_DB_SUPPORTED_VERSION    "10"
+
+#define TRIGGER_FLAG_CIDR       0x0001
+#define TRIGGER_FLAG_HOST       0x0002
+#define TRIGGER_FLAG_REALNAME   0x0004
+
 /*********************************************************
  * Public code                                           *
  *********************************************************/
@@ -194,6 +255,8 @@ extern void operdb_load(void);
 
 extern mowgli_list_t *serverBotList;
 extern mowgli_list_t *spam_list;
+extern mowgli_list_t *trigger_list;
+
 extern dynConfig dynConf;
 
 #endif /* DBCONV_OPERDB_H */

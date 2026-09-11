@@ -10,6 +10,8 @@
 
 mowgli_list_t *serverBotList = NULL;
 mowgli_list_t *spam_list = NULL;
+mowgli_list_t *trigger_list = NULL;
+
 dynConfig dynConf = {
     .cs_regLimit = 0,
     .ns_regLimit = 0,
@@ -21,6 +23,7 @@ static void rootserv_db_load(void);
 static bool access_db_load(mowgli_list_t *accessList, const char *database);
 static bool dynconf_db_load(void);
 static bool spam_db_load(void);
+static bool trigger_db_load(void);
 
 static void str_creator_init(Creator *creator);
 static bool str_creator_set(Creator *creator, const char *name, time_t time_set);
@@ -38,10 +41,25 @@ void operdb_init(void) {
     serverBotList = mowgli_list_create();
     /* Spam */
     spam_list = mowgli_list_create();
+    /* Trigger */
+    trigger_list = mowgli_list_create();
 }
 
 void operdb_terminate(void) {
     mowgli_node_t *n, *tn;
+
+    /* Trigger */
+    MOWGLI_LIST_FOREACH_SAFE(n, tn, trigger_list->head) {
+        Trigger *trigger = (Trigger *)n->data;
+        mowgli_node_delete(n, trigger_list);
+        if (trigger->username != NULL)
+            mowgli_free(trigger->username);
+        mowgli_free(trigger->host);
+        str_creationinfo_free(&(trigger->info));
+        mowgli_free(trigger);
+        mowgli_node_free(n);
+    }
+    mowgli_list_free(trigger_list);
 
     /* Spam */
     MOWGLI_LIST_FOREACH_SAFE(n, tn, spam_list->head) {
@@ -70,6 +88,8 @@ void operdb_terminate(void) {
 
 void operdb_load(void) {
     rootserv_db_load();
+    spam_db_load();
+    trigger_db_load();
 }
 
 static void rootserv_db_load(void) {
@@ -316,7 +336,6 @@ static bool spam_db_load(void) {
                                 if (!read_done)
                                     mowgli_log_fatal("Read error on %s (2) - %s", SPAM_DB, stg_result_to_string(result));
 
-                                spam->next = NULL;
                                 mowgli_node_add(spam, mowgli_node_create(), spam_list);
                                 break;
 
@@ -352,7 +371,106 @@ static bool spam_db_load(void) {
     }
 }
 
-void access_destroy(Access *anAccess) {
+static bool trigger_db_load(void) {
+    STGHANDLE   stg = 0;
+    STG_RESULT  result;
+
+    result = stg_open(TRIGGER_DB, &stg);
+
+    switch (result) {
+        case stgSuccess: { // OK -> loading data
+            STGVERSION  version;
+            bool        in_section;
+            bool        read_done;
+
+
+            version = stg_data_version(stg);
+            bool is64Bit = stg_is64bit(stg);
+
+            switch (version) {
+                case TRIGGER_DB_CURRENT_VERSION: {
+                    Trigger_V10     *aTrigger;
+
+                    // start-of-section marker
+                    result = stg_read_record(stg, NULL, 0);
+
+                    if (result == stgBeginOfSection) {
+                        in_section = true;
+
+                        while (in_section) {
+                            aTrigger = mowgli_alloc(sizeof(Trigger_V10));
+                            if (is64Bit)
+                                result = stg_read_record(stg, (unsigned char *)aTrigger, sizeof(Trigger_V10));
+                            else {
+                                Trigger32 tr;
+                                result = stg_read_record(stg, (unsigned char *)&tr, sizeof(Trigger32));
+                                aTrigger->value = tr.value;
+                                aTrigger->cidr = tr.cidr;
+                                aTrigger->flags = tr.flags;
+                                aTrigger->lastUsed = tr.lastUsed;
+                                aTrigger->username = (char *)(uintptr_t)tr.username;
+                                aTrigger->host = (char *)(uintptr_t)tr.host;
+                                aTrigger->info.creator.name = (char *)(uintptr_t)tr.info.creator.name;
+                                aTrigger->info.creator.time = tr.info.creator.time;
+                                aTrigger->info.reason = (char *)(uintptr_t)tr.info.reason;
+                                aTrigger->pad = tr.pad;
+                            }
+
+                            switch (result) {
+                                case stgEndOfSection: // end-of-section
+                                    in_section = false;
+                                    mowgli_free(aTrigger);
+                                    break;
+
+                                case stgSuccess: // a valid record
+                                    read_done = true;
+
+                                    if (aTrigger->username != NULL)
+                                        read_done &= (result = stg_read_string(stg, &(aTrigger->username), NULL)) == stgSuccess;
+
+                                    if (read_done && aTrigger->host != NULL)
+                                        read_done &= (result = stg_read_string(stg, &(aTrigger->host), NULL)) == stgSuccess;
+
+                                    if (read_done && aTrigger->info.creator.name != NULL)
+                                        read_done &= (result = stg_read_string(stg, &(aTrigger->info.creator.name), NULL)) == stgSuccess;
+
+                                    if (read_done && aTrigger->info.reason != NULL)
+                                        read_done &= (result = stg_read_string(stg, &(aTrigger->info.reason), NULL)) == stgSuccess;
+
+                                    if (!read_done)
+                                        mowgli_log_fatal("Read error on %s (2) - %s", TRIGGER_DB, stg_result_to_string(result));
+
+                                    mowgli_node_add(aTrigger, mowgli_node_create(), trigger_list);
+                                    break;
+
+                                default: // some error
+                                    mowgli_log_fatal("Read error on %s - %s", TRIGGER_DB, stg_result_to_string(result));
+                            }
+                        }
+                    }
+                    else
+                        mowgli_log_fatal("Read error on %s : invalid format", TRIGGER_DB);
+
+                    stg_close(stg, TRIGGER_DB);
+                    return true;
+                }
+
+                default:
+                    mowgli_log_fatal("Unsupported version number (%d) on %s", version, TRIGGER_DB);
+            }
+        }
+
+        case stgNotFound: // no data to load
+            return true;
+
+        default: // error!
+            stg_close(stg, TRIGGER_DB);
+            mowgli_log_fatal("Error opening %s - %s", TRIGGER_DB, stg_result_to_string(result));
+            return false;
+    }
+}
+
+static void access_destroy(Access *anAccess) {
         if (anAccess->nick)
             mowgli_free(anAccess->nick);
         if (anAccess->user)
@@ -379,7 +497,7 @@ void access_destroy(Access *anAccess) {
         mowgli_free(anAccess);
 }
 
-void str_creator_init(Creator *creator) {
+static void str_creator_init(Creator *creator) {
     if (creator != NULL) {
         creator->name = NULL;
         creator->time = 0;
