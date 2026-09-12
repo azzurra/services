@@ -25,6 +25,13 @@
 #define IGNORE_DB_SUPPORTED_VERSION     "10"
 #define SXLINE_DB_CURRENT_VERSION       10
 #define SXLINE_DB_SUPPORTED_VERSION     "10"
+#define RESERVED_DB_CURRENT_VERSION     10
+#define RESERVED_DB_SUPPORTED_VERSION   "10"
+#define BLACKLIST_DB_CURRENT_VERSION    10
+#define BLACKLIST_DB_SUPPORTED_VERSION  "10"
+#define	TAGLINE_DB_CURRENT_VERSION		10
+#define TAGLINE_DB_SUPPORTED_VERSION	"10"
+
 
 /*********************************************************
  * Data types                                            *
@@ -294,6 +301,93 @@ struct _SXLine_V10_32 {
 };
 typedef SXLine_V10_32   SXLine32;
 
+typedef struct _reservedName_V10    reservedName_V10;
+struct _reservedName_V10 {
+
+    reservedName_V10    *next;
+
+    char                *name;
+
+    CreationInfo        info;
+
+    flags_t             flags;      /* RESERVED_* */
+    time_t              lastUpdate;
+};
+
+// Current structs version
+typedef reservedName_V10            reservedName;
+
+typedef struct _reservedName_V10_32 reservedName_V10_32;
+struct _reservedName_V10_32 {
+
+    int32_t             next;
+
+    int32_t             name;
+
+    CreationInfo32      info;
+
+    uint32_t            flags;      /* RESERVED_* */
+    int32_t             lastUpdate;
+};
+
+// Current structs version
+typedef reservedName_V10_32         reservedName32;
+
+typedef struct _blacklist_V10       BlackList_V10;
+struct _blacklist_V10 {
+
+    BlackList_V10   *prev, *next;
+
+    char            *address;
+
+    CreationInfo    info;
+    time_t          lastUsed;
+
+    tiny_flags_t    flags;
+    short           pad;
+};
+
+// Current struct version
+typedef BlackList_V10       BlackList;
+
+typedef struct _BlackList_V10_32        BlackList_V10_32;
+struct _BlackList_V10_32 {
+    int32_t         prev, next;
+
+    int32_t         address;
+
+    CreationInfo32  info;
+    int32_t         lastUsed;
+
+    tiny_flags_t    flags;
+    uint16_t        pad;
+};
+typedef BlackList_V10_32        BlackList32;
+
+typedef struct _tagline_V10		Tagline_V10;
+struct _tagline_V10 {
+
+	Tagline_V10	*prev, *next;
+
+	char		*text;
+	Creator		creator;
+};
+
+// Current struct version
+typedef	Tagline_V10		Tagline;
+
+typedef struct _tagline_V10_32		Tagline_V10_32;
+struct _tagline_V10_32 {
+
+    int32_t	    prev, next;
+
+    int32_t		text;
+    Creator32	creator;
+};
+
+// Current struct version
+typedef	Tagline_V10_32		Tagline32;
+
 /*********************************************************
  * Constants                                             *
  *********************************************************/
@@ -320,6 +414,20 @@ typedef SXLine_V10_32   SXLine32;
 #define SXLINE_TYPE_GLINE   1
 #define SXLINE_TYPE_QLINE   2
 
+#define RESERVED_NOUSE  0x00000010  /* Impedire l'uso del nome */
+#define RESERVED_NOREG  0x00000020  /* Impedire la registrazione del nome */
+#define RESERVED_ALERT  0x00000100  /* Ad un tentativo di utilizzo, mandare un avviso agli operatori */
+#define RESERVED_KILL   0x00000200  /* Killare l'utente */
+#define RESERVED_AKILL  0x00000400  /* Akillare l'utente */
+#define RESERVED_LOG    0x00000800  /* Logging attivo */
+#define RESERVED_ACTIVE 0x00001000  /* Nome riservato attivo */
+
+#define RESERVED_NICK       0x00000001
+#define RESERVED_CHAN       0x00000002
+
+#define BLACKLIST_FLAG_NOTIFY   0x0001
+#define BLACKLIST_FLAG_DENY     0x0002
+
 /*********************************************************
  * Public code                                           *
  *********************************************************/
@@ -335,6 +443,9 @@ extern mowgli_list_t *trigger_list;
 extern mowgli_list_t *ignore_list;
 extern mowgli_list_t *sqline_list;
 extern mowgli_list_t *sgline_list;
+extern mowgli_list_t *reserved_list;
+extern mowgli_list_t *blacklist_list;
+extern mowgli_list_t *tagline_list;
 
 extern dynConfig dynConf;
 

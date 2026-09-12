@@ -14,6 +14,9 @@ mowgli_list_t *trigger_list = NULL;
 mowgli_list_t *ignore_list = NULL;
 mowgli_list_t *sqline_list = NULL;
 mowgli_list_t *sgline_list = NULL;
+mowgli_list_t *reserved_list = NULL;
+mowgli_list_t *blacklist_list = NULL;
+mowgli_list_t *tagline_list = NULL;
 
 dynConfig dynConf = {
     .cs_regLimit = 0,
@@ -29,17 +32,12 @@ static bool spam_db_load(void);
 static bool trigger_db_load(void);
 static bool ignore_db_load(void);
 static bool sxline_db_load(const int type);
+static bool reserved_db_load(void);
+static bool blacklist_db_load(void);
+static bool tagline_db_load(void);
 
-static void str_creator_init(Creator *creator);
-static bool str_creator_set(Creator *creator, const char *name, time_t time_set);
 static inline void str_creator_free(Creator *creator);
-
-static void str_creationinfo_init(CreationInfo *info);
-static bool str_creationinfo_set(CreationInfo *info, const char *creator, const char *reason, time_t time_set);
 static inline void str_creationinfo_free(CreationInfo *info);
-
-static bool str_settingsinfo_add(SettingsInfo **infoList, unsigned long int type, const char *creator, const char *reason);
-static bool str_settingsinfo_remove(SettingsInfo **infoList, unsigned long int type);
 
 void operdb_init(void) {
     /* RootServ */
@@ -54,10 +52,49 @@ void operdb_init(void) {
     sqline_list = mowgli_list_create();
     /* SGLine */
     sgline_list = mowgli_list_create();
+    /* Reserved */
+    reserved_list = mowgli_list_create();
+    /* Blacklist */
+    blacklist_list = mowgli_list_create();
+    /* Tagline */
+    tagline_list = mowgli_list_create();
 }
 
 void operdb_terminate(void) {
     mowgli_node_t *n, *tn;
+
+    /* Tagline */
+    MOWGLI_LIST_FOREACH_SAFE(n, tn, tagline_list->head) {
+        Tagline *tagline = (Tagline *)n->data;
+        mowgli_node_delete(n, tagline_list);
+        mowgli_free(tagline->text);
+        str_creator_free(&(tagline->creator));
+        mowgli_free(tagline);
+        mowgli_node_free(n);
+    }
+    mowgli_list_free(tagline_list);
+
+    /* Blacklist */
+    MOWGLI_LIST_FOREACH_SAFE(n, tn, blacklist_list->head) {
+        BlackList *bl = (BlackList *)n->data;
+        mowgli_node_delete(n, blacklist_list);
+        mowgli_free(bl->address);
+        str_creationinfo_free(&(bl->info));
+        mowgli_free(bl);
+        mowgli_node_free(n);
+    }
+    mowgli_list_free(blacklist_list);
+
+    /* Reserved */
+    MOWGLI_LIST_FOREACH_SAFE(n, tn, reserved_list->head) {
+        reservedName *name = (reservedName *)n->data;
+        mowgli_node_delete(n, reserved_list);
+        mowgli_free(name->name);
+        str_creationinfo_free(&(name->info));
+        mowgli_free(name);
+        mowgli_node_free(n);
+    }
+    mowgli_list_free(reserved_list);
 
     /* SQLine */
     MOWGLI_LIST_FOREACH_SAFE(n, tn, sqline_list->head) {
@@ -142,6 +179,9 @@ void operdb_load(void) {
     ignore_db_load();
     sxline_db_load(SXLINE_TYPE_GLINE);
     sxline_db_load(SXLINE_TYPE_QLINE);
+    reserved_db_load();
+    blacklist_db_load();
+    tagline_db_load();
 }
 
 static void rootserv_db_load(void) {
@@ -734,6 +774,271 @@ static bool sxline_db_load(const int type) {
     }
 }
 
+static bool reserved_db_load(void) {
+    STGHANDLE   stg = 0;
+    STG_RESULT  result;
+
+    result = stg_open(RESERVED_DB, &stg);
+
+    switch (result) {
+        case stgSuccess: { // OK -> loading data
+            STGVERSION  version;
+            bool        in_section;
+            bool        read_done;
+            bool        is64bit;
+
+            version = stg_data_version(stg);
+            is64bit = stg_is64bit(stg);
+
+            switch (version) {
+                case RESERVED_DB_CURRENT_VERSION: {
+                    reservedName_V10 *aName;
+
+                    // start-of-section marker
+                    result = stg_read_record(stg, NULL, 0);
+                    if (result == stgBeginOfSection) {
+                        in_section = true;
+
+                        while (in_section) {
+                            aName = mowgli_alloc(sizeof(reservedName_V10));
+
+                            if (is64bit)
+                                result = stg_read_record(stg, (unsigned char *)aName, sizeof(reservedName_V10));
+                            else {
+                                reservedName32 rsv32;
+                                result = stg_read_record(stg, (unsigned char *)&rsv32, sizeof(reservedName_V10_32));
+                                aName->name = (char *)(uintptr_t)rsv32.name;
+                                aName->flags = rsv32.flags;
+                                aName->info.creator.name = (char *)(uintptr_t)rsv32.info.creator.name;
+                                aName->info.creator.time = rsv32.info.creator.time;
+                                aName->info.reason = (char *)(uintptr_t)rsv32.info.reason;
+                                aName->lastUpdate = rsv32.lastUpdate;
+                            }
+
+                            switch (result) {
+                                case stgEndOfSection: // end-of-section
+                                    in_section = false;
+                                    mowgli_free(aName);
+                                    break;
+
+                                case stgSuccess: // a valid record
+                                    read_done = true;
+
+                                    read_done &= (result = stg_read_string(stg, &(aName->name), NULL)) == stgSuccess;
+
+                                    if (read_done)
+                                        read_done &= (result = stg_read_string(stg, &(aName->info.creator.name), NULL)) == stgSuccess;
+
+                                    if (read_done)
+                                        read_done &= (result = stg_read_string(stg, &(aName->info.reason), NULL)) == stgSuccess;
+
+                                    if (!read_done)
+                                        mowgli_log_fatal("Read error on %s (2) - %s", TAGLINE_DB, stg_result_to_string(result));
+
+                                    mowgli_node_add(aName, mowgli_node_create(), reserved_list);
+                                    break;
+
+                                default: // some error
+                                    mowgli_log_fatal("Read error on %s - %s", RESERVED_DB, stg_result_to_string(result));
+                            }
+                        }
+                    }
+                    else
+                        mowgli_log_fatal("Read error on %s : invalid format", RESERVED_DB);
+
+                    stg_close(stg, RESERVED_DB);
+                    return true;
+                }
+
+                default:
+                    mowgli_log_fatal("Unsupported version number (%d) on %s", version, RESERVED_DB);
+            }
+        }
+
+        case stgNotFound: // no data to load
+            return true;
+
+        default: // error!
+            stg_close(stg, RESERVED_DB);
+            mowgli_log_fatal("Error opening %s - %s", RESERVED_DB, stg_result_to_string(result));
+            return false;
+    }
+}
+
+static bool blacklist_db_load(void) {
+    STGHANDLE   stg = 0;
+    STG_RESULT  result;
+
+    result = stg_open(BLACKLIST_DB, &stg);
+
+    switch (result) {
+        case stgSuccess: { // OK -> loading data
+            STGVERSION  version;
+            bool        in_section;
+            bool        read_done;
+            bool        is64Bit;
+
+            version = stg_data_version(stg);
+            is64Bit = stg_is64bit(stg);
+
+            switch (version) {
+                case BLACKLIST_DB_CURRENT_VERSION: {
+                    BlackList_V10   *anAddress;
+                    BlackList32     bl32;
+
+                    // start-of-section marker
+                    result = stg_read_record(stg, NULL, 0);
+                    if (result == stgBeginOfSection) {
+                        in_section = true;
+
+                        while (in_section) {
+                            anAddress = mowgli_alloc(sizeof(BlackList_V10));
+                            if (is64Bit) {
+                                result = stg_read_record(stg, (unsigned char *)anAddress, sizeof(BlackList_V10));
+                            } else {
+                                result = stg_read_record(stg, (unsigned char *)&bl32, sizeof(BlackList32));
+                                anAddress->address = (char*)(uintptr_t)bl32.address;
+                                anAddress->flags = bl32.flags;
+                                anAddress->lastUsed = bl32.lastUsed;
+                                anAddress->info.creator.name = (char*)(uintptr_t)bl32.info.creator.name;
+                                anAddress->info.creator.time = bl32.info.creator.time;
+                                anAddress->info.reason = (char*)(uintptr_t)bl32.info.reason;
+                            }
+
+                            switch (result) {
+                                case stgEndOfSection: // end-of-section
+                                    in_section = false;
+                                    mowgli_free(anAddress);
+                                    break;
+
+                                case stgSuccess: // a valid record
+                                    read_done = true;
+
+                                    read_done &= (result = stg_read_string(stg, &(anAddress->address), NULL)) == stgSuccess;
+
+                                    if (read_done)
+                                        read_done &= (result = stg_read_string(stg, &(anAddress->info.creator.name), NULL)) == stgSuccess;
+
+                                    if (read_done)
+                                        read_done &= (result = stg_read_string(stg, &(anAddress->info.reason), NULL)) == stgSuccess;
+
+                                    if (!read_done)
+                                        mowgli_log_fatal("Read error on %s (2) - %s", BLACKLIST_DB, stg_result_to_string(result));
+
+                                    mowgli_node_add(anAddress, mowgli_node_create(), blacklist_list);
+                                    break;
+
+                                default: // some error
+                                    mowgli_log_fatal("Read error on %s - %s", BLACKLIST_DB, stg_result_to_string(result));
+                            }
+                        }
+                    }
+                    else
+                        mowgli_log_fatal("Read error on %s : invalid format", BLACKLIST_DB);
+
+                    stg_close(stg, BLACKLIST_DB);
+                    return true;
+                }
+
+                default:
+                    mowgli_log_fatal("Unsupported version number (%d) on %s", version, BLACKLIST_DB);
+            }
+        }
+
+        case stgNotFound: // no data to load
+            return true;
+
+        default: // error!
+            stg_close(stg, BLACKLIST_DB);
+            mowgli_log_fatal("Error opening %s - %s", BLACKLIST_DB, stg_result_to_string(result));
+            return false;
+    }
+}
+
+static bool tagline_db_load(void) {
+    STGHANDLE   stg = 0;
+    STG_RESULT  result;
+
+    result = stg_open(TAGLINE_DB, &stg);
+
+    switch (result) {
+        case stgSuccess: { // OK -> loading data
+            STGVERSION  version;
+            bool        in_section;
+            bool        read_done;
+            bool        is64Bit;
+
+            version = stg_data_version(stg);
+            is64Bit = stg_is64bit(stg);
+
+            switch (version) {
+                case TAGLINE_DB_CURRENT_VERSION: {
+                    Tagline_V10     *aTagline;
+
+                    // start-of-section marker
+                    result = stg_read_record(stg, NULL, 0);
+                    if (result == stgBeginOfSection) {
+                        in_section = true;
+
+                        while (in_section) {
+                            aTagline = mowgli_alloc(sizeof(Tagline_V10));
+                            if (is64Bit)
+                                result = stg_read_record(stg, (unsigned char *)aTagline, sizeof(Tagline_V10));
+                            else {
+                                Tagline32 tgl32;
+                                result = stg_read_record(stg, (unsigned char *)&tgl32, sizeof(Tagline_V10_32));
+                                aTagline->text = (char *)(uintptr_t)tgl32.text;
+                                aTagline->creator.name = (char *)(uintptr_t)tgl32.creator.name;
+                                aTagline->creator.time = tgl32.creator.time;
+                            }
+
+                            switch (result) {
+                                case stgEndOfSection: // end-of-section
+                                    in_section = false;
+                                    mowgli_free(aTagline);
+                                    break;
+
+                                case stgSuccess: // a valid record
+                                    read_done = true;
+
+                                    read_done &= (result = stg_read_string(stg, &(aTagline->text), NULL)) == stgSuccess;
+
+                                    if (read_done)
+                                        read_done &= (result = stg_read_string(stg, &(aTagline->creator.name), NULL)) == stgSuccess;
+
+                                    if (!read_done)
+                                        mowgli_log_fatal("Read error on %s (2) - %s", TAGLINE_DB, stg_result_to_string(result));
+
+                                    mowgli_node_add(aTagline, mowgli_node_create(), tagline_list);
+                                    break;
+
+                                default: // some error
+                                    mowgli_log_fatal("Read error on %s - %s", TAGLINE_DB, stg_result_to_string(result));
+                            }
+                        }
+                    }
+                    else
+                        mowgli_log_fatal("Read error on %s : invalid format", TAGLINE_DB);
+
+                    stg_close(stg, TAGLINE_DB);
+                    return true;
+                }
+
+                default:
+                    mowgli_log_fatal("Unsupported version number (%d) on %s", version, TAGLINE_DB);
+            }
+        }
+
+        case stgNotFound: // no data to load
+            return true;
+
+        default: // error!
+            stg_close(stg, TAGLINE_DB);
+            mowgli_log_fatal("Error opening %s - %s", TAGLINE_DB, stg_result_to_string(result));
+            return false;
+    }
+}
+
 static void access_destroy(Access *anAccess) {
         if (anAccess->nick)
             mowgli_free(anAccess->nick);
@@ -761,54 +1066,9 @@ static void access_destroy(Access *anAccess) {
         mowgli_free(anAccess);
 }
 
-static void str_creator_init(Creator *creator) {
-    if (creator != NULL) {
-        creator->name = NULL;
-        creator->time = 0;
-    }
-}
-
-static bool str_creator_set(Creator *creator, const char *name, time_t time_set) {
-    if (creator != NULL) {
-
-        if (name != NULL) {
-            if (creator->name != NULL)
-                mowgli_free(creator->name);
-
-            creator->name = mowgli_strdup(name);
-        }
-
-        creator->time = time_set != 0 ? time_set : NOW;
-        return true;
-
-    } else
-        return false;
-}
-
 static inline void str_creator_free(Creator *creator) {
     if (creator != NULL)
         mowgli_free(creator->name);
-}
-
-void str_creationinfo_init(CreationInfo *info) {
-    if (info != NULL) {
-        info->reason = NULL;
-        str_creator_init(&(info->creator));
-    }
-}
-
-static bool str_creationinfo_set(CreationInfo *info, const char *creator, const char *reason, time_t time_set) {
-    if (info == NULL || creator == NULL || reason == NULL)
-        return false;
-
-    str_creator_set(&(info->creator), creator, time_set);
-
-    if (info->reason != NULL)
-        mowgli_free(info->reason);
-
-    info->reason = mowgli_strdup(reason);
-
-    return true;
 }
 
 static inline void str_creationinfo_free(CreationInfo *info) {
@@ -816,58 +1076,4 @@ static inline void str_creationinfo_free(CreationInfo *info) {
         str_creator_free(&(info->creator));
         mowgli_free(info->reason);
     }
-}
-
-/*********************************************************/
-
-static bool str_settingsinfo_add(SettingsInfo **infoList, unsigned long int type, const char *creator, const char *reason) {
-    SettingsInfo *info;
-
-    info = *infoList;
-
-    while (info != NULL) {
-        if (info->type == type)
-            return false;
-
-        info = info->next;
-    }
-
-    info = mowgli_alloc(sizeof(SettingsInfo));
-
-    info->type = type;
-
-    str_creationinfo_init(&(info->creation));
-    str_creationinfo_set(&(info->creation), creator, reason, NOW);
-
-    info->next = *infoList;
-    *infoList = info;
-
-    return true;
-}
-
-/*********************************************************/
-
-static bool str_settingsinfo_remove(SettingsInfo **infoList, unsigned long int type) {
-    SettingsInfo *info, *prevInfo = NULL;
-
-    info = *infoList;
-
-    while (info != NULL) {
-        if (info->type == type) {
-
-            if (prevInfo->next != NULL)
-                prevInfo->next = info->next;
-            else
-                *infoList = info->next;
-
-            str_creationinfo_free(&(info->creation));
-            mowgli_free(info);
-            return true;
-        }
-
-        prevInfo = info;
-        info = info->next;
-    }
-
-    return false;
 }
