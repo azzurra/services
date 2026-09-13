@@ -9,14 +9,10 @@
 #include "dbconv.h"
 
 static void print_help(void) {
-    printf("usage: dbconv [-m master]\n\n"
-           "-m <master>    Nickname of the static Services Master\n"
-    );
+    printf("usage: dbconv\n\n");
 }
 
 int main(int argc, char *argv[]) {
-    bool have_svc_master;
-    char *svc_master = NULL;
     int r;
     mowgli_getopt_option_t long_opts[] = {
         { NULL, 0, NULL, 0, 0 }
@@ -28,15 +24,11 @@ int main(int argc, char *argv[]) {
     /* Parse command line arguments */
     while ((r = mowgli_getopt_long(argc, argv, "m:h", long_opts, NULL)) != -1) {
         switch(r) {
-            case 'm':
-                svc_master = mowgli_strdup(mowgli_optarg);
-                have_svc_master = true;
-                break;
             case 'h':
                 print_help();
                 exit(EXIT_SUCCESS);
             default:
-                fprintf(stderr, "usage: dbconv [-m master]\n");
+                fprintf(stderr, "usage: dbconv\n");
                 exit(EXIT_FAILURE);
         }
     }
@@ -52,19 +44,21 @@ int main(int argc, char *argv[]) {
     memoserv_init();
     operdb_init();
 
+    mowgli_log("Loading legacy services databases");
     load_ns_dbase();
     load_cs_dbase();
     load_suspend_db();
     load_ms_dbase();
     operdb_load();
+    /* We don't really care about StatServ and SeenServ at the moment... */
+    mowgli_log("Database load complete");
+
+    /* TODO: write data to monolithic services.db */
 
     operdb_terminate();
     memoserv_terminate();
     chanserv_terminate();
     nickserv_terminate();
-
-    if (svc_master != NULL)
-        mowgli_free(svc_master);
 
     return EXIT_SUCCESS;
 }

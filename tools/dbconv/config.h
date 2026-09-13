@@ -136,6 +136,10 @@ _Static_assert(CRYPT_NETNAME_LEN == sizeof(CRYPT_NETNAME) - 1, "CRYPT_NETNAME_LE
 #define MAIL_KLINE      "irc@azzurra.chat"
 #define MAIL_ABUSE      "irc@azzurra.chat"
 
+/* Opers DB needs this cruft */
+#define FIRST_VALID_NICK_CHAR   65
+#define LAST_VALID_NICK_CHAR    125
+
 /* For SeenServ */
 #define WILDSEEN        5
 

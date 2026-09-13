@@ -35,6 +35,8 @@
 #define AKILL_DB_SUPPORTED_VERSION      "10"
 #define REGIONS_DB_CURRENT_VERSION      10
 #define REGIONS_DB_SUPPORTED_VERSION    "7 10"
+#define OPER_DB_CURRENT_VERSION         11
+#define OPER_DB_SUPPORTED_VERSION       "11"
 
 
 /*********************************************************
@@ -477,6 +479,38 @@ struct __attribute__((packed)) _Region_32 {
     uint32_t        next, prev;
 };
 
+typedef struct _Oper_V11    Oper_V11;
+struct _Oper_V11 {
+
+    Oper_V11        *prev, *next;
+
+    char            *nick;
+
+    Creator         creator;
+    time_t          lastUpdate;
+
+    flags_t         flags;                  /* OPER_* defined below. */
+    int             level;                  /* Oper's access level to services (ULEVEL_*) */
+};
+
+typedef struct _Oper_V11_32 Oper_V11_32;
+struct _Oper_V11_32 {
+
+    int32_t             prev, next;
+
+    int32_t             nick;
+
+    Creator32           creator;
+    int32_t             lastUpdate;
+
+    uint32_t            flags;                  /* OPER_* defined below. */
+    int32_t             level;                  /* Oper's access level to services (ULEVEL_*) */
+};
+typedef Oper_V11_32 Oper32;
+
+// Current structs version
+#define Oper    Oper_V11
+
 /*********************************************************
  * Constants                                             *
  *********************************************************/
@@ -561,6 +595,35 @@ struct __attribute__((packed)) _Region_32 {
 // only for region_match()
 #define REGIONTYPE_BOTH REGIONTYPE_IP | REGIONTYPE_HOST
 
+// Oper.flags
+#define OPER_FLAG_ENABLED   0x00000001
+
+// Livelli di accesso ai comandi
+#define CMDLEVEL_USER               0x00000001
+#define CMDLEVEL_OPER               0x00000002
+#define CMDLEVEL_AGENT              0x00000004
+#define CMDLEVEL_HOP                0x00000008
+#define CMDLEVEL_SOP                0x00000020
+#define CMDLEVEL_SA                 0x00000040
+#define CMDLEVEL_SRA                0x00000080
+#define CMDLEVEL_CODER              0x00000100
+#define CMDLEVEL_MASTER             0x00000200
+
+#define CMDLEVEL_DISABLED           0x10000000
+#define CMDLEVEL_CANT_BE_DISABLED   0x08000000
+
+// Livelli utenti standard
+#define ULEVEL_NOACCESS         0x00000000
+#define ULEVEL_USER             CMDLEVEL_USER
+#define ULEVEL_OPER             (ULEVEL_USER  | CMDLEVEL_OPER)
+#define ULEVEL_AGENT            (ULEVEL_USER  | CMDLEVEL_AGENT)
+#define ULEVEL_HOP              (ULEVEL_USER  | CMDLEVEL_HOP)
+#define ULEVEL_SOP              (ULEVEL_AGENT | CMDLEVEL_HOP | CMDLEVEL_OPER | CMDLEVEL_SOP)
+#define ULEVEL_SA               (ULEVEL_SOP   | CMDLEVEL_SA)
+#define ULEVEL_SRA              (ULEVEL_SA    | CMDLEVEL_SRA)
+#define ULEVEL_CODER            (ULEVEL_SRA   | CMDLEVEL_CODER)
+#define ULEVEL_MASTER           (ULEVEL_CODER | CMDLEVEL_MASTER)
+
 /*********************************************************
  * Public code                                           *
  *********************************************************/
@@ -581,6 +644,8 @@ extern mowgli_list_t *blacklist_list;
 extern mowgli_list_t *tagline_list;
 extern mowgli_list_t *akill_list;
 extern mowgli_list_t *regions_list;
+
+extern mowgli_patricia_t *opers_tree;
 
 extern dynConfig dynConf;
 

@@ -20,6 +20,8 @@ mowgli_list_t *tagline_list = NULL;
 mowgli_list_t *akill_list = NULL;
 mowgli_list_t *regions_list = NULL;
 
+mowgli_patricia_t *opers_tree = NULL;
+
 dynConfig dynConf = {
     .cs_regLimit = 0,
     .ns_regLimit = 0,
@@ -39,6 +41,9 @@ static bool blacklist_db_load(void);
 static bool tagline_db_load(void);
 static bool akill_db_load(void);
 static bool regions_db_load(void);
+static bool opers_db_load(void);
+
+static void oper_destroy_cb(const char *key, void *data, void *privdata);
 
 static inline void str_creator_free(Creator *creator);
 static inline void str_creationinfo_free(CreationInfo *info);
@@ -66,10 +71,15 @@ void operdb_init(void) {
     akill_list = mowgli_list_create();
     /* Regions */
     regions_list = mowgli_list_create();
+    /* Opers */
+    opers_tree = mowgli_patricia_create(&strcasecanon);
 }
 
 void operdb_terminate(void) {
     mowgli_node_t *n, *tn;
+
+    /* Opers */
+    mowgli_patricia_destroy(opers_tree, &oper_destroy_cb, NULL);
 
     /* Regions */
     MOWGLI_LIST_FOREACH_SAFE(n, tn, regions_list->head) {
@@ -219,6 +229,7 @@ void operdb_load(void) {
     tagline_db_load();
     akill_db_load();
     regions_db_load();
+    opers_db_load();
 }
 
 static void rootserv_db_load(void) {
@@ -1302,6 +1313,116 @@ static void access_destroy(Access *anAccess) {
         str_creator_free(&(anAccess->creator));
 
         mowgli_free(anAccess);
+}
+
+static bool opers_db_load(void) {
+    STGHANDLE   stg = 0;
+    STG_RESULT  result;
+    bool        masterFound = false;
+    Oper        *currentMaster = NULL, *confMaster = NULL;
+
+    result = stg_open(OPER_DB, &stg);
+    switch (result) {
+        case stgSuccess: { // OK -> loading data
+            STGVERSION  version;
+            bool        in_section;
+            bool        read_done;
+            bool        is64Bit;
+
+            version = stg_data_version(stg);
+            is64Bit = stg_is64bit(stg);
+
+            switch (version) {
+                case OPER_DB_CURRENT_VERSION: {
+                    Oper    *anOper;
+                    int     operIdx;
+
+                    for (operIdx = FIRST_VALID_NICK_CHAR; operIdx <= LAST_VALID_NICK_CHAR; ++operIdx) {
+                        // start-of-section marker
+                        result = stg_read_record(stg, NULL, 0);
+
+                        if (result == stgBeginOfSection) {
+                            in_section = true;
+
+                            while (in_section) {
+                                anOper = mowgli_alloc(sizeof(Oper));
+
+                                if (is64Bit)
+                                    result = stg_read_record(stg, (unsigned char *)anOper, sizeof(Oper));
+                                else {
+                                    Oper32 oper32;
+                                    result = stg_read_record(stg, (unsigned char *)&oper32, sizeof(Oper32));
+                                    anOper->nick = (char *)(uintptr_t)oper32.nick;
+                                    anOper->creator.name = (char *)(uintptr_t)oper32.creator.name;
+                                    anOper->creator.time = oper32.creator.time;
+                                    anOper->lastUpdate = oper32.lastUpdate;
+                                    anOper->flags = oper32.flags;
+                                    anOper->level = oper32.level;
+                                }
+
+                                switch (result) {
+                                    case stgEndOfSection: // end-of-section
+                                        in_section = false;
+                                        mowgli_free(anOper);
+                                        break;
+
+                                    case stgSuccess: // a valid region
+                                        read_done = true;
+
+                                        read_done &= (result = stg_read_string(stg, &(anOper->nick), NULL)) == stgSuccess;
+
+                                        if (read_done)
+                                            read_done &= (result = stg_read_string(stg, &(anOper->creator.name), NULL)) == stgSuccess;
+
+                                        if (!read_done)
+                                            mowgli_log_fatal("Read error on %s (2) - %s", OPER_DB, stg_result_to_string(result));
+
+                                        if (anOper->level == ULEVEL_MASTER) {
+                                            /* services.conf is the only place where ULEVEL_MASTER can be assigned, warn and drop the entry */
+                                            mowgli_log_warning("Dropping Services Master %s while loading %s", anOper->nick, OPER_DB);
+                                            oper_destroy_cb(NULL, anOper, NULL);
+                                        } else {
+                                            mowgli_patricia_add(opers_tree, anOper->nick, anOper);
+                                        }
+                                        break;
+
+                                    default: // some error
+                                        mowgli_log_fatal("Read error on %s - %s", OPER_DB, stg_result_to_string(result));
+                                }
+                            }
+                        }
+                        else
+                            mowgli_log_fatal("Read error on %s : invalid format", OPER_DB);
+                    }
+
+                    stg_close(stg, OPER_DB);
+                    break;
+                }
+
+                default:
+                    mowgli_log_fatal("Unsupported version number (%d) on %s", version, OPER_DB);
+            }
+
+            break;
+        }
+
+        case stgNotFound: // no data to load
+            break;
+
+        default: // error!
+            stg_close(stg, OPER_DB);
+            mowgli_log_fatal("Error opening %s - %s", OPER_DB, stg_result_to_string(result));
+            return false;
+    }
+
+    return true;
+}
+
+static void oper_destroy_cb(const char *key, void *data, void *privdata) {
+    Oper *oper = (Oper *)data;
+    mowgli_free(oper->nick);
+    str_creator_free(&(oper->creator));
+    mowgli_free(oper);
 }
 
 static inline void str_creator_free(Creator *creator) {
