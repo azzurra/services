@@ -20,7 +20,7 @@ static void chaninfo_destroy_cb(const char *key, void *data, void *privdata);
 void chanserv_init(void) {
     chandb_heap = mowgli_heap_create(sizeof(ChannelInfo), 2, BH_NOW);
     cs_suspend_list = mowgli_list_create();
-    chantree = mowgli_patricia_create_named("chantree", &strcasecanon);
+    chantree = mowgli_patricia_create(&strcasecanon);
 }
 
 void chanserv_terminate(void) {
@@ -165,6 +165,7 @@ void load_cs_dbase(void) {
                                             anAccess->name = NULL;
 
                                             if (anAccess->creator != NULL) {
+                                                mowgli_free(anAccess->creator);
                                                 anAccess->status = ACCESS_ENTRY_FREE;
                                                 anAccess->flags = 0;
                                                 ++unused_access;

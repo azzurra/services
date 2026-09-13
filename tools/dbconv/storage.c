@@ -117,7 +117,7 @@ STG_RESULT stg_open(const char *path, STGHANDLE *handle) {
 
     if (path != NULL && handle != NULL) {
 
-        StorageDescriptor   *sd;
+        StorageDescriptor   *sd = NULL;
 
         *handle = STG_INVALID_HANDLE;
 
@@ -162,7 +162,7 @@ STG_RESULT stg_open(const char *path, STGHANDLE *handle) {
                         }
                     }
                     else
-                        return stg_last_error = stgReadError;
+                        result = stgReadError;
                 }
                 else {
 
@@ -171,12 +171,12 @@ STG_RESULT stg_open(const char *path, STGHANDLE *handle) {
                         return stg_last_error = stgOldStorage; // done
                     }
                     else
-                        return stg_last_error = stgInvalidStorage;
+                        result = stgInvalidStorage;
                 }
 
             }
             else
-                return stg_last_error = stgReadError;
+                result = stgReadError;
         }
         else {
 
@@ -199,6 +199,12 @@ STG_RESULT stg_open(const char *path, STGHANDLE *handle) {
                     result = stgUnknownError;
                     break;
             }
+        }
+
+        if (sd) {
+            if (sd->fd)
+                fclose(sd->fd);
+            mowgli_free(sd);
         }
     }
 

@@ -15,7 +15,7 @@ static void nickinfo32_to64(NickInfo32 *ni32, NickInfo *ni);
 
 void nickserv_init(void) {
     nickdb_heap = mowgli_heap_create(sizeof(NickInfo), 2, BH_NOW);
-    nicktree = mowgli_patricia_create_named("nicktree", &strcasecanon);
+    nicktree = mowgli_patricia_create(&strcasecanon);
 }
 
 static void nickinfo_destroy_cb(const char *key, void *data, void *privdata) {
