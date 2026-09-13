@@ -18,6 +18,7 @@ mowgli_list_t *reserved_list = NULL;
 mowgli_list_t *blacklist_list = NULL;
 mowgli_list_t *tagline_list = NULL;
 mowgli_list_t *akill_list = NULL;
+mowgli_list_t *regions_list = NULL;
 
 dynConfig dynConf = {
     .cs_regLimit = 0,
@@ -37,6 +38,7 @@ static bool reserved_db_load(void);
 static bool blacklist_db_load(void);
 static bool tagline_db_load(void);
 static bool akill_db_load(void);
+static bool regions_db_load(void);
 
 static inline void str_creator_free(Creator *creator);
 static inline void str_creationinfo_free(CreationInfo *info);
@@ -62,10 +64,24 @@ void operdb_init(void) {
     tagline_list = mowgli_list_create();
     /* AKill */
     akill_list = mowgli_list_create();
+    /* Regions */
+    regions_list = mowgli_list_create();
 }
 
 void operdb_terminate(void) {
     mowgli_node_t *n, *tn;
+
+    /* Regions */
+    MOWGLI_LIST_FOREACH_SAFE(n, tn, regions_list->head) {
+        Region *region = (Region *)n->data;
+        mowgli_node_delete(n, regions_list);
+        mowgli_free(region->host_mask);
+        mowgli_free(region->reason);
+        str_creator_free(&(region->creator));
+        mowgli_free(region);
+        mowgli_node_free(n);
+    }
+    mowgli_list_free(regions_list);
 
     /* AKill */
     MOWGLI_LIST_FOREACH_SAFE(n, tn, akill_list->head) {
@@ -202,6 +218,7 @@ void operdb_load(void) {
     blacklist_db_load();
     tagline_db_load();
     akill_db_load();
+    regions_db_load();
 }
 
 static void rootserv_db_load(void) {
@@ -477,7 +494,6 @@ static bool spam_db_load(void) {
 
         default: // error!
             stg_close(stg, SPAM_DB);
-
             mowgli_log_fatal("Error opening %s - %s", SPAM_DB, stg_result_to_string(result));
             return false;
     }
@@ -1158,6 +1174,105 @@ static bool akill_db_load(void) {
         default: // error!
             stg_close(stg, AKILL_DB);
             mowgli_log_fatal("Error opening %s - %s", AKILL_DB, stg_result_to_string(result));
+            return false;
+    }
+}
+
+static bool regions_db_load(void) {
+    STGHANDLE   stg = 0;
+    STG_RESULT  result;
+
+    Region      *region;
+    int         i, type;
+
+    result = stg_open(REGIONS_DB, &stg);
+    switch (result) {
+        case stgSuccess: { // OK -> loading data
+            STGVERSION  version;
+            bool        in_section;
+            bool        read_done;
+            bool        is64Bit;
+
+            version = stg_data_version(stg);
+            is64Bit = stg_is64bit(stg);
+
+            switch (version) {
+                case REGIONS_DB_CURRENT_VERSION:
+                    for (type = 0; type < 2; ++type) {
+                        // load CIDRs in the first loop, HOSTs in the second one
+                        for (i = 0; i < 256; ++i) {
+                            // start-of-section marker
+                            result = stg_read_record(stg, NULL, 0);
+
+                            if (result == stgBeginOfSection) {
+                                in_section = true;
+
+                                while (in_section) {
+                                    region = mowgli_alloc(sizeof(Region));
+
+                                    if (is64Bit)
+                                        result = stg_read_record(stg, (unsigned char *)region, sizeof(Region));
+                                    else {
+                                        Region32 region32;
+                                        result = stg_read_record(stg, (unsigned char *)&region32, sizeof(Region32));
+                                        region->creator.name = (char *)(uintptr_t)region32.creator.name;
+                                        region->creator.time = region32.creator.time;
+                                        region->flags = region32.flags;
+                                        region->hits = region32.hits;
+                                        region->cidr = region32.cidr;
+                                        region->id = region32.id;
+                                        region->reason = (char *)(uintptr_t)region32.reason;
+                                        region->host_mask = (char *)(uintptr_t)region32.host_mask;
+                                    }
+
+                                    switch (result) {
+                                        case stgEndOfSection: // end-of-section
+                                            in_section = false;
+                                            mowgli_free(region);
+                                            break;
+
+                                        case stgSuccess: // a valid region
+                                            read_done = true;
+
+                                            if (region->host_mask)
+                                                read_done &= (result = stg_read_string(stg, &(region->host_mask), NULL)) == stgSuccess;
+
+                                            if (read_done && region->creator.name != NULL)
+                                                read_done &= (result = stg_read_string(stg, &(region->creator.name), NULL)) == stgSuccess;
+
+                                            if (read_done && region->reason != NULL)
+                                                read_done &= (result = stg_read_string(stg, &(region->reason), NULL)) == stgSuccess;
+
+                                            if (!read_done)
+                                                mowgli_log_fatal("Read error on %s (2) - %s", REGIONS_DB, stg_result_to_string(result));
+
+                                            mowgli_node_add(region, mowgli_node_create(), regions_list);
+                                            break;
+
+                                        default: // some error
+                                            mowgli_log_fatal("Read error on %s - %s", REGIONS_DB, stg_result_to_string(result));
+                                    }
+                                }
+                            }
+                            else
+                                mowgli_log_fatal("Read error on %s : invalid format", REGIONS_DB);
+                        }
+                    }
+
+                    stg_close(stg, REGIONS_DB);
+                    return true;
+
+                default:
+                    mowgli_log_fatal("Unsupported version number (%d) on %s", version, REGIONS_DB);
+            }
+        }
+
+        case stgNotFound: // no data to load
+            return true;
+
+        default: // error!
+            stg_close(stg, REGIONS_DB);
+            mowgli_log_fatal("Error opening %s - %s", REGIONS_DB, stg_result_to_string(result));
             return false;
     }
 }

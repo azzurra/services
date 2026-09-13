@@ -33,11 +33,16 @@
 #define TAGLINE_DB_SUPPORTED_VERSION    "10"
 #define AKILL_DB_CURRENT_VERSION        10
 #define AKILL_DB_SUPPORTED_VERSION      "10"
+#define REGIONS_DB_CURRENT_VERSION      10
+#define REGIONS_DB_SUPPORTED_VERSION    "7 10"
 
 
 /*********************************************************
  * Data types                                            *
  *********************************************************/
+
+typedef uint32_t REGION_ID;
+typedef uint32_t REGION_TYPE;
 
 struct _CIDR_IP {
     uint32_t ip;
@@ -440,6 +445,38 @@ struct __attribute__((packed)) _AutoKill_V10_32 {
 // Current structs version
 typedef AutoKill_V10_32     AutoKill32;
 
+typedef struct _Region  Region;
+struct _Region {
+
+    REGION_ID       id;
+    unsigned long   flags;  /* RF_* */
+    unsigned long   hits;
+
+    CIDR_IP         cidr;
+    char            *host_mask;
+
+    Creator         creator;
+    char            *reason;
+
+    Region          *next, *prev;
+};
+
+typedef struct _Region_32   Region32;
+struct __attribute__((packed)) _Region_32 {
+
+    REGION_ID       id;
+    uint32_t        flags;  /* RF_* */
+    uint32_t        hits;
+
+    CIDR_IP         cidr;
+    uint32_t        host_mask;
+
+    Creator32       creator;
+    uint32_t        reason;
+
+    uint32_t        next, prev;
+};
+
 /*********************************************************
  * Constants                                             *
  *********************************************************/
@@ -506,6 +543,24 @@ typedef AutoKill_V10_32     AutoKill32;
 
 #define AKILL_TYPE_DISABLED     0x80000000
 
+#define REGION_IT       (REGION_ID) 0
+#define REGION_US       (REGION_ID) 1
+#define REGION_FR       (REGION_ID) 2
+#define REGION_DE       (REGION_ID) 3
+#define REGION_ES       (REGION_ID) 4
+#define REGION_JP       (REGION_ID) 5
+
+#define REGION_INVALID  (REGION_ID) (-1)
+
+#define REGION_FIRST    REGION_IT
+#define REGION_LAST     REGION_JP
+#define REGION_COUNT    6
+
+#define REGIONTYPE_IP   (REGION_TYPE) 0x00000001
+#define REGIONTYPE_HOST (REGION_TYPE) 0x00000002
+// only for region_match()
+#define REGIONTYPE_BOTH REGIONTYPE_IP | REGIONTYPE_HOST
+
 /*********************************************************
  * Public code                                           *
  *********************************************************/
@@ -525,6 +580,7 @@ extern mowgli_list_t *reserved_list;
 extern mowgli_list_t *blacklist_list;
 extern mowgli_list_t *tagline_list;
 extern mowgli_list_t *akill_list;
+extern mowgli_list_t *regions_list;
 
 extern dynConfig dynConf;
 
