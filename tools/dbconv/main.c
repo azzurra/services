@@ -22,7 +22,7 @@ int main(int argc, char *argv[]) {
     mowgli_thread_set_policy(MOWGLI_THREAD_POLICY_DISABLED);
 
     /* Parse command line arguments */
-    while ((r = mowgli_getopt_long(argc, argv, "m:h", long_opts, NULL)) != -1) {
+    while ((r = mowgli_getopt_long(argc, argv, "h", long_opts, NULL)) != -1) {
         switch(r) {
             case 'h':
                 print_help();
