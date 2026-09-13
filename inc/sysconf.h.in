@@ -105,6 +105,9 @@
 /* Define to 1 if you have the 'fork' function. */
 #undef HAVE_FORK
 
+/* Define to 1 if you have the 'fstat' function. */
+#undef HAVE_FSTAT
+
 /* Define to 1 if you have the 'fsync' function. */
 #undef HAVE_FSYNC
 
@@ -260,6 +263,9 @@
 
 /* Define to 1 if you have the 'snprintf' function. */
 #undef HAVE_SNPRINTF
+
+/* Define to 1 if you have the 'stat' function. */
+#undef HAVE_STAT
 
 /* Define to 1 if you have the <stdarg.h> header file. */
 #undef HAVE_STDARG_H

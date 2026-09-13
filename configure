@@ -5456,6 +5456,23 @@ then :
 fi
 
 
+  for ac_func in fstat
+do :
+  ac_fn_c_check_func "$LINENO" "fstat" "ac_cv_func_fstat"
+if test "x$ac_cv_func_fstat" = xyes
+then :
+  printf "%s\n" "#define HAVE_FSTAT 1" >>confdefs.h
+
+else case e in #(
+  e)
+
+    as_fn_error $? "required function not available" "$LINENO" 5
+ ;;
+esac
+fi
+
+done
+
   for ac_func in fileno
 do :
   ac_fn_c_check_func "$LINENO" "fileno" "ac_cv_func_fileno"
@@ -5772,6 +5789,23 @@ do :
 if test "x$ac_cv_func_snprintf" = xyes
 then :
   printf "%s\n" "#define HAVE_SNPRINTF 1" >>confdefs.h
+
+else case e in #(
+  e)
+
+    as_fn_error $? "required function not available" "$LINENO" 5
+ ;;
+esac
+fi
+
+done
+
+  for ac_func in stat
+do :
+  ac_fn_c_check_func "$LINENO" "stat" "ac_cv_func_stat"
+if test "x$ac_cv_func_stat" = xyes
+then :
+  printf "%s\n" "#define HAVE_STAT 1" >>confdefs.h
 
 else case e in #(
   e)
