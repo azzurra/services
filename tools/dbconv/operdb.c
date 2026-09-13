@@ -17,6 +17,7 @@ mowgli_list_t *sgline_list = NULL;
 mowgli_list_t *reserved_list = NULL;
 mowgli_list_t *blacklist_list = NULL;
 mowgli_list_t *tagline_list = NULL;
+mowgli_list_t *akill_list = NULL;
 
 dynConfig dynConf = {
     .cs_regLimit = 0,
@@ -35,6 +36,7 @@ static bool sxline_db_load(const int type);
 static bool reserved_db_load(void);
 static bool blacklist_db_load(void);
 static bool tagline_db_load(void);
+static bool akill_db_load(void);
 
 static inline void str_creator_free(Creator *creator);
 static inline void str_creationinfo_free(CreationInfo *info);
@@ -58,10 +60,27 @@ void operdb_init(void) {
     blacklist_list = mowgli_list_create();
     /* Tagline */
     tagline_list = mowgli_list_create();
+    /* AKill */
+    akill_list = mowgli_list_create();
 }
 
 void operdb_terminate(void) {
     mowgli_node_t *n, *tn;
+
+    /* AKill */
+    MOWGLI_LIST_FOREACH_SAFE(n, tn, akill_list->head) {
+        AutoKill *akill = (AutoKill *)n->data;
+        mowgli_node_delete(n, akill_list);
+        mowgli_free(akill->username);
+        mowgli_free(akill->host);
+        mowgli_free(akill->reason);
+        if (akill->desc)
+            mowgli_free(akill->desc);
+        str_creator_free(&(akill->creator));
+        mowgli_free(akill);
+        mowgli_node_free(n);
+    }
+    mowgli_list_free(akill_list);
 
     /* Tagline */
     MOWGLI_LIST_FOREACH_SAFE(n, tn, tagline_list->head) {
@@ -182,6 +201,7 @@ void operdb_load(void) {
     reserved_db_load();
     blacklist_db_load();
     tagline_db_load();
+    akill_db_load();
 }
 
 static void rootserv_db_load(void) {
@@ -1035,6 +1055,109 @@ static bool tagline_db_load(void) {
         default: // error!
             stg_close(stg, TAGLINE_DB);
             mowgli_log_fatal("Error opening %s - %s", TAGLINE_DB, stg_result_to_string(result));
+            return false;
+    }
+}
+
+static bool akill_db_load(void) {
+    STGHANDLE   stg = 0;
+    STG_RESULT  result;
+
+    result = stg_open(AKILL_DB, &stg);
+
+    switch (result) {
+        case stgSuccess: { // OK -> loading data
+            STGVERSION  version;
+            bool        in_section;
+            bool        read_done;
+            bool        is64Bit;
+
+            version = stg_data_version(stg);
+            is64Bit = stg_is64bit(stg);
+
+            switch (version) {
+                case AKILL_DB_CURRENT_VERSION: {
+                    AutoKill_V10 *akill;
+                    AutoKill32 akill32;
+                    // start-of-section marker
+                    result = stg_read_record(stg, NULL, 0);
+
+                    if (result == stgBeginOfSection) {
+                        in_section = true;
+
+                        while (in_section) {
+                            akill = mowgli_alloc(sizeof(AutoKill_V10));
+                            if (!is64Bit)
+                                result = stg_read_record(stg, (unsigned char *)&akill32, sizeof(AutoKill32));
+                            else
+                                result = stg_read_record(stg, (unsigned char *)akill, sizeof(AutoKill_V10));
+
+                            switch (result) {
+                                case stgEndOfSection: // end-of-section
+                                    in_section = false;
+                                    mowgli_free(akill);
+                                    break;
+
+                                case stgSuccess: // a valid record
+                                    if (!is64Bit) {
+                                        akill->creator.name = (char *)(uintptr_t) akill32.creator.name;
+                                        akill->creator.time = akill32.creator.time;
+                                        akill->username = (char *)(uintptr_t) akill32.username;
+                                        akill->host = (char *)(uintptr_t) akill32.host;
+                                        akill->reason = (char *)(uintptr_t) akill32.reason;
+                                        akill->desc = (char *)(uintptr_t) akill32.desc;
+                                        memcpy(&akill->cidr, &akill32.cidr, sizeof(CIDR_IP));
+                                        akill->expireTime = akill32.expireTime;
+                                        akill->lastUsed = akill32.lastUsed;
+                                        akill->id = akill32.id;
+                                        akill->type = akill32.type;
+                                    }
+                                    read_done = true;
+
+                                    if (akill->username)
+                                        read_done &= (result = stg_read_string(stg, &(akill->username), NULL)) == stgSuccess;
+
+                                    if (read_done && akill->host != NULL)
+                                        read_done &= (result = stg_read_string(stg, &(akill->host), NULL)) == stgSuccess;
+
+                                    if (read_done && akill->reason != NULL)
+                                        read_done &= (result = stg_read_string(stg, &(akill->reason), NULL)) == stgSuccess;
+
+                                    if (read_done && akill->desc != NULL)
+                                        read_done &= (result = stg_read_string(stg, &(akill->desc), NULL)) == stgSuccess;
+
+                                    if (read_done && akill->creator.name != NULL)
+                                        read_done &= (result = stg_read_string(stg, &(akill->creator.name), NULL)) == stgSuccess;
+
+                                    if (!read_done)
+                                        mowgli_log_fatal("Read error on %s (2) - %s", AKILL_DB, stg_result_to_string(result));
+
+                                    mowgli_node_add(akill, mowgli_node_create(), akill_list);
+                                    break;
+
+                                default: // some error
+                                    mowgli_log_fatal("Read error on %s - %s", AKILL_DB, stg_result_to_string(result));
+                            }
+                        }
+                    }
+                    else
+                        mowgli_log_fatal("Read error on %s : invalid format", AKILL_DB);
+
+                    stg_close(stg, AKILL_DB);
+                    return true;
+                }
+
+                default:
+                    mowgli_log_fatal("Unsupported version number (%d) on %s", version, AKILL_DB);
+            }
+        }
+
+        case stgNotFound: // no data to load
+            return true;
+
+        default: // error!
+            stg_close(stg, AKILL_DB);
+            mowgli_log_fatal("Error opening %s - %s", AKILL_DB, stg_result_to_string(result));
             return false;
     }
 }
