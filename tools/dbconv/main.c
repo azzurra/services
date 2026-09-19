@@ -37,7 +37,7 @@ int main(int argc, char *argv[]) {
         mowgli_log_fatal("Could not change directory to %s: %s", DATADIR, strerror(errno));
     }
 
-    time(&NOW);
+    NOW = time(NULL);
 
     nickserv_init();
     chanserv_init();

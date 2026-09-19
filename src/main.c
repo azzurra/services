@@ -587,7 +587,7 @@ int main(int ac, char **av, char **envp) {
 		}
 	}
 
-	time(&NOW);
+	NOW = time(NULL);
 
 	/* Initialization stuff. */
 	trace_init();
@@ -623,7 +623,7 @@ int main(int ac, char **av, char **envp) {
 	/*** Main loop. ***/
 	while (quitting == FALSE) {
 
-		time(&NOW);
+		NOW = time(NULL);
 
 		TRACE_MAIN_FCLT(FACILITY_MAIN_LOOP);
 
