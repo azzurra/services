@@ -15,22 +15,22 @@
  * Headers                                               *
  *********************************************************/
 
-#include "../inc/common.h"
-#include "../inc/svcstrings.h"
-#include "../inc/messages.h"
-#include "../inc/logging.h"
-#include "../inc/memory.h"
-#include "../inc/storage.h"
-#include "../inc/conf.h"
-#include "../inc/main.h"
-#include "../inc/helpserv.h"
-#include "../inc/misc.h"
-#include "../inc/send.h"
-#include "../inc/crypt_userhost.h"
-#include "../inc/servers.h"
-#include "../inc/seenserv.h"
-#include "../inc/statserv.h"
-#include "../inc/cidr.h"
+#include <services/common.h>
+#include <services/strings.h>
+#include <services/messages.h>
+#include <services/logging.h>
+#include <services/memory.h>
+#include <services/storage.h>
+#include <services/conf.h>
+#include <services/main.h>
+#include <services/helpserv.h>
+#include <services/misc.h>
+#include <services/send.h>
+#include <services/crypt_userhost.h>
+#include <services/servers.h>
+#include <services/seenserv.h>
+#include <services/statserv.h>
+#include <services/cidr.h>
 
 
 /*********************************************************
@@ -79,7 +79,7 @@ static ServerStats	*list_serverstats = NULL;
 #undef  HASH_KEY_OFFSET
 #define HASH_KEY_OFFSET		1
 
-#include "../inc/list.h"
+#include <services/list.h>
 
 
 #define CHANSTATS_HASHSIZE	1024

@@ -18,9 +18,9 @@
  * Headers                                               *
  *********************************************************/
 
-#include "facility.h"
-#include "users.h"
-#include "options.h"
+#include <services/facility.h>
+#include <services/users.h>
+#include <services/options.h>
 
 
 typedef unsigned short int	FACILITY;	/* F00000 */

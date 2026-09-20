@@ -21,14 +21,14 @@
  * Headers                                               *
  *********************************************************/
 
-#include "svcstrings.h"
-#include "cidr.h"
-#include "lang.h"
-#include "oper.h"
-#include "channels.h"
-#include "chanserv.h"
-#include "nickserv.h"
-#include "servers.h"
+#include <services/strings.h>
+#include <services/cidr.h>
+#include <services/lang.h>
+#include <services/oper.h>
+#include <services/channels.h>
+#include <services/chanserv.h>
+#include <services/nickserv.h>
+#include <services/servers.h>
 #include <arpa/inet.h>
 
 /*********************************************************

@@ -12,7 +12,7 @@
 
 SUBDIRS =                   \
     ${SUBMODULE_LIBMOWGLI}  \
-    inc                     \
+    include                 \
     src                     \
     tools
 
@@ -27,5 +27,5 @@ buildsys.mk:
 	@exit 1
 
 # Explicit dependencies need to be expressed to ensure parallel builds don't die
-src: ${SUBMODULE_LIBMOWGLI} inc
-tools: ${SUBMODULE_LIBMOWGLI} inc
+src: ${SUBMODULE_LIBMOWGLI} include
+tools: ${SUBMODULE_LIBMOWGLI} include

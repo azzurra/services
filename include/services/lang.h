@@ -126,7 +126,7 @@ typedef struct _user	User;
 /* ID messaggi */
 
 #ifndef MAKE_LANG_COMPILER
-#include "lang_msg.h"
+#include <services/lang_msg.h>
 #endif
 
 

@@ -1,4 +1,4 @@
-/* inc/sysconf.h.in.  Generated from configure.ac by autoheader.  */
+/* include/services/sysconf.h.in.  Generated from configure.ac by autoheader.  */
 
 
 #ifndef AZSVC_INC_SYSCONF_H

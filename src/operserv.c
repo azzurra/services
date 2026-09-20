@@ -17,35 +17,35 @@
  * Headers                                               *
  *********************************************************/
 
-#include "../inc/common.h"
-#include "../inc/svcstrings.h"
-#include "../inc/messages.h"
-#include "../inc/logging.h"
-#include "../inc/memory.h"
-#include "../inc/send.h"
-#include "../inc/conf.h"
-#include "../inc/storage.h"
-#include "../inc/misc.h"
-#include "../inc/main.h"
-#include "../inc/servers.h"
-#include "../inc/version.h"
-#include "../inc/oper.h"
-#include "../inc/timeout.h"
-#include "../inc/cidr.h"
-#include "../inc/akill.h"
-#include "../inc/memoserv.h"
-#include "../inc/rootserv.h"
-#include "../inc/helpserv.h"
-#include "../inc/operserv.h"
-#include "../inc/list.h"
-#include "../inc/trigger.h"
-#include "../inc/spam.h"
-#include "../inc/ignore.h"
-#include "../inc/sxline.h"
-#include "../inc/reserved.h"
-#include "../inc/blacklist.h"
-#include "../inc/tagline.h"
-#include "../inc/jupe.h"
+#include <services/common.h>
+#include <services/strings.h>
+#include <services/messages.h>
+#include <services/logging.h>
+#include <services/memory.h>
+#include <services/send.h>
+#include <services/conf.h>
+#include <services/storage.h>
+#include <services/misc.h>
+#include <services/main.h>
+#include <services/servers.h>
+#include <services/version.h>
+#include <services/oper.h>
+#include <services/timeout.h>
+#include <services/cidr.h>
+#include <services/akill.h>
+#include <services/memoserv.h>
+#include <services/rootserv.h>
+#include <services/helpserv.h>
+#include <services/operserv.h>
+#include <services/list.h>
+#include <services/trigger.h>
+#include <services/spam.h>
+#include <services/ignore.h>
+#include <services/sxline.h>
+#include <services/reserved.h>
+#include <services/blacklist.h>
+#include <services/tagline.h>
+#include <services/jupe.h>
 
 
 /*********************************************************

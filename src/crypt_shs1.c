@@ -41,13 +41,13 @@
 //#define SHS1_IO
 #undef SHS1_IO // Shaka 22/04/02 - don't needed
 
-#include "../inc/common.h"
-#include "../inc/crypt_shs1.h"
+#include <services/common.h>
+#include <services/crypt_shs1.h>
 
 
 /* Shaka 22/04/02 - don't needed
-#include "align.h"
-#include "endian.h"
+#include <services/align.h>
+#include <services/endian.h>
 */
 
 char *shs1_what="@(#)";	/* #(@) if checked in */

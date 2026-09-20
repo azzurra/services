@@ -17,32 +17,32 @@
  * Headers                                               *
  *********************************************************/
 
-#include "../inc/common.h"
-#include "../inc/svcstrings.h"
-#include "../inc/messages.h"
-#include "../inc/logging.h"
-#include "../inc/memory.h"
-#include "../inc/send.h"
-#include "../inc/lang.h"
-#include "../inc/version.h"
-#include "../inc/servers.h"
-#include "../inc/main.h"
-#include "../inc/conf.h"
-#include "../inc/misc.h"
-#include "../inc/sockutil.h"
-#include "../inc/process.h"
-#include "../inc/users.h"
-#include "../inc/channels.h"
-#include "../inc/debugserv.h"
-#include "../inc/nickserv.h"
-#include "../inc/chanserv.h"
-#include "../inc/memoserv.h"
-#include "../inc/operserv.h"
-#include "../inc/rootserv.h"
-#include "../inc/seenserv.h"
-#include "../inc/statserv.h"
-#include "../inc/helpserv.h"
-#include "../inc/ignore.h"
+#include <services/common.h>
+#include <services/strings.h>
+#include <services/messages.h>
+#include <services/logging.h>
+#include <services/memory.h>
+#include <services/send.h>
+#include <services/lang.h>
+#include <services/version.h>
+#include <services/servers.h>
+#include <services/main.h>
+#include <services/conf.h>
+#include <services/misc.h>
+#include <services/sockutil.h>
+#include <services/process.h>
+#include <services/users.h>
+#include <services/channels.h>
+#include <services/debugserv.h>
+#include <services/nickserv.h>
+#include <services/chanserv.h>
+#include <services/memoserv.h>
+#include <services/operserv.h>
+#include <services/rootserv.h>
+#include <services/seenserv.h>
+#include <services/statserv.h>
+#include <services/helpserv.h>
+#include <services/ignore.h>
 
 
 /*********************************************************

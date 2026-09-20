@@ -18,4 +18,24 @@ SRCS =          \
 
 include ../../buildsys.mk
 
+CPPFLAGS += -I../../include
+
+CFLAGS +=                           \
+    ${LIBCRYPTO_CFLAGS}             \
+    ${LIBGCRYPT_CFLAGS}             \
+    ${LIBMBEDCRYPTO_CFLAGS}         \
+    ${LIBNETTLE_CFLAGS}             \
+    ${LIBQRENCODE_CFLAGS}           \
+    ${LIBSODIUM_CFLAGS}
+
+LIBS +=                             \
+    ${LIBCRYPTO_LIBS}               \
+    ${LIBGCRYPT_LIBS}               \
+    ${LIBMBEDCRYPTO_LIBS}           \
+    ${LIBNETTLE_LIBS}               \
+    ${LIBQRENCODE_LIBS}             \
+    ${LIBSODIUM_LIBS}               \
+    ${LIBDL_LIBS}                   \
+    ${LIBSOCKET_LIBS}
+
 build: all

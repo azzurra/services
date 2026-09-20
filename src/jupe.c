@@ -15,17 +15,17 @@
  * Headers                                               *
  *********************************************************/
 
-#include "../inc/common.h"
-#include "../inc/svcstrings.h"
-#include "../inc/messages.h"
-#include "../inc/logging.h"
-#include "../inc/memory.h"
-#include "../inc/main.h"
-#include "../inc/send.h"
-#include "../inc/storage.h"
-#include "../inc/conf.h"
-#include "../inc/misc.h"
-#include "../inc/jupe.h"
+#include <services/common.h>
+#include <services/strings.h>
+#include <services/messages.h>
+#include <services/logging.h>
+#include <services/memory.h>
+#include <services/main.h>
+#include <services/send.h>
+#include <services/storage.h>
+#include <services/conf.h>
+#include <services/misc.h>
+#include <services/jupe.h>
 
 
 /*********************************************************

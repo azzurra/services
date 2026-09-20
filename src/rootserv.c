@@ -17,21 +17,21 @@
  * Headers                                               *
  *********************************************************/
 
-#include "../inc/common.h"
-#include "../inc/svcstrings.h"
-#include "../inc/messages.h"
-#include "../inc/regions.h"
-#include "../inc/logging.h"
-#include "../inc/memory.h"
-#include "../inc/send.h"
-#include "../inc/conf.h"
-#include "../inc/memoserv.h"
-#include "../inc/helpserv.h"
-#include "../inc/rootserv.h"
-#include "../inc/misc.h"
-#include "../inc/main.h"
-#include "../inc/crypt_userhost.h"
-#include "../inc/storage.h"
+#include <services/common.h>
+#include <services/strings.h>
+#include <services/messages.h>
+#include <services/regions.h>
+#include <services/logging.h>
+#include <services/memory.h>
+#include <services/send.h>
+#include <services/conf.h>
+#include <services/memoserv.h>
+#include <services/helpserv.h>
+#include <services/rootserv.h>
+#include <services/misc.h>
+#include <services/main.h>
+#include <services/crypt_userhost.h>
+#include <services/storage.h>
 
 
 /*********************************************************

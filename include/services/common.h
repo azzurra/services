@@ -42,12 +42,12 @@
 #include <mowgli.h>
 
 /* Services headers */
-#include "xrefs.h"
-#include "sysconf.h"
-#include "options.h"
-#include "config.h"
-#include "macros.h"
-#include "instpaths.h"
+#include <services/xrefs.h>
+#include <services/sysconf.h>
+#include <services/options.h>
+#include <services/config.h>
+#include <services/macros.h>
+#include <services/instpaths.h>
 
 
 #endif /* SRV_COMMON_H */

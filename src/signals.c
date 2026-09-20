@@ -15,15 +15,15 @@
  * Headers                                               *
  *********************************************************/
 
-#include "../inc/common.h"
-#include "../inc/svcstrings.h"
-#include "../inc/messages.h"
-#include "../inc/logging.h"
-#include "../inc/signals.h"
-#include "../inc/main.h"
-#include "../inc/send.h"
-#include "../inc/conf.h"
-#include "../inc/process.h"		/* For to_dispatched */
+#include <services/common.h>
+#include <services/strings.h>
+#include <services/messages.h>
+#include <services/logging.h>
+#include <services/signals.h>
+#include <services/main.h>
+#include <services/send.h>
+#include <services/conf.h>
+#include <services/process.h>		/* For to_dispatched */
 
 
 /*********************************************************

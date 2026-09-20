@@ -15,27 +15,27 @@
  * Headers                                               *
  *********************************************************/
 
-#include "../inc/common.h"
-#include "../inc/svcstrings.h"
-#include "../inc/messages.h"
-#include "../inc/timeout.h"
-#include "../inc/regions.h"
-#include "../inc/users.h"
-#include "../inc/logging.h"
-#include "../inc/memory.h"
-#include "../inc/send.h"
-#include "../inc/conf.h"
-#include "../inc/operserv.h"
-#include "../inc/memoserv.h"
-#include "../inc/rootserv.h"
-#include "../inc/servers.h"
-#include "../inc/misc.h"
-#include "../inc/main.h"
-#include "../inc/crypt_userhost.h"
-#include "../inc/akill.h"
-#include "../inc/reserved.h"
-#include "../inc/seenserv.h"
-#include "../inc/statserv.h"
+#include <services/common.h>
+#include <services/strings.h>
+#include <services/messages.h>
+#include <services/timeout.h>
+#include <services/regions.h>
+#include <services/users.h>
+#include <services/logging.h>
+#include <services/memory.h>
+#include <services/send.h>
+#include <services/conf.h>
+#include <services/operserv.h>
+#include <services/memoserv.h>
+#include <services/rootserv.h>
+#include <services/servers.h>
+#include <services/misc.h>
+#include <services/main.h>
+#include <services/crypt_userhost.h>
+#include <services/akill.h>
+#include <services/reserved.h>
+#include <services/seenserv.h>
+#include <services/statserv.h>
 
 
 /*********************************************************
@@ -52,7 +52,7 @@ extern MemoryPool	*channels_chan_entry_mempool;
 #define HASH_FUNCTIONS_MODIFIER		
 #undef  LIST_USE_MY_HASH
 
-#include "../inc/list.h"
+#include <services/list.h>
 
 // online users
 

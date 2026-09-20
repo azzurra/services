@@ -15,13 +15,13 @@
  * Headers                                               *
  *********************************************************/
 
-#include "../inc/common.h"
-#include "../inc/svcstrings.h"
-#include "../inc/messages.h"
-#include "../inc/memory.h"
-#include "../inc/logging.h"
-#include "../inc/signals.h"
-#include "../inc/main.h"
+#include <services/common.h>
+#include <services/strings.h>
+#include <services/messages.h>
+#include <services/memory.h>
+#include <services/logging.h>
+#include <services/signals.h>
+#include <services/main.h>
 
 
 /*********************************************************

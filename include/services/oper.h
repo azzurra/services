@@ -18,10 +18,10 @@
  * Headers                                               *
  *********************************************************/
 
-#include "svcstrings.h"
-#include "messages.h"
-#include "users.h"
-#include "cidr.h"
+#include <services/strings.h>
+#include <services/messages.h>
+#include <services/users.h>
+#include <services/cidr.h>
 
 
 /*********************************************************

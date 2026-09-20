@@ -41,7 +41,7 @@ source archive.
 
 When downloading releases from GitHub, you MUST use the *attached* archive:
 
-    services-2.6.x.tar.bz2    (or .tar.xz)
+    services-3.0.x.tar.bz2    (or .tar.xz)
 
 DO NOT use the "Download ZIP" button or the "Source code" links, as they are
 missing the required submodules.

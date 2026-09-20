@@ -15,9 +15,9 @@
  * Headers                                               *
  *********************************************************/
 
-#include "../inc/common.h"
-#include "../inc/svcstrings.h"
-#include "../inc/compat.h"
+#include <services/common.h>
+#include <services/strings.h>
+#include <services/compat.h>
 
 
 /*********************************************************/

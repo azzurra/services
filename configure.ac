@@ -12,7 +12,7 @@ AC_INIT([Azzurra IRC Services],[3.0.0-alpha1],[https://github.com/azzurra/servic
 
 AC_CONFIG_AUX_DIR([build-aux])
 AC_CONFIG_FILES([buildsys.mk extra.mk])
-AC_CONFIG_HEADERS([inc/sysconf.h])
+AC_CONFIG_HEADERS([include/services/sysconf.h])
 AC_CONFIG_MACRO_DIR([m4])
 AC_CONFIG_SRCDIR([src/main.c])
 AC_PREFIX_DEFAULT([~/azsvc])
@@ -28,7 +28,7 @@ AS_IF([test -d ".git" -o -f ".git"], [
     ])
 ], [
     AC_MSG_CHECKING([if you downloaded the correct source code tarball])
-    AS_IF([test -f "inc/serno.h"], [
+    AS_IF([test -f "include/services/serno.h"], [
         AC_MSG_RESULT([yes])
     ], [
         AC_MSG_RESULT([no])

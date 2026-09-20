@@ -13,7 +13,7 @@
 #ifndef SRV_CONFIG_H
 #define SRV_CONFIG_H
 
-#include "../../inc/instpaths.h"
+#include <services/instpaths.h>
 
 /*********************************************************
  * Data types                                            *

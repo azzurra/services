@@ -2926,7 +2926,7 @@ ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
 ac_config_files="$ac_config_files buildsys.mk extra.mk"
 
-ac_config_headers="$ac_config_headers inc/sysconf.h"
+ac_config_headers="$ac_config_headers include/services/sysconf.h"
 
 
 
@@ -2960,7 +2960,7 @@ else case e in #(
   e)
     { printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking if you downloaded the correct source code tarball" >&5
 printf %s "checking if you downloaded the correct source code tarball... " >&6; }
-    if test -f "inc/serno.h"
+    if test -f "include/services/serno.h"
 then :
 
         { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: yes" >&5
@@ -22930,7 +22930,7 @@ do
   case $ac_config_target in
     "buildsys.mk") CONFIG_FILES="$CONFIG_FILES buildsys.mk" ;;
     "extra.mk") CONFIG_FILES="$CONFIG_FILES extra.mk" ;;
-    "inc/sysconf.h") CONFIG_HEADERS="$CONFIG_HEADERS inc/sysconf.h" ;;
+    "include/services/sysconf.h") CONFIG_HEADERS="$CONFIG_HEADERS include/services/sysconf.h" ;;
     "po-directories") CONFIG_COMMANDS="$CONFIG_COMMANDS po-directories" ;;
 
   *) as_fn_error $? "invalid argument: '$ac_config_target'" "$LINENO" 5;;

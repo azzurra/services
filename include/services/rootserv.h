@@ -16,7 +16,7 @@
 #ifndef SRV_ROOTSERV_H
 #define SRV_ROOTSERV_H
 
-#include "../inc/access.h"
+#include <services/access.h>
 
 /*********************************************************
  * Version stuff                                         *

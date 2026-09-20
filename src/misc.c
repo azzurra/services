@@ -15,19 +15,19 @@
  * Headers                                               *
  *********************************************************/
 
-#include "../inc/common.h"
-#include "../inc/svcstrings.h"
-#include "../inc/messages.h"
-#include "../inc/logging.h"
-#include "../inc/memory.h"
-#include "../inc/send.h"
-#include "../inc/lang.h"
-#include "../inc/conf.h"
-#include "../inc/main.h"
-#include "../inc/misc.h"
-#include "../inc/timeout.h"
-#include "../inc/ignore.h"
-#include "../inc/trigger.h"
+#include <services/common.h>
+#include <services/strings.h>
+#include <services/messages.h>
+#include <services/logging.h>
+#include <services/memory.h>
+#include <services/send.h>
+#include <services/lang.h>
+#include <services/conf.h>
+#include <services/main.h>
+#include <services/misc.h>
+#include <services/timeout.h>
+#include <services/ignore.h>
+#include <services/trigger.h>
 
 /*********************************************************/
 

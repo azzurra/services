@@ -20,9 +20,9 @@
  * Headers                                               *
  *********************************************************/
 
-#include "svcstrings.h"
-#include "users.h"
-#include "chanserv.h"
+#include <services/strings.h>
+#include <services/users.h>
+#include <services/chanserv.h>
 
 
 /*********************************************************

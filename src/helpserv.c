@@ -15,15 +15,15 @@
  * Headers                                               *
  *********************************************************/
 
-#include "../inc/common.h"
-#include "../inc/svcstrings.h"
-#include "../inc/messages.h"
-#include "../inc/logging.h"
-#include "../inc/send.h"
-#include "../inc/conf.h"
-#include "../inc/helpserv.h"
-#include "../inc/macros.h"
-#include "../inc/main.h"
+#include <services/common.h>
+#include <services/strings.h>
+#include <services/messages.h>
+#include <services/logging.h>
+#include <services/send.h>
+#include <services/conf.h>
+#include <services/helpserv.h>
+#include <services/macros.h>
+#include <services/main.h>
 
 
 /* Stuff to pass to the command handler. */

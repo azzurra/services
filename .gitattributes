@@ -1,8 +1,10 @@
 /build-aux/                     linguist-generated
 /configure                      linguist-generated
-/inc/sysconf.h                  linguist-generated
+/include/services/sysconf.h.in  linguist-generated
+/po/services.pot                linguist-generated
+/po/POTFILES.in                 linguist-generated
 
-/ABOUT-NLS l                    linguist-vendored
+/ABOUT-NLS                      linguist-vendored
 /m4/ax_subdirs_configure.m4     linguist-vendored
 /m4/gettext.m4                  linguist-vendored
 /m4/nls.m4                      linguist-vendored

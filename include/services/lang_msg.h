@@ -19,9 +19,9 @@
  * Headers                                               *
  *********************************************************/
 
-#include "common.h"
+#include <services/common.h>
 
-#include "lang_msg_svc.h"
+#include <services/lang_msg_svc.h>
 
 
 #endif /* SRV_LANG_MSG_MAIN_H */

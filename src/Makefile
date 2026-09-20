@@ -58,7 +58,7 @@ SRCS =               \
 
 include ../buildsys.mk
 
-CPPFLAGS += -I../inc
+CPPFLAGS += -I../include
 
 CFLAGS +=                           \
     ${LIBCRYPTO_CFLAGS}             \

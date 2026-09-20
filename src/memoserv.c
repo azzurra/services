@@ -17,21 +17,21 @@
  * Headers                                               *
  *********************************************************/
 
-#include "../inc/common.h"
-#include "../inc/svcstrings.h"
-#include "../inc/messages.h"
-#include "../inc/logging.h"
-#include "../inc/memory.h"
-#include "../inc/send.h"
-#include "../inc/lang.h"
-#include "../inc/datafiles.h"
-#include "../inc/users.h"
-#include "../inc/conf.h"
-#include "../inc/main.h"
-#include "../inc/misc.h"
-#include "../inc/nickserv.h"
-#include "../inc/helpserv.h"
-#include "../inc/memoserv.h"
+#include <services/common.h>
+#include <services/strings.h>
+#include <services/messages.h>
+#include <services/logging.h>
+#include <services/memory.h>
+#include <services/send.h>
+#include <services/lang.h>
+#include <services/datafiles.h>
+#include <services/users.h>
+#include <services/conf.h>
+#include <services/main.h>
+#include <services/misc.h>
+#include <services/nickserv.h>
+#include <services/helpserv.h>
+#include <services/memoserv.h>
 
 
 #ifdef	FIX_USE_MPOOL

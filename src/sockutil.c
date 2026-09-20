@@ -17,12 +17,12 @@
  * Headers                                               *
  *********************************************************/
 
-#include "../inc/common.h"
-#include "../inc/svcstrings.h"
-#include "../inc/messages.h"
-#include "../inc/timeout.h"
-#include "../inc/memory.h"
-#include "../inc/sockutil.h"
+#include <services/common.h>
+#include <services/strings.h>
+#include <services/messages.h>
+#include <services/timeout.h>
+#include <services/memory.h>
+#include <services/sockutil.h>
 
 
 /* Socket used when connecting to our uplink. */

@@ -19,8 +19,8 @@
  * Headers                                               *
  *********************************************************/
 
-#include "../inc/svcstrings.h"
-#include "../inc/cidr.h"
+#include <services/strings.h>
+#include <services/cidr.h>
 
 
 /*********************************************************

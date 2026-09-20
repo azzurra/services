@@ -11,15 +11,15 @@
  * Headers                                               *
  *********************************************************/
 
-#include "../inc/common.h"
-#include "../inc/svcstrings.h"
-#include "../inc/messages.h"
-#include "../inc/version.h"
-#include "../inc/users.h"
-#include "../inc/send.h"
-#include "../inc/conf.h"
-#include "../inc/logging.h"
-#include "../inc/main.h"
+#include <services/common.h>
+#include <services/strings.h>
+#include <services/messages.h>
+#include <services/version.h>
+#include <services/users.h>
+#include <services/send.h>
+#include <services/conf.h>
+#include <services/logging.h>
+#include <services/main.h>
 
 
 /*********************************************************

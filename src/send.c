@@ -17,15 +17,15 @@
  * Headers                                               *
  *********************************************************/
 
-#include "../inc/common.h"
-#include "../inc/svcstrings.h"
-#include "../inc/messages.h"
-#include "../inc/logging.h"
-#include "../inc/send.h"
-#include "../inc/conf.h"
-#include "../inc/main.h"
-#include "../inc/sockutil.h"	/* For socket_write */
-#include "../inc/servers.h"		/* For CAPAB_NICKIP */
+#include <services/common.h>
+#include <services/strings.h>
+#include <services/messages.h>
+#include <services/logging.h>
+#include <services/send.h>
+#include <services/conf.h>
+#include <services/main.h>
+#include <services/sockutil.h>	/* For socket_write */
+#include <services/servers.h>		/* For CAPAB_NICKIP */
 
 
 /*********************************************************

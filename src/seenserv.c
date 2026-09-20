@@ -15,21 +15,21 @@
  * Headers                                               *
  *********************************************************/
 
-#include "../inc/common.h"
-#include "../inc/memory.h"
-#include "../inc/svcstrings.h"
-#include "../inc/messages.h"
-#include "../inc/logging.h"
-#include "../inc/helpserv.h"
-#include "../inc/seenserv.h"
-#include "../inc/conf.h"
-#include "../inc/send.h"
-#include "../inc/misc.h"
-#include "../inc/main.h"
-#include "../inc/regions.h"
-#include "../inc/storage.h"
-#include "../inc/cidr.h"
-#include "../inc/crypt_userhost.h"
+#include <services/common.h>
+#include <services/memory.h>
+#include <services/strings.h>
+#include <services/messages.h>
+#include <services/logging.h>
+#include <services/helpserv.h>
+#include <services/seenserv.h>
+#include <services/conf.h>
+#include <services/send.h>
+#include <services/misc.h>
+#include <services/main.h>
+#include <services/regions.h>
+#include <services/storage.h>
+#include <services/cidr.h>
+#include <services/crypt_userhost.h>
 
 
 /*********************************************************
@@ -52,7 +52,7 @@ static Agent a_SeenServ;
 #define HASH_FUNCTIONS_MODIFIER		
 #undef  LIST_USE_MY_HASH
 
-#include "../inc/list.h"
+#include <services/list.h>
 
 
 #define SEENINFO_HASHSIZE	1024

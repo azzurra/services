@@ -11,19 +11,19 @@
  * Headers                                               *
  *********************************************************/
 
-#include "../inc/common.h"
-#include "../inc/svcstrings.h"
-#include "../inc/messages.h"
-#include "../inc/logging.h"
-#include "../inc/memory.h"
-#include "../inc/send.h"
-#include "../inc/misc.h"
-#include "../inc/servers.h"
-#include "../inc/main.h"
-#include "../inc/conf.h"
-#include "../inc/channels.h"
-#include "../inc/timeout.h"
-#include "../inc/statserv.h"
+#include <services/common.h>
+#include <services/strings.h>
+#include <services/messages.h>
+#include <services/logging.h>
+#include <services/memory.h>
+#include <services/send.h>
+#include <services/misc.h>
+#include <services/servers.h>
+#include <services/main.h>
+#include <services/conf.h>
+#include <services/channels.h>
+#include <services/timeout.h>
+#include <services/statserv.h>
 
 /*********************************************************
  * Prototipi                                             *
@@ -82,7 +82,7 @@ MemoryPool	*channels_user_entry_mempool;
 #define HASH_FUNCTIONS_MODIFIER		
 #undef  LIST_USE_MY_HASH
 
-#include "../inc/list.h"
+#include <services/list.h>
 
 #define CHANNEL_HASHSIZE	1024
 
