@@ -114,6 +114,7 @@ typedef Oper_V11_32 Oper32;
 
 // Oper.flags
 #define OPER_FLAG_ENABLED	0x00000001
+#define OPER_FLAG_AKILL_PROXY	0x00000002	/* Entry is a network proxy monitor: its akills are typed as such. */
 
 
 // Livelli di accesso ai comandi

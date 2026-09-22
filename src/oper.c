@@ -692,6 +692,9 @@ static BOOL send_oper_info(CSTR nick, CSTR sourceNick, const User *target) {
 
 		send_notice_to_user(sourceNick, target, "Enabled: %s", FlagSet(oper->flags, OPER_FLAG_ENABLED) ? "Yes" : "No");
 
+		if (FlagSet(oper->flags, OPER_FLAG_AKILL_PROXY))
+			send_notice_to_user(sourceNick, target, "Proxy akill: Yes");
+
 		tm = *localtime(&(oper->creator.time));
 		strftime(timebuf, sizeof(timebuf), "%d/%m/%Y %H:%M:%S (%Z)", &tm);
 
@@ -1084,7 +1087,7 @@ void handle_oper(CSTR source, User *callerUser, ServiceCommandData *data) {
 				}
 
 				/* Un oper puo' modificare sé stesso, ma non auto-disabilitarsi. */
-				if (access_denied && str_not_equals_nocase(callerUser->oper->nick, opernick)) {
+				if (access_denied && (callerUser->oper != oper)) {
 
 					send_notice_to_user(data->agent->nick, callerUser, "Access denied.");
 					return;
@@ -1167,9 +1170,68 @@ void handle_oper(CSTR source, User *callerUser, ServiceCommandData *data) {
 						send_notice_to_user(data->agent->nick, callerUser, "%s entry for \2%s\2 has been \2%s\2.", get_access_name(oper->level, TRUE), oper->nick, enable ? "enabled" : "disabled");
 					}
 				}
+				else if (str_equals_nocase(option, "AKILLPROXY")) {
+
+					int enable;
+
+					/* Granting the akill capability is never a self-service operation:
+					   unlike ENABLED, an oper cannot set this one on his own entry. */
+					if (access_denied || (callerUser->oper == oper)) {
+
+						send_notice_to_user(data->agent->nick, callerUser, "Access denied.");
+						return;
+					}
+
+					TRACE_MAIN();
+					if (str_equals_nocase(value, "YES"))
+						enable = TRUE;
+					else if (str_equals_nocase(value, "NO"))
+						enable = FALSE;
+
+					else {
+
+						send_notice_to_user(data->agent->nick, callerUser, "Syntax: \2OPER SET\2 nick AKILLPROXY [YES|NO]");
+						send_notice_to_user(data->agent->nick, callerUser, "Type \2/os OHELP OPER\2 for more information.");
+						return;
+					}
+
+					if (((enable == TRUE) && FlagSet(oper->flags, OPER_FLAG_AKILL_PROXY)) ||
+						((enable == FALSE) && FlagUnset(oper->flags, OPER_FLAG_AKILL_PROXY))) {
+
+						send_notice_to_user(data->agent->nick, callerUser, "%s entry for \2%s\2 already has the proxy akill capability \2%s\2.", get_access_name(oper->level, FALSE), oper->nick, enable ? "enabled" : "disabled");
+					}
+					else {
+
+						TRACE_MAIN();
+
+						if (enable)
+							AddFlag(oper->flags, OPER_FLAG_AKILL_PROXY);
+						else
+							RemoveFlag(oper->flags, OPER_FLAG_AKILL_PROXY);
+
+						oper->lastUpdate = NOW;
+
+						if (data->operMatch) {
+
+							LOG_SNOOP(data->agent->nick, "%s %s %s -- by %s (%s@%s) [Proxy akill %s]", data->agent->shortNick, get_access_name(oper->level, TRUE), oper->nick, callerUser->nick, callerUser->username, callerUser->host, enable ? "Enabled" : "Disabled");
+							log_services(data->agent->logID, "%s %s -- by %s (%s@%s) [Proxy akill %s]", get_access_name(oper->level, TRUE), oper->nick, callerUser->nick, callerUser->username, callerUser->host, enable ? "Enabled" : "Disabled");
+
+							send_globops(data->agent->nick, "\2%s\2 %s the proxy akill capability for \2%s\2", source, enable ? "enabled" : "disabled", oper->nick);
+						}
+						else {
+
+							LOG_SNOOP(data->agent->nick, "%s %s %s -- by %s (%s@%s) through %s [Proxy akill %s]", data->agent->shortNick, get_access_name(oper->level, TRUE), oper->nick, callerUser->nick, callerUser->username, callerUser->host, data->operName, enable ? "Enabled" : "Disabled");
+							log_services(data->agent->logID, "%s %s -- by %s (%s@%s) through %s [Proxy akill %s]", get_access_name(oper->level, TRUE), oper->nick, callerUser->nick, callerUser->username, callerUser->host, data->operName, enable ? "Enabled" : "Disabled");
+
+							send_globops(data->agent->nick, "\2%s\2 (through \2%s\2) %s the proxy akill capability for \2%s\2", source, data->operName, enable ? "enabled" : "disabled", oper->nick);
+						}
+
+						send_notice_to_user(data->agent->nick, callerUser, "Proxy akill capability for \2%s\2 has been \2%s\2.", oper->nick, enable ? "enabled" : "disabled");
+					}
+				}
 				else {
 
-					send_notice_to_user(data->agent->nick, callerUser, "Syntax: \2OPER SET\2 nick [USER|USER2|USER3|HOST|HOST2|HOST3|SERVER|SERVER2|SERVER3|ENABLED] value");
+					send_notice_to_user(data->agent->nick, callerUser, "Syntax: \2OPER SET\2 nick [USER|USER2|USER3|HOST|HOST2|HOST3|SERVER|SERVER2|SERVER3|ENABLED|AKILLPROXY] value");
 					send_notice_to_user(data->agent->nick, callerUser, "Type \2/os OHELP OPER\2 for more information.");
 				}
 			}
@@ -1185,7 +1247,7 @@ void handle_oper(CSTR source, User *callerUser, ServiceCommandData *data) {
 		}
 		else {
 
-			send_notice_to_user(data->agent->nick, callerUser, "Syntax: \2OPER SET\2 nick [ENABLED|PASS] value");
+			send_notice_to_user(data->agent->nick, callerUser, "Syntax: \2OPER SET\2 nick [ENABLED|AKILLPROXY|PASS] value");
 			send_notice_to_user(data->agent->nick, callerUser, "Type \2/os OHELP OPER\2 for more information.");
 		}
 	}

@@ -296,8 +296,8 @@ static char *get_akill_type_long(flags_t type) {
 	APPEND_FLAG(type, AKILL_TYPE_PROXY80, "Proxy (80)")
 	APPEND_FLAG(type, AKILL_TYPE_PROXY3128, "Proxy (3128)")
 	APPEND_FLAG(type, AKILL_TYPE_PROXY6588, "Proxy (6588)")
-	APPEND_FLAG(type, AKILL_TYPE_PROXY3128, "Proxy (8080)")
-	APPEND_FLAG(type, AKILL_TYPE_PROXY3128, "Proxy")
+	APPEND_FLAG(type, AKILL_TYPE_PROXY8080, "Proxy (8080)")
+	APPEND_FLAG(type, AKILL_TYPE_PROXY, "Proxy")
 	APPEND_FLAG(type, AKILL_TYPE_MANUAL, "Manual")
 	APPEND_FLAG(type, AKILL_TYPE_BY_APM, "By APM")
 	APPEND_FLAG(type, AKILL_TYPE_BY_DNSBL, "By DNSBL")
@@ -494,6 +494,9 @@ void akill_add(CSTR source, CSTR username, CSTR host, CSTR reason, const BOOL ma
 			break;
 
 		default:
+			/* Carry over whatever type the caller asked for: AKILL_TYPE_NONE ors
+			   nothing, so the hand-typed akills keep coming out as before. */
+			AddFlag(akill->type, type);
 			akill->reason = str_duplicate(reason);
 			break;
 	}
@@ -733,7 +736,7 @@ void handle_akill(CSTR source, User *callerUser, ServiceCommandData *data) {
 
 		char			akill_nicks[IRCBUFSIZE];
 		char			*expiry = NULL, *username, *host, *reason, *ptr;
-		BOOL			too_many_akill_nicks = FALSE, more_nicks = FALSE, have_CIDR = FALSE;
+		BOOL			too_many_akill_nicks = FALSE, more_nicks = FALSE, have_CIDR = FALSE, by_apm;
 		size_t			user_len, host_len;
 		User			*user;
 		int				akillIdx, usercount = 0, expireTime = CONF_DEFAULT_AKILL_EXPIRY;
@@ -977,7 +980,15 @@ void handle_akill(CSTR source, User *callerUser, ServiceCommandData *data) {
 		if (CONF_SET_READONLY)
 			send_notice_to_user(data->agent->nick, callerUser, "\2Notice:\2 Services is in read-only mode. Changes will not be saved!");
 
-		akill_add(data->operName, username, host, reason, TRUE, have_CIDR, &cidr, AKILL_TYPE_NONE, expireTime, 0, LANG_DEFAULT);
+		/* Akills added by a proxy monitor carry their own type, so that LIST, INFO
+		   and the AKILL ID shown to users tell them apart from the manual ones.
+		   They are not manual either: nobody typed them, so they must not answer
+		   to AKILL LIST MANUAL nor show up as "M". */
+		by_apm = (IS_NOT_NULL(callerUser->oper) && FlagSet(callerUser->oper->flags, OPER_FLAG_AKILL_PROXY));
+
+		akill_add(data->operName, username, host, reason, (by_apm ? FALSE : TRUE), have_CIDR, &cidr,
+			by_apm ? (AKILL_TYPE_BY_APM | AKILL_TYPE_PROXY) : AKILL_TYPE_NONE,
+			expireTime, 0, LANG_DEFAULT);
 	}
 	else if (str_equals_nocase(command, "DEL")) {
 
