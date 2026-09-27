@@ -42,6 +42,7 @@
 #include <mowgli.h>
 
 /* Services headers */
+#include <services/attributes.h>
 #include <services/xrefs.h>
 #include <services/sysconf.h>
 #include <services/options.h>

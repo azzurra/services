@@ -1,0 +1,2 @@
+[spatch]
+    options = -I include -all_includes --preprocess --in-place --no-show-diff

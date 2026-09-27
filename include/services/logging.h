@@ -18,6 +18,7 @@
  * Headers                                               *
  *********************************************************/
 
+#include <services/attributes.h>
 #include <services/facility.h>
 #include <services/users.h>
 #include <services/options.h>
@@ -99,32 +100,32 @@ extern void log_done(void);
 extern void log_rotate(BOOL force);
 
 /* Log errors on the errors log file (errors.log) and on the debug-snoop channel (default is #bugs) */
-extern void log_error(FACILITY facility, FACILITY_LINE subcode, LOG_TYPE type, SEVERITY severity, CSTR fmt, ...) ATTRIBUTE_PRINTF(5, 6);
+extern void log_error(FACILITY facility, FACILITY_LINE subcode, LOG_TYPE type, SEVERITY severity, CSTR fmt, ...) AZSVC_FATTR_PRINTF(5, 6);
 
 /* Log debug messages on the debug log file (debugs.log) */
-extern void log_debug(CSTR fmt, ...) ATTRIBUTE_PRINTF(1, 2);
+extern void log_debug(CSTR fmt, ...) AZSVC_FATTR_PRINTF(1, 2);
 extern void log_debug_direct(CSTR string);
 
 extern int logid_from_agentid(agentid_t agentID);
 
 /* Log service messages on the services log file (services.log) */
-extern void log_services(int services, CSTR fmt, ...) ATTRIBUTE_PRINTF(2, 3);
+extern void log_services(int services, CSTR fmt, ...) AZSVC_FATTR_PRINTF(2, 3);
 
 /* Log panic messages on the panic error log file (panic.log) */
-extern void log_panic(CSTR fmt, ...) ATTRIBUTE_PRINTF(1, 2);
+extern void log_panic(CSTR fmt, ...) AZSVC_FATTR_PRINTF(1, 2);
 extern void log_panic_direct(CSTR string);
 
 /* Send message to the services snoop channel (default is #security) */
-extern void log_snoop(CSTR source, CSTR fmt, ...) ATTRIBUTE_PRINTF(2, 3);
+extern void log_snoop(CSTR source, CSTR fmt, ...) AZSVC_FATTR_PRINTF(2, 3);
 
 /* Send message to the debug snoop channel (default is #bugs) */
-extern void log_debug_snoop(CSTR fmt, ...) ATTRIBUTE_PRINTF(1, 2);
+extern void log_debug_snoop(CSTR fmt, ...) AZSVC_FATTR_PRINTF(1, 2);
 
 /* Send the libc error message on the debug snoop channel and on the stderr stream */
-extern void log_stderr(CSTR fmt, ...) ATTRIBUTE_PRINTF(1, 2);
+extern void log_stderr(CSTR fmt, ...) AZSVC_FATTR_PRINTF(1, 2);
 
 /* Log the error both on the log file and on the stderr stream, send a globops, then die. */
-extern void fatal_error(FACILITY facility, FACILITY_LINE line, CSTR fmt, ...) ATTRIBUTE_PRINTF(3, 4);
+extern void fatal_error(FACILITY facility, FACILITY_LINE line, CSTR fmt, ...) AZSVC_FATTR_PRINTF(3, 4);
 
 extern CSTR log_get_day_timestamp(int day, int month, int year);
 extern CSTR log_get_timestamp(time_t logtime);

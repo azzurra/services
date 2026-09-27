@@ -16,13 +16,36 @@
  *********************************************************/
 
 #include <services/common.h>
+#include <services/memory.h>
 #include <services/strings.h>
 #include <services/messages.h>
 #include <services/logging.h>
 #include <services/signals.h>
 #include <services/memory.h>
 
+#ifndef SIGUSR1
+#  define RAISE_EXCEPTION           abort()
+#else /* !SIGUSR1 */
+#  define RAISE_EXCEPTION           do { raise(SIGUSR1); abort(); } while (0)
+#endif /* SIGUSR1 */
 
+#if !defined(HAVE_TIMINGSAFE_BCMP) && !defined(HAVE_TIMINGSAFE_MEMCMP) && !defined(HAVE_CONSTTIME_MEMEQUAL)
+#  if defined(HAVE_LIBSODIUM_MEMCMP)
+#    include <sodium/utils.h>
+#  elif defined(HAVE_LIBCRYPTO_MEMCMP)
+#    include <openssl/crypto.h>
+#  elif defined(HAVE_LIBNETTLE_MEMEQL)
+#    include <nettle/memops.h>
+#  endif
+#endif /* !HAVE_TIMINGSAFE_BCMP && !HAVE_TIMINGSAFE_MEMCMP && !HAVE_CONSTTIME_MEMEQUAL */
+
+#if !defined(HAVE_MEMSET_S) && !defined(HAVE_EXPLICIT_BZERO) && !defined(HAVE_EXPLICIT_MEMSET)
+#  if defined(HAVE_LIBSODIUM_MEMZERO)
+#    include <sodium/utils.h>
+#  elif defined(HAVE_LIBCRYPTO_CLEANSE)
+#    include <openssl/crypto.h>
+#  endif
+#endif /* !HAVE_MEMSET_S && !HAVE_EXPLICIT_BZERO && !HAVE_EXPLICIT_MEMSET */
 
 
 /*********************************************************
@@ -34,81 +57,207 @@
  * The return value from these functions is never NULL.  *
  *********************************************************/
 
-void *mem_malloc(size_t size) {
-
-	void	*buffer;
-
-	if (size == 0) {
-
-		log_error(FACILITY_MEMORY, __LINE__, LOG_TYPE_ERROR_SANITY, LOG_SEVERITY_ERROR_RESUMED,
-			"mem_malloc(): Illegal attempt to allocate 0 bytes (%s)", log_get_trace_string(trace_main_facility, trace_main_line, trace_current_facility, trace_current_line));
-
-		size = 1;
-	}
-
-	buffer = malloc(size);
-
-	if (IS_NULL(buffer)) {
-
-		log_error(FACILITY_MEMORY, __LINE__, LOG_TYPE_ERROR_SANITY, LOG_SEVERITY_ERROR_QUIT,
-			"mem_malloc(): Out of memory on a %zu byte request.", size);
-
-		raise(SIG_OUT_OF_MEMORY);
-	}
-
-	return buffer;
+void sfree(void *const restrict ptr) {
+	(void) free(ptr);
 }
 
-void *mem_calloc(size_t count, size_t size) {
-
-	void	*buffer;
-
-	if ((size == 0) || (count == 0)) {
-
-		log_error(FACILITY_MEMORY, __LINE__, LOG_TYPE_ERROR_SANITY, LOG_SEVERITY_ERROR_RESUMED,
-			"mem_calloc(): Illegal attempt to allocate 0 bytes");
-
-		if (size == 0)
-			size = 1;
-
-		if (count == 0)
-			count = 1;
-	}
-
-	buffer = calloc(count, size);
-
-	if (IS_NULL(buffer)) {
-
-		log_error(FACILITY_MEMORY, __LINE__, LOG_TYPE_ERROR_SANITY, LOG_SEVERITY_ERROR_QUIT,
-			"mem_calloc(): Out of memory on a %zu byte request.", size * count);
-
-		raise(SIG_OUT_OF_MEMORY);
-	}
-
-	return buffer;
+void smemzerofree(void *const restrict ptr, const size_t len) {
+	(void) smemzero(ptr, len);
+	(void) sfree(ptr);
 }
 
-void *mem_realloc(void *ptr, size_t size) {
+void * AZSVC_FATTR_ALLOC_SIZE_PRODUCT(1, 2) AZSVC_FATTR_MALLOC AZSVC_FATTR_RETURNS_NONNULL
+scalloc(const size_t num, const size_t len) {
+	void *const buf = calloc(num, len);
 
-	void	*buffer;
-
-	if (size == 0)
-		log_error(FACILITY_MEMORY, __LINE__, LOG_TYPE_ERROR_SANITY, LOG_SEVERITY_ERROR_WARNING,
-			"mem_realloc(): 0 bytes reallocation request -> freeing memory");
-
-	buffer = realloc(ptr, size);
-
-	if (IS_NULL(buffer) && (size != 0)) {
-
+	if (!buf) {
 		log_error(FACILITY_MEMORY, __LINE__, LOG_TYPE_ERROR_SANITY, LOG_SEVERITY_ERROR_QUIT,
-			"mem_realloc(): Out of memory on a %zu byte request.", size);
-
-		raise(SIG_OUT_OF_MEMORY);
+			"scalloc(): Out of memory on a %zu byte request.", num * len);
+		RAISE_EXCEPTION;
 	}
 
-	return buffer;
+	return buf;
 }
 
+void * AZSVC_FATTR_ALLOC_SIZE(2) AZSVC_FATTR_WUR
+srealloc(void *const restrict ptr, const size_t len) {
+	void *const buf = realloc(ptr, len);
+
+	if (len && !buf) {
+		log_error(FACILITY_MEMORY, __LINE__, LOG_TYPE_ERROR_SANITY, LOG_SEVERITY_ERROR_QUIT,
+			"srealloc(): Out of memory on a %zu byte request.", len);
+		RAISE_EXCEPTION;
+	}
+
+	return buf;
+}
+
+void * AZSVC_FATTR_ALLOC_SIZE(1) AZSVC_FATTR_MALLOC AZSVC_FATTR_RETURNS_NONNULL
+smalloc(const size_t len) {
+	return scalloc(1, len);
+}
+
+void * AZSVC_FATTR_ALLOC_SIZE_PRODUCT(2, 3) AZSVC_FATTR_WUR
+sreallocarray(void *const restrict ptr, const size_t num, const size_t len) {
+	const size_t product = (num * len);
+
+	// Check for overflow
+	if (product < num || product < len || num > (SIZE_MAX / len)) {
+		log_error(FACILITY_MEMORY, __LINE__, LOG_TYPE_ERROR_SANITY, LOG_SEVERITY_ERROR_QUIT,
+			"sreallocarray(): Overflow on a request of num %zu with len %zu.", num, len);
+		RAISE_EXCEPTION;
+	}
+
+	return srealloc(ptr, product);
+}
+
+int AZSVC_FATTR_WUR
+smemcmp(const void *const ptr1, const void *const ptr2, const size_t len) {
+#if defined(HAVE_TIMINGSAFE_BCMP)
+	return timingsafe_bcmp(ptr1, ptr2, len);
+#elif defined(HAVE_TIMINGSAFE_MEMCMP)
+	return timingsafe_memcmp(ptr1, ptr2, len);
+#elif defined(HAVE_CONSTTIME_MEMEQUAL)
+	return !consttime_memequal(ptr1, ptr2, len);
+#elif defined(HAVE_LIBSODIUM_MEMCMP)
+	return sodium_memcmp(ptr1, ptr2, len);
+#elif defined(HAVE_LIBCRYPTO_MEMCMP)
+	return CRYPTO_memcmp(ptr1, ptr2, len);
+#elif defined(HAVE_LIBNETTLE_MEMEQL)
+	return !nettle_memeql_sec(ptr1, ptr2, len);
+#else
+#warning "No secure library constant-time memory comparison function is available"
+	/* WARNING:
+	 *   This is highly liable to be optimised out with
+	 *   LTO builds, but it's still better than nothing.
+	 */
+	volatile const unsigned char *val1 = (volatile const unsigned char *) ptr1;
+	volatile const unsigned char *val2 = (volatile const unsigned char *) ptr2;
+	volatile int result = 0;
+
+	for (size_t i = 0; i < len; i++)
+		result |= (int) ((*val1++) ^ (*val2++));
+
+	return result;
+#endif
+}
+
+void
+smemzero(void *const restrict ptr, const size_t len)
+{
+	if (! (ptr && len))
+		return;
+
+#if defined(HAVE_MEMSET_S)
+	if (memset_s(ptr, len, 0x00, len) != 0)
+		RAISE_EXCEPTION;
+#elif defined(HAVE_EXPLICIT_BZERO)
+	(void) explicit_bzero(ptr, len);
+#elif defined(HAVE_EXPLICIT_MEMSET)
+	(void) explicit_memset(ptr, 0x00, len);
+#elif defined(HAVE_LIBSODIUM_MEMZERO)
+	(void) sodium_memzero(ptr, len);
+#elif defined(HAVE_LIBCRYPTO_CLEANSE)
+	(void) OPENSSL_cleanse(ptr, len);
+#else
+#warning "No secure library memory erasing function is available"
+
+	/* Indirect memset(3) through a volatile function pointer should hopefully prevent dead-store elimination
+	 * removing the call. This may not work if Azzurra IRC Services is built with Link Time Optimisation, because
+	 * the compiler may be able to prove (for a given definition of proof) that the pointer always points to
+	 * memset(3); LTO lets the compiler analyse every compilation unit, not just this one. Alas, the C standard
+	 * only requires the compiler to read the value of the pointer, not make the function call through it; so if
+	 * it reads it and determines that it still points to memset(3), it can still decide not to call it. To
+	 * hopefully prevent the compiler making assumptions about what it points to, it is not located in this
+	 * compilation unit. Still, the C standar does not guarantee that this will work, and a sufficiently clever
+	 * compiler may still remove the smemzero function calls if Full LTO is used, because nothing in this program 
+	 * or any of its modules sets the function pointer to any other value.
+	 *
+	 * Clang <= 7.0 with/without Thin LTO does not remove any calls; other compilers & situations are untested.
+	 */
+
+	(void) volatile_memset(ptr, 0x00, len);
+#endif
+}
+
+void * AZSVC_FATTR_MALLOC
+smemdup(const void *const restrict ptr, const size_t len)
+{
+	if (! ptr || ! len)
+		return NULL;
+
+	void *const buf = smalloc(len);
+
+	return memcpy(buf, ptr, len);
+}
+
+char * AZSVC_FATTR_MALLOC
+sstrdup(const char *const restrict ptr)
+{
+	if (! ptr)
+		return NULL;
+
+	const size_t len = strlen(ptr);
+	char *const buf = smalloc(len + 1);
+
+	if (len)
+		(void) memcpy(buf, ptr, len);
+
+	return buf;
+}
+
+char * AZSVC_FATTR_MALLOC
+sstrndup(const char *const restrict ptr, const size_t maxlen)
+{
+	if (! ptr)
+		return NULL;
+
+	const size_t len = strnlen(ptr, maxlen);
+	char *const buf = smalloc(len + 1);
+
+	if (len)
+		(void) memcpy(buf, ptr, len);
+
+	return buf;
+}
+
+/*********************************************************
+ * Heap management                                       *
+ *********************************************************/
+
+static inline size_t heap_prealloc_size(const size_t size) {
+	const size_t page_size = sysconf(_SC_PAGESIZE);
+
+#ifdef AZSVC_ENABLE_LARGENET
+	const size_t prealloc_size = (page_size / size) * 4U;
+#else
+	const size_t prealloc_size = (page_size / size);
+#endif
+
+	return prealloc_size;
+}
+
+static inline size_t heap_normalize_size(const size_t size) {
+	const size_t normalized = ((size / sizeof(void *)) + ((size / sizeof(void *)) % 2U)) * sizeof(void *);
+
+	return normalized;
+}
+
+mowgli_heap_t *heap_get(const size_t size) {
+	const size_t normalized = heap_normalize_size(size);
+	mowgli_heap_t *const heap = mowgli_heap_create(normalized, heap_prealloc_size(normalized), BH_NOW);
+
+	if (!heap)
+		return NULL;
+
+	return heap;
+}
+
+void heap_destroy(mowgli_heap_t *const restrict heap) {
+	return_if_fail(heap != NULL);
+
+	(void) mowgli_heap_destroy(heap);
+}
 
 /*********************************************************
  * Memory pools                                          *
@@ -133,13 +282,13 @@ static void _mempool_allocate_block(MemoryPool *mp) {
 	MemoryBlock        *new_block;
 
 
-	new_block = mem_malloc(sizeof(MemoryBlock));
+	new_block = smalloc(sizeof(MemoryBlock));
 
 	new_block->free_items = mp->items_per_block;
 	new_block->next_block = mp->blocks;
 
-	new_block->allocation_map = (unsigned long*) mem_calloc(sizeof(unsigned long), mp->map_item_count + 1);
-	new_block->buffer_start = mem_calloc(mp->item_size, mp->items_per_block + 1);
+	new_block->allocation_map = (unsigned long*) scalloc(sizeof(unsigned long), mp->map_item_count + 1);
+	new_block->buffer_start = scalloc(mp->item_size, mp->items_per_block + 1);
 
 	new_block->buffer_end = (void*)((unsigned long)new_block->buffer_start + (unsigned long)((mp->items_per_block - 1) * mp->item_size));
 
@@ -158,7 +307,7 @@ MemoryPool *mempool_create(unsigned int id, size_t item_size, int items_per_bloc
 	if (items_per_block_count <= 0)
 		items_per_block_count = 1;
 
-	mp = mem_malloc(sizeof(MemoryPool));
+	mp = smalloc(sizeof(MemoryPool));
 
 	mp->id = id;
 	mp->item_size = item_size + (item_size & (sizeof(void*) - 1));
@@ -186,9 +335,9 @@ void mempool_destroy(MemoryPool *mp) {
 
 			next = ptr->next_block;
 
-			mem_free(ptr->allocation_map);
-			mem_free(ptr->buffer_start);
-			mem_free(ptr);
+			sfree(ptr->allocation_map);
+			sfree(ptr->buffer_start);
+			sfree(ptr);
 		}
 	}
 }
@@ -221,7 +370,7 @@ void *_mempool_alloc(MemoryPool *mp, BOOL wipe) {
 
         mem = mp->blocks->buffer_start;
         if (wipe)
-            memset(mem, 0, mp->item_size);
+            smemzero(mem, mp->item_size);
 
 		return mem;
     }
@@ -252,7 +401,7 @@ void *_mempool_alloc(MemoryPool *mp, BOOL wipe) {
 
                     mem = (void*) ( (unsigned long)ptr->buffer_start + ((map_region_index * MP_MAP_REGION_SIZE + map_region_offset) * (unsigned long)mp->item_size));
                     if (wipe)
-                       memset(mem, 0, mp->item_size);
+                       smemzero(mem, mp->item_size);
 
 					return mem;
                 }
@@ -304,7 +453,7 @@ void *_mempool_alloc2(MemoryPool *mp, BOOL wipe, MEMORYBLOCK_ID *mblock_id) {
 
         mem = mp->blocks->buffer_start;
         if (wipe)
-            memset(mem, 0, mp->item_size);
+            smemzero(mem, mp->item_size);
 
 		if (IS_NOT_NULL(mblock_id))
 			*mblock_id = (unsigned long) mp->blocks;
@@ -338,7 +487,7 @@ void *_mempool_alloc2(MemoryPool *mp, BOOL wipe, MEMORYBLOCK_ID *mblock_id) {
 
                     mem = (void*) ( (unsigned long)ptr->buffer_start + ((map_region_index * MP_MAP_REGION_SIZE + map_region_offset) * (unsigned long)mp->item_size));
                     if (wipe)
-                       memset(mem, 0, mp->item_size);
+                       smemzero(mem, mp->item_size);
 
 					if (IS_NOT_NULL(mblock_id))
 						*mblock_id = (unsigned long) ptr;
@@ -466,19 +615,19 @@ unsigned int mempool_garbage_collect(MemoryPool *mp) {
 
             // Il blocco e' completamente libero. Deallocarlo.
 
-			mem_free(ptr->allocation_map);
-			mem_free(ptr->buffer_start);
+			sfree(ptr->allocation_map);
+			sfree(ptr->buffer_start);
 
             if (last_block) {
 
                 last_block->next_block = ptr->next_block;
-				mem_free(ptr);
+				sfree(ptr);
 				ptr = last_block->next_block;
 
             } else {
 
                 mp->blocks = ptr->next_block;
-				mem_free(ptr);
+				sfree(ptr);
 				ptr = mp->blocks;
             }
 

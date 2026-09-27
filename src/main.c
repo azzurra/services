@@ -59,6 +59,9 @@
 #include <sys/resource.h>
 #endif
 
+#ifdef HAVE_LIBSODIUM
+#include <sodium/core.h>
+#endif /* HAVE_LIBSODIUM */
 
 /*********************************************************
  * Global Variables                                      *
@@ -89,6 +92,9 @@ time_t NOW;
 /* Are we synched to network data? */
 BOOL synched = FALSE;
 
+#if !defined(HAVE_MEMSET_S) && !defined(HAVE_EXPLICIT_BZERO) && !defined(HAVE_LIBSODIUM_MEMZERO)
+void *(* volatile volatile_memset)(void *, int, size_t) = &memset;
+#endif /* !HAVE_MEMSET_S && !HAVE_EXPLICIT_BZERO && !HAVE_LIBSODIUM_MEMZERO */
 
 /*********************************************************
  * Local Variables                                       *
@@ -192,6 +198,18 @@ static void capab_init(void) {
 }
 
 /*********************************************************/
+
+bool set_mowgli_allocator(void) {
+	mowgli_allocation_policy_t *const policy = mowgli_allocation_policy_create("azsvc", &smalloc, &sfree);
+
+	if (!policy) {
+		(void) fprintf(stderr, "Error: mowgli_allocation_policy_create() failed!\n");
+		return false;
+	}
+
+	(void) mowgli_allocator_set_policy(policy);
+	return true;
+}
 
 /* Overall initialization routine. */
 
@@ -554,6 +572,16 @@ void database_store() {
 /*********************************************************/
 
 int main(int ac, char **av, char **envp) {
+
+#ifdef HAVE_LIBSODIUM
+	if (sodium_init() == -1) {
+		(void) fprintf(stderr, "libsodium: library initialisation failed!\n");
+		return EXIT_FAILURE;
+	}
+#endif /* HAVE_LIBSODIUM */
+
+	if (!set_mowgli_allocator())
+		return EXIT_FAILURE;
 
 	/* Disable libmowgli thread support */
 	mowgli_thread_set_policy(MOWGLI_THREAD_POLICY_DISABLED);
