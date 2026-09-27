@@ -106,7 +106,7 @@ SpamItem *spam_create(CSTR text, int type, CSTR reason, CSTR creator_name) {
 
 		SpamItem *spam;
 
-		spam = mem_malloc(sizeof(SpamItem));
+		spam = smalloc(sizeof(SpamItem));
 
 		spam->next = NULL;
 
@@ -130,10 +130,10 @@ void spam_delete(SpamItem *spam) {
 
 	if (IS_NOT_NULL(spam)) {
 
-		mem_free(spam->text);
-		mem_free(spam->reason);
+		sfree(spam->text);
+		sfree(spam->reason);
 		str_creator_free(&(spam->creator));
-		mem_free(spam);
+		sfree(spam);
 	}
 }
 
@@ -261,7 +261,7 @@ BOOL spam_db_load(void) {
 
 					do {
 
-						spam = mem_malloc(sizeof(SpamItem));
+						spam = smalloc(sizeof(SpamItem));
 
 						BOOL is64bit = stg_is64bit(stg);
 						if (is64bit)
@@ -301,7 +301,7 @@ BOOL spam_db_load(void) {
 
 							case stgEndOfData:
 								data_available = FALSE;
-								mem_free(spam);
+								sfree(spam);
 								break;
 
 							default: // some error

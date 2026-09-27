@@ -92,7 +92,7 @@ BOOL oper_db_load(void) {
 
 							while (in_section) {
 
-								anOper = mem_malloc(sizeof(Oper));
+								anOper = smalloc(sizeof(Oper));
 
 								BOOL is64Bit = stg_is64bit(stg);
 								if (is64Bit)
@@ -112,7 +112,7 @@ BOOL oper_db_load(void) {
 
 									case stgEndOfSection: // end-of-section
 										in_section = FALSE;
-										mem_free(anOper);
+										sfree(anOper);
 										break;
 
 									case stgSuccess: // a valid region
@@ -172,7 +172,7 @@ BOOL oper_db_load(void) {
 
 							while (in_section) {
 
-								anOper_V11 = mem_malloc(sizeof(Oper_V11));
+								anOper_V11 = smalloc(sizeof(Oper_V11));
 
 								result = stg_read_record(stg, (PBYTE)&anOper_V10, sizeof(Oper_V10));
 
@@ -180,7 +180,7 @@ BOOL oper_db_load(void) {
 
 									case stgEndOfSection: // end-of-section
 										in_section = FALSE;
-										mem_free(anOper_V11);
+										sfree(anOper_V11);
 										break;
 
 									case stgSuccess: // a valid region
@@ -205,7 +205,7 @@ BOOL oper_db_load(void) {
 										/* Read the userlist. */
 										for (accessIdx = 0; accessIdx < anOper_V10.userCount; ++accessIdx) {
 
-											anAccess = mem_malloc(sizeof(OperAccess));
+											anAccess = smalloc(sizeof(OperAccess));
 
 											result = stg_read_record(stg, (PBYTE)anAccess, sizeof(OperAccess_V10));
 
@@ -222,15 +222,15 @@ BOOL oper_db_load(void) {
 											if (!read_done)
 												fatal_error(FACILITY_OPER_DB_LOAD, __LINE__, "Read error on %s (2) - %s", OPER_DB, stg_result_to_string(result));
 
-											mem_free(anAccess->name);
-											mem_free(anAccess->creator.name);
-											mem_free(anAccess);
+											sfree(anAccess->name);
+											sfree(anAccess->creator.name);
+											sfree(anAccess);
 										}
 
 										/* Read the hostlist. */
 										for (accessIdx = 0; accessIdx < anOper_V10.hostCount; ++accessIdx) {
 
-											anAccess = mem_malloc(sizeof(OperAccess));
+											anAccess = smalloc(sizeof(OperAccess));
 
 											result = stg_read_record(stg, (PBYTE)anAccess, sizeof(OperAccess_V10));
 
@@ -247,9 +247,9 @@ BOOL oper_db_load(void) {
 											if (!read_done)
 												fatal_error(FACILITY_OPER_DB_LOAD, __LINE__, "Read error on %s (2) - %s", OPER_DB, stg_result_to_string(result));
 
-											mem_free(anAccess->name);
-											mem_free(anAccess->creator.name);
-											mem_free(anAccess);
+											sfree(anAccess->name);
+											sfree(anAccess->creator.name);
+											sfree(anAccess);
 										}
 
 										if (anOper_V11->level == ULEVEL_MASTER) {
@@ -460,7 +460,7 @@ static Oper *oper_add(CSTR nick, CSTR creator, int accessLevel) {
 
 	TRACE_FCLT(FACILITY_OPER_MAKEOPER);
 
-	oper = mem_calloc(1, sizeof(Oper));
+	oper = smalloc(sizeof(Oper));
 	oper->nick = str_duplicate(nick);
 
 	database_insert_oper(oper);
@@ -503,10 +503,10 @@ static void oper_remove(Oper *oper) {
 
 	TRACE();
 
-	mem_free(oper->nick);
+	sfree(oper->nick);
 	str_creator_free(&(oper->creator));
 
-	mem_free(oper);
+	sfree(oper);
 }
 
 /*********************************************************/

@@ -142,7 +142,7 @@ void send_notice_lang_to_nick(CSTR source, CSTR dest, const LANG_ID lang_id, con
 	if (nick_is_service(dest)) // non mandiamoci messaggi da soli che non e' il caso ...
 		return;
 	
-	memset(buffer, 0, sizeof(buffer));
+	smemzero(buffer, sizeof(buffer));
 	va_start(args, msg_id);
 	vsnprintf(buffer, sizeof(buffer), fmt, args);
 	va_end(args);
@@ -171,7 +171,7 @@ void send_notice_lang_to_user(CSTR source, const User *dest, const LANG_ID lang_
 	if (user_is_services_client(dest)) // non mandiamoci messaggi da soli che non e' il caso ...
 		return;
 	
-	memset(buffer, 0, sizeof(buffer));
+	smemzero(buffer, sizeof(buffer));
 	va_start(args, msg_id);
 	vsnprintf(buffer, sizeof(buffer), fmt, args);
 	va_end(args);

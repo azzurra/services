@@ -101,7 +101,7 @@ BOOL sxline_db_load(const int type) {
 
 						while (in_section) {
 
-							aSXLine = mem_malloc(sizeof(SXLine_V10));
+							aSXLine = smalloc(sizeof(SXLine_V10));
 							BOOL is64Bit = stg_is64bit(stg);
 							if (is64Bit)
 								result = stg_read_record(stg, (PBYTE)aSXLine, sizeof(SXLine_V10));
@@ -119,7 +119,7 @@ BOOL sxline_db_load(const int type) {
 
 								case stgEndOfSection: // end-of-section
 									in_section = FALSE;
-									mem_free(aSXLine);
+									sfree(aSXLine);
 									break;
 
 								case stgSuccess: // a valid record
@@ -490,7 +490,7 @@ void handle_sxline(CSTR source, User *callerUser, ServiceCommandData *data) {
 		}
 
 		/* Check that it doesn't affects too many users. */
-		memset(affected_nicks, 0, sizeof(affected_nicks));
+		smemzero(affected_nicks, sizeof(affected_nicks));
 
 		ptr = affected_nicks;
 
@@ -587,7 +587,7 @@ void handle_sxline(CSTR source, User *callerUser, ServiceCommandData *data) {
 		TRACE_MAIN();
 
 		/* Allocate the new entry. */
-		aSXLine = mem_malloc(sizeof(SXLine));
+		aSXLine = smalloc(sizeof(SXLine));
 
 		/* Fill it. */
 		aSXLine->name = str_duplicate(name);
@@ -742,11 +742,11 @@ void handle_sxline(CSTR source, User *callerUser, ServiceCommandData *data) {
 			*SXLineList = aSXLine->next;
 
 		/* Free it. */
-		mem_free(aSXLine->name);
+		sfree(aSXLine->name);
 
 		str_creationinfo_free(&(aSXLine->info));
 
-		mem_free(aSXLine);
+		sfree(aSXLine);
 	}
 	else {
 

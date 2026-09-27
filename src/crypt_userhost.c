@@ -58,14 +58,15 @@ void crypt_init() {
 
 	TRACE();
 	hidehost_crypt_buffer_size = CRYPT_SHA1_DIGEST_LEN + 1;
-	hidehost_crypt_buffer = (STR) mem_calloc(hidehost_crypt_buffer_size, sizeof(char));
+	hidehost_crypt_buffer = (STR) scalloc(hidehost_crypt_buffer_size,
+					      sizeof(char));
 }
 
 void crypt_done() {
 
-	mem_free(hidehost_buffer);
-	mem_free(hidehost_key);
-	mem_free(hidehost_crypt_buffer);
+	sfree(hidehost_buffer);
+	sfree(hidehost_key);
+	sfree(hidehost_crypt_buffer);
 }
 
 
@@ -74,7 +75,7 @@ BOOL crypt_change_key(CSTR newKey) {
 	if (IS_NOT_NULL(newKey) && IS_NOT_EMPTY_STR(newKey)) {
 
 		if (IS_NOT_NULL(hidehost_key))
-			mem_free(hidehost_key);
+			sfree(hidehost_key);
 
 		hidehost_key = str_duplicate(newKey);
 		hidehost_key_size = strlen(hidehost_key);
@@ -104,7 +105,7 @@ BOOL crypt_load_key() {
 				if (size > HIDEHOST_MAX_KEY_LEN)
 					size = HIDEHOST_MAX_KEY_LEN;
 
-				key = mem_malloc(size + 1);
+				key = smalloc(size + 1);
 				read(file, (void *) key, size);
 				key[size] = c_NULL;
 
@@ -113,7 +114,7 @@ BOOL crypt_load_key() {
 				else
 					errors = FALSE;
 
-				mem_free(key);
+				sfree(key);
 			}
 			else
 				fatal_error(FACILITY_CRYPT, __LINE__, "Host encryption key is too short! (%d < %d)", size, HIDEHOST_MIN_KEY_LEN);
@@ -302,7 +303,7 @@ STR crypt_userhost(CSTR real, HOST_TYPE htype, short int dotsCount) {
 
 	if (virlen > hidehost_buffer_size) {
 
-		hidehost_buffer = (STR) mem_realloc(hidehost_buffer, virlen);
+		hidehost_buffer = (STR) srealloc(hidehost_buffer, virlen);
 		hidehost_buffer_size = virlen;
 	}
 
@@ -336,9 +337,9 @@ STR crypt_userhost(CSTR real, HOST_TYPE htype, short int dotsCount) {
 		struct in6_addr ip6addr;
 
 		char ip6buffer[INET6_ADDRSTRLEN];
-		memset(ip6buffer, 0, sizeof(ip6buffer));
+		smemzero(ip6buffer, sizeof(ip6buffer));
 		inet_pton(AF_INET6, real, &ip6addr);
-		memset(&(ip6addr.s6_addr[6]), 0, 10);
+		smemzero(&(ip6addr.s6_addr[6]), 10);
 		inet_ntop(AF_INET6, &ip6addr, ip6buffer, INET6_ADDRSTRLEN);
 
 		snprintf(hidehost_buffer, hidehost_buffer_size, "%s" CRYPT_NETNAME "%c%X", ip6buffer, hash < 0 ? c_EQUAL : c_MINUS, (unsigned int)(hash < 0 ? -hash : hash));

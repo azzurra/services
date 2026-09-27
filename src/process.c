@@ -56,7 +56,7 @@ void process_init() {
 	int argc;
 
 	for (argc = 0; argc < IRCD_MAX_PARAMS; ++argc)
-		argv[argc] = mem_calloc(1, IRCBUFSIZE);
+		argv[argc] = smalloc(IRCBUFSIZE);
 }
 
 void process_terminate() {
@@ -64,7 +64,7 @@ void process_terminate() {
 	int argc;
 
 	for (argc = 0; argc < IRCD_MAX_PARAMS; ++argc)
-		mem_free(argv[argc]);
+		sfree(argv[argc]);
 }
 
 
@@ -168,7 +168,7 @@ void process_parse() {
 
 	TRACE_MAIN_FCLT(FACILITY_PROCESS);
 
-	memset(source, 0, sizeof(source));
+	smemzero(source, sizeof(source));
 
 	LOG_DEBUG("Received: %s", serv_input_buffer);
 
@@ -214,7 +214,7 @@ void process_parse() {
 	while (*buffer == c_SPACE)
 		++buffer;
 
-	memset(command, 0, sizeof(command));
+	smemzero(command, sizeof(command));
 
 	ptr = command;
 
@@ -259,7 +259,7 @@ void process_parse() {
 
 			/* Clear args we used. */
 			for (i = 0; i < argc; ++i)
-				memset(argv[i], 0, IRCBUFSIZE);
+				smemzero(argv[i], IRCBUFSIZE);
 		}
 	}
 	else
@@ -278,7 +278,7 @@ void process_debug_inject(CSTR buffer) {
 		return;
 
 	if (IS_NOT_NULL(debug_inject_buffer))
-		mem_free(debug_inject_buffer);
+		sfree(debug_inject_buffer);
 
 	debug_inject_buffer = str_duplicate(buffer);
 	debug_inject = TRUE;
@@ -298,7 +298,7 @@ void process_check_debug_inject() {
 		str_copy_checked(debug_inject_buffer, serv_input_buffer, sizeof(serv_input_buffer));
 		process_parse();
 
-		mem_free(debug_inject_buffer);
+		sfree(debug_inject_buffer);
 		debug_inject_buffer = NULL;
 		debug_inject = FALSE;
 	}

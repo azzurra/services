@@ -77,13 +77,13 @@ static void remove_trigger(Trigger *aTrigger, const User *callerUser, BOOL operM
 
 	/* Free it. */
 	if (IS_NOT_NULL(aTrigger->username))
-		mem_free(aTrigger->username);
+		sfree(aTrigger->username);
 
-	mem_free(aTrigger->host);
+	sfree(aTrigger->host);
 
 	str_creationinfo_free(&(aTrigger->info));
 
-	mem_free(aTrigger);
+	sfree(aTrigger);
 }
 
 
@@ -128,7 +128,7 @@ BOOL trigger_db_load(void) {
 
 						while (in_section) {
 
-							aTrigger = mem_malloc(sizeof(Trigger_V10));
+							aTrigger = smalloc(sizeof(Trigger_V10));
 							BOOL is64Bit = stg_is64bit(stg);
 							if (is64Bit)
 								result = stg_read_record(stg, (PBYTE)aTrigger, sizeof(Trigger_V10));
@@ -151,7 +151,7 @@ BOOL trigger_db_load(void) {
 
 								case stgEndOfSection: // end-of-section
 									in_section = FALSE;
-									mem_free(aTrigger);
+									sfree(aTrigger);
 									break;
 
 								case stgSuccess: // a valid record
@@ -557,8 +557,8 @@ void handle_trigger(CSTR source, User *callerUser, ServiceCommandData *data) {
 			}
 		}
 
-		memset(username, 0, sizeof(username));
-		memset(host, 0, sizeof(host));
+		smemzero(username, sizeof(username));
+		smemzero(host, sizeof(host));
 
 		if (!strchr(mask, '!')) {
 
@@ -727,7 +727,7 @@ void handle_trigger(CSTR source, User *callerUser, ServiceCommandData *data) {
 				else {
 
 					/* Allocate the new trigger. */
-					aTrigger = mem_calloc(1, sizeof(Trigger));
+					aTrigger = smalloc(sizeof(Trigger));
 
 					/* Link it. */
 					aTrigger->next = TriggerList;

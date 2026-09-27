@@ -290,7 +290,7 @@ void check_clones(const User *newUser) {
 
 	TRACE_FCLT(FACILITY_OPERSERV_CHECK_CLONES);
 
-	memset(clone_nicks, 0, sizeof(clone_nicks));
+	smemzero(clone_nicks, sizeof(clone_nicks));
 
 	HASH_FOREACH_BRANCH_ITEM(onlinehost, USER_ONLINEHOST_HASHFUNC(newUser->ip), host_item) {
 
@@ -474,7 +474,7 @@ void check_clones(const User *newUser) {
 
 			TRACE();
 			if (IS_NOT_NULL(warnings[0].host))
-				mem_free(warnings[0].host);
+				sfree(warnings[0].host);
 
 			TRACE();
 			/* Move the existent ones up one slot. This overrides the first entry. */
@@ -547,8 +547,8 @@ void check_clones_v6(const User *newUser) {
 
 	TRACE_FCLT(FACILITY_OPERSERV_CHECK_CLONES);
 
-	memset(clone_nicks, 0, sizeof(clone_nicks));
-	memset(tmp_clones, 0, sizeof(tmp_clones));
+	smemzero(clone_nicks, sizeof(clone_nicks));
+	smemzero(tmp_clones, sizeof(tmp_clones));
 	
 	expand_ipv6(get_ip6(newUser->ipv6), ipbuf, sizeof(ipbuf));
 	idx = CONF_CLONE_SCAN_V6 * 5;
@@ -740,7 +740,7 @@ void check_clones_v6(const User *newUser) {
 
 			TRACE();
 			if (IS_NOT_NULL(warnings[0].host))
-				mem_free(warnings[0].host);
+				sfree(warnings[0].host);
 
 			TRACE();
 			/* Move the existent ones up one slot. This overrides the first entry. */
@@ -946,7 +946,7 @@ static void do_mass_op_voice(CSTR source, User *callerUser, ServiceCommandData *
 				send_cmd(lang_msg((chan->ci) ? EXTRACT_LANG_ID(chan->ci->langID) : LANG_DEFAULT, CS_VERBOSE_OPNOTICE_MASS_VOICE_THROUGH), s_OperServ, chan_name, source, data->operName);
 		}
 
-		memset(modes, 0, SERVER_MAX_MODES + 2);
+		smemzero(modes, SERVER_MAX_MODES + 2);
 		modes[0] = '+';
 
 		TRACE_MAIN();
@@ -984,7 +984,8 @@ static void do_mass_op_voice(CSTR source, User *callerUser, ServiceCommandData *
 					send_cmd(":%s MODE %s %s %s", s_OperServ, chan_name, modes, nicks);
 
 					mode_count = 0;
-					memset(modes, 0, (SERVER_MAX_MODES + 2));
+					smemzero(modes,
+						 (SERVER_MAX_MODES + 2));
 
 					TRACE_MAIN();
 					modes[0] = '+';
@@ -1058,7 +1059,7 @@ static void do_find(CSTR source, User *callerUser, ServiceCommandData *data) {
 			else
 				LOG_SNOOP(s_OperServ, "OS *F %s -- by %s (%s@%s) through %s [Invalid Mask]", mask_prm, callerUser->nick, callerUser->username, callerUser->host, data->operName);
 
-			mem_free(mask);
+			sfree(mask);
 			return;
 		}
 
@@ -1081,7 +1082,7 @@ static void do_find(CSTR source, User *callerUser, ServiceCommandData *data) {
 				log_services(LOG_SERVICES_OPERSERV, "F %s!%s@%s -- by %s (%s@%s) through %s", nick, username, host, callerUser->nick, callerUser->username, callerUser->host, data->operName);
 			}
 
-			user_nick = mem_malloc(NICKSIZE * sizeof(char));
+			user_nick = smalloc(NICKSIZE * sizeof(char));
 		}
 		else {
 
@@ -1100,9 +1101,9 @@ static void do_find(CSTR source, User *callerUser, ServiceCommandData *data) {
 		}
 
 		TRACE_MAIN();
-		user_username = mem_malloc(USERSIZE * sizeof(char));
-		user_host = mem_malloc(HOSTSIZE * sizeof(char));
-		user_xhost = mem_malloc(HOSTSIZE * sizeof(char));
+		user_username = smalloc(USERSIZE * sizeof(char));
+		user_host = smalloc(HOSTSIZE * sizeof(char));
+		user_xhost = smalloc(HOSTSIZE * sizeof(char));
 
 		TRACE_MAIN();
 
@@ -1159,14 +1160,14 @@ static void do_find(CSTR source, User *callerUser, ServiceCommandData *data) {
 		send_notice_to_user(s_OperServ, callerUser, "End of search. Users found: \2%d\2.", count);
 
 		if (nick)
-			mem_free(user_nick);
+			sfree(user_nick);
 
-		mem_free(user_username);
-		mem_free(user_host);
-		mem_free(user_xhost);
+		sfree(user_username);
+		sfree(user_host);
+		sfree(user_xhost);
 
 		TRACE_MAIN();
-		mem_free(mask);
+		sfree(mask);
 	}
 }
 
@@ -1246,7 +1247,7 @@ static void do_kick_ban(CSTR source, User *callerUser, ServiceCommandData *data)
 			}
 
 			TRACE_MAIN();
-			mem_free(mask);
+			sfree(mask);
 		}
 	}
 	else {
@@ -1554,7 +1555,7 @@ static void do_masskill(CSTR source, User *callerUser, ServiceCommandData *data)
 		}
 
 		size = (str_len(targetUser->host) + 5);
-		mask = mem_malloc(size);
+		mask = smalloc(size);
 		snprintf(mask, size, "*!*@%s", targetUser->host);
 
 		HASH_FOREACH_BRANCH(idx, ONLINEUSER_HASHSIZE) {
@@ -1610,7 +1611,7 @@ static void do_masskill(CSTR source, User *callerUser, ServiceCommandData *data)
 		}
 
 		send_notice_to_user(s_OperServ, callerUser, "Killed \2%d\2 user%s matching \2%s\2", count, count == 1 ? "" : "s", mask);
-		mem_free(mask);
+		sfree(mask);
 	}
 	else {
 

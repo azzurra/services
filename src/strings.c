@@ -676,7 +676,7 @@ BOOL str_creator_set(Creator *creator, CSTR name, time_t time_set) {
 		if (IS_NOT_NULL(name)) {
 
 			if (IS_NOT_NULL(creator->name))
-				mem_free(creator->name);
+				sfree(creator->name);
 
 			creator->name = str_duplicate(name);
 		}
@@ -691,7 +691,7 @@ BOOL str_creator_set(Creator *creator, CSTR name, time_t time_set) {
 __inline__ void str_creator_free(Creator *creator) {
 
 	if (IS_NOT_NULL(creator))
-		mem_free(creator->name);
+		sfree(creator->name);
 }
 
 void str_creationinfo_init(CreationInfo *info) {
@@ -712,7 +712,7 @@ BOOL str_creationinfo_set(CreationInfo *info, CSTR creator, CSTR reason, time_t 
 	str_creator_set(&(info->creator), creator, time_set);
 
 	if (IS_NOT_NULL(info->reason))
-		mem_free(info->reason);
+		sfree(info->reason);
 
 	info->reason = str_duplicate(reason);
 
@@ -724,7 +724,7 @@ __inline__ void str_creationinfo_free(CreationInfo *info) {
 	if (IS_NOT_NULL(info)) {
 
 		str_creator_free(&(info->creator));
-		mem_free(info->reason);
+		sfree(info->reason);
 	}
 }
 
@@ -744,7 +744,7 @@ BOOL str_settingsinfo_add(SettingsInfo **infoList, unsigned long int type, CSTR 
 		info = info->next;
 	}
 
-	info = mem_malloc(sizeof(SettingsInfo));
+	info = smalloc(sizeof(SettingsInfo));
 
 	info->type = type;
 
@@ -776,7 +776,7 @@ BOOL str_settingsinfo_remove(SettingsInfo **infoList, unsigned long int type) {
 
 			str_creationinfo_free(&(info->creation));
 
-			mem_free(info);
+			sfree(info);
 
 			return TRUE;
 		}

@@ -131,7 +131,7 @@ User_AltListItem	*list_onlineuser_ipv6 = NULL;
 		\
 		User_AltListItem	*item; \
 		\
-		item = mem_malloc(sizeof(User_AltListItem)); \
+		item = smalloc(sizeof(User_AltListItem)); \
 		item->user = (user); \
 		LIST_INSERT_ORDERED((item), list_onlineuser_ipv6, str_compare_nocase, user->nick); \
 	}
@@ -144,7 +144,7 @@ User_AltListItem	*list_onlineuser_ipv6 = NULL;
 		LIST_SEARCH_ORDERED(list_onlineuser_ipv6, user->nick, user->nick, str_compare_nocase, item); \
 		if (item) { \
 			LIST_REMOVE(item, list_onlineuser_ipv6); \
-			mem_free(item); \
+			sfree(item); \
 		} \
 	}
 
@@ -198,7 +198,7 @@ static BOOL user_localuser_add(User *user) {
 
 		User_AltListItem *item;
 
-		item = mem_malloc(sizeof(User_AltListItem));
+		item = smalloc(sizeof(User_AltListItem));
 		item->user = user;
 		hash_localuser_add(item);
 
@@ -235,7 +235,7 @@ static BOOL user_localuser_remove(const User *user) {
 		hash_localuser_remove(item);
 
 		TRACE();
-		mem_free(item);
+		sfree(item);
 
 		return TRUE;
 	}
@@ -250,7 +250,7 @@ static BOOL user_onlinehost_add(User *user) {
 
 		User_AltListItem	*item;
 
-		item = mem_malloc(sizeof(User_AltListItem));
+		item = smalloc(sizeof(User_AltListItem));
 		item->user = user;
 		hash_onlinehost_add(item);
 
@@ -281,7 +281,7 @@ static BOOL user_onlinehost_remove(const User *user) {
 		if (IS_NOT_NULL(item)) {
 
 			hash_onlinehost_remove(item);
-			mem_free(item);
+			sfree(item);
 			return TRUE;
 		}
 		else
@@ -323,7 +323,7 @@ static void user_change_nick(User *user, CSTR oldNick, CSTR newNick, BOOL equals
 		if (IS_NOT_NULL(si)) {
 
 			TRACE();
-			mem_free(si->nick);
+			sfree(si->nick);
 			si->nick = str_duplicate(newNick);
 		}
 		else {
@@ -340,7 +340,7 @@ static void user_change_nick(User *user, CSTR oldNick, CSTR newNick, BOOL equals
 
 		if (str_not_equals(newNick, si->nick)) {
 
-			mem_free(si->nick);
+			sfree(si->nick);
 			si->nick = str_duplicate(newNick);
 		}
 
@@ -349,7 +349,7 @@ static void user_change_nick(User *user, CSTR oldNick, CSTR newNick, BOOL equals
 			if (str_not_equals(si->username, user->username)) {
 
 				TRACE();
-				mem_free(si->username);
+				sfree(si->username);
 				si->username = str_duplicate(user->username);
 			}
 		}
@@ -361,7 +361,7 @@ static void user_change_nick(User *user, CSTR oldNick, CSTR newNick, BOOL equals
 			if (str_not_equals(si->host, user->host)) {
 
 				TRACE();
-				mem_free(si->host);
+				sfree(si->host);
 				si->host = str_duplicate(user->host);
 			}
 		}
@@ -373,7 +373,7 @@ static void user_change_nick(User *user, CSTR oldNick, CSTR newNick, BOOL equals
 			if (str_not_equals(si->realname, user->realname)) {
 
 				TRACE();
-				mem_free(si->realname);
+				sfree(si->realname);
 				si->realname = str_duplicate(user->realname);
 			}
 		}
@@ -383,12 +383,12 @@ static void user_change_nick(User *user, CSTR oldNick, CSTR newNick, BOOL equals
 		si->type = SEEN_TYPE_NCFR;
 
 		if (IS_NOT_NULL(si->tempnick))
-			mem_free(si->tempnick);
+			sfree(si->tempnick);
 		si->tempnick = str_duplicate(oldNick);
 
 		if (IS_NOT_NULL(si->quitmsg)) {
 
-			mem_free(si->quitmsg);
+			sfree(si->quitmsg);
 			si->quitmsg = NULL;
 		}
 
@@ -416,7 +416,7 @@ static void user_change_nick(User *user, CSTR oldNick, CSTR newNick, BOOL equals
 
 		if (IS_NOT_NULL(si->quitmsg)) {
 
-			mem_free(si->quitmsg);
+			sfree(si->quitmsg);
 			si->quitmsg = NULL;
 		}
 	}
@@ -441,7 +441,7 @@ static User *user_create_user(CSTR nick, BOOL myClient) {
 	#ifdef	FIX_USE_MPOOL
 	user = mempool_alloc(User*, user_mempool, TRUE);
 	#else
-	user = mem_calloc(1, sizeof(User));
+	user = smalloc(sizeof(User));
 	#endif
 
 	if (IS_NULL(nick) || IS_EMPTY_STR(nick)) {
@@ -630,10 +630,10 @@ void user_delete_user(User *user) {
 
 	TRACE();
 
-	mem_free(user->username);
-	mem_free(user->host);
-	mem_free(user->maskedHost);
-	mem_free(user->realname);
+	sfree(user->username);
+	sfree(user->host);
+	sfree(user->maskedHost);
+	sfree(user->realname);
 
 	TRACE();
 
@@ -652,7 +652,7 @@ void user_delete_user(User *user) {
 			#ifdef	FIX_USE_MPOOL
 			mempool_free(channels_chan_entry_mempool, item);
 			#else
-			mem_free(item);
+			sfree(item);
 			#endif
 
 			item = next;
@@ -671,7 +671,7 @@ void user_delete_user(User *user) {
 		while (IS_NOT_NULL(item)) {
 
 			next = item->next;
-			mem_free(item);
+			sfree(item);
 			item = next;
 		}
 	}
@@ -682,15 +682,15 @@ void user_delete_user(User *user) {
 		int idx;
 
 		for (idnicks = user->id_nicks, idx = 0; idx < user->idcount; ++idnicks, ++idx)
-			mem_free(*idnicks);
+			sfree(*idnicks);
 
-		mem_free(user->id_nicks);
+		sfree(user->id_nicks);
 	}
 
 	#ifdef	FIX_USE_MPOOL
 	mempool_free(user_mempool, user);
 	#else
-	mem_free(user);
+	sfree(user);
 	#endif
 }
 
@@ -774,7 +774,7 @@ void user_remove_id(CSTR nickname, BOOL deleted) {
 				TRACE();
 				if (str_equals_nocase(*idnicks, nickname)) {
 
-					mem_free(*idnicks);
+					sfree(*idnicks);
 					--(user->idcount);
 
 					if (nickIdx < user->idcount)	/* if it wasn't the last entry... */
@@ -782,11 +782,12 @@ void user_remove_id(CSTR nickname, BOOL deleted) {
 
 					TRACE_MAIN();
 					if (user->idcount)	/* if there are any entries left... */
-						user->id_nicks = mem_realloc(user->id_nicks, user->idcount * sizeof(char *));
+						user->id_nicks = srealloc(user->id_nicks,
+									  user->idcount * sizeof(char *));
 
 					else {
 
-						mem_free(user->id_nicks);
+						sfree(user->id_nicks);
 						user->id_nicks = NULL;
 					}
 
@@ -830,7 +831,7 @@ void user_remove_chanid(ChannelInfo *ci) {
 						user->founder_chans = item->next;
 
 					TRACE();
-					mem_free(item);
+					sfree(item);
 					break;
 				}
 			}
@@ -885,7 +886,7 @@ void user_handle_services_kick(CSTR chan, User *user) {
 		#ifdef	FIX_USE_MPOOL
 		mempool_free(channels_chan_entry_mempool, item);
 		#else
-		mem_free(item);
+		sfree(item);
 		#endif
 	}
 }
@@ -1206,13 +1207,13 @@ void user_handle_NICK(CSTR source, const int ac, char **av) {
 
 					if (IS_NOT_NULL(si->quitmsg)) {
 
-						mem_free(si->quitmsg);
+						sfree(si->quitmsg);
 						si->quitmsg = NULL;
 					}
 
 					if (IS_NOT_NULL(si->tempnick)) {
 
-						mem_free(si->tempnick);
+						sfree(si->tempnick);
 						si->tempnick = NULL;
 					}
 
@@ -1227,13 +1228,13 @@ void user_handle_NICK(CSTR source, const int ac, char **av) {
 
 				if (str_not_equals(av[0], si->nick)) {
 
-					mem_free(si->nick);
+					sfree(si->nick);
 					si->nick = str_duplicate(av[0]);
 				}
 
 				if (IS_NOT_NULL(si->username)) {
 
-					mem_free(si->username);
+					sfree(si->username);
 					si->username = str_duplicate(user->username);
 				}
 				else
@@ -1243,7 +1244,7 @@ void user_handle_NICK(CSTR source, const int ac, char **av) {
 
 				if (IS_NOT_NULL(si->host)) {
 
-					mem_free(si->host);
+					sfree(si->host);
 					si->host = str_duplicate(user->host);
 				}
 				else
@@ -1251,7 +1252,7 @@ void user_handle_NICK(CSTR source, const int ac, char **av) {
 
 				if (IS_NOT_NULL(si->realname)) {
 
-					mem_free(si->realname);
+					sfree(si->realname);
 					si->realname = str_duplicate(user->realname);
 				}
 				else
@@ -1268,13 +1269,13 @@ void user_handle_NICK(CSTR source, const int ac, char **av) {
 
 				if (IS_NOT_NULL(si->quitmsg)) {
 
-					mem_free(si->quitmsg);
+					sfree(si->quitmsg);
 					si->quitmsg = NULL;
 				}
 
 				if (IS_NOT_NULL(si->tempnick)) {
 
-					mem_free(si->tempnick);
+					sfree(si->tempnick);
 					si->tempnick = NULL;
 				}
 			}
@@ -1408,11 +1409,11 @@ void user_handle_NICK(CSTR source, const int ac, char **av) {
 
 					user->ni->last_seen = NOW;
 					if (user->ni->last_usermask)
-						mem_free(user->ni->last_usermask);
+						sfree(user->ni->last_usermask);
 
 					TRACE_MAIN();
 
-					user->ni->last_usermask = mem_malloc(str_len(user->username) + str_len(user_public_host(user)) + 2);
+					user->ni->last_usermask = smalloc(str_len(user->username) + str_len(user_public_host(user)) + 2);
 					sprintf(user->ni->last_usermask, "%s@%s", user->username, user_public_host(user));
 
 					TRACE_MAIN();
@@ -1473,12 +1474,12 @@ void user_handle_NICK(CSTR source, const int ac, char **av) {
 				si->type = SEEN_TYPE_NCTO;
 
 				if (IS_NOT_NULL(si->tempnick))
-					mem_free(si->tempnick);
+					sfree(si->tempnick);
 				si->tempnick = str_duplicate(av[0]);
 
 				if (IS_NOT_NULL(si->quitmsg)) {
 
-					mem_free(si->quitmsg);
+					sfree(si->quitmsg);
 					si->quitmsg = NULL;
 				}
 
@@ -1767,7 +1768,7 @@ void user_handle_PART(CSTR source, const int ac, char **av) {
 			#ifdef	FIX_USE_MPOOL
 			mempool_free(channels_chan_entry_mempool, item);
 			#else
-			mem_free(item);
+			sfree(item);
 			#endif
 		}
 	}
@@ -1854,7 +1855,7 @@ void user_handle_KICK(CSTR source, const int ac, char **av) {
 			#ifdef	FIX_USE_MPOOL
 			mempool_free(channels_chan_entry_mempool, item);
 			#else
-			mem_free(item);
+			sfree(item);
 			#endif
 		}
 	}
@@ -1900,7 +1901,8 @@ static void user_handle_newuserMODE(User *user, char *newmodes, const NickInfo *
 					if (!user_is_identified_to(user, user->nick)) {
 
 						++(user->idcount);
-						user->id_nicks = mem_realloc(user->id_nicks, sizeof(char *) * user->idcount);
+						user->id_nicks = srealloc(user->id_nicks,
+									  sizeof(char *) * user->idcount);
 						user->id_nicks[user->idcount - 1] = str_duplicate(user->nick);
 						user->current_lang = EXTRACT_LANG_ID(ni->langID);
 					}
@@ -2195,7 +2197,8 @@ void user_handle_userMODE(CSTR source, const int ac, char **av) {
 
 							++(user->idcount);
 
-							user->id_nicks = mem_realloc(user->id_nicks, sizeof(char *) * user->idcount);
+							user->id_nicks = srealloc(user->id_nicks,
+										  sizeof(char *) * user->idcount);
 							user->id_nicks[user->idcount - 1] = str_duplicate(user->nick);
 
 							user->current_lang = EXTRACT_LANG_ID(user->ni->langID);
@@ -2297,8 +2300,8 @@ void user_handle_QUIT(CSTR source, const int ac, char **av) {
 			user->ni->last_seen = NOW;
 
 			if (IS_NOT_NULL(user->ni->last_usermask))
-				mem_free(user->ni->last_usermask);
-			user->ni->last_usermask = mem_malloc(str_len(user->username) + str_len(user_public_host(user)) + 2);
+				sfree(user->ni->last_usermask);
+			user->ni->last_usermask = smalloc(str_len(user->username) + str_len(user_public_host(user)) + 2);
 			sprintf(user->ni->last_usermask, "%s@%s", user->username, user_public_host(user));
 		}
 	}
@@ -2335,7 +2338,7 @@ void user_handle_QUIT(CSTR source, const int ac, char **av) {
 
 			if (IS_NOT_NULL(si->tempnick)) {
 
-				mem_free(si->tempnick);
+				sfree(si->tempnick);
 				si->tempnick = NULL;
 			}
 
@@ -2354,12 +2357,12 @@ void user_handle_QUIT(CSTR source, const int ac, char **av) {
 				killer = strtok(string, s_SPACE);
 
 				if (IS_NOT_NULL(si->tempnick))
-					mem_free(si->tempnick);
+					sfree(si->tempnick);
 				si->tempnick = str_duplicate(killer);
 
 				/* Free it -- it will be filled below. */
 				if (IS_NOT_NULL(si->quitmsg))
-					mem_free(si->quitmsg);
+					sfree(si->quitmsg);
 
 				reason = strtok(NULL, s_NULL);
 
@@ -2384,7 +2387,7 @@ void user_handle_QUIT(CSTR source, const int ac, char **av) {
 			else {
 
 				if (IS_NOT_NULL(si->quitmsg))
-					mem_free(si->quitmsg);
+					sfree(si->quitmsg);
 
 				if (str_equals_partial(av[0], "Autokilled: ", 12)) {
 
@@ -2411,7 +2414,7 @@ void user_handle_QUIT(CSTR source, const int ac, char **av) {
 
 				if (IS_NOT_NULL(si->tempnick)) {
 
-					mem_free(si->tempnick);
+					sfree(si->tempnick);
 					si->tempnick = NULL;
 				}
 			}
@@ -2458,7 +2461,7 @@ int user_handle_server_SQUIT(const Server *server) {
 				user_delete_user(user);
 				introduce_services_agent(nick);
 				send_globops(NULL, "\2%s\2 revived after server split", nick);
-				mem_free(nick);
+				sfree(nick);
 				continue;
 			}
 
@@ -2472,8 +2475,8 @@ int user_handle_server_SQUIT(const Server *server) {
 					user->ni->last_seen = NOW;
 
 					if (IS_NOT_NULL(user->ni->last_usermask))
-						mem_free(user->ni->last_usermask);
-					user->ni->last_usermask = mem_malloc(str_len(user->username) + str_len(user_public_host(user)) + 2);
+						sfree(user->ni->last_usermask);
+					user->ni->last_usermask = smalloc(str_len(user->username) + str_len(user_public_host(user)) + 2);
 					sprintf(user->ni->last_usermask, "%s@%s", user->username, user_public_host(user));
 				}
 
@@ -2506,13 +2509,13 @@ int user_handle_server_SQUIT(const Server *server) {
 
 					if (IS_NOT_NULL(si->tempnick)) {
 
-						mem_free(si->tempnick);
+						sfree(si->tempnick);
 						si->tempnick = NULL;
 					}
 
 					if (IS_NOT_NULL(si->quitmsg)) {
 
-						mem_free(si->quitmsg);
+						sfree(si->quitmsg);
 						si->quitmsg = NULL;
 					}
 
@@ -2629,7 +2632,7 @@ void user_handle_KILL(CSTR source, const int ac, char **av) {
 
 			TRACE_MAIN();
 			if (IS_NOT_NULL(si->quitmsg))
-				mem_free(si->quitmsg);
+				sfree(si->quitmsg);
 
 			reason = strchr(av[1], '(');
 
@@ -2646,7 +2649,7 @@ void user_handle_KILL(CSTR source, const int ac, char **av) {
 			}
 
 			if (IS_NOT_NULL(si->tempnick))
-				mem_free(si->tempnick);
+				sfree(si->tempnick);
 			si->tempnick = str_duplicate(source);
 
 			si->last_seen = NOW;
@@ -3041,10 +3044,10 @@ BOOL user_usermask_match(CSTR mask, const User *user, BOOL matchMaskedHost, BOOL
 		return FALSE;
 	}
 
-	memset(token, 0, sizeof(token));
-	memset(nick, 0, sizeof(nick));
-	memset(username, 0, sizeof(username));
-	memset(host, 0, sizeof(host));
+	smemzero(token, sizeof(token));
+	smemzero(nick, sizeof(nick));
+	smemzero(username, sizeof(username));
+	smemzero(host, sizeof(host));
 
 	/* Begin splitting the mask. */
 	if (strchr(mask, c_EXCLAM)) {
@@ -3207,7 +3210,7 @@ char *user_usermask_create(const User *user, short type) {
 
 		case 0:
 			/* *!user@host.domain */
-			mask = mem_malloc(str_len(user->username) + str_len(user_host) + 4);
+			mask = smalloc(str_len(user->username) + str_len(user_host) + 4);
 			sprintf(mask, "*!%s@%s", user->username, user_host);
 			break;
 
@@ -3216,7 +3219,7 @@ char *user_usermask_create(const User *user, short type) {
 
 			size_t len = str_len(user->username);
 
-			mask = mem_malloc(len + str_len(user_host) + ((len > 9) ? 4 : 5));
+			mask = smalloc(len + str_len(user_host) + ((len > 9) ? 4 : 5));
 			sprintf(mask, "*!*%s@%s", (len > 9 || user->username[0] == '~') ? &user->username[1] : user->username, user_host);
 			break;
 		}
@@ -3224,7 +3227,7 @@ char *user_usermask_create(const User *user, short type) {
 		case 2:
 			/* *!*@host.domain */
 
-			mask = mem_malloc(str_len(user_host) + 5);
+			mask = smalloc(str_len(user_host) + 5);
 			sprintf(mask, "*!*@%s", user_host);
 			break;
 
@@ -3242,7 +3245,7 @@ char *user_usermask_create(const User *user, short type) {
 				if ((sscanf(user_host, "%d.%d.%s", &A, &B, cloak) == 3)
 					&& str_equals_partial(cloak, CRYPT_NETNAME, CRYPT_NETNAME_LEN)) {
 
-					mask = mem_malloc(len + ((A < 10) ? 1 : (A < 100) ? 2 : 3) + ((B < 10) ? 1 : (B < 100) ? 2 : 3) + ((len > 9) ? 7 : 8));
+					mask = smalloc(len + ((A < 10) ? 1 : (A < 100) ? 2 : 3) + ((B < 10) ? 1 : (B < 100) ? 2 : 3) + ((len > 9) ? 7 : 8));
 					sprintf(mask, "*!*%s@%d.%d.*", (len > 9 || user->username[0] == '~') ? &user->username[1] : user->username, A, B);
 					break;
 				}
@@ -3253,7 +3256,7 @@ char *user_usermask_create(const User *user, short type) {
 
 				if (sscanf(user_host, "%d.%d.%d.%d", &A, &B, &C, &D) == 4) {
 
-					mask = mem_malloc(len + ((A < 10) ? 1 : (A < 100) ? 2 : 3) + ((B < 10) ? 1 : (B < 100) ? 2 : 3) + ((C < 10) ? 1 : (C < 100) ? 2 : 3) + ((len > 9) ? 8 : 9));
+					mask = smalloc(len + ((A < 10) ? 1 : (A < 100) ? 2 : 3) + ((B < 10) ? 1 : (B < 100) ? 2 : 3) + ((C < 10) ? 1 : (C < 100) ? 2 : 3) + ((len > 9) ? 8 : 9));
 					sprintf(mask, "*!*%s@%d.%d.%d.*", (len > 9 || user->username[0] == '~') ? &user->username[1] : user->username, A, B, C);
 					break;
 				}
@@ -3261,12 +3264,12 @@ char *user_usermask_create(const User *user, short type) {
 
 			if ((ptr = strchr(user_host, '.')) && strchr(ptr + 1, '.')) {
 
-				mask = mem_malloc(len + str_len(ptr) + ((len > 9) ? 5 : 6));
+				mask = smalloc(len + str_len(ptr) + ((len > 9) ? 5 : 6));
 				sprintf(mask, "*!*%s@*%s", (len > 9 || user->username[0] == '~') ? &user->username[1] : user->username, ptr);
 			}
 			else {
 
-				mask = mem_malloc(len + str_len(user_host) + ((len > 9) ? 4 : 5));
+				mask = smalloc(len + str_len(user_host) + ((len > 9) ? 4 : 5));
 				sprintf(mask, "*!*%s@%s", (len > 9 || user->username[0] == '~') ? &user->username[1] : user->username, user_host);
 			}
 
@@ -3286,7 +3289,7 @@ char *user_usermask_create(const User *user, short type) {
 				if ((sscanf(user_host, "%d.%d.%s", &A, &B, cloak) == 3)
 					&& str_equals_partial(cloak, CRYPT_NETNAME, CRYPT_NETNAME_LEN)) {
 
-					mask = mem_malloc(((A < 10) ? 1 : (A < 100) ? 2 : 3) + ((B < 10) ? 1 : (B < 100) ? 2 : 3) + 8);
+					mask = smalloc(((A < 10) ? 1 : (A < 100) ? 2 : 3) + ((B < 10) ? 1 : (B < 100) ? 2 : 3) + 8);
 					sprintf(mask, "*!*@%d.%d.*", A, B);
 					break;
 				}
@@ -3297,7 +3300,7 @@ char *user_usermask_create(const User *user, short type) {
 
 				if (sscanf(user_host, "%d.%d.%d.%d", &A, &B, &C, &D) == 4) {
 
-					mask = mem_malloc(((A < 10) ? 1 : (A < 100) ? 2 : 3) + ((B < 10) ? 1 : (B < 100) ? 2 : 3) + ((C < 10) ? 1 : (C < 100) ? 2 : 3) + 9);
+					mask = smalloc(((A < 10) ? 1 : (A < 100) ? 2 : 3) + ((B < 10) ? 1 : (B < 100) ? 2 : 3) + ((C < 10) ? 1 : (C < 100) ? 2 : 3) + 9);
 					sprintf(mask, "*!*@%d.%d.%d.*", A, B, C);
 					break;
 				}
@@ -3305,12 +3308,12 @@ char *user_usermask_create(const User *user, short type) {
 
 			if ((ptr = strchr(user_host, '.')) && strchr(ptr + 1, '.')) {
 
-				mask = mem_malloc(str_len(ptr) + 6);
+				mask = smalloc(str_len(ptr) + 6);
 				sprintf(mask, "*!*@*%s", ptr);
 			}
 			else {
 
-				mask = mem_malloc(str_len(user_host) + 5);
+				mask = smalloc(str_len(user_host) + 5);
 				sprintf(mask, "*!*@%s", user_host);
 			}
 
@@ -3322,7 +3325,7 @@ char *user_usermask_create(const User *user, short type) {
 
 			size_t len = str_len(user->username);
 
-			mask = mem_malloc(str_len(user->nick) + len + str_len(user_host) + ((len > 9) ? 3 : 4));
+			mask = smalloc(str_len(user->nick) + len + str_len(user_host) + ((len > 9) ? 3 : 4));
 			sprintf(mask, "%s!*%s@%s", user->nick, (len > 9 || user->username[0] == '~') ? &user->username[1] : user->username, user_host);
 			break;
 		}
@@ -3330,7 +3333,7 @@ char *user_usermask_create(const User *user, short type) {
 		case 7:
 			/* nick!*@host.domain */
 
-			mask = mem_malloc(str_len(user->nick) + str_len(user_host) + 4);
+			mask = smalloc(str_len(user->nick) + str_len(user_host) + 4);
 			sprintf(mask, "%s!*@%s", user->nick, user_host);
 			break;
 
@@ -3348,7 +3351,7 @@ char *user_usermask_create(const User *user, short type) {
 				if ((sscanf(user_host, "%d.%d.%s", &A, &B, cloak) == 3)
 					&& str_equals_partial(cloak, CRYPT_NETNAME, CRYPT_NETNAME_LEN)) {
 
-					mask = mem_malloc(str_len(user->nick) + len + ((A < 10) ? 1 : (A < 100) ? 2 : 3) + ((B < 10) ? 1 : (B < 100) ? 2 : 3) + ((len > 9) ? 6 : 7));
+					mask = smalloc(str_len(user->nick) + len + ((A < 10) ? 1 : (A < 100) ? 2 : 3) + ((B < 10) ? 1 : (B < 100) ? 2 : 3) + ((len > 9) ? 6 : 7));
 					sprintf(mask, "%s!*%s@%d.%d.*", user->nick, (len > 9 || user->username[0] == '~') ? &user->username[1] : user->username, A, B);
 					break;
 				}
@@ -3359,7 +3362,7 @@ char *user_usermask_create(const User *user, short type) {
 
 				if (sscanf(user_host, "%d.%d.%d.%d", &A, &B, &C, &D) == 4) {
 
-					mask = mem_malloc(str_len(user->nick) + len + ((A < 10) ? 1 : (A < 100) ? 2 : 3) + ((B < 10) ? 1 : (B < 100) ? 2 : 3) + ((C < 10) ? 1 : (C < 100) ? 2 : 3) + ((len > 9) ? 7 : 8));
+					mask = smalloc(str_len(user->nick) + len + ((A < 10) ? 1 : (A < 100) ? 2 : 3) + ((B < 10) ? 1 : (B < 100) ? 2 : 3) + ((C < 10) ? 1 : (C < 100) ? 2 : 3) + ((len > 9) ? 7 : 8));
 					sprintf(mask, "%s!*%s@%d.%d.%d.*", user->nick, (len > 9 || user->username[0] == '~') ? &user->username[1] : user->username, A, B, C);
 					break;
 				}
@@ -3367,12 +3370,12 @@ char *user_usermask_create(const User *user, short type) {
 
 			if ((ptr = strchr(user_host, '.')) && strchr(ptr + 1, '.')) {
 
-				mask = mem_malloc(str_len(user->nick) + len + str_len(ptr) + ((len > 9) ? 4 : 5));
+				mask = smalloc(str_len(user->nick) + len + str_len(ptr) + ((len > 9) ? 4 : 5));
 				sprintf(mask, "%s!*%s@*%s", user->nick, (len > 9 || user->username[0] == '~') ? &user->username[1] : user->username, ptr);
 			}
 			else {
 
-				mask = mem_malloc(str_len(user->nick) + len + str_len(user_host) + ((len > 9) ? 3 : 4));
+				mask = smalloc(str_len(user->nick) + len + str_len(user_host) + ((len > 9) ? 3 : 4));
 				sprintf(mask, "%s!*%s@%s", user->nick, (len > 9 || user->username[0] == '~') ? &user->username[1] : user->username, user_host);
 			}
 
@@ -3392,7 +3395,7 @@ char *user_usermask_create(const User *user, short type) {
 				if ((sscanf(user_host, "%d.%d.%s", &A, &B, cloak) == 3)
 					&& str_equals_partial(cloak, CRYPT_NETNAME, CRYPT_NETNAME_LEN)) {
 
-					mask = mem_malloc(str_len(user->nick) + ((A < 10) ? 1 : (A < 100) ? 2 : 3) + ((B < 10) ? 1 : (B < 100) ? 2 : 3) + 7);
+					mask = smalloc(str_len(user->nick) + ((A < 10) ? 1 : (A < 100) ? 2 : 3) + ((B < 10) ? 1 : (B < 100) ? 2 : 3) + 7);
 					sprintf(mask, "%s!*@%d.%d.*", user->nick, A, B);
 					break;
 				}
@@ -3403,7 +3406,7 @@ char *user_usermask_create(const User *user, short type) {
 
 				if (sscanf(user_host, "%d.%d.%d.%d", &A, &B, &C, &D) == 4) {
 
-					mask = mem_malloc(str_len(user->nick) + ((A < 10) ? 1 : (A < 100) ? 2 : 3) + ((B < 10) ? 1 : (B < 100) ? 2 : 3) + ((C < 10) ? 1 : (C < 100) ? 2 : 3) + 8);
+					mask = smalloc(str_len(user->nick) + ((A < 10) ? 1 : (A < 100) ? 2 : 3) + ((B < 10) ? 1 : (B < 100) ? 2 : 3) + ((C < 10) ? 1 : (C < 100) ? 2 : 3) + 8);
 					sprintf(mask, "%s!*@%d.%d.%d.*", user->nick, A, B, C);
 					break;
 				}
@@ -3411,12 +3414,12 @@ char *user_usermask_create(const User *user, short type) {
 
 			if ((ptr = strchr(user_host, '.')) && strchr(ptr + 1, '.')) {
 
-				mask = mem_malloc(str_len(user->nick) + str_len(ptr) + 5);
+				mask = smalloc(str_len(user->nick) + str_len(ptr) + 5);
 				sprintf(mask, "%s!*@*%s", user->nick, ptr);
 			}
 			else {
 
-				mask = mem_malloc(str_len(user->nick) + str_len(user_host) + 4);
+				mask = smalloc(str_len(user->nick) + str_len(user_host) + 4);
 				sprintf(mask, "%s!*@%s", user->nick, user_host);
 			}
 
@@ -3427,7 +3430,7 @@ char *user_usermask_create(const User *user, short type) {
 		default:
 			/* nick!user@host.domain */
 
-			mask = mem_malloc(str_len(user->nick) + str_len(user->username) + str_len(user_host) + 3);
+			mask = smalloc(str_len(user->nick) + str_len(user->username) + str_len(user_host) + 3);
 			sprintf(mask, "%s!%s@%s", user->nick, user->username, user_host);
 			break;
 

@@ -140,18 +140,18 @@ void statserv_init(const time_t now) {
 	#endif
 
 	/* Overall Stats variables */
-	memset(&total, 0, sizeof(total));
+	smemzero(&total, sizeof(total));
 
 	/* Monthly variables */
-	memset(&monthly, 0, sizeof(monthly));
+	smemzero(&monthly, sizeof(monthly));
 	monthly.last_update = now;
 
 	/* Weekly variables. */
-	memset(&weekly, 0, sizeof(weekly));
+	smemzero(&weekly, sizeof(weekly));
 	weekly.last_update = now;
 
 	/* Daily variables. */
-	memset(&daily, 0, sizeof(daily));
+	smemzero(&daily, sizeof(daily));
 	daily.last_update = now;
 
 	uavg = oavg = savg = cavg = 0;
@@ -486,7 +486,7 @@ BOOL statserv_chanstats_db_load(void) {
 								#ifdef	FIX_USE_MPOOL
 								cs = mempool_alloc2(ChannelStats_V10*, stats_chan_mempool, FALSE, &mblock_id);
 								#else
-								cs = mem_malloc(sizeof(ChannelStats_V10));
+								cs = smalloc(sizeof(ChannelStats_V10));
 								#endif
 
 								if (is64bit) {
@@ -506,7 +506,7 @@ BOOL statserv_chanstats_db_load(void) {
 										#ifdef	FIX_USE_MPOOL
 										mempool_free2(stats_chan_mempool, cs, mblock_id);
 										#else
-										mem_free(cs);
+										sfree(cs);
 										#endif
 
 										break;
@@ -584,7 +584,7 @@ BOOL statserv_servstats_db_load(void) {
 
 						while (1) {
 							
-							ss = mem_malloc(sizeof(ServerStats_V10));
+							ss = smalloc(sizeof(ServerStats_V10));
 
 							BOOL is64bit = stg_is64bit(stg);
 							if (is64bit)
@@ -627,7 +627,7 @@ BOOL statserv_servstats_db_load(void) {
 							}
 							else {
 
-								mem_free(ss);
+								sfree(ss);
 								break;
 							}
 						}
@@ -833,7 +833,7 @@ void statserv_daily_expire() {
 	}
 
 	TRACE();
-	memset(&daily, 0, sizeof(GlobalStats));
+	smemzero(&daily, sizeof(GlobalStats));
 	daily.last_update = NOW;
 
 	stats_daily_maxusers = 0;
@@ -884,7 +884,7 @@ void statserv_weekly_expire() {
 	}
 
 	TRACE();
-	memset(&weekly, 0, sizeof(GlobalStats));
+	smemzero(&weekly, sizeof(GlobalStats));
 	weekly.last_update = NOW;
 
 	if (CONF_DISPLAY_UPDATES)
@@ -932,7 +932,7 @@ void statserv_monthly_expire() {
 	}
 
 	TRACE();
-	memset(&monthly, 0, sizeof(GlobalStats));
+	smemzero(&monthly, sizeof(GlobalStats));
 	monthly.last_update = NOW;
 
 	if (CONF_DISPLAY_UPDATES)
@@ -956,7 +956,7 @@ static ChannelStats *make_channel_stats(CSTR name) {
 	#ifdef	FIX_USE_MPOOL
 	cs = mempool_alloc(ChannelStats*, stats_chan_mempool, TRUE);
 	#else
-	cs = mem_calloc(1, sizeof(ChannelStats));
+	cs = smalloc(sizeof(ChannelStats));
 	#endif
 
 	cs->name = str_duplicate(name);
@@ -977,12 +977,12 @@ static void delete_channel_stats(ChannelStats *cs) {
 	hash_chanstats_remove(cs);
 
 	TRACE();
-	mem_free(cs->name);
+	sfree(cs->name);
 
 	#ifdef	FIX_USE_MPOOL
 	mempool_free(stats_chan_mempool, cs);
 	#else
-	mem_free(cs);
+	sfree(cs);
 	#endif
 }
 
@@ -1114,7 +1114,7 @@ ServerStats *make_server_stats(CSTR server) {
 
 	TRACE_FCLT(FACILITY_STATSERV_MAKE_SERVER_STATS);
 
-	stats = mem_calloc(1, sizeof(ServerStats));
+	stats = smalloc(sizeof(ServerStats));
 
 	stats->name = str_duplicate(server);
 
@@ -1137,8 +1137,8 @@ static void delete_server_stats(ServerStats *stats) {
 	LIST_REMOVE(stats, list_serverstats);
 
 	TRACE();
-	mem_free(stats->name);
-	mem_free(stats);
+	sfree(stats->name);
+	sfree(stats);
 }
 
 /*********************************************************/
@@ -2460,15 +2460,15 @@ done:
 
 	TRACE_MAIN();
 	if (search_nick)
-		mem_free(search_nick);
+		sfree(search_nick);
 	if (search_realname)
-		mem_free(search_realname);
+		sfree(search_realname);
 	if (search_host)
-		mem_free(search_host);
+		sfree(search_host);
 	if (search_username)
-		mem_free(search_username);
+		sfree(search_username);
 	if (search_server)
-		mem_free(search_server);
+		sfree(search_server);
 }
 
 

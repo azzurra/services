@@ -252,7 +252,7 @@ void handle_jupe(CSTR source, User *callerUser, ServiceCommandData *data) {
 		terminate_string_ccodes(reason);
 
 		/* Allocate the new entry. */
-		aJupe = mem_malloc(sizeof(Jupe));
+		aJupe = smalloc(sizeof(Jupe));
 
 		/* Fill it. */
 		aJupe->name = str_duplicate(name);
@@ -358,9 +358,9 @@ void handle_jupe(CSTR source, User *callerUser, ServiceCommandData *data) {
 
 		/* Free it. */
 		TRACE();
-		mem_free(aJupe->name);
+		sfree(aJupe->name);
 		str_creationinfo_free(&(aJupe->info));
-		mem_free(aJupe);
+		sfree(aJupe);
 	}
 	else if (!CheckOperAccess(data->userLevel, CMDLEVEL_SRA))
 		send_notice_lang_to_user(s_OperServ, callerUser, GetCallerLang(), OPER_ERROR_ACCESS_DENIED);

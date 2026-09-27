@@ -96,7 +96,7 @@ BOOL blacklist_db_load(void) {
 
 						while (in_section) {
 
-							anAddress = mem_malloc(sizeof(BlackList_V10));
+							anAddress = smalloc(sizeof(BlackList_V10));
 							BOOL is64Bit = stg_is64bit(stg);
 							if (is64Bit) {
 								result = stg_read_record(stg, (PBYTE)anAddress, sizeof(BlackList_V10));
@@ -114,7 +114,7 @@ BOOL blacklist_db_load(void) {
 
 								case stgEndOfSection: // end-of-section
 									in_section = FALSE;
-									mem_free(anAddress);
+									sfree(anAddress);
 									break;
 
 								case stgSuccess: // a valid record
@@ -436,7 +436,7 @@ void handle_blacklist(CSTR source, User *callerUser, ServiceCommandData *data) {
 			send_notice_to_user(s_OperServ, callerUser, "\2Notice:\2 Services is in read-only mode. Changes will not be saved!");
 
 		/* Allocate the new entry. */
-		anAddress = mem_calloc(1, sizeof(BlackList));
+		anAddress = smalloc(sizeof(BlackList));
 
 		/* Fill it. */
 		anAddress->address = str_duplicate(address);
@@ -542,9 +542,9 @@ void handle_blacklist(CSTR source, User *callerUser, ServiceCommandData *data) {
 			BlackListList = anAddress->next;
 
 		/* Free it. */
-		mem_free(anAddress->address);
+		sfree(anAddress->address);
 		str_creationinfo_free(&(anAddress->info));
-		mem_free(anAddress);
+		sfree(anAddress);
 	}
 	else {
 

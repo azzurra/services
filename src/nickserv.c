@@ -134,7 +134,8 @@ static void do_set_url(const User *callerUser, CSTR param);
 void nickserv_init(void) {
 
 	if (IS_NULL(nickserv_used_guest_list))
-		nickserv_used_guest_list = mem_calloc(99999 - 10000 + 1, sizeof(unsigned char));
+		nickserv_used_guest_list = scalloc(99999 - 10000 + 1,
+						   sizeof(unsigned char));
 
 	#ifdef FIX_USE_MPOOL
 	nickdb_mempool = mempool_create(MEMPOOL_ID_NICKDB, sizeof(NickInfo), MP_IPB_NICKDB, MB_IBC_NICKDB);
@@ -355,7 +356,7 @@ static void nickinfo32_to64(NickInfo32 * ni32, NickInfo *ni) {
 	ni->auth = ni32->auth;
 	ni->freeze = (char *)(uintptr_t)ni32->freeze;
 	ni->langID = ni32->langID;
-	memset(ni->reserved, 0, sizeof(ni->reserved));
+	smemzero(ni->reserved, sizeof(ni->reserved));
 }
 
 /* Load/save data files. */
@@ -394,7 +395,7 @@ void load_ns_dbase(void) {
 					#ifdef	FIX_USE_MPOOL
 					ni = mempool_alloc(NickInfo*, nickdb_mempool, FALSE);
 					#else
-					ni = mem_malloc(sizeof(NickInfo));
+					ni = smalloc(sizeof(NickInfo));
 					#endif
 					if (flags & DATAFILE64) {
 						//64bit datafile on a 64bit machine, nothing to do
@@ -402,11 +403,11 @@ void load_ns_dbase(void) {
 							fatal_error(FACILITY_NICKSERV_LOAD_NS_DB, __LINE__, "Read error on %s", NICKSERV_DB);
 					} else {
 						//32bit datafile on a 64bit machine
-						NickInfo32 *ni32 = mem_malloc(sizeof(NickInfo32));
+						NickInfo32 *ni32 = smalloc(sizeof(NickInfo32));
 						if (fread(ni32, sizeof(NickInfo32), 1, f) != 1)
 							fatal_error(FACILITY_NICKSERV_LOAD_NS_DB, __LINE__, "Read error on %s", NICKSERV_DB);
 						nickinfo32_to64(ni32, ni);
-						mem_free(ni32);
+						sfree(ni32);
 					}
 					TRACE();
 					// Reset language id to default for languages that aren't supported anymore
@@ -468,10 +469,10 @@ void load_ns_dbase(void) {
 						ni->auth = 0;
 
 						if (ni->email)
-							mem_free(ni->email);
+							sfree(ni->email);
 						ni->email = str_duplicate(ni->regemail);
 
-						mem_free(ni->regemail);
+						sfree(ni->regemail);
 						ni->regemail = NULL;
 
 						AddFlag(ni->flags, NI_HIDE_EMAIL);
@@ -500,7 +501,7 @@ void load_ns_dbase(void) {
 						char **anAccess;
 
 						TRACE();
-						anAccess = mem_malloc(sizeof(char *) * ni->accesscount);
+						anAccess = smalloc(sizeof(char *) * ni->accesscount);
 						ni->access = anAccess;
 
 						for (j = 0; j < ni->accesscount; ++j, ++anAccess)
@@ -701,10 +702,10 @@ void nickserv_daily_expire() {
 					if (ni->regemail) {
 
 						if (ni->email)
-							mem_free(ni->email);
+							sfree(ni->email);
 
 						ni->email = str_duplicate(ni->regemail);
-						mem_free(ni->regemail);
+						sfree(ni->regemail);
 						ni->regemail = NULL;
 					}
 					else {
@@ -801,7 +802,7 @@ static NickInfo *makenick(CSTR nick) {
 	#ifdef	FIX_USE_MPOOL
 	ni = mempool_alloc(NickInfo*, nickdb_mempool, TRUE);
 	#else
-	ni = mem_calloc(1, sizeof(NickInfo));
+	ni = smalloc(sizeof(NickInfo));
 	#endif
 
 	str_copy_checked(nick, ni->nick, NICKMAX);
@@ -903,51 +904,51 @@ static void delnick(NickInfo *ni) {
 
 	/* Now actually free it. */
 	if (ni->last_usermask)
-		mem_free(ni->last_usermask);
+		sfree(ni->last_usermask);
 
 	if (ni->last_realname)
-		mem_free(ni->last_realname);
+		sfree(ni->last_realname);
 
 	if (ni->access) {
 
 		int accessIdx;
 
 		for (accessIdx = 0; accessIdx < ni->accesscount; ++accessIdx)
-			mem_free(ni->access[accessIdx]);
+			sfree(ni->access[accessIdx]);
 
-		mem_free(ni->access);
+		sfree(ni->access);
 	}
 
 	if (ni->url)
-		mem_free(ni->url);
+		sfree(ni->url);
 
 	if (ni->email)
-		mem_free(ni->email);
+		sfree(ni->email);
 
 	if (ni->regemail)
-		mem_free(ni->regemail);
+		sfree(ni->regemail);
 
 	if (ni->forward)
-		mem_free(ni->forward);
+		sfree(ni->forward);
 
 	if (ni->hold)
-		mem_free(ni->hold);
+		sfree(ni->hold);
 
 	if (ni->mark)
-		mem_free(ni->mark);
+		sfree(ni->mark);
 
 	if (ni->forbid)
-		mem_free(ni->forbid);
+		sfree(ni->forbid);
 
 	if (ni->freeze)
-		mem_free(ni->freeze);
+		sfree(ni->freeze);
 
 	TRACE();
 
 	#ifdef FIX_USE_MPOOL
 	mempool_free(nickdb_mempool, ni);
 	#else
-	mem_free(ni);
+	sfree(ni);
 	#endif
 }
 
@@ -1050,13 +1051,13 @@ void validate_user(const User *user) {
 		ni->last_seen = NOW;
 
 		if (ni->last_usermask)
-			mem_free(ni->last_usermask);
+			sfree(ni->last_usermask);
 
-		ni->last_usermask = mem_malloc(str_len(user->username) + str_len(user_public_host(user)) + 2);
+		ni->last_usermask = smalloc(str_len(user->username) + str_len(user_public_host(user)) + 2);
 		sprintf(ni->last_usermask, "%s@%s", user->username, user_public_host(user));
 
 		if (ni->last_realname)
-			mem_free(ni->last_realname);
+			sfree(ni->last_realname);
 
 		ni->last_realname = str_duplicate(user->realname);
 
@@ -1102,7 +1103,7 @@ static void timeout_start_collide(NickInfo *ni, int type) {
 		NickTimeoutData *data;
 
 		TRACE();
-		data = mem_malloc(sizeof(NickTimeoutData));
+		data = smalloc(sizeof(NickTimeoutData));
 
 		data->ni = ni;
 		data->user_online = TRUE;
@@ -1285,7 +1286,7 @@ static void nickserv_create_enforcer(NickInfo *ni) {
 	user_add_enforcer(ni);
 
 	TRACE();
-	data = mem_malloc(sizeof(NickTimeoutData));
+	data = smalloc(sizeof(NickTimeoutData));
 
 	data->ni = ni;
 	data->step = 0;
@@ -1357,7 +1358,7 @@ static void release(NickInfo *ni, BOOL from_timeout) {
 
 void nickserv_dispose_timeout_data(void *data) {
 
-	mem_free(data);
+	sfree(data);
 }
 
 /*********************************************************/
@@ -1497,7 +1498,8 @@ static void do_register(CSTR source, User *callerUser, ServiceCommandData *data)
 		if (!user_is_identified_to(callerUser, source)) {
 
 			++(callerUser->idcount);
-			callerUser->id_nicks = mem_realloc(callerUser->id_nicks, sizeof(char *) * callerUser->idcount);
+			callerUser->id_nicks = srealloc(callerUser->id_nicks,
+							sizeof(char *) * callerUser->idcount);
 			callerUser->id_nicks[callerUser->idcount - 1] = str_duplicate(source);
 		}
 
@@ -1507,7 +1509,7 @@ static void do_register(CSTR source, User *callerUser, ServiceCommandData *data)
 		AddFlag(callerUser->ni->flags, NI_READNEWS);
 		AddFlag(callerUser->ni->flags, NI_KILL_SLOW);
 
-		callerUser->ni->last_usermask = mem_malloc(str_len(callerUser->username) + str_len(user_public_host(callerUser)) + 2);
+		callerUser->ni->last_usermask = smalloc(str_len(callerUser->username) + str_len(user_public_host(callerUser)) + 2);
 		sprintf(callerUser->ni->last_usermask, "%s@%s", callerUser->username, user_public_host(callerUser));
 
 		callerUser->ni->email = str_tolower(str_duplicate(email));
@@ -1714,14 +1716,15 @@ static void do_identify(CSTR source, User *callerUser, ServiceCommandData *data)
 		int modeIdx = 1;
 		BOOL isOper = FALSE;
 
-		memset(accessLevel, 0, sizeof(accessLevel));
+		smemzero(accessLevel, sizeof(accessLevel));
 
 		TRACE_MAIN();
 
 		if (!user_is_identified_to(callerUser, ni->nick)) {
 
 			++(callerUser->idcount);
-			callerUser->id_nicks = mem_realloc(callerUser->id_nicks, sizeof(char *) * callerUser->idcount);
+			callerUser->id_nicks = srealloc(callerUser->id_nicks,
+							sizeof(char *) * callerUser->idcount);
 			callerUser->id_nicks[callerUser->idcount - 1] = str_duplicate(ni->nick);
 		}
 
@@ -1758,13 +1761,13 @@ static void do_identify(CSTR source, User *callerUser, ServiceCommandData *data)
 
 			ni->last_seen = NOW;
 			if (ni->last_usermask)
-				mem_free(ni->last_usermask);
+				sfree(ni->last_usermask);
 
-			ni->last_usermask = mem_malloc(str_len(callerUser->username) + str_len(user_public_host(callerUser)) + 2);
+			ni->last_usermask = smalloc(str_len(callerUser->username) + str_len(user_public_host(callerUser)) + 2);
 			sprintf(ni->last_usermask, "%s@%s", callerUser->username, user_public_host(callerUser));
 
 			if (ni->last_realname)
-				mem_free(ni->last_realname);
+				sfree(ni->last_realname);
 			ni->last_realname = str_duplicate(callerUser->realname);
 		}
 
@@ -1905,8 +1908,8 @@ static void do_identify(CSTR source, User *callerUser, ServiceCommandData *data)
 
 	if (freeMe) {
 
-		mem_free(nick);
-		mem_free(pass);
+		sfree(nick);
+		sfree(pass);
 	}
 }
 
@@ -2201,7 +2204,8 @@ static void do_set_password(User *callerUser, CSTR param) {
 					user_remove_id(callerUser->nick, FALSE);
 
 					++(callerUser->idcount);
-					callerUser->id_nicks = mem_realloc(callerUser->id_nicks, sizeof(char *) * callerUser->idcount);
+					callerUser->id_nicks = srealloc(callerUser->id_nicks,
+									sizeof(char *) * callerUser->idcount);
 					callerUser->id_nicks[callerUser->idcount - 1] = str_duplicate(callerUser->nick);
 				}
 				else
@@ -2244,7 +2248,7 @@ static void do_set_url(const User *callerUser, CSTR param) {
 			return;
 		}
 
-		mem_free(callerUser->ni->url);
+		sfree(callerUser->ni->url);
 		callerUser->ni->url = NULL;
 
 		send_notice_lang_to_user(s_NickServ, callerUser, GetCallerLang(), NS_SET_URL_DELETED, callerUser->ni->nick);
@@ -2255,7 +2259,7 @@ static void do_set_url(const User *callerUser, CSTR param) {
 	else {
 
 		if (callerUser->ni->url)
-			mem_free(callerUser->ni->url);
+			sfree(callerUser->ni->url);
 		callerUser->ni->url = str_duplicate(param);
 
 		send_notice_lang_to_user(s_NickServ, callerUser, GetCallerLang(), NS_SET_URL_CHANGED, callerUser->ni->nick, param);
@@ -2325,7 +2329,7 @@ static void do_set_email(const User *callerUser, CSTR param, BOOL hasmail) {
 		RemoveFlag(ni->flags, NI_MAILCHANGE);
 
 		if (ni->regemail)
-			mem_free(ni->regemail);
+			sfree(ni->regemail);
 		ni->regemail = NULL;
 
 		ni->auth = 0;
@@ -2368,10 +2372,10 @@ static void do_set_email(const User *callerUser, CSTR param, BOOL hasmail) {
 				if (ni->regemail) {
 
 					if (ni->email)
-						mem_free(ni->email);
+						sfree(ni->email);
 
 					ni->email = str_duplicate(ni->regemail);
-					mem_free(ni->regemail);
+					sfree(ni->regemail);
 					ni->regemail = NULL;
 				}
 				else {
@@ -2431,7 +2435,7 @@ static void do_set_email(const User *callerUser, CSTR param, BOOL hasmail) {
 			FILE *mailfile;
 
 			if (ni->regemail)
-				mem_free(ni->regemail);
+				sfree(ni->regemail);
 
 			if (hasmail == FALSE) {
 
@@ -2936,7 +2940,8 @@ static void do_access(CSTR source, User *callerUser, ServiceCommandData *data) {
 
 			TRACE_MAIN();
 			++(callerUser->ni->accesscount);
-			callerUser->ni->access = mem_realloc(callerUser->ni->access, sizeof(char *) * callerUser->ni->accesscount);
+			callerUser->ni->access = srealloc(callerUser->ni->access,
+							  sizeof(char *) * callerUser->ni->accesscount);
 			callerUser->ni->access[callerUser->ni->accesscount - 1] = str_duplicate(mask);
 
 			send_notice_lang_to_user(s_NickServ, callerUser, GetCallerLang(), NS_ACCESS_MASK_ADDED, mask);
@@ -2997,7 +3002,7 @@ static void do_access(CSTR source, User *callerUser, ServiceCommandData *data) {
 
 			log_services(LOG_SERVICES_NICKSERV_ACCESS, "DEL %s -- by %s (%s@%s)", *anAccess, source, callerUser->username, callerUser->host);
 
-			mem_free(*anAccess);
+			sfree(*anAccess);
 			--(callerUser->ni->accesscount);
 
 			if (accessIdx < callerUser->ni->accesscount)	/* If it wasn't the last entry... */
@@ -3005,11 +3010,12 @@ static void do_access(CSTR source, User *callerUser, ServiceCommandData *data) {
 
 			TRACE_MAIN();
 			if (callerUser->ni->accesscount)	/* If there are any entries left... */
-				callerUser->ni->access = mem_realloc(callerUser->ni->access, callerUser->ni->accesscount * sizeof(char *));
+				callerUser->ni->access = srealloc(callerUser->ni->access,
+								  callerUser->ni->accesscount * sizeof(char *));
 
 			else {
 
-				mem_free(callerUser->ni->access);
+				sfree(callerUser->ni->access);
 				callerUser->ni->access = NULL;
 			}
 		}
@@ -3021,10 +3027,10 @@ static void do_access(CSTR source, User *callerUser, ServiceCommandData *data) {
 
 		TRACE_MAIN();
 		for (anAccess = callerUser->ni->access, accessIdx = 0; (accessIdx < callerUser->ni->accesscount); ++anAccess, ++accessIdx)
-			mem_free(*anAccess);
+			sfree(*anAccess);
 
 		callerUser->ni->accesscount = 0;
-		mem_free(callerUser->ni->access);
+		sfree(callerUser->ni->access);
 		callerUser->ni->access = NULL;
 		
 		send_notice_lang_to_user(s_NickServ, callerUser, GetCallerLang(), NS_ACCESS_LIST_WIPED);
@@ -3315,7 +3321,8 @@ static void do_recover(CSTR source, User *callerUser, ServiceCommandData *data) 
 		if (!user_is_identified_to(callerUser, ni->nick)) {
 
 			++(callerUser->idcount);
-			callerUser->id_nicks = mem_realloc(callerUser->id_nicks, sizeof(char *) * callerUser->idcount);
+			callerUser->id_nicks = srealloc(callerUser->id_nicks,
+							sizeof(char *) * callerUser->idcount);
 			callerUser->id_nicks[callerUser->idcount - 1] = str_duplicate(ni->nick);
 		}
 
@@ -4130,7 +4137,7 @@ static void do_forbid(CSTR source, User *callerUser, ServiceCommandData *data) {
 		AddFlag(ni->flags, NI_FORBIDDEN);
 
 		if (ni->forbid)
-			mem_free(ni->forbid);
+			sfree(ni->forbid);
 		ni->forbid = str_duplicate(data->operName);
 
 		user_remove_id(ni->nick, FALSE);
@@ -4224,7 +4231,7 @@ static void do_unforbid(CSTR source, User *callerUser, ServiceCommandData *data)
 				send_notice_lang_to_user(s_NickServ, callerUser, GetCallerLang(), NS_FLAG_ERROR_NICK_NOT_FLAGGED, ni->nick, "FORBIDDEN");
 
 				if (ni->forbid)
-					mem_free(ni->forbid);
+					sfree(ni->forbid);
 				ni->forbid = NULL;
 
 				return;
@@ -4331,7 +4338,7 @@ static void do_freeze(CSTR source, User *callerUser, ServiceCommandData *data) {
 		AddFlag(ni->flags, NI_FROZEN);
 
 		if (ni->freeze)
-			mem_free(ni->freeze);
+			sfree(ni->freeze);
 		ni->freeze = str_duplicate(data->operName);
 
 		user_remove_id(ni->nick, FALSE);
@@ -4434,7 +4441,7 @@ static void do_unfreeze(CSTR source, User *callerUser, ServiceCommandData *data)
 		RemoveFlag(ni->flags, NI_FROZEN);
 
 		if (ni->freeze)
-			mem_free(ni->freeze);
+			sfree(ni->freeze);
 		ni->freeze = NULL;
 
 		/* Quit the enforcer and remove timeouts, if any. */
@@ -4517,7 +4524,7 @@ static void do_hold(CSTR source, User *callerUser, ServiceCommandData *data) {
 		AddFlag(ni->flags, NI_HOLD);
 		
 		if (ni->hold)
-			mem_free(ni->hold);
+			sfree(ni->hold);
 		ni->hold = str_duplicate(data->operName);
 
 		if (data->operMatch) {
@@ -4590,7 +4597,7 @@ static void do_unhold(CSTR source, User *callerUser, ServiceCommandData *data) {
 		RemoveFlag(ni->flags, NI_HOLD);
 
 		if (ni->hold)
-			mem_free(ni->hold);
+			sfree(ni->hold);
 		ni->hold = NULL;
 
 		/* Avoid right-away expiration */
@@ -4669,7 +4676,7 @@ static void do_mark(CSTR source, User *callerUser, ServiceCommandData *data) {
 		AddFlag(ni->flags, NI_MARK);
 
 		if (ni->mark)
-			mem_free(ni->mark);
+			sfree(ni->mark);
 		ni->mark = str_duplicate(data->operName);
 
 		if (data->operMatch) {
@@ -4751,7 +4758,7 @@ static void do_unmark(CSTR source, User *callerUser, ServiceCommandData *data) {
 		RemoveFlag(ni->flags, NI_MARK);
 
 		if (ni->mark)
-			mem_free(ni->mark);
+			sfree(ni->mark);
 		ni->mark = NULL;
 
 		if (data->operMatch) {
@@ -4831,7 +4838,7 @@ static void do_authnick(CSTR source, User *callerUser, ServiceCommandData *data)
 
 			if (ni->email && email) {
 
-				mem_free(ni->email);
+				sfree(ni->email);
 				ni->email = str_duplicate(email);
 			}
 			else if (IS_NULL(ni->email))
@@ -4839,7 +4846,7 @@ static void do_authnick(CSTR source, User *callerUser, ServiceCommandData *data)
 
 			if (ni->regemail) {
 
-				mem_free(ni->regemail);
+				sfree(ni->regemail);
 				ni->regemail = NULL;
 			}
 
@@ -4911,11 +4918,11 @@ static void do_authreset(CSTR source, User *callerUser, ServiceCommandData *data
 			RemoveFlag(ni->flags, NI_NOMAIL);
 
 			if (ni->email)
-				mem_free(ni->email);
+				sfree(ni->email);
 			ni->email = NULL;
 
 			if (ni->regemail)
-				mem_free(ni->regemail);
+				sfree(ni->regemail);
 			ni->regemail = NULL;
 
 			ni->auth = 0;
@@ -4945,7 +4952,7 @@ static void do_authreset(CSTR source, User *callerUser, ServiceCommandData *data
 			RemoveFlag(ni->flags, NI_NOMAIL);
 
 			if (ni->regemail)
-				mem_free(ni->regemail);
+				sfree(ni->regemail);
 			ni->regemail = NULL;
 
 			ni->auth = 0;
@@ -5542,7 +5549,7 @@ static void do_nickset(CSTR source, User *callerUser, ServiceCommandData *data) 
 		}
 
 		if (ni->last_usermask)
-			mem_free(ni->last_usermask);
+			sfree(ni->last_usermask);
 		ni->last_usermask = str_duplicate(mask);
 	}
 	else if (str_equals_nocase(what, "REALNAME")) {
@@ -5572,7 +5579,7 @@ static void do_nickset(CSTR source, User *callerUser, ServiceCommandData *data) 
 		}
 
 		if (ni->last_realname)
-			mem_free(ni->last_realname);
+			sfree(ni->last_realname);
 		ni->last_realname = str_duplicate(realname);
 	}
 	else if (str_equals_nocase(what, "REGDATE")) {
@@ -5713,7 +5720,7 @@ static void do_nickset(CSTR source, User *callerUser, ServiceCommandData *data) 
 		}
 
 		if (ni->url)
-			mem_free(ni->url);
+			sfree(ni->url);
 		ni->url = str_duplicate(url);
 	}
 	else if (str_equals_nocase(what, "CHANNELCOUNT")) {

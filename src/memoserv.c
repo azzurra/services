@@ -271,7 +271,7 @@ void load_ms_dbase(void) {
 					#ifdef FIX_USE_MPOOL
 					ml = mempool_alloc(MemoList*, memodb_mempool, FALSE);
 					#else
-					ml = mem_malloc(sizeof(MemoList));
+					ml = smalloc(sizeof(MemoList));
 					#endif
 
 					if (flags & DATAFILE64) {
@@ -288,7 +288,8 @@ void load_ms_dbase(void) {
 						ml->memos = (void *)(uintptr_t)memoList32.memos;
 						ml->next = (void *)(uintptr_t)memoList32.next;
 						ml->prev = (void *)(uintptr_t)memoList32.prev;
-						memset(ml->reserved, 0, sizeof(ml->reserved));
+						smemzero(ml->reserved,
+							 sizeof(ml->reserved));
 					}
 
 					TRACE();
@@ -296,7 +297,7 @@ void load_ms_dbase(void) {
 
 					if (ml->n_memos > 0) {
 
-						ml->memos = mem_malloc(sizeof(Memo) * ml->n_memos);
+						ml->memos = smalloc(sizeof(Memo) * ml->n_memos);
 
 						TRACE();
 
@@ -304,7 +305,7 @@ void load_ms_dbase(void) {
 							if (fread(ml->memos, sizeof(Memo), ml->n_memos, f) != (size_t) ml->n_memos)
 								fatal_error(FACILITY_MEMOSERV_LOAD_MS_DB, __LINE__, "Read error (2) on %s", MEMOSERV_DB);
 						} else {
-							Memo32 *memos32 = mem_malloc(sizeof(Memo32) * ml->n_memos);
+							Memo32 *memos32 = smalloc(sizeof(Memo32) * ml->n_memos);
 
 							if (fread(memos32, sizeof(Memo32), ml->n_memos, f) != (size_t) ml->n_memos)
 								fatal_error(FACILITY_MEMOSERV_LOAD_MS_DB, __LINE__, "Read error (2) on %s", MEMOSERV_DB);
@@ -316,9 +317,10 @@ void load_ms_dbase(void) {
 								ml->memos[memoIdx].chan = (void *)(uintptr_t)memos32[memoIdx].chan;
 								ml->memos[memoIdx].flags = memos32[memoIdx].flags;
 								ml->memos[memoIdx].level = memos32[memoIdx].level;
-								memset(ml->memos[memoIdx].reserved, 0, sizeof(ml->memos[memoIdx].reserved));
+								smemzero(ml->memos[memoIdx].reserved,
+									 sizeof(ml->memos[memoIdx].reserved));
 							}
-							mem_free(memos32);
+							sfree(memos32);
 						}
 
 						for (memo = ml->memos, memoIdx = 0; memoIdx < ml->n_memos; ++memoIdx, ++memo) {
@@ -339,7 +341,7 @@ void load_ms_dbase(void) {
 
 						for (memoIdx = 0; memoIdx < ml->n_ignores; ++memoIdx) {
 
-							ignore = mem_malloc(sizeof(MemoIgnore));
+							ignore = smalloc(sizeof(MemoIgnore));
 
 							TRACE();
 							if (flags & DATAFILE64) {
@@ -490,10 +492,10 @@ void expire_memos() {
 						LOG_SNOOP(s_OperServ, "MS X %s [%d]", ml->nick, (memoIdx + memoExpired));
 
 					/* Free this memo. */
-					mem_free(memo->text);
+					sfree(memo->text);
 
 					if (IS_NOT_NULL(memo->chan))
-						mem_free(memo->chan);
+						sfree(memo->chan);
 
 					/* Decrease user's memo count by one. */
 					--(ml->n_memos);
@@ -525,7 +527,7 @@ void expire_memos() {
 						else {
 
 							if (IS_NOT_NULL(ml->memos))
-								mem_free(ml->memos);
+								sfree(ml->memos);
 							ml->memos = NULL;
 						}
 					}
@@ -555,7 +557,7 @@ static MemoList *create_memolist(const char *nickname) {
 	#ifdef FIX_USE_MPOOL
 	ml = mempool_alloc(MemoList*, memodb_mempool, TRUE);
 	#else
-	ml = mem_calloc(1, sizeof(MemoList));
+	ml = smalloc(sizeof(MemoList));
 	#endif
 
 	str_copy_checked(nickname, ml->nick, NICKMAX);
@@ -643,14 +645,14 @@ static void del_memolist(MemoList *ml) {
 	/* Clear all remaining memos. */
 	for (memoIdx = 0; memoIdx < ml->n_memos; ++memoIdx) {
 
-		mem_free(ml->memos[memoIdx].text);
+		sfree(ml->memos[memoIdx].text);
 
 		if (ml->memos[memoIdx].chan)
-			mem_free(ml->memos[memoIdx].chan);
+			sfree(ml->memos[memoIdx].chan);
 	}
 
 	if (ml->memos)
-		mem_free(ml->memos);
+		sfree(ml->memos);
 
 	TRACE();
 
@@ -659,8 +661,8 @@ static void del_memolist(MemoList *ml) {
 
 		next = ignore->next;
 
-		mem_free(ignore->ignoredNick);
-		mem_free(ignore);
+		sfree(ignore->ignoredNick);
+		sfree(ignore);
 
 		ignore = next;
 	}
@@ -670,7 +672,7 @@ static void del_memolist(MemoList *ml) {
 	#ifdef FIX_USE_MPOOL
 	mempool_free(memodb_mempool, ml);
 	#else
-	mem_free(ml);
+	sfree(ml);
 	#endif
 }
 
@@ -792,10 +794,10 @@ void memoserv_delete_flagged_memos(CSTR nick, BOOL noMessage) {
 
 				TRACE();
 
-				mem_free(memo->text);
+				sfree(memo->text);
 
 				if (IS_NOT_NULL(memo->chan))
-					mem_free(memo->chan);
+					sfree(memo->chan);
 
 				/* Decrease user's memo count by one. */
 				--(ml->n_memos);
@@ -830,7 +832,7 @@ void memoserv_delete_flagged_memos(CSTR nick, BOOL noMessage) {
 			else {
 
 				if (ml->memos)
-					mem_free(ml->memos);
+					sfree(ml->memos);
 				ml->memos = NULL;
 			}
 		}
@@ -1020,7 +1022,7 @@ static BOOL send_memo(User *callerUser, CSTR sender, NickInfo *ni, CSTR message,
 		}
 		else {
 
-			mem_free(ni->forward);
+			sfree(ni->forward);
 			ni->forward = NULL;
 		}
 	}
@@ -1043,7 +1045,7 @@ static BOOL send_memo(User *callerUser, CSTR sender, NickInfo *ni, CSTR message,
 	++(ml->n_memos);
 
 	/* Allocate a new slot. */
-	ml->memos = mem_realloc(ml->memos, sizeof(Memo) * ml->n_memos);
+	ml->memos = srealloc(ml->memos, sizeof(Memo) * ml->n_memos);
 
 	/* Point memo to the newly allocated slot. */
 	memo = ml->memos + (ml->n_memos - 1);
@@ -1110,7 +1112,7 @@ void send_memo_internal(NickInfo *ni, CSTR message) {
 		}
 		else {
 
-			mem_free(ni->forward);
+			sfree(ni->forward);
 			ni->forward = NULL;
 		}
 	}
@@ -1122,7 +1124,7 @@ void send_memo_internal(NickInfo *ni, CSTR message) {
 	++(ml->n_memos);
 
 	/* Allocate a new slot. */
-	ml->memos = mem_realloc(ml->memos, sizeof(Memo) * ml->n_memos);
+	ml->memos = srealloc(ml->memos, sizeof(Memo) * ml->n_memos);
 
 	/* Point memo to the newly allocated slot. */
 	memo = ml->memos + (ml->n_memos - 1);
@@ -1523,7 +1525,7 @@ static void do_forward(const char *source, User *callerUser, ServiceCommandData 
 				if (CONF_SET_READONLY)
 					send_notice_lang_to_user(s_MemoServ, callerUser, GetCallerLang(), WARNING_READONLY);
 
-				mem_free(ni->forward);
+				sfree(ni->forward);
 				ni->forward = NULL;
 			}
 			else
@@ -1568,7 +1570,7 @@ static void do_forward(const char *source, User *callerUser, ServiceCommandData 
 
 				TRACE_MAIN();
 				if (callerUser->ni->forward)
-					mem_free(callerUser->ni->forward);
+					sfree(callerUser->ni->forward);
 				callerUser->ni->forward = str_duplicate(ni->nick);
 
 				if (CONF_SET_EXTRASNOOP)
@@ -1718,10 +1720,10 @@ static void do_unsend(CSTR source, User *callerUser, ServiceCommandData *data) {
 						send_notice_lang_to_user(s_MemoServ, user, FindNickLang(targetNick, user), MS_UNSEND_MEMO_UNSENT_TARGET_CHAN, source, ci->name);
 
 					TRACE_MAIN();
-					mem_free(ml->memos[memoIdx].text);
+					sfree(ml->memos[memoIdx].text);
 
 					if (IS_NOT_NULL(ml->memos[memoIdx].chan))
-						mem_free(ml->memos[memoIdx].chan);
+						sfree(ml->memos[memoIdx].chan);
 
 					/* Decrease user's memo count by one. */
 					--(ml->n_memos);
@@ -1739,7 +1741,7 @@ static void do_unsend(CSTR source, User *callerUser, ServiceCommandData *data) {
 						else {
 
 							if (ml->memos)
-								mem_free(ml->memos);
+								sfree(ml->memos);
 							ml->memos = NULL;
 						}
 					}
@@ -1781,7 +1783,7 @@ static void do_unsend(CSTR source, User *callerUser, ServiceCommandData *data) {
 
 			if (IS_NULL(findnick(ni->forward))) {
 
-				mem_free(ni->forward);
+				sfree(ni->forward);
 				ni->forward = NULL;
 			}
 			else
@@ -1824,10 +1826,10 @@ static void do_unsend(CSTR source, User *callerUser, ServiceCommandData *data) {
 			send_notice_lang_to_user(s_MemoServ, user, FindNickLang(target, user), MS_UNSEND_MEMO_UNSENT_TARGET, source);
 
 		TRACE_MAIN();
-		mem_free(ml->memos[memoIdx].text);	/* Deallocate memo text memory */
+		sfree(ml->memos[memoIdx].text);	/* Deallocate memo text memory */
 
 		if (IS_NOT_NULL(ml->memos[memoIdx].chan))
-			mem_free(ml->memos[memoIdx].chan);
+			sfree(ml->memos[memoIdx].chan);
 
 		/* Decrease user's memo count by one. */
 		--(ml->n_memos);
@@ -1847,7 +1849,7 @@ static void do_unsend(CSTR source, User *callerUser, ServiceCommandData *data) {
 
 				TRACE_MAIN();
 				if (ml->memos)
-					mem_free(ml->memos);
+					sfree(ml->memos);
 				ml->memos = NULL;
 			}
 		}
@@ -2535,7 +2537,7 @@ static void do_ignore(const char *source, User *callerUser, ServiceCommandData *
 
 			TRACE_MAIN();
 
-			ignore = (MemoIgnore*) mem_malloc(sizeof(MemoIgnore));
+			ignore = (MemoIgnore*) smalloc(sizeof(MemoIgnore));
 
 			ignore->creationTime = NOW;
 			ignore->ignoredNick = str_duplicate(ni->nick);
@@ -2613,8 +2615,8 @@ static void do_ignore(const char *source, User *callerUser, ServiceCommandData *
 					else
 						ml->ignores = ignore->next;
 
-					mem_free(ignore->ignoredNick);
-					mem_free(ignore);
+					sfree(ignore->ignoredNick);
+					sfree(ignore);
 
 					--(ml->n_ignores);
 
@@ -2628,7 +2630,7 @@ static void do_ignore(const char *source, User *callerUser, ServiceCommandData *
 							if (ml->n_ignores == 0) {
 
 								if (ml->ignores)
-									mem_free(ml->ignores);
+									sfree(ml->ignores);
 								ml->ignores = NULL;
 							}
 						}
@@ -2666,8 +2668,8 @@ static void do_ignore(const char *source, User *callerUser, ServiceCommandData *
 					else
 						ml->ignores = ignore->next;
 
-					mem_free(ignore->ignoredNick);
-					mem_free(ignore);
+					sfree(ignore->ignoredNick);
+					sfree(ignore);
 
 					--(ml->n_ignores);
 
@@ -2681,7 +2683,7 @@ static void do_ignore(const char *source, User *callerUser, ServiceCommandData *
 							if (ml->n_ignores == 0) {
 
 								if (ml->ignores)
-									mem_free(ml->ignores);
+									sfree(ml->ignores);
 								ml->ignores = NULL;
 							}
 						}
@@ -2705,8 +2707,8 @@ static void do_ignore(const char *source, User *callerUser, ServiceCommandData *
 
 			next = ignore->next;
 
-			mem_free(ignore->ignoredNick);
-			mem_free(ignore);
+			sfree(ignore->ignoredNick);
+			sfree(ignore);
 
 			ignore = next;
 		}

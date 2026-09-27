@@ -299,7 +299,7 @@ static void conf_break(int ac, char **av, BOOL rehash) {
 			else {
 
 				if (CONF_SNOOP_CHAN)
-					mem_free(CONF_SNOOP_CHAN);
+					sfree(CONF_SNOOP_CHAN);
 				CONF_SNOOP_CHAN = str_duplicate(av[1]);
 			}
 		}
@@ -315,7 +315,7 @@ static void conf_break(int ac, char **av, BOOL rehash) {
 			else {
 
 				if (CONF_DEBUG_CHAN)
-					mem_free(CONF_DEBUG_CHAN);
+					sfree(CONF_DEBUG_CHAN);
 				CONF_DEBUG_CHAN = str_duplicate(av[1]);
 			}
 		}
@@ -813,7 +813,7 @@ static void conf_break(int ac, char **av, BOOL rehash) {
 			int add = 1;
 			char *modes = av[1];
 
-			memset(modebuf, 0, sizeof(modebuf));
+			smemzero(modebuf, sizeof(modebuf));
 
 			CONF_DEF_MLOCKON = 0;
 			CONF_DEF_MLOCKOFF = 0;
@@ -909,14 +909,14 @@ static void conf_break(int ac, char **av, BOOL rehash) {
 			else {
 
 				if (CONF_RETURN_EMAIL)
-					mem_free(CONF_RETURN_EMAIL);
+					sfree(CONF_RETURN_EMAIL);
 				CONF_RETURN_EMAIL = str_duplicate(av[1]);
 			}
 		}
 		else if (str_equals_nocase(av[0], "SENDMAIL")) {
 
 			if (CONF_SENDMAIL_PATH)
-				mem_free(CONF_SENDMAIL_PATH);
+				sfree(CONF_SENDMAIL_PATH);
 			CONF_SENDMAIL_PATH = str_duplicate(av[1]);
 		}
 		else if (str_equals_nocase(av[0], "FORCE_AUTH")) {
@@ -1075,7 +1075,7 @@ static void conf_break(int ac, char **av, BOOL rehash) {
 			else {
 
 				if (CONF_SERVICES_NAME)
-					mem_free(CONF_SERVICES_NAME);
+					sfree(CONF_SERVICES_NAME);
 				CONF_SERVICES_NAME = str_duplicate(av[1]);
 			}
 
@@ -1085,7 +1085,7 @@ static void conf_break(int ac, char **av, BOOL rehash) {
 			else {
 
 				if (CONF_REMOTE_PASSWORD)
-					mem_free(CONF_REMOTE_PASSWORD);
+					sfree(CONF_REMOTE_PASSWORD);
 				CONF_REMOTE_PASSWORD = str_duplicate(av[2]);
 			}
 
@@ -1095,7 +1095,7 @@ static void conf_break(int ac, char **av, BOOL rehash) {
 			else {
 
 				if (CONF_REMOTE_SERVER)
-					mem_free(CONF_REMOTE_SERVER);
+					sfree(CONF_REMOTE_SERVER);
 				CONF_REMOTE_SERVER = str_duplicate(av[3]);
 			}
 
@@ -1131,7 +1131,7 @@ static void conf_break(int ac, char **av, BOOL rehash) {
 			else {
 
 				if (CONF_SERVICES_DESC)
-					mem_free(CONF_SERVICES_DESC);
+					sfree(CONF_SERVICES_DESC);
 				CONF_SERVICES_DESC = str_duplicate(desc);
 			}
 
@@ -1262,7 +1262,7 @@ static void conf_break(int ac, char **av, BOOL rehash) {
 			else {
 
 				if (CONF_SERVICES_USERNAME)
-					mem_free(CONF_SERVICES_USERNAME);
+					sfree(CONF_SERVICES_USERNAME);
 				CONF_SERVICES_USERNAME = str_duplicate(av[1]);
 			}
 
@@ -1272,7 +1272,7 @@ static void conf_break(int ac, char **av, BOOL rehash) {
 			else {
 
 				if (CONF_SERVICES_HOST)
-					mem_free(CONF_SERVICES_HOST);
+					sfree(CONF_SERVICES_HOST);
 				CONF_SERVICES_HOST = str_duplicate(av[2]);
 			}
 
@@ -1292,7 +1292,7 @@ static void conf_break(int ac, char **av, BOOL rehash) {
 			else {
 
 				if (CONF_NETWORK_NAME)
-					mem_free(CONF_NETWORK_NAME);
+					sfree(CONF_NETWORK_NAME);
 				CONF_NETWORK_NAME = str_duplicate(av[1]);
 			}
 
@@ -1312,7 +1312,7 @@ static void conf_break(int ac, char **av, BOOL rehash) {
 			else {
 
 				if (CONF_SERVICES_MASTER)
-					mem_free(CONF_SERVICES_MASTER);
+					sfree(CONF_SERVICES_MASTER);
 				CONF_SERVICES_MASTER = str_duplicate(av[1]);
 			}
 

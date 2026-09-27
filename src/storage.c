@@ -151,7 +151,7 @@ STG_RESULT stg_open(const char *path, STGHANDLE *handle) {
 
 		*handle = STG_INVALID_HANDLE;
 
-		sd = mem_calloc(1, sizeof(StorageDescriptor));
+		sd = smalloc(sizeof(StorageDescriptor));
 
 		sd->fd = fopen(path, s_OPENMODE_READONLY);
 
@@ -265,7 +265,7 @@ STG_RESULT stg_create(const char *path, flags_t flags, STGVERSION version, STGHA
 
 				// old data saved
 
-				sd = mem_calloc(1, sizeof(StorageDescriptor));
+				sd = smalloc(sizeof(StorageDescriptor));
 
 				sd->fd = fopen(path, s_OPENMODE_WRITEONLY);
 				if (IS_NOT_NULL(sd->fd)) {
@@ -349,7 +349,7 @@ STG_RESULT stg_close(STGHANDLE handle, const char *path) {
 		}
 
 		fclose(sd->fd);
-		mem_free(sd);
+		sfree(sd);
 
 		result = stgSuccess;	// done
 	}
@@ -516,7 +516,7 @@ STG_RESULT stg_read_string(STGHANDLE handle, char **string, size_t *length) {
 			if (IS_NOT_NULL(length))
 				*length = rd.size;
 
-			data = mem_malloc(rd.size);
+			data = smalloc(rd.size);
 			read_done = (fread(data, rd.size, 1, sd->fd) == 1);
 
 			if (read_done) {

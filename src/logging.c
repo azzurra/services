@@ -274,7 +274,7 @@ void log_done() {
 
 	if (IS_NOT_NULL(log_last_error_status)) {
 
-		mem_free(log_last_error_status);
+		sfree(log_last_error_status);
 		log_last_error_status = NULL;
 	}
 
@@ -311,7 +311,7 @@ BOOL log_init() {
 	}
 
 	if (IS_NULL(log_last_error_status))
-		log_last_error_status = mem_calloc(1, sizeof(LASTERROR_STATUS)); // allocata e azzerata.
+		log_last_error_status = smalloc(sizeof(LASTERROR_STATUS)); // allocata e azzerata.
 
 	return log_started = TRUE;
 }
@@ -676,7 +676,7 @@ static BOOL log_search_file(CSTR agentNickname, const User *callerUser, int logT
 
 	/* Now get the last date. */
 	if (IS_NULL(str_tokenize(ptr, lastDay, sizeof(lastDay), ' ')))
-		memset(lastDay, 0, sizeof(lastDay));
+		smemzero(lastDay, sizeof(lastDay));
 
 	/* Parse the first date. */
 	if (str_equals_nocase(firstDay, s_TODAY)) {
@@ -1054,7 +1054,7 @@ void handle_search(CSTR source, User *callerUser, ServiceCommandData *data) {
 		for (j = 0; j < MAX_PARAMS; ++j) {
 
 			if (IS_NOT_NULL(prms[j]))
-				mem_free(prms[j]);
+				sfree(prms[j]);
 		}
 
 		return;
@@ -1077,11 +1077,11 @@ void handle_search(CSTR source, User *callerUser, ServiceCommandData *data) {
 	log_search_file(data->agent->nick, callerUser, log_type, days, search, start_line, end_line);
 
 	TRACE();
-	mem_free(search);
-	mem_free(days);
-	mem_free(type);
-	mem_free(start);
-	mem_free(end);
+	sfree(search);
+	sfree(days);
+	sfree(type);
+	sfree(start);
+	sfree(end);
 	TRACE();
 
 	#undef MAX_PARAMS

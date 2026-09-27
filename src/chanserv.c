@@ -443,7 +443,7 @@ void load_cs_dbase(void) {
 				#ifdef FIX_USE_MPOOL
 				ci = mempool_alloc(ChannelInfo *, chandb_mempool, FALSE);
 				#else
-				ci = mem_malloc(sizeof(ChannelInfo));
+				ci = smalloc(sizeof(ChannelInfo));
 				#endif
 
 				if (flags & DATAFILE64) {
@@ -503,7 +503,7 @@ void load_cs_dbase(void) {
 				ci->banType = 2;
 				#endif
 
-				memset(ci->reserved, 0, sizeof(ci->reserved));
+				smemzero(ci->reserved, sizeof(ci->reserved));
 
 				if (ci->accesscount == 0)
 					ci->access = NULL;
@@ -578,7 +578,7 @@ void load_cs_dbase(void) {
 					int			unused_access, accessIdx;
 
 					TRACE();
-					anAccess = mem_malloc(sizeof(ChanAccess) * ci->accesscount);
+					anAccess = smalloc(sizeof(ChanAccess) * ci->accesscount);
 					ci->access = anAccess;
 
 					TRACE();
@@ -587,7 +587,7 @@ void load_cs_dbase(void) {
 						if ((signed)fread(anAccess, sizeof(ChanAccess), ci->accesscount, f) != ci->accesscount)
 							fatal_error(FACILITY_CHANSERV_LOAD_CS_DB, __LINE__, "Read error on %s", CHANSERV_DB);
 					} else {
-						access32 = mem_malloc(sizeof(ChanAccess32) * ci->accesscount);
+						access32 = smalloc(sizeof(ChanAccess32) * ci->accesscount);
 						if ((signed)fread(access32, sizeof(ChanAccess32), ci->accesscount, f) != ci->accesscount)
 							fatal_error(FACILITY_CHANSERV_LOAD_CS_DB, __LINE__, "Read error on %s", CHANSERV_DB);
 						for (accessIdx = 0; accessIdx < ci->accesscount; ++accessIdx) {
@@ -634,14 +634,14 @@ void load_cs_dbase(void) {
 								TRACE();
 								if (IS_NOT_NULL(anAccess->name)) {
 
-									mem_free(anAccess->name);
+									sfree(anAccess->name);
 									anAccess->name = NULL;
 								}
 
 								TRACE();
 								if (IS_NOT_NULL(anAccess->creator)) {
 
-									mem_free(anAccess->creator);
+									sfree(anAccess->creator);
 									anAccess->creator = NULL;
 								}
 
@@ -660,13 +660,13 @@ void load_cs_dbase(void) {
 									TRACE();
 									if (IS_NULL(ni) || str_equals_nocase(ni->nick, ci->founder)) {
 
-										mem_free(anAccess->name);
+										sfree(anAccess->name);
 										anAccess->name = NULL;
 
 										TRACE();
 										if (IS_NOT_NULL(anAccess->creator)) {
 
-											mem_free(anAccess->creator);
+											sfree(anAccess->creator);
 											anAccess->creator = NULL;
 										}
 
@@ -698,7 +698,7 @@ void load_cs_dbase(void) {
 					int akickIdx;
 
 					TRACE();
-					anAkick = mem_malloc(sizeof(AutoKick) * ci->akickcount);
+					anAkick = smalloc(sizeof(AutoKick) * ci->akickcount);
 					ci->akick = anAkick;
 
 					AutoKick32 *anAkick32 = NULL;
@@ -706,7 +706,7 @@ void load_cs_dbase(void) {
 						if ((signed)fread(anAkick, sizeof(AutoKick), ci->akickcount, f) != ci->akickcount)
 							fatal_error(FACILITY_CHANSERV_LOAD_CS_DB, __LINE__, "Read error on %s", CHANSERV_DB);
 					} else {
-						anAkick32 = mem_malloc(sizeof(AutoKick32) * ci->akickcount);
+						anAkick32 = smalloc(sizeof(AutoKick32) * ci->akickcount);
 						if ((signed)fread(anAkick32, sizeof(AutoKick32), ci->akickcount, f) != ci->akickcount)
 							fatal_error(FACILITY_CHANSERV_LOAD_CS_DB, __LINE__, "Read error on %s", CHANSERV_DB);
 						for (akickIdx = 0; akickIdx < ci->akickcount; ++akickIdx) {
@@ -718,7 +718,7 @@ void load_cs_dbase(void) {
 							anAkick[akickIdx].banType = anAkick32[akickIdx].banType;
 							anAkick[akickIdx].creationTime = anAkick32[akickIdx].creationTime;
 						}
-						mem_free(anAkick32);
+						sfree(anAkick32);
 					}
 
 					TRACE();
@@ -752,13 +752,13 @@ void load_cs_dbase(void) {
 							TRACE();
 							--(ci->akickcount);
 
-							mem_free(anAkick->name);
+							sfree(anAkick->name);
 
 							if (anAkick->reason)
-								mem_free(anAkick->reason);
+								sfree(anAkick->reason);
 
 							if (anAkick->creator)
-								mem_free(anAkick->creator);
+								sfree(anAkick->creator);
 
 							if (akickIdx < ci->akickcount)
 								memmove(anAkick, (anAkick + 1), sizeof(AutoKick) * (ci->akickcount - akickIdx));
@@ -773,12 +773,13 @@ void load_cs_dbase(void) {
 
 					TRACE();
 					if (ci->akickcount)
-						ci->akick = mem_realloc(ci->akick, sizeof(AutoKick) * ci->akickcount);
+						ci->akick = srealloc(ci->akick,
+								     sizeof(AutoKick) * ci->akickcount);
 
 					else {
 
 						TRACE();
-						mem_free(ci->akick);
+						sfree(ci->akick);
 						ci->akick = NULL;
 					}
 					#endif /* SUX */
@@ -832,7 +833,7 @@ static void channelinfo32_to64(ChannelInfo32 *ci32, ChannelInfo *ci) {
 	ci->last_drop_request = ci32->last_drop_request;
 	ci->langID = ci32->langID;
 	ci->banType = ci32->banType;
-	memset(ci->reserved, 0, sizeof(ci->reserved));
+	smemzero(ci->reserved, sizeof(ci->reserved));
 }
 
 /*********************************************************/
@@ -991,7 +992,7 @@ void load_suspend_db(void) {
 	while (fgetc(f) == 1) {
 
 		++i;
-		name = mem_malloc(sizeof(ChannelSuspendData));
+		name = smalloc(sizeof(ChannelSuspendData));
 
 		TRACE();
 		if (flags & DATAFILE64) {
@@ -1099,36 +1100,39 @@ void expire_chans() {
 								"%s in expire_chans(): Nickname record %s (founder) has a negative channelcount value", s_ChanServ, ni->nick);
 					}
 
-					memset(&(ci->founder), 0, sizeof(ci->founder));
-					memset(&(ci->founderpass), 0, sizeof(ci->founderpass));
-					memset(&(ci->last_topic_setter), 0, sizeof(ci->last_topic_setter));
+					smemzero(&(ci->founder),
+						 sizeof(ci->founder));
+					smemzero(&(ci->founderpass),
+						 sizeof(ci->founderpass));
+					smemzero(&(ci->last_topic_setter),
+						 sizeof(ci->last_topic_setter));
 
 					if (ci->desc)
-						mem_free(ci->desc);
+						sfree(ci->desc);
 					ci->desc = NULL;
 
 					if (ci->successor)
-						mem_free(ci->successor);
+						sfree(ci->successor);
 					ci->successor = NULL;
 
 					if (ci->url)
-						mem_free(ci->url);
+						sfree(ci->url);
 					ci->url = NULL;
 
 					if (ci->email)
-						mem_free(ci->email);
+						sfree(ci->email);
 					ci->email = NULL;
 
 					if (ci->real_founder)
-						mem_free(ci->real_founder);
+						sfree(ci->real_founder);
 					ci->real_founder = NULL;
 
 					if (ci->mlock_key)
-						mem_free(ci->mlock_key);
+						sfree(ci->mlock_key);
 					ci->mlock_key = NULL;
 
 					if (ci->last_topic)
-						mem_free(ci->last_topic);
+						sfree(ci->last_topic);
 					ci->last_topic = NULL;
 
 					if (ci->access) {
@@ -1148,13 +1152,13 @@ void expire_chans() {
 							}
 
 							if (anAccess->name)
-								mem_free(anAccess->name);
+								sfree(anAccess->name);
 
 							if (anAccess->creator)
-								mem_free(anAccess->creator);
+								sfree(anAccess->creator);
 						}
 
-						mem_free(ci->access);
+						sfree(ci->access);
 
 						ci->access = NULL;
 					}
@@ -1164,35 +1168,35 @@ void expire_chans() {
 					TRACE();
 					for (i = 0; i < ci->akickcount; ++i) {
 
-						mem_free(ci->akick[i].name);
+						sfree(ci->akick[i].name);
 
 						if (ci->akick[i].reason)
-							mem_free(ci->akick[i].reason);
+							sfree(ci->akick[i].reason);
 
 						if (ci->akick[i].creator)
-							mem_free(ci->akick[i].creator);
+							sfree(ci->akick[i].creator);
 					}
 
 					ci->akickcount = 0;
 
 					if (ci->akick)
-						mem_free(ci->akick);
+						sfree(ci->akick);
 					ci->akick = NULL;
 
 					if (ci->welcome)
-						mem_free(ci->welcome);
+						sfree(ci->welcome);
 					ci->welcome = NULL;
 
 					if (ci->hold)
-						mem_free(ci->hold);
+						sfree(ci->hold);
 					ci->hold = NULL;
 
 					if (ci->mark)
-						mem_free(ci->mark);
+						sfree(ci->mark);
 					ci->mark = NULL;
 
 					if (ci->freeze)
-						mem_free(ci->freeze);
+						sfree(ci->freeze);
 					ci->freeze = NULL;
 
 					ci->mlock_on = 0;
@@ -1207,7 +1211,7 @@ void expire_chans() {
 					ci->flags = CI_FORBIDDEN;
 
 					if (ci->forbid)
-						mem_free(ci->forbid);
+						sfree(ci->forbid);
 					ci->forbid = str_duplicate(s_ChanServ);
 
 					continue;
@@ -1298,9 +1302,9 @@ void chanserv_daily_expire() {
 					size_t	size;
 
 					TRACE();
-					mem_free(ci->real_founder);
+					sfree(ci->real_founder);
 					size = (str_len(ci->founder) + str_len(ni->last_usermask) + 4) * sizeof(char);
-					ci->real_founder = mem_calloc(1, size);
+					ci->real_founder = smalloc(size);
 
 					snprintf(ci->real_founder, size, "%s (%s)", ci->founder, ni->last_usermask);
 				}
@@ -1376,7 +1380,7 @@ static ChannelInfo *makechan(CSTR chan) {
 	#ifdef FIX_USE_MPOOL
 	ci = mempool_alloc(ChannelInfo*, chandb_mempool, TRUE);
 	#else
-	ci = mem_calloc(1, sizeof(ChannelInfo));
+	ci = smalloc(sizeof(ChannelInfo));
 	#endif
 
 	TRACE();
@@ -1447,25 +1451,25 @@ static void delchan(ChannelInfo *ci) {
 		chanlists[str_char_tolower(ci->name[1])] = ci->next;
 
 	if (ci->desc)
-		mem_free(ci->desc);
+		sfree(ci->desc);
 
 	if (ci->successor)
-		mem_free(ci->successor);
+		sfree(ci->successor);
 
 	if (ci->url)
-		mem_free(ci->url);
+		sfree(ci->url);
 
 	if (ci->email)
-		mem_free(ci->email);
+		sfree(ci->email);
 
 	if (ci->real_founder)
-		mem_free(ci->real_founder);
+		sfree(ci->real_founder);
 
 	if (ci->mlock_key)
-		mem_free(ci->mlock_key);
+		sfree(ci->mlock_key);
 
 	if (ci->last_topic)
-		mem_free(ci->last_topic);
+		sfree(ci->last_topic);
 
 	if (ci->access) {
 
@@ -1484,50 +1488,50 @@ static void delchan(ChannelInfo *ci) {
 			}
 
 			if (anAccess->name)
-				mem_free(anAccess->name);
+				sfree(anAccess->name);
 
 			if (anAccess->creator)
-				mem_free(anAccess->creator);
+				sfree(anAccess->creator);
 		}
 
-		mem_free(ci->access);
+		sfree(ci->access);
 	}	
 
 	TRACE();
 	for (i = 0; i < ci->akickcount; ++i) {
 
-		mem_free(ci->akick[i].name);
+		sfree(ci->akick[i].name);
 
 		if (ci->akick[i].reason)
-			mem_free(ci->akick[i].reason);
+			sfree(ci->akick[i].reason);
 
 		if (ci->akick[i].creator)
-			mem_free(ci->akick[i].creator);
+			sfree(ci->akick[i].creator);
 	}
 
 	if (ci->akick)
-		mem_free(ci->akick);
+		sfree(ci->akick);
 
 	if (ci->welcome)
-		mem_free(ci->welcome);
+		sfree(ci->welcome);
 
 	if (ci->hold)
-		mem_free(ci->hold);
+		sfree(ci->hold);
 
 	if (ci->mark)
-		mem_free(ci->mark);
+		sfree(ci->mark);
 
 	if (ci->freeze)
-		mem_free(ci->freeze);
+		sfree(ci->freeze);
 
 	if (ci->forbid)
-		mem_free(ci->forbid);
+		sfree(ci->forbid);
 
 	TRACE();
 	#ifdef FIX_USE_MPOOL
 	mempool_free(chandb_mempool, ci);
 	#else
-	mem_free(ci);
+	sfree(ci);
 	#endif
 
 	--cs_regCount;
@@ -1561,7 +1565,7 @@ static __inline__ void link_channel(User *user, ChannelInfo *ci) {
 	ChanInfoListItem *item;
 
 
-	item = mem_malloc(sizeof(ChanInfoListItem));
+	item = smalloc(sizeof(ChanInfoListItem));
 
 	item->next = user->founder_chans;
 	item->prev = NULL;
@@ -1651,9 +1655,9 @@ void chanserv_dispose_timeout_data(void *data) {
 	if (IS_NOT_NULL(ctd)) {
 
 		if (ctd->type == CTOD_CHAN_NAME)
-			mem_free(ctd->info.name);
+			sfree(ctd->info.name);
 
-		mem_free(ctd);
+		sfree(ctd);
 	}
 }
 
@@ -1695,8 +1699,8 @@ static int masskick_channel(CSTR chan_name, LANG_MSG_ID reason) {
 		}
 
 		TRACE_MAIN();
-		data1 = mem_malloc(sizeof(ChannelTimeoutData));
-		data2 = mem_malloc(sizeof(ChannelTimeoutData));
+		data1 = smalloc(sizeof(ChannelTimeoutData));
+		data2 = smalloc(sizeof(ChannelTimeoutData));
 
 		if (IS_NOT_NULL(ci)) {
 
@@ -1843,13 +1847,13 @@ void check_modelock(Channel *chan, User *changedBy) {
 	if (removeKey) {
 
 		if (chan->key)
-			mem_free(chan->key);
+			sfree(chan->key);
 		chan->key = NULL;
 	}
 	else if (addKey) {
 
 		if (chan->key)
-			mem_free(chan->key);
+			sfree(chan->key);
 
 		chan->key = str_duplicate(ci->mlock_key);
 	}
@@ -2053,7 +2057,7 @@ static ChannelSuspendData *add_suspend(CSTR channel) {
 
 	TRACE_FCLT(FACILITY_CHANSERV_ADD_SUSPEND);
 
-	data = mem_malloc(sizeof(ChannelSuspendData));
+	data = smalloc(sizeof(ChannelSuspendData));
 
 	TRACE();
 	str_copy_checked(channel, data->name, CHANMAX);
@@ -2134,7 +2138,7 @@ static void del_suspend(CSTR channel) {
 				RemoveFlag(ci->flags, CI_SUSPENDED);
 
 			TRACE();
-			mem_free(name);
+			sfree(name);
 			return;
 		}
 
@@ -2365,7 +2369,7 @@ kick:
 		ChannelTimeoutData	*data;
 
 
-		data = mem_malloc(sizeof(ChannelTimeoutData));
+		data = smalloc(sizeof(ChannelTimeoutData));
 
 		if (IS_NOT_NULL(ci)) {
 
@@ -2402,7 +2406,7 @@ kick:
 
 	TRACE();
 	if (mask)
-		mem_free(mask);
+		sfree(mask);
 
 	return FALSE;
 }
@@ -2424,7 +2428,7 @@ void record_topic(Channel *chan) {
 
 	TRACE();
 	if (ci->last_topic)
-		mem_free(ci->last_topic);
+		sfree(ci->last_topic);
 
 	if (chan->topic)
 		ci->last_topic = str_duplicate(chan->topic);
@@ -2450,7 +2454,7 @@ void restore_topic(Channel *chan) {
 
 	TRACE();
 	if (chan->topic)
-		mem_free(chan->topic);
+		sfree(chan->topic);
 
 	if (ci->last_topic) {
 
@@ -2490,7 +2494,7 @@ BOOL check_topiclock(const User *user, Channel *chan) {
 
 	TRACE();
 	if (chan->topic)
-		mem_free(chan->topic);
+		sfree(chan->topic);
 
 	if (ci->last_topic)
 		chan->topic = str_duplicate(ci->last_topic);
@@ -2531,7 +2535,7 @@ void cs_remove_nick(CSTR nick) {
 
 			if (IS_NOT_NULL(ci->successor) && str_equals_nocase(ci->successor, nick)) {
 
-				mem_free(ci->successor);
+				sfree(ci->successor);
 				ci->successor = NULL;
 			}
 			else if (str_equals_nocase(ci->founder, nick)) {
@@ -2607,7 +2611,7 @@ void cs_remove_nick(CSTR nick) {
 					user_remove_chanid(ci);
 
 					/* Clear the successor entry. */
-					mem_free(ci->successor);
+					sfree(ci->successor);
 					ci->successor = NULL;
 
 					for (anAccess = ci->access, j = 0; (j < ci->accesscount) && IS_NOT_NULL(anAccess); ++anAccess, ++j) {
@@ -2615,10 +2619,10 @@ void cs_remove_nick(CSTR nick) {
 						if ((anAccess->status == ACCESS_ENTRY_NICK) && (anAccess->level == CS_ACCESS_COFOUNDER)
 							&& str_equals_nocase(ci->founder, anAccess->name)) {
 
-							mem_free(anAccess->name);
+							sfree(anAccess->name);
 							anAccess->name = NULL;
 
-							mem_free(anAccess->creator);
+							sfree(anAccess->creator);
 							anAccess->creator = NULL;
 
 							anAccess->status = ACCESS_ENTRY_FREE;
@@ -3001,7 +3005,7 @@ static void do_register(CSTR source, User *callerUser, ServiceCommandData *data)
 
 		TRACE_MAIN();
 		size = (str_len(source) + str_len(callerUser->username) + str_len(callerUser->host) + 5) * sizeof(char);
-		ci->real_founder = mem_calloc(1, size);
+		ci->real_founder = smalloc(size);
 
 		snprintf(ci->real_founder, size, "%s (%s@%s)", source, callerUser->username, callerUser->host);
 
@@ -3844,7 +3848,7 @@ static void do_set_founder(User *callerUser, ChannelInfo *ci, CSTR param, CSTR a
 
 		if (str_equals_nocase(ci->founder, ci->successor)) {
 
-			mem_free(ci->successor);
+			sfree(ci->successor);
 			ci->successor = NULL;
 		}
 
@@ -3853,10 +3857,10 @@ static void do_set_founder(User *callerUser, ChannelInfo *ci, CSTR param, CSTR a
 			if ((anAccess->status == ACCESS_ENTRY_NICK) && str_equals_nocase(anAccess->name, ci->founder)) {
 
 				TRACE_MAIN();
-				mem_free(anAccess->name);
+				sfree(anAccess->name);
 				anAccess->name = NULL;
 
-				mem_free(anAccess->creator);
+				sfree(anAccess->creator);
 				anAccess->creator = NULL;
 
 				anAccess->status = ACCESS_ENTRY_FREE;
@@ -3976,7 +3980,7 @@ static void do_set_successor(User *callerUser, ChannelInfo *ci, CSTR param, CSTR
 
 		else {
 
-			mem_free(ci->successor);
+			sfree(ci->successor);
 			ci->successor = NULL;
 			send_notice_lang_to_user(s_ChanServ, callerUser, GetCallerLang(), CS_SET_SUCCESSOR_REMOVED, ci->name);
 
@@ -4023,7 +4027,7 @@ static void do_set_successor(User *callerUser, ChannelInfo *ci, CSTR param, CSTR
 		send_notice_lang_to_user(s_ChanServ, callerUser, GetCallerLang(), CS_SET_SUCCESSOR_CHANGED, ni->nick, ci->name);
 
 		if (ci->successor)
-			mem_free(ci->successor);
+			sfree(ci->successor);
 		ci->successor = str_duplicate(ni->nick);
 
 		if (CSMatchVerbose(ci->settings, CI_NOTICE_VERBOSE_SET)) {
@@ -4051,7 +4055,7 @@ static void do_set_welcome(User *callerUser, ChannelInfo *ci, CSTR param, CSTR a
 		if (ci->welcome) {
 
 			TRACE_MAIN();
-			mem_free(ci->welcome);
+			sfree(ci->welcome);
 			ci->welcome = NULL;
 
 			send_notice_lang_to_user(s_ChanServ, callerUser, GetCallerLang(), CS_SET_WELCOME_DELETED, ci->name);
@@ -4080,7 +4084,7 @@ static void do_set_welcome(User *callerUser, ChannelInfo *ci, CSTR param, CSTR a
 
 		TRACE_MAIN();
 		if (ci->welcome)
-			mem_free(ci->welcome);
+			sfree(ci->welcome);
 		ci->welcome = str_duplicate(param);
 
 		send_notice_lang_to_user(s_ChanServ, callerUser, GetCallerLang(), CS_SET_WELCOME_CHANGED, ci->name, ci->welcome);
@@ -4165,7 +4169,7 @@ static void do_set_desc(User *callerUser, ChannelInfo *ci, CSTR param, CSTR acce
 		return;
 	}
 
-	mem_free(ci->desc);
+	sfree(ci->desc);
 	ci->desc = str_duplicate(param);
 	send_notice_lang_to_user(s_ChanServ, callerUser, GetCallerLang(), CS_SET_DESC_CHANGED, ci->name, param);
 
@@ -4195,7 +4199,7 @@ static void do_set_url(User *callerUser, ChannelInfo *ci, CSTR param, CSTR acces
 		if (ci->url) {
 
 			TRACE_MAIN();
-			mem_free(ci->url);
+			sfree(ci->url);
 			ci->url = NULL;
 			send_notice_lang_to_user(s_ChanServ, callerUser, GetCallerLang(), CS_SET_URL_DELETED, ci->name);
 
@@ -4225,7 +4229,7 @@ static void do_set_url(User *callerUser, ChannelInfo *ci, CSTR param, CSTR acces
 
 		TRACE_MAIN();
 		if (ci->url)
-			mem_free(ci->url);
+			sfree(ci->url);
 
 		ci->url = str_duplicate(param);
 		send_notice_lang_to_user(s_ChanServ, callerUser, GetCallerLang(), CS_SET_URL_CHANGED, ci->name, param);
@@ -4257,7 +4261,7 @@ static void do_set_email(User *callerUser, ChannelInfo *ci, CSTR param, CSTR acc
 		if (ci->email) {
 
 			TRACE_MAIN();
-			mem_free(ci->email);
+			sfree(ci->email);
 			ci->email = NULL;
 
 			send_notice_lang_to_user(s_ChanServ, callerUser, GetCallerLang(), CS_SET_EMAIL_DELETED, ci->name);
@@ -4289,7 +4293,7 @@ static void do_set_email(User *callerUser, ChannelInfo *ci, CSTR param, CSTR acc
 
 		TRACE_MAIN();
 		if (ci->email)
-			mem_free(ci->email);
+			sfree(ci->email);
 
 		ci->email = str_duplicate(param);
 		send_notice_lang_to_user(s_ChanServ, callerUser, GetCallerLang(), CS_SET_EMAIL_CHANGED, ci->name, param);
@@ -4331,7 +4335,7 @@ static void do_set_topic(User *callerUser, ChannelInfo *ci, CSTR param, const in
 
 		TRACE_MAIN();
 		if (ci->last_topic)
-			mem_free(ci->last_topic);
+			sfree(ci->last_topic);
 		ci->last_topic = str_duplicate(param);
 
 		str_copy_checked(accessName, ci->last_topic_setter, NICKMAX);
@@ -4339,7 +4343,7 @@ static void do_set_topic(User *callerUser, ChannelInfo *ci, CSTR param, const in
 
 		TRACE_MAIN();
 		if (chan->topic)
-			mem_free(chan->topic);
+			sfree(chan->topic);
 		chan->topic = str_duplicate(param);
 
 		str_copy_checked(accessName, chan->topic_setter, NICKMAX);
@@ -4397,7 +4401,7 @@ static void do_set_mlock(User *callerUser, ChannelInfo *ci, char *param, CSTR ac
 	TRACE_MAIN();
 	if (ci->mlock_key) {
 
-		mem_free(ci->mlock_key);
+		sfree(ci->mlock_key);
 		ci->mlock_key = NULL;
 	}
 
@@ -4435,8 +4439,8 @@ static void do_set_mlock(User *callerUser, ChannelInfo *ci, char *param, CSTR ac
 			return;
 		}
 
-		memset(invalid, 0, sizeof(invalid));
-		memset(unknown, 0, sizeof(unknown));
+		smemzero(invalid, sizeof(invalid));
+		smemzero(unknown, sizeof(unknown));
 
 		while (*param) {
 
@@ -4533,7 +4537,7 @@ static void do_set_mlock(User *callerUser, ChannelInfo *ci, char *param, CSTR ac
 
 						if (FlagSet(ci->mlock_on, CMODE_k)) {
 
-							mem_free(ci->mlock_key);
+							sfree(ci->mlock_key);
 							ci->mlock_key = NULL;
 
 							RemoveFlag(ci->mlock_on, CMODE_k);
@@ -5452,13 +5456,13 @@ static void do_akick(CSTR source, User *callerUser, ServiceCommandData *data) {
 			++deleted;
 
 			TRACE_MAIN();
-			mem_free(anAkick->name);
+			sfree(anAkick->name);
 
 			if (anAkick->reason)
-				mem_free(anAkick->reason);
+				sfree(anAkick->reason);
 
 			if (anAkick->creator)
-				mem_free(anAkick->creator);
+				sfree(anAkick->creator);
 
 			TRACE_MAIN();
 
@@ -5473,7 +5477,7 @@ static void do_akick(CSTR source, User *callerUser, ServiceCommandData *data) {
 
 		if (ci->akickcount <= 0) {
 
-			mem_free(ci->akick);
+			sfree(ci->akick);
 			ci->akick = NULL;
 		}
 
@@ -5603,11 +5607,11 @@ static void do_akick(CSTR source, User *callerUser, ServiceCommandData *data) {
 				user[USERMAX] = '\0';
 			}
 
-			mask = mem_malloc(str_len(nick) + str_len(user) + str_len(host) + 3);
+			mask = smalloc(str_len(nick) + str_len(user) + str_len(host) + 3);
 			sprintf(mask, "%s!%s@%s", nick, user, host);
-			mem_free(nick);
-			mem_free(user);
-			mem_free(host);
+			sfree(nick);
+			sfree(user);
+			sfree(host);
 
 			str_compact(mask);
 
@@ -5624,7 +5628,7 @@ static void do_akick(CSTR source, User *callerUser, ServiceCommandData *data) {
 				else
 					send_notice_lang_to_user(s_ChanServ, callerUser, GetCallerLang(), ERROR_MASK_ALREADY_COVERED, mask, anAkick->name);
 
-				mem_free(mask);
+				sfree(mask);
 				return;
 			}
 		}
@@ -5638,7 +5642,7 @@ static void do_akick(CSTR source, User *callerUser, ServiceCommandData *data) {
 				/* Found it. Let the user know, then stop. */
 				send_notice_lang_to_user(s_ChanServ, callerUser, GetCallerLang(), CS_AKICK_ERROR_ONACCESS, mask, get_chan_access_name(anAccess->level), ci->name);
 
-				mem_free(mask);
+				sfree(mask);
 				return;
 			}
 		}
@@ -5646,7 +5650,8 @@ static void do_akick(CSTR source, User *callerUser, ServiceCommandData *data) {
 		TRACE_MAIN();
 		++(ci->akickcount);
 
-		ci->akick = mem_realloc(ci->akick, sizeof(AutoKick) * ci->akickcount);
+		ci->akick = srealloc(ci->akick,
+				     sizeof(AutoKick) * ci->akickcount);
 
 		anAkick = &(ci->akick[ci->akickcount - 1]);
 
@@ -5758,13 +5763,13 @@ static void do_akick(CSTR source, User *callerUser, ServiceCommandData *data) {
 		else
 			log_services(LOG_SERVICES_CHANSERV_ACCESS, "AKICK %s DEL %s -- by %s (%s@%s) through %s", ci->name, anAkick->name, callerUser->nick, callerUser->username, callerUser->host, accessName);
 
-		mem_free(anAkick->name);
+		sfree(anAkick->name);
 
 		if (anAkick->reason)
-			mem_free(anAkick->reason);
+			sfree(anAkick->reason);
 
 		if (anAkick->creator)
-			mem_free(anAkick->creator);
+			sfree(anAkick->creator);
 
 		--ci->akickcount;
 
@@ -5774,11 +5779,12 @@ static void do_akick(CSTR source, User *callerUser, ServiceCommandData *data) {
 		TRACE_MAIN();
 
 		if (ci->akickcount)
-			ci->akick = mem_realloc(ci->akick, sizeof(AutoKick) * ci->akickcount);
+			ci->akick = srealloc(ci->akick,
+					     sizeof(AutoKick) * ci->akickcount);
 
 		else {
 
-			mem_free(ci->akick);
+			sfree(ci->akick);
 			ci->akick = NULL;
 		}
 	}
@@ -6351,8 +6357,8 @@ static void do_unban(CSTR source, User *callerUser, ServiceCommandData *data) {
 				char buf[1024], buf2[16];
 				int bcnt = 0, len = 0, i;
 
-				memset(buf, 0, sizeof(buf));
-				memset(buf2, 0, sizeof(buf2));
+				smemzero(buf, sizeof(buf));
+				smemzero(buf2, sizeof(buf2));
 
 				for (i = 0; i < chan->bancount; ++i) {
 
@@ -6528,7 +6534,7 @@ void chanserv_listchans(const User *callerUser, CSTR nick, const BOOL isSelf) {
 
 	TRACE_MAIN_FCLT(FACILITY_CHANSERV_HANDLE_LISTCHANS);
 
-	memset(buffer, 0, sizeof(buffer));
+	smemzero(buffer, sizeof(buffer));
 
 	send_notice_lang_to_user(s_NickServ, callerUser, GetCallerLang(), NS_LISTCHANS_LIST_HEADER, nick);
 
@@ -6836,7 +6842,7 @@ static void do_why(CSTR source, User *callerUser, ServiceCommandData *data) {
 									accessLevel = anAccess->level;
 
 									if (accessMask)
-										mem_free(accessMask);
+										sfree(accessMask);
 									accessMask = str_duplicate(anAccess->name);
 
 									accessStatus = CS_STATUS_MASK;
@@ -6984,7 +6990,7 @@ static void do_why(CSTR source, User *callerUser, ServiceCommandData *data) {
 				}
 
 				if (accessMask)
-					mem_free(accessMask);
+					sfree(accessMask);
 			}
 			else {
 
@@ -7124,9 +7130,9 @@ static void handle_voice_devoice(User *callerUser, Channel *chan, User *user_lis
 		int 	i, skip, mIndex = 1;
 		
 		TRACE_MAIN();
-		memset(nick_list_buf, 0, sizeof(nick_list_buf));
-		memset(globops_buf, 0, sizeof(globops_buf));
-		memset(modes, 0, sizeof(modes));
+		smemzero(nick_list_buf, sizeof(nick_list_buf));
+		smemzero(globops_buf, sizeof(globops_buf));
+		smemzero(modes, sizeof(modes));
 		
 		modes[0] = action;
 		
@@ -7292,9 +7298,9 @@ static void handle_halfop_dehalfop(User *callerUser, Channel *chan, User *user_l
 		int 	i, skip, mIndex = 1;
 		
 		TRACE_MAIN();
-		memset(nick_list_buf, 0, sizeof(nick_list_buf));
-		memset(globops_buf, 0, sizeof(globops_buf));
-		memset(modes, 0, sizeof(modes));
+		smemzero(nick_list_buf, sizeof(nick_list_buf));
+		smemzero(globops_buf, sizeof(globops_buf));
+		smemzero(modes, sizeof(modes));
 		
 		modes[0] = action;
 		
@@ -7423,9 +7429,9 @@ static void handle_op_deop(User *callerUser, Channel *chan, User *user_list[], i
 		int 	cannot_opguard = 0, cannot_neverop = 0, cannot_protect = 0; 
 		
 		TRACE_MAIN();
-		memset(nick_list_buf, 0, sizeof(nick_list_buf));
-		memset(globops_buf, 0, sizeof(globops_buf));
-		memset(modes, 0, sizeof(modes));
+		smemzero(nick_list_buf, sizeof(nick_list_buf));
+		smemzero(globops_buf, sizeof(globops_buf));
+		smemzero(modes, sizeof(modes));
 		
 		modes[0] = action;
 		
@@ -7871,7 +7877,7 @@ static void do_chan_access_FIND(const int listLevel, CSTR source, const User *ca
 
 	TRACE_FCLT(FACILITY_CHANSERV_CHAN_ACCESS_FIND);
 
-	memset(nick_mask, 0 , sizeof(nick_mask));
+	smemzero(nick_mask, sizeof(nick_mask));
 	
 	accessLevel = get_access(callerUser, ci, NULL, NULL, NULL);
 	
@@ -7929,10 +7935,10 @@ static void do_chan_access_FIND(const int listLevel, CSTR source, const User *ca
 			FlagSet(anAccess->flags, ACCESS_FLAG_LOCKED) ? " [Locked]" : "");	
 				
 			}
-		mem_free(nick);
-		mem_free(usermask);
-		mem_free(host);
-		memset(nick_mask, 0, sizeof(nick_mask));
+		sfree(nick);
+		sfree(usermask);
+		sfree(host);
+		smemzero(nick_mask, sizeof(nick_mask));
 		}		
 	}
 	
@@ -7942,9 +7948,9 @@ static void do_chan_access_FIND(const int listLevel, CSTR source, const User *ca
 	TRACE();
 	send_notice_lang_to_user(s_ChanServ, callerUser, GetCallerLang(), END_OF_LIST);
 
-	mem_free(user_nick);
-	mem_free(user_usermask);
-	mem_free(user_host);
+	sfree(user_nick);
+	sfree(user_usermask);
+	sfree(user_host);
 }
 
 /*********************************************************
@@ -8110,7 +8116,7 @@ static void do_chan_access_ADD(const int listLevel, CSTR source, const User *cal
 
 				TRACE();
 				if (anAccess->creator)
-					mem_free(anAccess->creator);
+					sfree(anAccess->creator);
 				anAccess->creator = str_duplicate(accessName);
 
 				anAccess->creationTime = NOW;
@@ -8135,7 +8141,7 @@ static void do_chan_access_ADD(const int listLevel, CSTR source, const User *cal
 						send_notice_lang_to_user(s_ChanServ, callerUser, GetCallerLang(), CS_XOP_ADD_JUMP_NOOP_1, ni->nick, ci->name);
 						send_notice_lang_to_user(s_ChanServ, callerUser, GetCallerLang(), CS_XOP_ADD_JUMP_NOOP_2_SUCCESSOR, listName);
 
-						mem_free(ci->successor);
+						sfree(ci->successor);
 						ci->successor = NULL;
 					}
 					else {
@@ -8150,7 +8156,7 @@ static void do_chan_access_ADD(const int listLevel, CSTR source, const User *cal
 
 						send_notice_lang_to_user(s_ChanServ, callerUser, GetCallerLang(), CS_XOP_ADD_LEVEL_CHANGED_SUCCESSOR, anAccess->name, listName, ci->name);
 
-						mem_free(ci->successor);
+						sfree(ci->successor);
 						ci->successor = NULL;
 					}
 					else {
@@ -8215,7 +8221,8 @@ static void do_chan_access_ADD(const int listLevel, CSTR source, const User *cal
 			TRACE();
 			++(ci->accesscount);
 
-			ci->access = mem_realloc(ci->access, sizeof(ChanAccess) * ci->accesscount);
+			ci->access = srealloc(ci->access,
+					      sizeof(ChanAccess) * ci->accesscount);
 
 			anAccess = &(ci->access[ci->accesscount - 1]);
 			anAccess->creator = NULL;
@@ -8224,7 +8231,7 @@ static void do_chan_access_ADD(const int listLevel, CSTR source, const User *cal
 
 		TRACE();
 		if (anAccess->name)
-			mem_free(anAccess->name);
+			sfree(anAccess->name);
 
 		if (ni) {
 
@@ -8236,7 +8243,7 @@ static void do_chan_access_ADD(const int listLevel, CSTR source, const User *cal
 
 		TRACE();
 		if (anAccess->creator)
-			mem_free(anAccess->creator);
+			sfree(anAccess->creator);
 		anAccess->creator = str_duplicate(accessName);
 
 		anAccess->creationTime = NOW;
@@ -8385,7 +8392,7 @@ static void do_chan_access_DEL(const int listLevel, CSTR source, const User *cal
 
 			if (str_equals_nocase(anAccess->name, ci->successor)) {
 
-				mem_free(ci->successor);
+				sfree(ci->successor);
 				ci->successor = NULL;
 				send_notice_lang_to_user(s_ChanServ, callerUser, GetCallerLang(), CS_XOP_DEL_NICK_DELETED_SUCCESSOR, anAccess->name, listName, ci->name);
 			}
@@ -8408,10 +8415,10 @@ static void do_chan_access_DEL(const int listLevel, CSTR source, const User *cal
 			else
 				log_services(LOG_SERVICES_CHANSERV_ACCESS, "%s %s DEL %s -- by %s (%s@%s) through %s", listName, ci->name, anAccess->name, source, callerUser->username, callerUser->host, accessName);
 
-			mem_free(anAccess->name);
+			sfree(anAccess->name);
 			anAccess->name = NULL;
 
-			mem_free(anAccess->creator);
+			sfree(anAccess->creator);
 			anAccess->creator = NULL;
 
 			anAccess->status = ACCESS_ENTRY_FREE;
@@ -8458,10 +8465,10 @@ static void do_chan_access_CLEAN(const int listLevel, CSTR source, const User *c
 			if (listLevel == anAccess->level && (anAccess->status == ACCESS_ENTRY_EXPIRED ||
 				(anAccess->status == ACCESS_ENTRY_NICK && (!findnick(anAccess->name)))) ) {
 				TRACE();
-				mem_free(anAccess->name);
+				sfree(anAccess->name);
 				anAccess->name = NULL;
 
-				mem_free(anAccess->creator);
+				sfree(anAccess->creator);
 				anAccess->creator = NULL;
 
 				anAccess->status = ACCESS_ENTRY_FREE;
@@ -8551,10 +8558,10 @@ static void do_chan_access_WIPE(const int listLevel, CSTR source, const User *ca
 							"%s in do_chan_access_WIPE(): Nickname record %s has a negative channelcount value", s_ChanServ, ni->nick);
 				}
 
-				mem_free(anAccess->name);
+				sfree(anAccess->name);
 				anAccess->name = NULL;
 
-				mem_free(anAccess->creator);
+				sfree(anAccess->creator);
 				anAccess->creator = NULL;
 
 				anAccess->status = ACCESS_ENTRY_FREE;
@@ -8577,7 +8584,7 @@ static void do_chan_access_WIPE(const int listLevel, CSTR source, const User *ca
 
 				if ((listLevel == CS_ACCESS_COFOUNDER) && ci->successor) {
 
-					mem_free(ci->successor);
+					sfree(ci->successor);
 					ci->successor = NULL;
 					send_notice_lang_to_user(s_ChanServ, callerUser, GetCallerLang(), CS_XOP_WIPE_1_ENTRY_WIPED_SUCCESSOR, 1, listName, ci->name);
 				}
@@ -8588,7 +8595,7 @@ static void do_chan_access_WIPE(const int listLevel, CSTR source, const User *ca
 
 				if ((listLevel == CS_ACCESS_COFOUNDER) && ci->successor) {
 
-					mem_free(ci->successor);
+					sfree(ci->successor);
 					ci->successor = NULL;
 					send_notice_lang_to_user(s_ChanServ, callerUser, GetCallerLang(), CS_XOP_WIPE_X_ENTRIES_WIPED_SUCCESSOR, removed, listName, ci->name);
 				}
@@ -8773,7 +8780,7 @@ static void compact_chan_access_list(ChannelInfo *ci, const int removed) {
 		/* Tutti gli elementi della lista sono stati rimossi. */
 
 		TRACE();
-		mem_free(ci->access);
+		sfree(ci->access);
 		ci->access = NULL;
 		ci->accesscount = 0;
 	}
@@ -8828,12 +8835,13 @@ static void compact_chan_access_list(ChannelInfo *ci, const int removed) {
 		ci->accesscount -= removed;
 
 		if (ci->accesscount > 0)
-			ci->access = mem_realloc(ci->access, sizeof(ChanAccess) * ci->accesscount);
+			ci->access = srealloc(ci->access,
+					      sizeof(ChanAccess) * ci->accesscount);
 
 		else {
 
 			TRACE();
-			mem_free(ci->access);
+			sfree(ci->access);
 			ci->access = NULL;
 		}
 	}
@@ -8888,10 +8896,10 @@ static void do_remove(CSTR source, User *callerUser, ServiceCommandData *data) {
 				TRACE_MAIN();
 				oldlevel = anAccess->level;
 
-				mem_free(anAccess->name);
+				sfree(anAccess->name);
 				anAccess->name = NULL;
 
-				mem_free(anAccess->creator);
+				sfree(anAccess->creator);
 				anAccess->creator = NULL;
 
 				anAccess->status = ACCESS_ENTRY_FREE;
@@ -8954,7 +8962,7 @@ static void do_remove(CSTR source, User *callerUser, ServiceCommandData *data) {
 				case CS_ACCESS_COFOUNDER:
 					if (str_equals_nocase(source, ci->successor)) {
 
-						mem_free(ci->successor);
+						sfree(ci->successor);
 						ci->successor = NULL;
 					}
 
@@ -9421,7 +9429,7 @@ static void do_freeze(CSTR source, User *callerUser, ServiceCommandData *data) {
 		AddFlag(ci->flags, CI_FROZEN);
 
 		if (ci->freeze)
-			mem_free(ci->freeze);
+			sfree(ci->freeze);
 		ci->freeze = str_duplicate(data->operName);
 
 		user_remove_chanid(ci);
@@ -9489,7 +9497,7 @@ static void do_unfreeze(CSTR source, User *callerUser, ServiceCommandData *data)
 		RemoveFlag(ci->flags, CI_FROZEN);
 
 		if (ci->freeze)
-			mem_free(ci->freeze);
+			sfree(ci->freeze);
 		ci->freeze = NULL;
 
 		/* Avoid right-away expiration */
@@ -9572,7 +9580,7 @@ static void do_forbid(CSTR source, User *callerUser, ServiceCommandData *data) {
 		AddFlag(ci->flags, CI_FORBIDDEN);
 
 		if (ci->forbid)
-			mem_free(ci->forbid);
+			sfree(ci->forbid);
 		ci->forbid = str_duplicate(data->operName);
 
 		user_remove_chanid(ci);
@@ -9712,7 +9720,7 @@ static void do_hold(CSTR source, User *callerUser, ServiceCommandData *data) {
 		AddFlag(ci->flags, CI_HELDCHAN);
 
 		if (ci->hold)
-			mem_free(ci->hold);
+			sfree(ci->hold);
 		ci->hold = str_duplicate(data->operName);
 
 		if (data->operMatch) {
@@ -9778,7 +9786,7 @@ static void do_unhold(CSTR source, User *callerUser, ServiceCommandData *data) {
 		RemoveFlag(ci->flags, CI_HELDCHAN);
 
 		if (ci->hold)
-			mem_free(ci->hold);
+			sfree(ci->hold);
 		ci->hold = NULL;
 
 		/* Avoid right-away expiration */
@@ -9850,7 +9858,7 @@ static void do_mark(CSTR source, User *callerUser, ServiceCommandData *data) {
 		AddFlag(ci->flags, CI_MARKCHAN);
 
 		if (ci->mark)
-			mem_free(ci->mark);
+			sfree(ci->mark);
 		ci->mark = str_duplicate(data->operName);
 
 		if (data->operMatch) {
@@ -9916,7 +9924,7 @@ static void do_unmark(CSTR source, User *callerUser, ServiceCommandData *data) {
 		RemoveFlag(ci->flags, CI_MARKCHAN);
 
 		if (ci->mark)
-			mem_free(ci->mark);
+			sfree(ci->mark);
 		ci->mark = NULL;
 
 		if (data->operMatch) {
@@ -10207,13 +10215,13 @@ static void do_wipe(CSTR source, User *callerUser, ServiceCommandData *data) {
 
 		for (;;) {
 
-			mem_free(anAkick->name);
+			sfree(anAkick->name);
 
 			if (anAkick->reason)
-				mem_free(anAkick->reason);
+				sfree(anAkick->reason);
 
 			if (anAkick->creator)
-				mem_free(anAkick->creator);
+				sfree(anAkick->creator);
 
 			++deleted;
 
@@ -10223,7 +10231,7 @@ static void do_wipe(CSTR source, User *callerUser, ServiceCommandData *data) {
 			++anAkick;
 		}
 
-		mem_free(ci->akick);
+		sfree(ci->akick);
 		ci->akick = NULL;
 	}
 
@@ -10277,10 +10285,10 @@ static void do_wipe(CSTR source, User *callerUser, ServiceCommandData *data) {
 						"%s in do_wipe(): Nickname record %s has a negative channelcount value", s_ChanServ, ni->nick);
 			}
 
-			mem_free(anAccess->name);
+			sfree(anAccess->name);
 			anAccess->name = NULL;
 
-			mem_free(anAccess->creator);
+			sfree(anAccess->creator);
 			anAccess->creator = NULL;
 
 			anAccess->status = ACCESS_ENTRY_FREE;
@@ -10648,11 +10656,11 @@ static void do_chanset(CSTR source, User *callerUser, ServiceCommandData *data) 
 			snprintf(ci->founderpass, sizeof(ci->founderpass), "%s-%lu", CRYPT_NETNAME, randID);
 
 			/* Update the Real Founder info. */
-			mem_free(ci->real_founder);
+			sfree(ci->real_founder);
 
 			size = (str_len(new_founder) + str_len(ni->last_usermask) + 4) * sizeof(char);
 
-			ci->real_founder = mem_calloc(1, size);
+			ci->real_founder = smalloc(size);
 
 			snprintf(ci->real_founder, size, "%s (%s)", ni->nick, ni->last_usermask);
 
@@ -10669,7 +10677,7 @@ static void do_chanset(CSTR source, User *callerUser, ServiceCommandData *data) 
 			if (str_equals_nocase(new_founder, ci->successor)) {
 
 				send_notice_to_user(s_ChanServ, callerUser, "\2%s\2 lost the successor position.", ci->successor);
-				mem_free(ci->successor);
+				sfree(ci->successor);
 				ci->successor = NULL;
 			}
 
@@ -10679,10 +10687,10 @@ static void do_chanset(CSTR source, User *callerUser, ServiceCommandData *data) 
 
 					send_notice_to_user(s_ChanServ, callerUser, "\2%s\2 was removed from the %s list.", anAccess->name, (anAccess->level == CS_ACCESS_COFOUNDER) ? "Co-Founder" : ((anAccess->level == CS_ACCESS_SOP) ? "SOP" : ((anAccess->level == CS_ACCESS_AOP) ? "AOP" : ((anAccess->level == CS_ACCESS_HOP) ? "HOP" : "VOP"))));
 
-					mem_free(anAccess->name);
+					sfree(anAccess->name);
 					anAccess->name = NULL;
 
-					mem_free(anAccess->creator);
+					sfree(anAccess->creator);
 					anAccess->creator = NULL;
 
 					anAccess->status = ACCESS_ENTRY_FREE;
@@ -10782,7 +10790,7 @@ static void do_chanset(CSTR source, User *callerUser, ServiceCommandData *data) 
 			TRACE_MAIN();
 
 			if (IS_NOT_NULL(ci->last_topic))
-				mem_free(ci->last_topic);
+				sfree(ci->last_topic);
 
 			TRACE_MAIN();
 			if (*new_topic != c_NULL)
@@ -10796,7 +10804,7 @@ static void do_chanset(CSTR source, User *callerUser, ServiceCommandData *data) 
 			if (IS_NOT_NULL(channel)) {
 
 				if (IS_NOT_NULL(channel->topic))
-					mem_free(channel->topic);
+					sfree(channel->topic);
 
 				TRACE_MAIN();
 				if (*new_topic != c_NULL)

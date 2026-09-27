@@ -276,7 +276,7 @@ BOOL seenserv_db_load(void) {
 								#ifdef	FIX_USE_MPOOL
 								si = mempool_alloc2(SeenInfo_V10*, seen_nickseen_mempool, FALSE, &mblock_id);
 								#else
-								si = mem_malloc(sizeof(SeenInfo_V10));
+								si = smalloc(sizeof(SeenInfo_V10));
 								#endif
 								BOOL is64Bit = stg_is64bit(stg);
 								if (is64Bit)
@@ -303,7 +303,7 @@ BOOL seenserv_db_load(void) {
 										#ifdef	FIX_USE_MPOOL
 										mempool_free2(seen_nickseen_mempool, si, mblock_id);
 										#else
-										mem_free(si);
+										sfree(si);
 										#endif
 
 										break;
@@ -509,34 +509,34 @@ static void delete_seen_record(SeenInfo *si) {
 
 	TRACE();
 	if (IS_NOT_NULL(si->nick))
-		mem_free(si->nick);
+		sfree(si->nick);
 
 	TRACE();
 	if (IS_NOT_NULL(si->username))
-		mem_free(si->username);
+		sfree(si->username);
 
 	TRACE();
 	if (IS_NOT_NULL(si->host))
-		mem_free(si->host);
+		sfree(si->host);
 
 	TRACE();
 	if (IS_NOT_NULL(si->realname))
-		mem_free(si->realname);
+		sfree(si->realname);
 
 	TRACE();
 	if (IS_NOT_NULL(si->tempnick))
-		mem_free(si->tempnick);
+		sfree(si->tempnick);
 
 	TRACE();
 	if (IS_NOT_NULL(si->quitmsg))
-		mem_free(si->quitmsg);
+		sfree(si->quitmsg);
 
 	TRACE();
 
 	#ifdef	FIX_USE_MPOOL
 	mempool_free2(seen_nickseen_mempool, si, si->mblock_id);
 	#else
-	mem_free(si);
+	sfree(si);
 	#endif
 }
 
@@ -565,7 +565,7 @@ SeenInfo *seenserv_create_record(const User *user) {
 	si = mempool_alloc2(SeenInfo*, seen_nickseen_mempool, TRUE, &mblock_id);
 	si->mblock_id = mblock_id;
 	#else
-	si = mem_calloc(1, sizeof(SeenInfo));
+	si = smalloc(sizeof(SeenInfo));
 	#endif
 
 	si->nick = str_duplicate(user->nick);
@@ -994,7 +994,7 @@ static void do_seen(CSTR source, User *callerUser, ServiceCommandData *data) {
 					goto error;
 
 				if (strHost)
-					mem_free(strHost);
+					sfree(strHost);
 				strHost = str_duplicate(token);
 
 				wantHost = add;
@@ -1037,7 +1037,7 @@ static void do_seen(CSTR source, User *callerUser, ServiceCommandData *data) {
 					goto error;
 
 				if (strNick)
-					mem_free(strNick);
+					sfree(strNick);
 				strNick = str_duplicate(token);
 
 				wantNick = add;
@@ -1049,7 +1049,7 @@ static void do_seen(CSTR source, User *callerUser, ServiceCommandData *data) {
 					goto error;
 
 				if (strQuit)
-					mem_free(strQuit);
+					sfree(strQuit);
 				strQuit = str_duplicate(token);
 
 				wantQuit = add;
@@ -1061,7 +1061,7 @@ static void do_seen(CSTR source, User *callerUser, ServiceCommandData *data) {
 					goto error;
 
 				if (strRealname)
-					mem_free(strRealname);
+					sfree(strRealname);
 				strRealname = str_duplicate(token);
 
 				wantRealname = add;
@@ -1107,7 +1107,7 @@ static void do_seen(CSTR source, User *callerUser, ServiceCommandData *data) {
 					goto error;
 
 				if (strUsername)
-					mem_free(strUsername);
+					sfree(strUsername);
 				strUsername = str_duplicate(token);
 
 				wantUsername = add;
@@ -1143,9 +1143,9 @@ proceed:
 
 		TRACE_MAIN();
 
-		memset(nick, 0, sizeof(nick));
-		memset(username, 0, sizeof(username));
-		memset(host, 0, sizeof(host));
+		smemzero(nick, sizeof(nick));
+		smemzero(username, sizeof(username));
+		smemzero(host, sizeof(host));
 
 		if (strchr(mask, '!')) {
 
@@ -1475,15 +1475,15 @@ error:
 
 done:
 	if (strQuit)
-		mem_free(strQuit);
+		sfree(strQuit);
 	if (strNick)
-		mem_free(strNick);
+		sfree(strNick);
 	if (strRealname)
-		mem_free(strRealname);
+		sfree(strRealname);
 	if (strUsername)
-		mem_free(strUsername);
+		sfree(strUsername);
 	if (strHost)
-		mem_free(strHost);
+		sfree(strHost);
 }
 
 

@@ -58,17 +58,17 @@ static void ignore_remove_record(Ignore *anIgnore) {
 
 	/* Free it. */
 	if (anIgnore->nick)
-		mem_free(anIgnore->nick);
+		sfree(anIgnore->nick);
 
 	if (anIgnore->username)
-		mem_free(anIgnore->username);
+		sfree(anIgnore->username);
 
 	if (anIgnore->host)
-		mem_free(anIgnore->host);
+		sfree(anIgnore->host);
 
 	str_creationinfo_free(&(anIgnore->info));
 
-	mem_free(anIgnore);
+	sfree(anIgnore);
 }
 
 
@@ -174,7 +174,7 @@ BOOL ignore_db_load(void) {
 
 						while (in_section) {
 
-							anIgnore = mem_malloc(sizeof(Ignore_V10));
+							anIgnore = smalloc(sizeof(Ignore_V10));
 							Ignore_V10_32 ignore32;
 							BOOL is64Bit = stg_is64bit(stg);
 							if (is64Bit)
@@ -197,7 +197,7 @@ BOOL ignore_db_load(void) {
 
 								case stgEndOfSection: // end-of-section
 									in_section = FALSE;
-									mem_free(anIgnore);
+									sfree(anIgnore);
 									break;
 
 								case stgSuccess: // a valid record
@@ -269,7 +269,7 @@ void ignore_create_record(CSTR source, STR nick, STR username, STR host, CSTR re
 	TRACE_FCLT(FACILITY_IGNORE_CREATE_RECORD);
 
 	/* Allocate it. */
-	ignore = (Ignore *) mem_calloc(1, sizeof(Ignore));
+	ignore = (Ignore *) smalloc(sizeof(Ignore));
 
 	/* Link it. */
 	ignore->next = IgnoreList;
@@ -609,23 +609,23 @@ void handle_ignore(CSTR source, User *callerUser, ServiceCommandData *data) {
 
 		if (str_equals(nick, "*")) {
 
-			mem_free(nick);
+			sfree(nick);
 			nick = NULL;
 		}
 
 		if (str_equals(username, "*")) {
 
-			mem_free(username);
+			sfree(username);
 			username = NULL;
 		}
 
 		if (str_equals(host, "*")) {
 
-			mem_free(host);
+			sfree(host);
 			host = NULL;
 		}
 
-		memset(ignored_nicks, 0, sizeof(ignored_nicks));
+		smemzero(ignored_nicks, sizeof(ignored_nicks));
 
 		if (IS_NOT_NULL(host)) {
 
@@ -783,11 +783,11 @@ void handle_ignore(CSTR source, User *callerUser, ServiceCommandData *data) {
 
 clear:
 		if (nick)
-			mem_free(nick);
+			sfree(nick);
 		if (username)
-			mem_free(username);
+			sfree(username);
 		if (host)
-			mem_free(host);
+			sfree(host);
 	}
 	else if (str_equals_nocase(cmd, "DEL")) {
 

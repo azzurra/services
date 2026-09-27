@@ -1518,7 +1518,7 @@ int mask_contains_crypt(const char *mask) {
 
 	if (sscanf(host, "%d.%d.%s", &classA, &classB, cloak) != 3) {
 
-		memset(cloak, 0, sizeof(cloak));
+		smemzero(cloak, sizeof(cloak));
 
 		if ((ptr = str_tokenize(host, token, sizeof(token), c_DOT)))
 			str_copy_checked(token, cloak, sizeof(cloak));
@@ -1527,7 +1527,7 @@ int mask_contains_crypt(const char *mask) {
 	if (IS_EMPTY_STR(cloak))
 		return FALSE;
 
-	memset(hidehost, 0, sizeof(hidehost));
+	smemzero(hidehost, sizeof(hidehost));
 
 	if ((ptr = str_tokenize(cloak, token, sizeof(token), strchr(cloak, '=') ? '=' : '-')))
 		str_copy_checked(token, hidehost, sizeof(hidehost));
@@ -1535,7 +1535,7 @@ int mask_contains_crypt(const char *mask) {
 	if (IS_EMPTY_STR(hidehost))
 		return FALSE;
 
-	memset(hex, 0, sizeof(hex));
+	smemzero(hex, sizeof(hex));
 
 	if ((ptr = str_tokenize(ptr, token, sizeof(token), c_SPACE)))
 		str_copy_checked(token, hex, sizeof(hex));

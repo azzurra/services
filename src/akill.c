@@ -127,7 +127,7 @@ BOOL akill_db_load(void) {
 
 						while (in_section) {
 
-							akill = mem_malloc(sizeof(AutoKill_V10));
+							akill = smalloc(sizeof(AutoKill_V10));
 							BOOL is64Bit = stg_is64bit(stg);
 							if (!is64Bit)
 								result = stg_read_record(stg, (PBYTE)&akill32, sizeof(AutoKill32));
@@ -138,7 +138,7 @@ BOOL akill_db_load(void) {
 
 								case stgEndOfSection: // end-of-section
 									in_section = FALSE;
-									mem_free(akill);
+									sfree(akill);
 									break;
 
 								case stgSuccess: // a valid record
@@ -219,7 +219,7 @@ static char *get_akill_type_short(flags_t type) {
 	static char buffer[33];
 	char *ptr = buffer;
 
-	memset(buffer, 0, sizeof(buffer));
+	smemzero(buffer, sizeof(buffer));
 
 	if (FlagSet(type, AKILL_TYPE_BY_APM))
 		*ptr++ = 'A';
@@ -314,16 +314,16 @@ static void akill_delete(AutoKill *akill) {
 	else
 		AutoKillList = akill->next;
 
-	mem_free(akill->username);
-	mem_free(akill->host);
-	mem_free(akill->reason);
+	sfree(akill->username);
+	sfree(akill->host);
+	sfree(akill->reason);
 
 	if (akill->desc)
-		mem_free(akill->desc);
+		sfree(akill->desc);
 
 	str_creator_free(&(akill->creator));
 
-	mem_free(akill);
+	sfree(akill);
 }
 
 /*********************************************************/
@@ -433,7 +433,7 @@ void akill_add(CSTR source, CSTR username, CSTR host, CSTR reason, const BOOL ma
 
 
 	/* Allocate it. */
-	akill = (AutoKill *) mem_calloc(1, sizeof(AutoKill));
+	akill = (AutoKill *) smalloc(sizeof(AutoKill));
 
 	/* Link it. */
 	akill->next = AutoKillList;
@@ -584,7 +584,7 @@ void handle_akill(CSTR source, User *callerUser, ServiceCommandData *data) {
 
 					/* user@host mask... hopefully. */
 
-					memset(host, 0, sizeof(host));
+					smemzero(host, sizeof(host));
 
 					ptr = str_tokenize(pattern, username, sizeof(username), c_AT);
 
@@ -825,7 +825,7 @@ void handle_akill(CSTR source, User *callerUser, ServiceCommandData *data) {
 		if (is_already_akilled(username, host, expireTime, data->agent->nick, callerUser))
 			return;
 
-		memset(akill_nicks, 0, sizeof(akill_nicks));
+		smemzero(akill_nicks, sizeof(akill_nicks));
 
 		ptr = akill_nicks;
 
@@ -1012,7 +1012,7 @@ void handle_akill(CSTR source, User *callerUser, ServiceCommandData *data) {
 			char *ptr;
 
 
-			memset(host, 0, sizeof(host));
+			smemzero(host, sizeof(host));
 
 			ptr = str_tokenize(mask, username, sizeof(username), c_AT);
 
@@ -1132,7 +1132,7 @@ void handle_akill(CSTR source, User *callerUser, ServiceCommandData *data) {
 					}
 
 					send_notice_to_user(data->agent->nick, callerUser, "AKILL description for \2%s@%s\2 changed to: %s", akill->username, akill->host, desc);
-					mem_free(akill->desc);
+					sfree(akill->desc);
 				}
 
 				akill->desc = str_duplicate(desc);
@@ -1253,7 +1253,7 @@ void handle_akill(CSTR source, User *callerUser, ServiceCommandData *data) {
 
 				send_notice_to_user(data->agent->nick, callerUser, "AKILL reason for \2%s@%s\2 changed to: %s", akill->username, akill->host, reason);
 
-				mem_free(akill->reason);
+				sfree(akill->reason);
 				akill->reason = str_duplicate(reason);
 
 				send_RAKILL(akill->username, akill->host);

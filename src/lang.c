@@ -386,7 +386,7 @@ static BOOL lang_load(LANG_ID lang_id) {
 
 	table->memory_size = 0;
 
-	table->msgs = mem_calloc(LANG_MSG_COUNT, sizeof(LANG_MSG));
+	table->msgs = scalloc(LANG_MSG_COUNT, sizeof(LANG_MSG));
 
 	if (IS_NOT_NULL(table->msgs)) {
 
@@ -434,14 +434,16 @@ static BOOL lang_load(LANG_ID lang_id) {
 
 				table->time_loaded = time(NULL);
 				table->time_created = header.created;
-				table->lang_name_loc = mem_calloc(header.name_loc_size + 1, sizeof(char));
-				table->lang_name_eng = mem_calloc(header.name_eng_size + 1, sizeof(char));
+				table->lang_name_loc = scalloc(header.name_loc_size + 1,
+							       sizeof(char));
+				table->lang_name_eng = scalloc(header.name_eng_size + 1,
+							       sizeof(char));
 				str_copy_checked(header.lang_short_name, table->lang_short_name, sizeof(table->lang_short_name));
 
 				if (IS_NULL(table->lang_name_loc) || IS_NULL(table->lang_name_eng)) {
 
-					mem_free(table->lang_name_loc);
-					mem_free(table->lang_name_eng);
+					sfree(table->lang_name_loc);
+					sfree(table->lang_name_eng);
 				}
 				else {
 
@@ -465,7 +467,7 @@ static BOOL lang_load(LANG_ID lang_id) {
 
 									// lettura messaggio
 									len = sizeof(char) * (msgheader.size + 1);
-									msg = mem_calloc(1, len);
+									msg = smalloc(len);
 
 									if (IS_NOT_NULL(msg)) {
 
@@ -478,7 +480,7 @@ static BOOL lang_load(LANG_ID lang_id) {
 
 											LOG_DEBUG_SNOOP("lang_load() not fread!");
 
-											mem_free(msg);
+											sfree(msg);
 											errors++;
 											break;
 										}
@@ -530,7 +532,7 @@ static BOOL lang_load(LANG_ID lang_id) {
 		//send_globops(NULL, "Errori nel caricamento della lingua %d !", lang_id);
 
 		TRACE();
-		mem_free(table->msgs);
+		sfree(table->msgs);
 		table->msgs = NULL;
 		table->memory_size -= LANG_MSG_COUNT * sizeof(LANG_MSG);
 	}
@@ -554,20 +556,20 @@ static void lang_unload(LANG_ID lang_id) {
 
 	TRACE();
 	for (idx = 0; idx < LANG_MSG_COUNT; ++idx)
-		mem_free(table->msgs[idx]);
+		sfree(table->msgs[idx]);
 
 	lang_memory_commit -= table->memory_size;
 
-	mem_free(table->msgs);
-	mem_free(table->lang_name_loc);
-	mem_free(table->lang_name_eng);	
+	sfree(table->msgs);
+	sfree(table->lang_name_loc);
+	sfree(table->lang_name_eng);
 
 	TRACE();
 
 	table->msgs = NULL;
 	table->lang_name_loc = NULL;
 	table->lang_name_eng = NULL;
-	table->time_loaded = 0;	
+	table->time_loaded = 0;
 	RemoveFlag(table->flags, LIF_LOADED);
 }
 
@@ -791,7 +793,7 @@ static CSTR lang_get_time_string(LANG_ID lang_id, int type, int value) {
 		int	i, si;
 
 		// caricamento dati
-		dts = mem_calloc(DATETIME_STRING_SLOT, sizeof(STR));
+		dts = scalloc(DATETIME_STRING_SLOT, sizeof(STR));
 
 		for (i = 0, si = 0; (i < DATETIME_STRING_SLOT) && (si < 4); ++i) {
 

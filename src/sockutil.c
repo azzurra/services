@@ -632,7 +632,7 @@ int sockprintf(int s, char *fmt, ...) {
 		if (filescnt <= s)
 			filescnt = s+1;
 
-		files = mem_realloc(files, sizeof(FILE *) * filescnt);
+		files = srealloc(files, sizeof(FILE *) * filescnt);
 
 		if (!files) {
 
@@ -641,7 +641,7 @@ int sockprintf(int s, char *fmt, ...) {
 			return 0;
 		}
 
-		memset(files+oldcnt, 0, sizeof(FILE *) * (filescnt - oldcnt));
+		smemzero(files + oldcnt, sizeof(FILE *) * (filescnt - oldcnt));
 	}
 
 	if (IS_NULL(files))
@@ -675,7 +675,7 @@ BOOL socket_connect(CSTR host, const unsigned short port) {
 	if (IS_NULL(hp = gethostbyname(host)))
 		return FALSE;
 
-	memset(&sa, 0, sizeof(sa));
+	smemzero(&sa, sizeof(sa));
 
 	memcpy((char *)&sa.sin_addr, hp->h_addr, hp->h_length);
 
@@ -694,7 +694,7 @@ BOOL socket_connect(CSTR host, const unsigned short port) {
 		if (filescnt <= sock)
 			filescnt = sock+1;
 
-		files = mem_realloc(files, sizeof(FILE *) * filescnt);
+		files = srealloc(files, sizeof(FILE *) * filescnt);
 
 		if (!files) {
 
@@ -705,7 +705,7 @@ BOOL socket_connect(CSTR host, const unsigned short port) {
 			return -1;
 		}
 
-		memset(files+oldcnt, 0, sizeof(FILE *) * (filescnt - oldcnt));
+		smemzero(files + oldcnt, sizeof(FILE *) * (filescnt - oldcnt));
 	}
 
 	if (!(files[sock] = fdopen(sock, "r+"))) {

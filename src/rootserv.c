@@ -87,7 +87,7 @@ static void dynconf_mem_free(void) {
 	TRACE_FCLT(FACILITY_ROOTSERV_DYNCONF_MEM_FREE);
 
 	if (dynConf.welcomeNotice)
-		mem_free(dynConf.welcomeNotice);
+		sfree(dynConf.welcomeNotice);
 }
 
 
@@ -635,7 +635,7 @@ static void do_bot(CSTR source, User *callerUser, ServiceCommandData *data) {
 			char removed[NICKSIZE];
 
 
-			memset(removed, 0, NICKSIZE);
+			smemzero(removed, NICKSIZE);
 
 			access_remove(&serverBotList, botnick, removed);
 
@@ -710,7 +710,7 @@ static void do_bot(CSTR source, User *callerUser, ServiceCommandData *data) {
 						}
 
 						send_notice_to_user(s_RootServ, callerUser, "\2USER\2 field of Bot \2%s\2 has been changed from \2%s\2 to \2%s\2.", bot->nick, bot->user, val);
-						mem_free(bot->user);
+						sfree(bot->user);
 					}
 					else {
 
@@ -755,7 +755,7 @@ static void do_bot(CSTR source, User *callerUser, ServiceCommandData *data) {
 						}
 
 						send_notice_to_user(s_RootServ, callerUser, "\2HOST\2 field of Bot \2%s\2 has been changed from \2%s\2 to \2%s\2.", bot->nick, bot->host, val);
-						mem_free(bot->host);
+						sfree(bot->host);
 					}
 					else {
 
@@ -800,7 +800,7 @@ static void do_bot(CSTR source, User *callerUser, ServiceCommandData *data) {
 						}
 
 						send_notice_to_user(s_RootServ, callerUser, "\2HOST2\2 field of Bot \2%s\2 has been changed from \2%s\2 to \2%s\2.", bot->nick, bot->host2, val);
-						mem_free(bot->host2);
+						sfree(bot->host2);
 					}
 					else {
 
@@ -846,7 +846,7 @@ static void do_bot(CSTR source, User *callerUser, ServiceCommandData *data) {
 						}
 
 						send_notice_to_user(s_RootServ, callerUser, "\2SERVER\2 field of Bot \2%s\2 has been changed from \2%s\2 to \2%s\2.", bot->nick, bot->server, val);
-						mem_free(bot->server);
+						sfree(bot->server);
 					}
 					else {
 
@@ -891,7 +891,7 @@ static void do_bot(CSTR source, User *callerUser, ServiceCommandData *data) {
 						}
 
 						send_notice_to_user(s_RootServ, callerUser, "\2SERVER2\2 field of Bot \2%s\2 has been changed from \2%s\2 to \2%s\2.", bot->nick, bot->server2, val);
-						mem_free(bot->server2);
+						sfree(bot->server2);
 					}
 					else {
 
@@ -1248,7 +1248,7 @@ static void do_dynconf(CSTR source, User *callerUser, ServiceCommandData *data) 
 
 						TRACE_MAIN();
 						if (IS_NOT_NULL(dynConf.welcomeNotice))
-							mem_free(dynConf.welcomeNotice);
+							sfree(dynConf.welcomeNotice);
 
 						dynConf.welcomeNotice = NULL;
 
@@ -1278,7 +1278,7 @@ static void do_dynconf(CSTR source, User *callerUser, ServiceCommandData *data) 
 
 						TRACE_MAIN();
 						if (IS_NOT_NULL(dynConf.welcomeNotice))
-							mem_free(dynConf.welcomeNotice);
+							sfree(dynConf.welcomeNotice);
 
 						dynConf.welcomeNotice = str_duplicate(message);
 

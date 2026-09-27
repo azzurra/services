@@ -85,7 +85,7 @@ BOOL tagline_db_load(void) {
 
 						while (in_section) {
 
-							aTagline = mem_malloc(sizeof(Tagline_V10));
+							aTagline = smalloc(sizeof(Tagline_V10));
 							BOOL is64Bit = stg_is64bit(stg);
 							if (is64Bit)
 								result = stg_read_record(stg, (PBYTE)aTagline, sizeof(Tagline_V10));
@@ -101,7 +101,7 @@ BOOL tagline_db_load(void) {
 
 								case stgEndOfSection: // end-of-section
 									in_section = FALSE;
-									mem_free(aTagline);
+									sfree(aTagline);
 									break;
 
 								case stgSuccess: // a valid record
@@ -380,7 +380,7 @@ void handle_tagline(CSTR source, User *callerUser, ServiceCommandData *data) {
 		TRACE_MAIN();
 
 		/* Allocate the new entry. */
-		aTagline = mem_malloc(sizeof(Tagline));
+		aTagline = smalloc(sizeof(Tagline));
 
 		/* Fill it. */
 		aTagline->text = str_duplicate(text);
@@ -497,9 +497,9 @@ void handle_tagline(CSTR source, User *callerUser, ServiceCommandData *data) {
 		--TaglineCount;
 
 		/* Free data. */
-		mem_free(aTagline->text);
+		sfree(aTagline->text);
 		str_creator_free(&(aTagline->creator));
-		mem_free(aTagline);
+		sfree(aTagline);
 	}
 	else {
 

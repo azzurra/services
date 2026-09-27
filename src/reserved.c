@@ -150,7 +150,7 @@ BOOL reserved_db_load(void) {
 						in_section = TRUE;
 
 						while (in_section) {
-							aName = mem_malloc(sizeof(reservedName_V10));
+							aName = smalloc(sizeof(reservedName_V10));
 
 							BOOL is64bit = stg_is64bit(stg);
 							if (is64bit)
@@ -170,7 +170,7 @@ BOOL reserved_db_load(void) {
 
 								case stgEndOfSection: // end-of-section
 									in_section = FALSE;
-									mem_free(aName);
+									sfree(aName);
 									break;
 
 								case stgSuccess: // a valid record
@@ -295,13 +295,13 @@ void reserved_terminate(void) {
 	while (IS_NOT_NULL(aName)) {
 
 		TRACE();
-		mem_free(aName->name);
+		sfree(aName->name);
 		str_creationinfo_free(&(aName->info));
 
 		TRACE();
 		prev = aName;
 		aName = aName->next;
-		mem_free(prev);
+		sfree(prev);
 	}
 
 	TRACE();
@@ -593,7 +593,7 @@ void handle_reserved(CSTR source, User *callerUser, ServiceCommandData *data) {
 
 			TRACE_MAIN();
 			/* Allocate the new entry. */
-			aName = (reservedName *) mem_calloc(1, sizeof(reservedName));
+			aName = (reservedName *) smalloc(sizeof(reservedName));
 
 			/* Fill it. */
 			aName->name = str_duplicate(value);
@@ -654,9 +654,9 @@ void handle_reserved(CSTR source, User *callerUser, ServiceCommandData *data) {
 					send_notice_to_user(s_OperServ, callerUser, "\2%s\2 has been removed from the Reserved list.", aName->name);
 
 					// cancellazione
-					mem_free(aName->name);
+					sfree(aName->name);
 					str_creationinfo_free(&(aName->info));
-					mem_free(aName);
+					sfree(aName);
 					break;
 				}
 

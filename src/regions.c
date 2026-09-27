@@ -177,7 +177,7 @@ Region *region_create(REGION_ID id, const char *value, REGION_TYPE type, const c
 
 			case REGIONTYPE_IP: {
 
-				region = mem_calloc(1, sizeof(Region));
+				region = smalloc(sizeof(Region));
 				region->id = id;
 
 				AddFlag(region->flags, RF_CIDR);
@@ -185,7 +185,7 @@ Region *region_create(REGION_ID id, const char *value, REGION_TYPE type, const c
 
 				if (error->value.cidr_error != cidrSuccess) {
 
-					mem_free(region);
+					sfree(region);
 					region = NULL;
 				}
 				else {
@@ -208,7 +208,7 @@ Region *region_create(REGION_ID id, const char *value, REGION_TYPE type, const c
 				if (IS_NULL(strrchr(value, '/')) /* no CIDR here */ &&
 					IS_NOT_NULL(ptr) && validate_tld(ptr + 1, TRUE) /* valid .tld? */ ) {
 
-					region = mem_calloc(1, sizeof(Region));
+					region = smalloc(sizeof(Region));
 					region->id = id;
 
 					AddFlag(region->flags, RF_HOST);
@@ -253,10 +253,10 @@ void region_delete(Region *region) {
 
 	if (IS_NOT_NULL(region)) {
 
-		mem_free(region->host_mask);
-		mem_free(region->reason);
+		sfree(region->host_mask);
+		sfree(region->reason);
 		str_creator_free(&(region->creator));
-		mem_free(region);
+		sfree(region);
 	}
 }
 
@@ -601,7 +601,7 @@ BOOL regions_db_load(void) {
 
 								while (in_section) {
 
-									region = mem_malloc(sizeof(Region));
+									region = smalloc(sizeof(Region));
 
 									BOOL is64Bit = stg_is64bit(stg);
 									if (is64Bit)
@@ -623,7 +623,7 @@ BOOL regions_db_load(void) {
 
 										case stgEndOfSection: // end-of-section
 											in_section = FALSE;
-											mem_free(region);
+											sfree(region);
 											break;
 										
 										case stgSuccess: // a valid region
@@ -990,7 +990,7 @@ void handle_regions(const char *source, User *callerUser, ServiceCommandData *da
 
 				if (IS_NOT_NULL(region)) {
 
-					mem_free(region->reason);
+					sfree(region->reason);
 					region->reason = str_duplicate(reason);
 					send_notice_to_user(data->agent->nick, callerUser, "Reason changed");
 				}

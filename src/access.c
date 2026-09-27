@@ -71,7 +71,7 @@ BOOL access_db_load(Access **accessList, CSTR database, BOOL *ListLoadComplete) 
 
 						while (in_section) {
 
-							anAccess = mem_malloc(sizeof(Access));
+							anAccess = smalloc(sizeof(Access));
 
 							++recordIdx;
 
@@ -103,7 +103,7 @@ BOOL access_db_load(Access **accessList, CSTR database, BOOL *ListLoadComplete) 
 
 								case stgEndOfSection: // end-of-section
 									in_section = FALSE;
-									mem_free(anAccess);
+									sfree(anAccess);
 									break;
 
 								case stgSuccess: // a valid region
@@ -273,32 +273,32 @@ void free_access_list(Access *accessList, int *ListLoadComplete) {
 
 		TRACE();
 		if (anAccess->nick)
-			mem_free(anAccess->nick);
+			sfree(anAccess->nick);
 		if (anAccess->user)
-			mem_free(anAccess->user);
+			sfree(anAccess->user);
 		if (anAccess->user2)
-			mem_free(anAccess->user2);
+			sfree(anAccess->user2);
 		if (anAccess->user3)
-			mem_free(anAccess->user3);
+			sfree(anAccess->user3);
 		if (anAccess->host)
-			mem_free(anAccess->host);
+			sfree(anAccess->host);
 		if (anAccess->host2)
-			mem_free(anAccess->host2);
+			sfree(anAccess->host2);
 		if (anAccess->host3)
-			mem_free(anAccess->host3);
+			sfree(anAccess->host3);
 		if (anAccess->server)
-			mem_free(anAccess->server);
+			sfree(anAccess->server);
 		if (anAccess->server2)
-			mem_free(anAccess->server2);
+			sfree(anAccess->server2);
 		if (anAccess->server3)
-			mem_free(anAccess->server3);
+			sfree(anAccess->server3);
 
 		str_creator_free(&(anAccess->creator));
 
 		TRACE();
 		clear = anAccess;
 		anAccess = anAccess->next;
-		mem_free(clear);
+		sfree(clear);
 	}
 
 	TRACE();
@@ -389,7 +389,7 @@ Access *access_add(Access **accessList, CSTR nick, CSTR creator) {
 
 	Access *anAccess;
 
-	anAccess = (Access *) mem_calloc(1, sizeof(Access));
+	anAccess = (Access *) smalloc(sizeof(Access));
 
 	if (IS_NULL(anAccess))
 		return NULL;
@@ -436,39 +436,39 @@ int access_remove(Access **accessList, CSTR nick, char *removed) {
 
 			TRACE_MAIN();
 			if (anAccess->nick)
-				mem_free(anAccess->nick);
+				sfree(anAccess->nick);
 			TRACE_MAIN();
 			if (anAccess->user)
-				mem_free(anAccess->user);
+				sfree(anAccess->user);
 			TRACE_MAIN();
 			if (anAccess->user2)
-				mem_free(anAccess->user2);
+				sfree(anAccess->user2);
 			TRACE_MAIN();
 			if (anAccess->user3)
-				mem_free(anAccess->user3);
+				sfree(anAccess->user3);
 			TRACE_MAIN();
 			if (anAccess->host)
-				mem_free(anAccess->host);
+				sfree(anAccess->host);
 			TRACE_MAIN();
 			if (anAccess->host2)
-				mem_free(anAccess->host2);
+				sfree(anAccess->host2);
 			TRACE_MAIN();
 			if (anAccess->host3)
-				mem_free(anAccess->host3);
+				sfree(anAccess->host3);
 			TRACE_MAIN();
 			if (anAccess->server)
-				mem_free(anAccess->server);
+				sfree(anAccess->server);
 			TRACE_MAIN();
 			if (anAccess->server2)
-				mem_free(anAccess->server2);
+				sfree(anAccess->server2);
 			TRACE_MAIN();
 			if (anAccess->server3)
-				mem_free(anAccess->server3);
+				sfree(anAccess->server3);
 			TRACE_MAIN();
 			str_creator_free(&(anAccess->creator));
 
 			TRACE_MAIN();
-			mem_free(anAccess);
+			sfree(anAccess);
 
 			return TRUE;
 		}

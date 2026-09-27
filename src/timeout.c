@@ -44,7 +44,7 @@ BOOL timeout_add(TimeoutType type, int user_type, unsigned long hash, int interv
 
 		Timeout	*to;
 
-		to = mem_calloc(1, sizeof(Timeout));
+		to = smalloc(sizeof(Timeout));
 
 		to->hash = hash;
 		to->type = type;
@@ -130,7 +130,7 @@ static void timeout_delete_item(Timeout *to) {
 			timeout_list_tail = to->prev;
 
 		// eliminare il timeout...
-		mem_free(to);
+		sfree(to);
 		--timeout_count;
 	}
 }

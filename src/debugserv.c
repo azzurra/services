@@ -491,7 +491,7 @@ static void do_set(const char *source, User *callerUser, ServiceCommandData *dat
 						if (IS_NOT_NULL(s_filter)) {
 
 							if (IS_NOT_NULL(debug_monitor_inputbuffer_filter))
-								mem_free(debug_monitor_inputbuffer_filter);
+								sfree(debug_monitor_inputbuffer_filter);
 
 							debug_monitor_inputbuffer_filter = str_duplicate(s_filter);
 						}
@@ -526,7 +526,7 @@ static void do_set(const char *source, User *callerUser, ServiceCommandData *dat
 						log_debug_direct(misc_buffer);
 
 						if (IS_NOT_NULL(debug_monitor_inputbuffer_filter)) {
-							mem_free(debug_monitor_inputbuffer_filter);
+							sfree(debug_monitor_inputbuffer_filter);
 							debug_monitor_inputbuffer_filter = NULL;
 						}
 
@@ -572,15 +572,15 @@ static void do_crypt(const char *source, User *callerUser, ServiceCommandData *d
 		send_notice_to_user(s_DebugServ, callerUser, "Crypted host for %s (type: %s / dots: %d) is \2%s\2", what,
 			(htype == htIPv4) ? "IPv4" : ((htype == htHostname) ? "host" : ((htype == htIPv6) ? "IPv6" : ((htype == htIPv4_CIDR) ? "CIDR" : "invalid"))), dotsCount, crypted);
 
-		mem_free(crypted);
+		sfree(crypted);
 		LOG_DEBUG_SNOOP("Command: CRYPT HOST %s -- by %s", what, source);
 
 	} else if (str_equals_nocase(type, "SHA1")) {
 
-		crypted = mem_malloc(CRYPT_SHA1_DIGEST_LEN + 1);
+		crypted = smalloc(CRYPT_SHA1_DIGEST_LEN + 1);
 		hash = crypt_hash_SHA1(what, str_len(what), crypted, CRYPT_SHA1_DIGEST_LEN + 1);
 		send_notice_to_user(s_DebugServ, callerUser, "SHA1 crypt for %s is \2%s\2 (FNV hash: %X)", what, crypted, hash);
-		mem_free(crypted);
+		sfree(crypted);
 		LOG_DEBUG_SNOOP("Command: CRYPT SHA1 %s -- by %s", what, source);
 
 	} else if (str_equals_nocase(type, "FNV")) {
@@ -773,8 +773,8 @@ static void do_clones(const char *source, User *callerUser, ServiceCommandData *
 
 		base_nick_size = str_len(base_nick);
 		base_chan_size = str_len(base_chan);
-		nick = mem_calloc(sizeof(char), base_nick_size + 12);
-		chan = mem_calloc(sizeof(char), base_chan_size + 12);
+		nick = scalloc(sizeof(char), base_nick_size + 12);
+		chan = scalloc(sizeof(char), base_chan_size + 12);
 
 		strcpy(nick, base_nick);
 		strcpy(chan, base_chan);
@@ -798,8 +798,8 @@ static void do_clones(const char *source, User *callerUser, ServiceCommandData *
 				send_QUIT(nick, "Assimilated");
 		}
 
-		mem_free(nick);
-		mem_free(chan);
+		sfree(nick);
+		sfree(chan);
 
 		send_notice_to_user(s_DebugServ, callerUser, "Done.");
 	}

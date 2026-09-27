@@ -217,7 +217,7 @@ void chan_handle_SJOIN(CSTR source, const int ac, char **av) {
 				#ifdef	FIX_USE_MPOOL
 				chan = mempool_alloc(Channel*, channels_mempool, TRUE);
 				#else
-				chan = mem_calloc(1, sizeof(Channel));
+				chan = smalloc(sizeof(Channel));
 				#endif
 
 				str_copy_checked(chan_name, chan->name, sizeof(chan->name));
@@ -303,8 +303,8 @@ void chan_handle_SJOIN(CSTR source, const int ac, char **av) {
 		int	check = 0, deop = 0, failed = 0;
 		BOOL	resetTS = FALSE;
 
-		memset(checklist, 0, sizeof(checklist));
-		memset(deoplist, 0, sizeof(deoplist));
+		smemzero(checklist, sizeof(checklist));
+		smemzero(deoplist, sizeof(deoplist));
 
 		/* Variable initializations, sanity checks. */
 		chan_name = av[2 - param];
@@ -338,7 +338,7 @@ void chan_handle_SJOIN(CSTR source, const int ac, char **av) {
 			#ifdef	FIX_USE_MPOOL
 			chan = mempool_alloc(Channel*, channels_mempool, TRUE);
 			#else
-			chan = mem_calloc(1, sizeof(Channel));
+			chan = smalloc(sizeof(Channel));
 			#endif
 
 			str_copy_checked(chan_name, chan->name, sizeof(chan->name));
@@ -386,7 +386,7 @@ void chan_handle_SJOIN(CSTR source, const int ac, char **av) {
 				#ifdef FIX_USE_MPOOL
 				mempool_free(channels_user_entry_mempool, item);
 				#else
-				mem_free(item);
+				sfree(item);
 				#endif
 			}
 
@@ -400,7 +400,7 @@ void chan_handle_SJOIN(CSTR source, const int ac, char **av) {
 				#ifdef FIX_USE_MPOOL
 				mempool_free(channels_user_entry_mempool, item);
 				#else
-				mem_free(item);
+				sfree(item);
 				#endif
 			}
 
@@ -414,7 +414,7 @@ void chan_handle_SJOIN(CSTR source, const int ac, char **av) {
 				#ifdef FIX_USE_MPOOL
 				mempool_free(channels_user_entry_mempool, item);
 				#else
-				mem_free(item);
+				sfree(item);
 				#endif
 			}
 
@@ -465,7 +465,7 @@ void chan_handle_SJOIN(CSTR source, const int ac, char **av) {
 					TRACE_MAIN();
 					if (chan->key) {
 
-						mem_free(chan->key);
+						sfree(chan->key);
 						chan->key = NULL;
 					}
 
@@ -548,7 +548,7 @@ void chan_handle_SJOIN(CSTR source, const int ac, char **av) {
 
 		TRACE_MAIN();
 
-		memset(nick_token, 0, sizeof(nick_token));
+		smemzero(nick_token, sizeof(nick_token));
 		nick_token_ptr = str_tokenize(nick_token_ptr, nick_token, sizeof(nick_token), c_SPACE);
 
 		/* In case of lag, or akills processed before the sjoin synch, we gotta
@@ -654,7 +654,7 @@ void chan_handle_SJOIN(CSTR source, const int ac, char **av) {
 			#ifdef FIX_USE_MPOOL
 			mempool_free(channels_mempool, chan);
 			#else
-			mem_free(chan);
+			sfree(chan);
 			#endif
 
 			return;
@@ -667,7 +667,7 @@ void chan_handle_SJOIN(CSTR source, const int ac, char **av) {
 			size_t	deopLen = 0;
 
 
-			memset(modes, 0, sizeof(modes));
+			smemzero(modes, sizeof(modes));
 
 			for (idx = 0; idx < deop; ++idx) {
 
@@ -693,7 +693,7 @@ void chan_handle_SJOIN(CSTR source, const int ac, char **av) {
 					modes[modeIdx] = '\0';
 					send_cmd(":%s MODE %s -%s %s", s_ChanServ, chan_name, modes, deopnicks);
 					deopLen = 0;
-					memset(modes, 0, SERVER_MAX_MODES + 1);
+					smemzero(modes, SERVER_MAX_MODES + 1);
 					modeIdx = 0;
 				}
 			}
@@ -764,7 +764,7 @@ void chan_handle_internal_SJOIN(const char *nick, const char *chan_name) {
 		#ifdef	FIX_USE_MPOOL
 		chan = mempool_alloc(Channel*, channels_mempool, TRUE);
 		#else
-		chan = mem_calloc(1, sizeof(Channel));
+		chan = smalloc(sizeof(Channel));
 		#endif
 
 		str_copy_checked(chan_name, chan->name, sizeof(chan->name));
@@ -864,7 +864,7 @@ static void chan_sjoin_add_user(User *user, Channel *chan) {
 	#ifdef	FIX_USE_MPOOL
 	userItem = mempool_alloc(UserListItem *, channels_user_entry_mempool, FALSE);
 	#else
-	userItem = mem_malloc(sizeof(UserListItem));
+	userItem = smalloc(sizeof(UserListItem));
 	#endif
 
 	userItem->next = chan->users;
@@ -926,7 +926,7 @@ static void chan_sjoin_add_user(User *user, Channel *chan) {
 	#ifdef	FIX_USE_MPOOL
 	chanItem = mempool_alloc(ChanListItem *, channels_chan_entry_mempool, FALSE);
 	#else
-	chanItem = mem_malloc(sizeof(ChanListItem));
+	chanItem = smalloc(sizeof(ChanListItem));
 	#endif
 
 	chanItem->next = user->chans;
@@ -967,9 +967,9 @@ static void chan_sjoin_ops_check(Channel *chan, User **checklist, int count) {
 		return;
 	}
 
-	memset(oplist, 0, sizeof(oplist));
-	memset(halfoplist, 0, sizeof(halfoplist));
-	memset(voicelist, 0, sizeof(voicelist));
+	smemzero(oplist, sizeof(oplist));
+	smemzero(halfoplist, sizeof(halfoplist));
+	smemzero(voicelist, sizeof(voicelist));
 
 	TRACE();
 	for (idx = 0; idx < count; ++idx) {
@@ -991,7 +991,7 @@ static void chan_sjoin_ops_check(Channel *chan, User **checklist, int count) {
 				#ifdef	FIX_USE_MPOOL
 				item = mempool_alloc(UserListItem *, channels_user_entry_mempool, FALSE);
 				#else
-				item = mem_malloc(sizeof(UserListItem));
+				item = smalloc(sizeof(UserListItem));
 				#endif
 
 				item->next = chan->voices;
@@ -1015,7 +1015,7 @@ static void chan_sjoin_ops_check(Channel *chan, User **checklist, int count) {
 				#ifdef	FIX_USE_MPOOL
 				item = mempool_alloc(UserListItem *, channels_user_entry_mempool, FALSE);
 				#else
-				item = mem_malloc(sizeof(UserListItem));
+				item = smalloc(sizeof(UserListItem));
 				#endif
 
 				item->next = chan->halfops;
@@ -1040,7 +1040,7 @@ static void chan_sjoin_ops_check(Channel *chan, User **checklist, int count) {
 				#ifdef	FIX_USE_MPOOL
 				item = mempool_alloc(UserListItem *, channels_user_entry_mempool, FALSE);
 				#else
-				item = mem_malloc(sizeof(UserListItem));
+				item = smalloc(sizeof(UserListItem));
 				#endif
 
 				item->next = chan->chanops;
@@ -1223,7 +1223,7 @@ void chan_user_remove(const User *user, Channel *chan) {
 	#ifdef	FIX_USE_MPOOL
 	mempool_free(channels_user_entry_mempool, item);
 	#else
-	mem_free(item);
+	sfree(item);
 	#endif
 
 	--(chan->userCount);
@@ -1249,7 +1249,7 @@ void chan_user_remove(const User *user, Channel *chan) {
 		#ifdef	FIX_USE_MPOOL
 		mempool_free(channels_user_entry_mempool, item);
 		#else
-		mem_free(item);
+		sfree(item);
 		#endif
 	}
 
@@ -1275,7 +1275,7 @@ void chan_user_remove(const User *user, Channel *chan) {
 		#ifdef	FIX_USE_MPOOL
 		mempool_free(channels_user_entry_mempool, item);
 		#else
-		mem_free(item);
+		sfree(item);
 		#endif
 	}
 
@@ -1301,7 +1301,7 @@ void chan_user_remove(const User *user, Channel *chan) {
 		#ifdef	FIX_USE_MPOOL
 		mempool_free(channels_user_entry_mempool, item);
 		#else
-		mem_free(item);
+		sfree(item);
 		#endif
 	}
 
@@ -1315,21 +1315,21 @@ void chan_user_remove(const User *user, Channel *chan) {
 		LOG_DEBUG("channels: Deleting channel %s", chan->name);
 
 		if (IS_NOT_NULL(chan->topic))
-			mem_free(chan->topic);
+			sfree(chan->topic);
 
 		if (IS_NOT_NULL(chan->key))
-			mem_free(chan->key);
+			sfree(chan->key);
 
 		if (chan->bancount > 0) {
 
 			int banIdx;
 
 			for (banIdx = 0; banIdx < chan->bancount; ++banIdx)
-				mem_free(chan->bans[banIdx]);
+				sfree(chan->bans[banIdx]);
 		}
 
 		if (chan->bansize)
-			mem_free(chan->bans);
+			sfree(chan->bans);
 
 		TRACE();
 		if (IS_NOT_NULL(chan->chanops) || IS_NOT_NULL(chan->halfops) || IS_NOT_NULL(chan->voices)) {
@@ -1349,7 +1349,7 @@ void chan_user_remove(const User *user, Channel *chan) {
 		#ifdef FIX_USE_MPOOL
 		mempool_free(channels_mempool, chan);
 		#else
-		mem_free(chan);
+		sfree(chan);
 		#endif
 	}
 }
@@ -1633,7 +1633,7 @@ void chan_handle_chanMODE(const char *source, const int ac, char **av) {
 
 					if (IS_NOT_NULL(chan->key)) {
 
-						mem_free(chan->key);
+						sfree(chan->key);
 						chan->key = NULL;
 					}
 
@@ -1649,7 +1649,7 @@ void chan_handle_chanMODE(const char *source, const int ac, char **av) {
 
 					if (IS_NOT_NULL(chan->key)) {
 
-						mem_free(chan->key);
+						sfree(chan->key);
 						chan->key = NULL;
 					}
 
@@ -2086,7 +2086,7 @@ BOOL chan_add_op(Channel *chan, User *user) {
 	#ifdef	FIX_USE_MPOOL
 	item = mempool_alloc(UserListItem *, channels_user_entry_mempool, FALSE);
 	#else
-	item = mem_malloc(sizeof(UserListItem));
+	item = smalloc(sizeof(UserListItem));
 	#endif
 
 	item->next = chan->chanops;
@@ -2138,7 +2138,7 @@ BOOL chan_remove_op(Channel *chan, const User *user) {
 	#ifdef FIX_USE_MPOOL
 	mempool_free(channels_user_entry_mempool, item);
 	#else
-	mem_free(item);
+	sfree(item);
 	#endif
 
 	return TRUE;
@@ -2176,7 +2176,7 @@ BOOL chan_add_halfop(Channel *chan, User *user) {
 	#ifdef	FIX_USE_MPOOL
 	item = mempool_alloc(UserListItem *, channels_user_entry_mempool, FALSE);
 	#else
-	item = mem_malloc(sizeof(UserListItem));
+	item = smalloc(sizeof(UserListItem));
 	#endif
 
 	item->next = chan->halfops;
@@ -2229,7 +2229,7 @@ BOOL chan_remove_halfop(Channel *chan, const User *user) {
 	#ifdef	FIX_USE_MPOOL
 	mempool_free(channels_user_entry_mempool, item);
 	#else
-	mem_free(item);
+	sfree(item);
 	#endif
 
 	return TRUE;
@@ -2267,7 +2267,7 @@ BOOL chan_add_voice(Channel *chan, User *user) {
 	#ifdef	FIX_USE_MPOOL
 	item = mempool_alloc(UserListItem *, channels_user_entry_mempool, FALSE);
 	#else
-	item = mem_malloc(sizeof(UserListItem));
+	item = smalloc(sizeof(UserListItem));
 	#endif
 
 	item->next = chan->voices;
@@ -2320,7 +2320,7 @@ BOOL chan_remove_voice(Channel *chan, const User *user) {
 	#ifdef	FIX_USE_MPOOL
 	mempool_free(channels_user_entry_mempool, item);
 	#else
-	mem_free(item);
+	sfree(item);
 	#endif
 
 	return TRUE;
@@ -2385,7 +2385,8 @@ BOOL chan_add_ban(Channel *chan, const char *mask) {
 	if (chan->bancount >= chan->bansize) {
 
 		chan->bansize += 8;
-		chan->bans = mem_realloc(chan->bans, sizeof(char *) * chan->bansize);
+		chan->bans = srealloc(chan->bans,
+				      sizeof(char *) * chan->bansize);
 	}
 
 	/* Add the new ban. */
@@ -2423,12 +2424,12 @@ BOOL chan_remove_ban(Channel *chan, CSTR banmask) {
 		--(chan->bancount);
 
 		/* Free this entry. */
-		mem_free(*aBan);
+		sfree(*aBan);
 
 		/* Was it the only one? */
 		if (chan->bancount == 0) {
 
-			mem_free(chan->bans);
+			sfree(chan->bans);
 			chan->bans = NULL;
 			chan->bansize = 0;
 		}
@@ -2462,10 +2463,10 @@ void chan_clear_bans(Channel *chan) {
 	}
 
 	for (banIdx = 0; banIdx < chan->bancount; ++banIdx)
-		mem_free(chan->bans[banIdx]);
+		sfree(chan->bans[banIdx]);
 
 	if (chan->bansize)
-		mem_free(chan->bans);
+		sfree(chan->bans);
 
 	chan->bans = NULL;
 	chan->bancount = 0;
@@ -2532,7 +2533,7 @@ void chan_handle_TOPIC(const char *source, const int ac, char **av) {
 				   and replace it with ours (code taken from check_topiclock()) */
 
 				if (chan->topic)
-					mem_free(chan->topic);
+					sfree(chan->topic);
 
 				if (ci->last_topic)
 					chan->topic = str_duplicate(ci->last_topic);
@@ -2556,7 +2557,7 @@ void chan_handle_TOPIC(const char *source, const int ac, char **av) {
 
 	if (chan->topic) {
 
-		mem_free(chan->topic);
+		sfree(chan->topic);
 		chan->topic = NULL;
 	}
 
@@ -2619,7 +2620,7 @@ void synch_topics() {
 
 				TRACE();
 				if (chan->topic)
-					mem_free(chan->topic);
+					sfree(chan->topic);
 
 				if (ci->last_topic) {
 
@@ -2975,16 +2976,16 @@ void handle_list(const char *source, User *callerUser, ServiceCommandData *data)
 done:
 
 	if (matchTopic)
-		mem_free(matchTopic);
+		sfree(matchTopic);
 
 	if (matchTopicSetter)
-		mem_free(matchTopicSetter);
+		sfree(matchTopicSetter);
 
 	if (matchKey)
-		mem_free(matchKey);
+		sfree(matchKey);
 
 	if (matchName)
-		mem_free(matchName);
+		sfree(matchName);
 }
 
 /*********************************************************/
@@ -3238,7 +3239,7 @@ void handle_masscmds(CSTR source, User *callerUser, ServiceCommandData *data) {
 			return;
 		}
 
-		memset(nickbuf, 0, sizeof(nickbuf));
+		smemzero(nickbuf, sizeof(nickbuf));
 
 		TRACE_MAIN();
 
@@ -3274,7 +3275,7 @@ void handle_masscmds(CSTR source, User *callerUser, ServiceCommandData *data) {
 
 				bancount = len = 0;
 
-				memset(nickbuf, 0, sizeof(nickbuf));
+				smemzero(nickbuf, sizeof(nickbuf));
 
 				nickptr = nickbuf;
 				modeptr = modebuf;
@@ -3375,7 +3376,7 @@ void handle_masscmds(CSTR source, User *callerUser, ServiceCommandData *data) {
 
 			if (removeKey) {
 
-				mem_free(chan->key);
+				sfree(chan->key);
 				chan->key = NULL;
 			}
 
@@ -3446,7 +3447,7 @@ void handle_masscmds(CSTR source, User *callerUser, ServiceCommandData *data) {
 
 		TRACE_MAIN();
 
-		memset(nickbuf, 0, sizeof(nickbuf));
+		smemzero(nickbuf, sizeof(nickbuf));
 
 		if (isChanServ) {
 
@@ -3530,7 +3531,7 @@ void handle_masscmds(CSTR source, User *callerUser, ServiceCommandData *data) {
 
 					/* Re-initialize variables. */
 					count  = 0;
-					memset(nickbuf, 0, sizeof(nickbuf));
+					smemzero(nickbuf, sizeof(nickbuf));
 					nickptr = nickbuf;
 					modeptr = modebuf;
 				}
@@ -3680,8 +3681,8 @@ void handle_masscmds(CSTR source, User *callerUser, ServiceCommandData *data) {
 				ChannelTimeoutData	*data1, *data2;
 
 				TRACE();
-				data1 = mem_malloc(sizeof(ChannelTimeoutData));
-				data2 = mem_malloc(sizeof(ChannelTimeoutData));
+				data1 = smalloc(sizeof(ChannelTimeoutData));
+				data2 = smalloc(sizeof(ChannelTimeoutData));
 
 				if (IS_NOT_NULL(ci)) {
 
@@ -3891,9 +3892,9 @@ void handle_mode(CSTR source, User *callerUser, ServiceCommandData *data) {
 				}
 			}
 
-			memset(unknownModes, 0, sizeof(unknownModes));
-			memset(invalidModes, 0, sizeof(invalidModes));
-			memset(lockedModes, 0, sizeof(lockedModes));
+			smemzero(unknownModes, sizeof(unknownModes));
+			smemzero(invalidModes, sizeof(invalidModes));
+			smemzero(lockedModes, sizeof(lockedModes));
 
 			while (*modes) {
 
@@ -3957,17 +3958,17 @@ void handle_mode(CSTR source, User *callerUser, ServiceCommandData *data) {
 
 							send_notice_to_user(s_OperServ, callerUser, "Invalid mask.");
 
-							mem_free(nick);
-							mem_free(user);
-							mem_free(host);
+							sfree(nick);
+							sfree(user);
+							sfree(host);
 							return;
 						}
 
-						token = mem_malloc(str_len(nick) + str_len(user) + str_len(host) + 3);
+						token = smalloc(str_len(nick) + str_len(user) + str_len(host) + 3);
 						sprintf((char *) token, "%s!%s@%s", nick, user, host);
-						mem_free(nick);
-						mem_free(user);
-						mem_free(host);
+						sfree(nick);
+						sfree(user);
+						sfree(host);
 
 						str_compact(token);
 
@@ -3990,7 +3991,7 @@ void handle_mode(CSTR source, User *callerUser, ServiceCommandData *data) {
 								else
 									send_notice_to_user(s_OperServ, callerUser, "\2%s\2 is already banned on \2%s\2.", token, chan->name);
 
-								mem_free(token);
+								sfree(token);
 								break;
 							}
 
@@ -4005,7 +4006,7 @@ void handle_mode(CSTR source, User *callerUser, ServiceCommandData *data) {
 
 								send_notice_to_user(s_OperServ, callerUser, "\2%s\2 is not banned on \2%s\2.", token, chan->name);
 
-								mem_free(token);
+								sfree(token);
 								break;
 							}
 
@@ -4014,7 +4015,7 @@ void handle_mode(CSTR source, User *callerUser, ServiceCommandData *data) {
 						}
 
 						++mode_count;
-						mem_free(token);
+						sfree(token);
 						break;
 					}
 
@@ -4158,7 +4159,7 @@ void handle_mode(CSTR source, User *callerUser, ServiceCommandData *data) {
 
 							if (key) {
 
-								mem_free(key);
+								sfree(key);
 								key = NULL;
 							}
 
@@ -4181,7 +4182,7 @@ void handle_mode(CSTR source, User *callerUser, ServiceCommandData *data) {
 
 							if (key) {
 
-								mem_free(key);
+								sfree(key);
 								key = NULL;
 								RemoveFlag(addmode, CMODE_k);
 								--mode_count;
@@ -4513,9 +4514,9 @@ void handle_mode(CSTR source, User *callerUser, ServiceCommandData *data) {
 						if (known_cmodes[idx].letter == 'k') {
 
 							if (chan->key)
-								mem_free(chan->key);
+								sfree(chan->key);
 							chan->key = str_duplicate(key);
-							mem_free(key);
+							sfree(key);
 							addKey = TRUE;
 						}
 						else if (known_cmodes[idx].letter == 'l')
@@ -4548,7 +4549,7 @@ void handle_mode(CSTR source, User *callerUser, ServiceCommandData *data) {
 
 				if (removeKey) {
 
-					mem_free(chan->key);
+					sfree(chan->key);
 					chan->key = NULL;
 				}
 
@@ -4620,10 +4621,10 @@ void handle_mode(CSTR source, User *callerUser, ServiceCommandData *data) {
 			char c;
 			BOOL add = FALSE;
 
-			memset(unknown, 0, sizeof(unknown));
-			memset(invalid, 0, sizeof(invalid));
-			memset(local_add, 0, sizeof(local_add));
-			memset(local_del, 0, sizeof(local_del));
+			smemzero(unknown, sizeof(unknown));
+			smemzero(invalid, sizeof(invalid));
+			smemzero(local_add, sizeof(local_add));
+			smemzero(local_del, sizeof(local_del));
 
 			while (*modes) {
 

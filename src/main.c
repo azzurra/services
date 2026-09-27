@@ -164,7 +164,7 @@ static void write_pidfile(void) {
 
 static void capab_init(void) {
 
-	memset(CAPAB, 0, sizeof(CAPAB));
+	smemzero(CAPAB, sizeof(CAPAB));
 
 	strcat(CAPAB, "CAPAB");
 
@@ -419,7 +419,7 @@ static BOOL initialize() {
 	TRACE_MAIN();
 
 	/* Success! - wee! */
-	memset(QUIT_MESSAGE, 0, sizeof(QUIT_MESSAGE));
+	smemzero(QUIT_MESSAGE, sizeof(QUIT_MESSAGE));
 	LOG_DEBUG("Services successfully loaded");
 
 	return TRUE;

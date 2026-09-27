@@ -54,7 +54,7 @@ static Server *server_create_record(CSTR hub, CSTR name, CSTR hops, CSTR desc) {
 	int branch_name;
 
 	/* Allocate it. */
-	server = mem_calloc(1, sizeof(Server));
+	server = smalloc(sizeof(Server));
 
 	/* Fill it. */
 	server->name = str_duplicate(name);
@@ -182,7 +182,7 @@ void server_handle_SERVER(CSTR source, const int ac, char **av) {
 		server->uplink = findserver(source);
 		server->hops = atoi(av[1]);
 
-		mem_free(server->desc);
+		sfree(server->desc);
 		server->desc = str_duplicate(av[2]);
 	}
 	else

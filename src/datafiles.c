@@ -96,7 +96,7 @@ FILE *open_db_write(const char *service, const char *filename, int version) {
 	char namebuf[MAX_PATH + 1];
 	FILE *f;
 
-	memset(namebuf, 0, MAX_PATH + 1);
+	smemzero(namebuf, MAX_PATH + 1);
 	snprintf(namebuf, sizeof(namebuf), "%s.save", filename);
 
 	if (!*namebuf || str_equals(namebuf, filename)) {
@@ -211,7 +211,7 @@ char *read_string(FILE *f, const char *filename) {
 
 	len = fgetc(f) * 256 + fgetc(f);
 
-	string = mem_malloc(len);
+	string = smalloc(len);
 
 	if (len != fread(string, 1, len, f))
 		fatal_error(FACILITY_DATABASE, __LINE__, "Read error on file: %s", filename);

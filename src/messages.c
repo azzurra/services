@@ -685,7 +685,7 @@ static void m_gnotice(CSTR source, const int ac, char **av) {
 		char servername[HOSTMAX];
 		Server *server;
 
-		memset(servername, 0, sizeof(servername));
+		smemzero(servername, sizeof(servername));
 
 		str_tokenize(av[0], servername, sizeof(servername), c_SPACE);
 
