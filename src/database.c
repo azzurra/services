@@ -451,6 +451,7 @@ void db_init(void) {
         exit(EXIT_FAILURE);
     }
 
+    // Register core record type handlers
     db_register_type_handler("GRVER", db_h_grver);
     db_register_type_handler("DBV", db_h_dbv);
     db_register_type_handler("MDEP", db_h_mdep);
@@ -458,9 +459,7 @@ void db_init(void) {
     db_register_type_handler("CF", db_ignore_row); // CF is silently ignored
     db_register_type_handler("TS", db_h_ts);
 
-    db_register_type_handler("NAM", db_ignore_row); // NAM is silently ignored
-    db_register_type_handler("MDN", db_ignore_row); // ... and so is MDN
-
+    // Register the unknown record type handler
     db_register_type_handler("???", db_h_unknown);
 }
 
