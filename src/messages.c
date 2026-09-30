@@ -269,7 +269,7 @@ static void m_ping(CSTR source, const int ac, char **av) {
 static void m_burst(CSTR source, const int ac, char **av) {
 
 #ifdef ENABLE_CAPAB_BURST
-	if (ac > 0) {
+	if (FlagSet(uplink_capab, CAPAB_BURST) && ac > 0) {
 
 		/* Let our uplink know we're synched. */
 		send_cmd("BURST 0");
@@ -750,6 +750,12 @@ static void m_capab(CSTR source, const int ac, char **av) {
 				AddFlag(uplink_capab, known_capabs[capab_idx].flag);
 		}
 	}
+
+#ifdef ENABLE_CAPAB_BURST
+	if (FlagSet(uplink_capab, CAPAB_BURST))
+		// Inform our uplink that we're beginning our burst sequence
+		send_cmd("BURST");
+#endif
 
 	introduce_services_agent(NULL);
 }
