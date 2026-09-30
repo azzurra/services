@@ -787,3 +787,10 @@ BOOL str_settingsinfo_remove(SettingsInfo **infoList, unsigned long int type) {
 
 	return FALSE;
 }
+
+void strcasecanon(char *str) {
+    while (*str) {
+        *str = tolower((unsigned char)*str);
+        str++;
+    }
+}

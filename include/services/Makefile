@@ -29,6 +29,7 @@ INCLUDES =           \
     config.h         \
     crypt_shs1.h     \
     crypt_userhost.h \
+    database.h       \
     datafiles.h      \
     debugserv.h      \
     facility.h       \

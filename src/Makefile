@@ -21,6 +21,7 @@ SRCS =               \
     conf.c           \
     crypt_shs1.c     \
     crypt_userhost.c \
+    database.c       \
     datafiles.c      \
     debugserv.c      \
     helpserv.c       \

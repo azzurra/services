@@ -26,6 +26,7 @@
 #include <services/process.h>
 #include <services/sockutil.h>
 #include <services/datafiles.h>
+#include <services/database.h>
 #include <services/lang.h>
 #include <services/users.h>
 #include <services/channels.h>
@@ -309,6 +310,10 @@ static BOOL initialize() {
 	debugserv_init();
 
 	TRACE_MAIN();
+	init_entities();
+	db_init();
+
+	TRACE_MAIN();
 	helpserv_init();
 	nickserv_init();
 	chanserv_init();
@@ -363,6 +368,9 @@ static BOOL initialize() {
 	TRACE_MAIN();
 
 	oper_db_load();
+	TRACE_MAIN();
+
+	db_load("services.db");
 	TRACE_MAIN();
 
 	LOG_DEBUG("Databases loaded");
@@ -443,6 +451,9 @@ void services_cleanup() {
 	TRACE_MAIN();
 
 	chan_terminate();
+
+	TRACE_MAIN();
+	db_terminate();
 
 	TRACE_MAIN();
 	lang_unload_all();
@@ -559,6 +570,8 @@ void database_store() {
 	seenserv_db_save();
 	TRACE_MAIN();
 	oper_db_save();
+	TRACE_MAIN();
+	db_save("services.db");
 
 	TRACE_MAIN();
 

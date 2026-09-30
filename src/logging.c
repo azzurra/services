@@ -610,7 +610,8 @@ void log_stderr(CSTR fmt, ...) {
 	}
 }
 
-void fatal_error(FACILITY facility, FACILITY_LINE line, CSTR fmt, ...) {
+void AZSVC_FATTR_NORETURN AZSVC_FATTR_PRINTF(3, 4)
+fatal_error(FACILITY facility, FACILITY_LINE line, CSTR fmt, ...) {
 
 	char timebuf[64], buffer[IRCBUFSIZE];
 	size_t len;

@@ -247,4 +247,6 @@ extern void str_creationinfo_free(CreationInfo *info);
 extern BOOL str_settingsinfo_add(SettingsInfo **infoList, unsigned long int type, CSTR creator, CSTR reason);
 extern BOOL str_settingsinfo_remove(SettingsInfo **infoList, unsigned long int type);
 
+extern void strcasecanon(char *str);
+
 #endif /* SVC_STRINGS_H */

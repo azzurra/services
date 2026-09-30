@@ -125,7 +125,9 @@ extern void log_debug_snoop(CSTR fmt, ...) AZSVC_FATTR_PRINTF(1, 2);
 extern void log_stderr(CSTR fmt, ...) AZSVC_FATTR_PRINTF(1, 2);
 
 /* Log the error both on the log file and on the stderr stream, send a globops, then die. */
-extern void fatal_error(FACILITY facility, FACILITY_LINE line, CSTR fmt, ...) AZSVC_FATTR_PRINTF(3, 4);
+extern void fatal_error(FACILITY facility, FACILITY_LINE line, CSTR fmt, ...)
+	AZSVC_FATTR_NORETURN
+	AZSVC_FATTR_PRINTF(3, 4);
 
 extern CSTR log_get_day_timestamp(int day, int month, int year);
 extern CSTR log_get_timestamp(time_t logtime);

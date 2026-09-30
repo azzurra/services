@@ -14,6 +14,8 @@
 #ifndef SRV_COMMON_H
 #define SRV_COMMON_H
 
+#include <services/sysconf.h>
+
 /* C headers */
 #include <stdint.h>
 #include <stdarg.h>
@@ -37,6 +39,9 @@
 #include <ctype.h>
 #include <fcntl.h>
 #include <inttypes.h>
+#ifdef HAVE_SYS_FILE_H
+#include <sys/file.h>
+#endif
 
 /* Libmowgli */
 #include <mowgli.h>
