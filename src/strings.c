@@ -23,6 +23,11 @@
 #include <services/signals.h>
 #include <services/main.h>
 
+static mowgli_patricia_t *strshare_dict = NULL;
+
+struct strshare {
+	int refcount;
+};
 
 /*********************************************************
  * Caratteri generici                                    *
@@ -793,4 +798,61 @@ void strcasecanon(char *str) {
         *str = tolower((unsigned char)*str);
         str++;
     }
+}
+
+void noopcanon(char *str) {
+	return;
+}
+
+/*************************************************************/
+
+void strshare_init(void) {
+	strshare_dict = mowgli_patricia_create(&noopcanon);
+}
+
+stringref strshare_get(const char *str) {
+	struct strshare *ss;
+
+	if (str == NULL)
+		return NULL;
+
+	ss = mowgli_patricia_retrieve(strshare_dict, str);
+	if (ss != NULL)
+		ss->refcount++;
+	else {
+		ss = smalloc((sizeof *ss) + strlen(str) + 1);
+		ss->refcount = 1;
+		strcpy((char *)(ss + 1), str);
+		mowgli_patricia_add(strshare_dict, (char *)(ss + 1), ss);
+	}
+
+	return (stringref)(ss + 1);
+}
+
+stringref strshare_ref(stringref str) {
+	struct strshare *ss;
+
+	if (str == NULL)
+		return NULL;
+
+	/* intermediate cast to suppress gcc -Wcast-qual */
+	ss = (struct strshare *)(uintptr_t)str - 1;
+	ss->refcount++;
+
+	return str;
+}
+
+void strshare_unref(stringref str) {
+	struct strshare *ss;
+
+	if (str == NULL)
+		return;
+
+	/* intermediate cast to suppress gcc -Wcast-qual */
+	ss = (struct strshare *)(uintptr_t)str - 1;
+	ss->refcount--;
+	if (ss->refcount == 0) {
+		mowgli_patricia_delete(strshare_dict, str);
+		sfree(ss);
+	}
 }

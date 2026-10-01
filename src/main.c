@@ -632,6 +632,7 @@ int main(int ac, char **av, char **envp) {
 
 	/* Initialization stuff. */
 	trace_init();
+	strshare_init();
 
 	TRACE_MAIN_FCLT(FACILITY_MAIN);
 

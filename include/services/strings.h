@@ -30,6 +30,8 @@ typedef		CSTR			STDSTR;
 
 typedef		int				STDVAL;
 
+/* Kinda redundant, but we can spot stringrefs with a simple grep */
+typedef const char *stringref;
 
 typedef struct _Creator {
 
@@ -248,5 +250,12 @@ extern BOOL str_settingsinfo_add(SettingsInfo **infoList, unsigned long int type
 extern BOOL str_settingsinfo_remove(SettingsInfo **infoList, unsigned long int type);
 
 extern void strcasecanon(char *str);
+extern void noopcanon(char *str);
+
+/* sharedstring functions */
+extern void strshare_init(void);
+extern stringref strshare_get(const char *str);
+extern stringref strshare_ref(stringref str);
+extern void strshare_unref(stringref str);
 
 #endif /* SVC_STRINGS_H */
