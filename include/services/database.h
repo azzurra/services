@@ -45,6 +45,12 @@ struct database_handle {
 
     /* Grammar version */
     unsigned int grver;
+
+    /* Database version identifier */
+    unsigned int dbv;
+
+    /* Database time */
+    time_t db_time;
 };
 
 /****************************************************

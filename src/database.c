@@ -24,9 +24,6 @@
 /* Tree of database row type handlers */
 static mowgli_patricia_t *db_types = NULL;
 
-static unsigned int dbv;
-static time_t db_time;
-
 static char last_entity_uid[IDLEN + 1];
 
 #ifdef HAVE_FLOCK
@@ -92,7 +89,7 @@ void db_load(const char *filename) {
     if (db == NULL)
         return;
 
-    db_time = 0;
+    db->db_time = 0;
 
     LOG_DEBUG("db_load(): %s open with DB_READ transaction level, parsing will begin shortly", db->file);
     db_parse(db);
@@ -561,6 +558,8 @@ db_open_write(const char *filename) {
     db = smalloc(sizeof *db);
     db->f = f;
     db->grver = 1;
+    db->dbv = 12;
+    db->db_time = NOW;
     db->txn = DB_WRITE;
     db->file = sstrdup(bpath);
 
@@ -585,7 +584,7 @@ static void db_write_core_records(struct database_handle *db) {
 
     // Write database version
     db_start_row(db, "DBV");
-    db_write_uint(db, 12);
+    db_write_uint(db, db->dbv);
     db_commit_row(db);
 
     // Write a single mdep to ensure Atheme doesn't load this db by accident
@@ -603,7 +602,7 @@ static void db_write_core_records(struct database_handle *db) {
     db_commit_row(db);
 
     db_start_row(db, "TS");
-    db_write_time(db, NOW);
+    db_write_time(db, db->db_time);
     db_commit_row(db);
 }
 
@@ -623,7 +622,7 @@ static void AZSVC_FATTR_NORETURN db_h_unknown(struct database_handle *db, const 
 }
 
 static void db_h_dbv(struct database_handle *db, const char *type) {
-    dbv = db_sread_uint(db);
+    db->dbv = db_sread_uint(db);
 }
 
 static void db_h_mdep(struct database_handle *db, const char *type) {
@@ -648,7 +647,7 @@ static void db_h_luid(struct database_handle *db, const char *type) {
 }
 
 static void db_h_ts(struct database_handle *db, const char *type) {
-    db_time = db_sread_time(db);
+    db->db_time = db_sread_time(db);
 }
 
 static void db_ignore_row(struct database_handle *db, const char *type) {
