@@ -48,6 +48,16 @@ struct database_handle {
 };
 
 /****************************************************
+ * Constants                                        *
+ ****************************************************/
+enum database_hook_priority {
+    DB_HOOK_PRIO_NS,
+    DB_HOOK_PRIO_CS,
+    DB_HOOK_PRIO_OTHER,
+    DB_HOOK_PRIO_BOTTOM
+};
+
+/****************************************************
  * Functions                                        *
  ****************************************************/
 

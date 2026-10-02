@@ -55,5 +55,7 @@
 #include <services/macros.h>
 #include <services/instpaths.h>
 
+/* Causes a warning if value is not of type (or compatible), returning value. */
+#define ENSURE_TYPE(value, type) (true ? (value) : (type)0)
 
 #endif /* SRV_COMMON_H */

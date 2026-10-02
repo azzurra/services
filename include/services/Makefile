@@ -11,7 +11,7 @@
 
 include ../../extra.mk
 
-DISTCLEAN = instpaths.h serno.h sysconf.h
+DISTCLEAN = hooktypes.h instpaths.h serno.h sysconf.h
 
 includesubdir = services
 
@@ -34,6 +34,8 @@ INCLUDES =           \
     debugserv.h      \
     facility.h       \
     helpserv.h       \
+    hook.h           \
+    hooktypes.h      \
     ignore.h         \
     instpaths.h      \
     jupe.h           \
@@ -76,6 +78,10 @@ INCLUDES =           \
     xrefs.h
 
 pre-depend: ${DISTCLEAN}
+
+hooktypes.h: hooktypes.in mkhooktypes.sh
+	$(info Generate: $@)
+	@sh mkhooktypes.sh hooktypes.in >$@
 
 instpaths.h: ../../extra.mk instpaths.h.in
 	$(info Generate: $@)

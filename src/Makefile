@@ -25,6 +25,7 @@ SRCS =               \
     datafiles.c      \
     debugserv.c      \
     helpserv.c       \
+    hook.c           \
     ignore.c         \
     jupe.c           \
     lang.c           \

@@ -22,6 +22,7 @@
 #include <services/messages.h>
 #include <services/logging.h>
 #include <services/memory.h>
+#include <services/hook.h>
 #include <services/send.h>
 #include <services/process.h>
 #include <services/sockutil.h>
@@ -326,6 +327,8 @@ static BOOL initialize() {
 
 	/* Load up databases */
 	TRACE_MAIN();
+	db_load("services.db");
+	TRACE_MAIN();
 	load_ns_dbase();
 	TRACE_MAIN();
 	load_cs_dbase();
@@ -368,9 +371,6 @@ static BOOL initialize() {
 	TRACE_MAIN();
 
 	oper_db_load();
-	TRACE_MAIN();
-
-	db_load("services.db");
 	TRACE_MAIN();
 
 	LOG_DEBUG("Databases loaded");
@@ -529,6 +529,8 @@ void database_expire(const time_t now) {
 void database_store() {
 
 	TRACE_MAIN();
+	db_save("services.db");
+	TRACE_MAIN();
 	regions_db_save();
 	TRACE_MAIN();
 	save_ns_dbase();
@@ -570,8 +572,6 @@ void database_store() {
 	seenserv_db_save();
 	TRACE_MAIN();
 	oper_db_save();
-	TRACE_MAIN();
-	db_save("services.db");
 
 	TRACE_MAIN();
 
@@ -633,6 +633,7 @@ int main(int ac, char **av, char **envp) {
 	/* Initialization stuff. */
 	trace_init();
 	strshare_init();
+	hooks_init();
 
 	TRACE_MAIN_FCLT(FACILITY_MAIN);
 

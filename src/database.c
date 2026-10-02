@@ -14,6 +14,8 @@
 #include <services/strings.h>
 #include <services/messages.h>
 #include <services/logging.h>
+#include <services/hook.h>
+#include <services/hooktypes.h>
 #include <services/send.h>
 #include <services/memory.h>
 #include <services/database.h>
@@ -110,8 +112,11 @@ void db_save(const char *filename) {
         return;
     }
 
+    LOG_DEBUG("db_save(): %s open with DB_WRITE transaction level, writing core records", db->file);
     db_write_core_records(db);
-    // TODO: fire db_write event hooks
+    LOG_DEBUG("db_save(): core records written, firing db_write hook handlers");
+    hook_call_db_write(db);
+    LOG_DEBUG("db_save(): all hook calls done, closing %s", db->file);
     db_close(db);
 }
 
@@ -142,6 +147,10 @@ void db_close(struct database_handle *db) {
             );
             send_globops(NULL, "\2DATABASE ERROR\2: db_save(): cannot rename services.db.new to services.db: %s", strerror(errno1));
         }
+
+        LOG_DEBUG("db_close(): firing db_saved handlers");
+        hook_call_db_saved();
+        LOG_DEBUG("db_close(): db_saved handlers done");
 
 #ifdef HAVE_FLOCK
         close(lockfd);
