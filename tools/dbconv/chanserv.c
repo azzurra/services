@@ -18,7 +18,7 @@ static void compact_chan_access_list(ChannelInfo *ci, const int removed);
 static void chaninfo_destroy_cb(const char *key, void *data, void *privdata);
 
 void chanserv_init(void) {
-    chandb_heap = heap_get(sizeof(ChannelInfo));
+    chandb_heap = mowgli_heap_create(sizeof(ChannelInfo), 2, BH_NOW);
     cs_suspend_list = mowgli_list_create();
     chantree = mowgli_patricia_create(&strcasecanon);
 }
@@ -35,7 +35,7 @@ void chanserv_terminate(void) {
     }
     mowgli_list_free(cs_suspend_list);
 
-    heap_destroy(chandb_heap);
+    mowgli_heap_destroy(chandb_heap);
 }
 
 void load_cs_dbase(void) {

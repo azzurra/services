@@ -9,16 +9,9 @@
 #ifndef DBCONV_DBCONV_H
 #define DBCONV_DBCONV_H 1
 
-#include <services/attributes.h>
-#include <services/sysconf.h>
-#ifdef HAVE_SYS_FILE_H
-#include <sys/file.h>
-#endif
 #include <mowgli.h>
 #include "common.h"
 #include "config.h"
-#include "memory.h"
-#include "database.h"
 #include "datafiles.h"
 #include "storage.h"
 #include "lang.h"

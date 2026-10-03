@@ -18,16 +18,6 @@ int main(int argc, char *argv[]) {
         { NULL, 0, NULL, 0, 0 }
     };
 
-    mowgli_allocation_policy_t *const policy = mowgli_allocation_policy_create("azsvc", &smalloc, &sfree);
-
-    if (!policy) {
-        (void) fprintf(stderr, "Error: mowgli_allocation_policy_create() failed!\n");
-        return false;
-    }
-
-    (void) mowgli_allocator_set_policy(policy);
-
-
     /* Disable mowgli thread support */
     mowgli_thread_set_policy(MOWGLI_THREAD_POLICY_DISABLED);
 
@@ -49,7 +39,6 @@ int main(int argc, char *argv[]) {
 
     NOW = time(NULL);
 
-    init_entities();
     nickserv_init();
     chanserv_init();
     memoserv_init();
@@ -64,9 +53,7 @@ int main(int argc, char *argv[]) {
     /* We don't really care about StatServ and SeenServ at the moment... */
     mowgli_log("Database load complete");
 
-    mowgli_log("Creating new services.db");
-    db_save("services.db");
-    mowgli_log("Done creating new services.db");
+    /* TODO: write data to monolithic services.db */
 
     operdb_terminate();
     memoserv_terminate();

@@ -14,13 +14,13 @@ mowgli_patricia_t *memotree;
 static void memolist_destroy_cb(const char *key, void *data, void *privdata);
 
 void memoserv_init(void) {
-    memodb_heap = heap_get(sizeof(MemoList));
+    memodb_heap = mowgli_heap_create(sizeof(MemoList), 2, BH_NOW);
     memotree = mowgli_patricia_create(&strcasecanon);
 }
 
 void memoserv_terminate(void) {
     mowgli_patricia_destroy(memotree, &memolist_destroy_cb, NULL);
-    heap_destroy(memodb_heap);
+    mowgli_heap_destroy(memodb_heap);
 }
 
 void load_ms_dbase(void) {
