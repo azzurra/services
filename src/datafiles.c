@@ -187,16 +187,6 @@ void close_db(FILE *dbfile, const char *filename) {
 
 /*********************************************************/
 
-void backup_database() {
-	// Oh god...
-	system("cp -f " DATADIR "/*.db " DATADIR "/backup");
-
-	send_globops(NULL, "Database Back-Up Complete");
-	return;
-}
-
-/*********************************************************/
-
 /* read_string, write_string:
  *	Read a string from a file, or write a string to a file, with the
  *	string length prefixed as a two-byte big-endian integer. The

@@ -75,6 +75,8 @@ const char *entity_alloc_uid(void);
 extern void db_load(const char *filename);
 extern void db_save(const char *filename);
 
+extern void db_backup(void);
+
 extern struct database_handle *db_open(const char *filename, enum database_transaction txn);
 extern void db_close(struct database_handle *db);
 extern void db_parse(struct database_handle *db);

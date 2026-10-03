@@ -26,7 +26,6 @@
 #include <services/send.h>
 #include <services/process.h>
 #include <services/sockutil.h>
-#include <services/datafiles.h>
 #include <services/database.h>
 #include <services/lang.h>
 #include <services/users.h>
@@ -578,7 +577,7 @@ void database_store() {
 	if ((CONF_DATABASE_BACKUP_FREQUENCY > 0) && (++global_force_backup_count > CONF_DATABASE_BACKUP_FREQUENCY)) {
 
 		global_force_backup_count = 0;
-		backup_database();
+		db_backup();
 	}
 }
 

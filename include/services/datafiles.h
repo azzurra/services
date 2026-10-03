@@ -27,7 +27,6 @@ extern int write_file_version(FILE *f, const char *filename, int version);
 extern FILE *open_db_read(const char *service, const char *filename);
 extern FILE *open_db_write(const char *service, const char *filename, int version);
 extern void close_db(FILE *dbfile, const char *filename);
-extern void backup_database(void);
 extern char *read_string(FILE *f, const char *filename);
 extern char *write_string(const char *string, FILE *f, const char *filename);
 

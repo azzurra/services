@@ -606,17 +606,6 @@ STG_RESULT stg_write_strings(STGHANDLE handle, char **strings, size_t strings_co
 		return stg_last_error = stgBadParam;
 }
 
-
-STG_RESULT stg_run_backup(void) {
-	// Oh god...
-	system("cp -f " DATADIR "/*.db " DATADIR "/backup");
-
-	send_globops(NULL, "Database Back-Up Complete");
-
-	return stg_last_error = stgSuccess;
-}
-
-
 const char *stg_result_to_string(STG_RESULT result) {
 
 	static char	buffer[36];

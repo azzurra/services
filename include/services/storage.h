@@ -73,10 +73,6 @@ STG_RESULT stg_read_string(STGHANDLE handle, char **string, size_t *length);
 STG_RESULT stg_write_string(STGHANDLE handle, char *string);
 STG_RESULT stg_write_strings(STGHANDLE handle, char **strings, size_t strings_count, int *error_index);
 
-
-STG_RESULT stg_run_backup(void);
-
-
 #define stg_get_last_error()		stg_last_error
 #define stg_reset_last_error()		stg_last_error = stgSuccess
 

@@ -117,6 +117,12 @@ void db_save(const char *filename) {
     db_close(db);
 }
 
+/* FIXME: this stinks... */
+void db_backup(void) {
+    system("cp -f " DATADIR "/*.db " DATADIR "/backup");
+    send_globops(NULL, "Database Back-Up Complete");
+}
+
 struct database_handle *db_open(const char *filename, enum database_transaction txn) {
     if (txn == DB_WRITE)
         return db_open_write(filename);
