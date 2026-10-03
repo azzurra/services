@@ -9,8 +9,10 @@ PROG = dbconv${PROG_SUFFIX}
 SRCS =          \
     chanserv.c  \
     common.c    \
+    database.c  \
     datafiles.c \
     main.c      \
+    memory.c    \
     memoserv.c  \
     nickserv.c  \
     operdb.c    \
