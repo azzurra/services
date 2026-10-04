@@ -21,61 +21,33 @@
 
 #include <services/strings.h>
 
-
 /*********************************************************
  * Data types                                            *
  *********************************************************/
 
-typedef struct _tagline_V10		Tagline_V10;
-struct _tagline_V10 {
+typedef struct _tagline {
+    char *text;
+    Creator	creator;
 
-	Tagline_V10	*prev, *next;
-
-	char		*text;
-	Creator		creator;
-};
-
-// Current struct version
-typedef	Tagline_V10		Tagline;
-
-typedef struct _tagline_V10_32		Tagline_V10_32;
-struct _tagline_V10_32 {
-
-    int32_t	    prev, next;
-
-    int32_t		text;
-    Creator32	creator;
-};
-
-// Current struct version
-typedef	Tagline_V10_32		Tagline32;
-
-
-/*********************************************************
- * Constants                                             *
- *********************************************************/
-
-#define	TAGLINE_DB_CURRENT_VERSION		10
-#define TAGLINE_DB_SUPPORTED_VERSION	"10"
-
+    mowgli_node_t node;
+} Tagline;
 
 /*********************************************************
  * Global variables                                      *
  *********************************************************/
 
-extern int TaglineCount;
-
+ extern int TaglineCount;
 
 /*********************************************************
  * Public code                                           *
  *********************************************************/
 
-extern BOOL tagline_db_load(void);
-extern BOOL tagline_db_save(void);
-extern void handle_tagline(CSTR source, User *callerUser, ServiceCommandData *data);
-extern void tagline_show(const time_t now);
-extern void tagline_ds_dump(CSTR sourceNick, const User *callerUser, STR request);
-extern unsigned long int tagline_mem_report(CSTR sourceNick, const User *callerUser);
+extern void tagline_init(void);
+extern void tagline_terminate(void);
 
+extern void handle_tagline(const char * ource, User *callerUser, ServiceCommandData *data);
+extern void tagline_show(const time_t now);
+extern void tagline_ds_dump(const char *sourceNick, const User *callerUser, STR request);
+extern unsigned long int tagline_mem_report(const char *sourceNick, const User *callerUser);
 
 #endif /* SRV_TAGLINE_H */

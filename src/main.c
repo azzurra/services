@@ -323,6 +323,7 @@ static BOOL initialize() {
 	statserv_init();
 	seenserv_init();
 	spam_init();
+	tagline_init();
 
 	/* Load up databases */
 	TRACE_MAIN();
@@ -352,7 +353,6 @@ static BOOL initialize() {
 	TRACE_MAIN();
 	blacklist_db_load(); 
 	TRACE_MAIN();
-	tagline_db_load();
 
 	akill_db_load();
 	TRACE_MAIN();
@@ -446,6 +446,7 @@ void services_cleanup() {
 	reserved_terminate();
 	seenserv_terminate();
 	statserv_terminate();
+	tagline_terminate();
 
 	TRACE_MAIN();
 
@@ -559,8 +560,6 @@ void database_store() {
 	reserved_db_save();
 	TRACE_MAIN();
 	blacklist_db_save();
-	TRACE_MAIN();
-	tagline_db_save();
 	TRACE_MAIN();
 	akill_db_save();
 	TRACE_MAIN();
