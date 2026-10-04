@@ -69,7 +69,7 @@ void tagline_terminate(void) {
 static void tg_db_h_tl(struct database_handle *db, const char *type) {
 	/* TL creator timestamp tagline */
 	const char *creator = db_sread_word(db);
-	const time_t created_at = db_sread_time(db);
+	time_t created_at = db_sread_time(db);
 	const char *text = db_sread_str(db);
 
 	Tagline *aTagline = smalloc(sizeof(Tagline));
