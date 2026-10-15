@@ -11,7 +11,6 @@
   h  - (Services Only) Marque un Help Operator
   i  - Invisible aux usagers qui employent la commande /names ou /who
   I  - (IRCop Only) Permet de cacher le temps d'inactivité dans le WHOIS
-  j  - Marque un client Java
   k  - (IRCop Only) Permet la vision des messages de Kill par clients non U:Lined
   K  - (IRCop Only) Permet la vision des messages de Kill par clients U:Lined
   m  - (IRCop Only) Permet la vision des messages de Spam
