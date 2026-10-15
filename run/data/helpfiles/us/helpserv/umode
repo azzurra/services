@@ -11,7 +11,6 @@
   h  - (Services Only) This user is a Help Operator.
   i  - Invisible mode (you will not show up in /WHO or /NAMES ).
   I  - (IRCop Only) Hides idle time in a /WHOIS.
-  j  - This user is chatting from the web using Java.
   k  - (IRCop Only) Receive KILL messages from non-U:Lined clients.
   K  - (IRCop Only) Receive KILL messages from U:Lined clients.
   m  - (IRCop Only) Receive SPAM messages.

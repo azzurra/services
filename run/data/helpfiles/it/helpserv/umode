@@ -11,7 +11,6 @@
   h  - (Services Only) Contraddistingue un Help Operator.
   i  - Invisibile agli utenti che eseguono il comando /names o il comando /who.
   I  - (IRCop Only) Permette di nascondere l'idle time ai WHOIS.
-  j  - Contraddistingue un client che chatta dal web tramite Java.
   k  - (IRCop Only) Permette la visione dei messaggi di Kill da parte di client non U:Lined.
   K  - (IRCop Only) Permette la visione dei messaggi di Kill da parte di client U:Lined.
   m  - (IRCop Only) Permette la visione dei messaggi di Spam.
