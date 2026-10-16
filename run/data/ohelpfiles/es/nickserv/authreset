@@ -1,0 +1,15 @@
+*** NickServ Operator Help - Command: AUTHRESET ***
+Cancels a pending AUTH procedure on a nickname.
+ 
+Syntax: AUTHRESET nickname [MAILCHANGE | DROP | RESETPASS]
+ 
+No sub-command: full reset, nick back to unauthorized,
+registered and pending E-Mail removed.
+MAILCHANGE, DROP, RESETPASS: cancel only that pending
+request, E-Mail and password untouched.
+ 
+On a pending password reset use RESETPASS: a full reset
+locks the owner out.
+ 
+This command is limited to Services Help Operators.
+*** End of OHelp ***
