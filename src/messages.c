@@ -705,6 +705,12 @@ static void m_gnotice(CSTR source, const int ac, char **av) {
 
 			RemoveFlag(server->flags, SERVER_FLAG_BURSTING);
 			LOG_SNOOP(s_Snooper, "Synched with \2%s\2%s [Users: %u]", server->name, FlagSet(server->flags, SERVER_FLAG_UPLINK) ? " [Uplink]" : s_NULL, server->userCount);
+
+			/* Reconcile topics now that this server finished bursting. chan_handle_TOPIC and
+			   chan_handle_SJOIN deferred TOPICLOCK/KEEPTOPIC enforcement while BURSTING was set,
+			   so any mismatch between ci->last_topic and chan->topic is resolved here with a
+			   single ChanServ TOPIC per channel. See issue #1. */
+			synch_topics();
 		}
 
 		burst_servers(server);
