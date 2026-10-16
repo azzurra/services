@@ -4,7 +4,8 @@ Manages the services access lists.
 Syntax: OPER ADD nick level
         OPER DEL nick
         OPER INFO nick
-        OPER SET ENABLED YES|NO
+        OPER SET nick ENABLED YES|NO
+        OPER SET nick AKILLPROXY YES|NO
         OPER LIST [level]
  
 ADD adds the given nick with the given level, which can
@@ -13,6 +14,12 @@ list, it will be raised/demoted to the new list accordingly.
  
 Note: All entries must be enabled after being added
 in order to work.
+ 
+AKILLPROXY marks an entry as a network proxy monitor.
+Akills it adds are typed as proxy akills and show up as
+such in AKILL LIST, AKILL INFO and in the akill ID, so
+that they can be told apart from the ones an oper added
+by hand. An oper cannot grant this to his own entry.
  
 This command is limited to Services Administrators.
 *** End of OHelp ***

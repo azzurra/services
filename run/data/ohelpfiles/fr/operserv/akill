@@ -26,5 +26,8 @@ only by opers.
 ENABLE and DISABLE temporarily enable/disable an
 AKILL without having to remove it and readd it later.
  
-This command is limited to Services Operators.
+This command is limited to Services Operators. Akills added
+by an entry carrying the AKILLPROXY capability (see OPER SET)
+are typed as proxy akills, so that LIST and INFO tell them
+apart from the ones an oper added by hand.
 *** End of OHelp ***
