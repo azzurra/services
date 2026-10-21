@@ -49,6 +49,11 @@ struct user_chaninfolist_item {
 	ChannelInfo			*ci;
 };
 
+typedef struct _user_alt_list_item	User_AltListItem;
+#ifdef ENABLE_CAPAB_NICKIP
+typedef struct _rdns_host_group RdnsHostGroup;
+#endif
+
 // an user
 struct _User {
 
@@ -63,6 +68,8 @@ struct _User {
 	#ifdef ENABLE_CAPAB_NICKIP
 	unsigned long int			ip;
 	unsigned char				ipv6[sizeof(struct in6_addr)];
+	User_AltListItem			*rdns_host_item;
+	RdnsHostGroup				*rdns_host_group;
 	#endif
 
 	time_t					tsinfo;			/* User's tsinfo, used for SVSMODE etc. */
@@ -98,7 +105,6 @@ struct _User {
 };
 
 
-typedef struct _user_alt_list_item	User_AltListItem;
 struct _user_alt_list_item {
 
 	User				*user;
@@ -165,11 +171,15 @@ struct _user_alt_list_item {
 #else
 	#define ONLINEHOST_HASHSIZE				256
 	#define USER_ONLINEHOST_HASHFUNC(key)	((key) % ONLINEHOST_HASHSIZE)
+	#define RDNS_HOST_HASHSIZE				2048
 #endif
 
 extern User 				*hashtable_onlineuser[];
 extern User_AltListItem 	*hashtable_onlinehost[];
 extern User_AltListItem		*list_onlineuser_ipv6;
+#ifdef ENABLE_CAPAB_NICKIP
+extern User_AltListItem		*user_rdns_host_find(CSTR host);
+#endif
 
 // Users stats
 extern unsigned int user_online_user_count;

@@ -126,6 +126,106 @@ CREATE_HASH_FIND(localuser, User_AltListItem, user->nick)
 	
 User_AltListItem	*list_onlineuser_ipv6 = NULL;
 
+#ifdef ENABLE_CAPAB_NICKIP
+struct _rdns_host_group {
+	char				*host;
+	User_AltListItem	*users;
+	RdnsHostGroup		*next, *prev;
+};
+
+static RdnsHostGroup *hashtable_rdns_host[RDNS_HOST_HASHSIZE];
+
+static unsigned int user_rdns_host_hash(CSTR host) {
+	unsigned long int hash = 5381;
+	unsigned char character;
+
+
+	while ((character = (unsigned char)*host++) != c_NULL) {
+
+		if ((character >= 'A') && (character <= 'Z'))
+			character = (unsigned char)(character + ('a' - 'A'));
+
+		hash = ((hash << 5) + hash) + character;
+	}
+
+	return (unsigned int)(hash % RDNS_HOST_HASHSIZE);
+}
+
+
+static void user_rdns_host_add(User *user) {
+	unsigned int hash;
+	RdnsHostGroup *group;
+	User_AltListItem *item;
+
+
+	if (IS_NULL(user) || IS_EMPTY_STR(user->host))
+		return;
+
+	hash = user_rdns_host_hash(user->host);
+	for (group = hashtable_rdns_host[hash]; IS_NOT_NULL(group); group = group->next) {
+
+		if (str_equals_nocase(group->host, user->host))
+			break;
+	}
+
+	if (IS_NULL(group)) {
+
+		group = mem_calloc(1, sizeof(RdnsHostGroup));
+		group->host = str_duplicate(user->host);
+		LIST_INSERT(group, hashtable_rdns_host[hash]);
+	}
+
+	item = mem_calloc(1, sizeof(User_AltListItem));
+	item->user = user;
+	LIST_INSERT(item, group->users);
+	user->rdns_host_item = item;
+	user->rdns_host_group = group;
+}
+
+
+static void user_rdns_host_remove(User *user) {
+	RdnsHostGroup *group;
+	User_AltListItem *item;
+
+
+	if (IS_NULL(user) || IS_NULL(user->rdns_host_item))
+		return;
+
+	item = user->rdns_host_item;
+	group = user->rdns_host_group;
+	LIST_REMOVE(item, group->users);
+	mem_free(item);
+	user->rdns_host_item = NULL;
+	user->rdns_host_group = NULL;
+
+	if (IS_NULL(group->users)) {
+
+		LIST_REMOVE(group, hashtable_rdns_host[user_rdns_host_hash(group->host)]);
+		mem_free(group->host);
+		mem_free(group);
+	}
+}
+
+
+User_AltListItem *user_rdns_host_find(CSTR host) {
+	unsigned int hash;
+	RdnsHostGroup *group;
+
+
+	if (IS_EMPTY_STR(host))
+		return NULL;
+
+	hash = user_rdns_host_hash(host);
+	for (group = hashtable_rdns_host[hash]; IS_NOT_NULL(group); group = group->next) {
+
+		if (str_equals_nocase(group->host, host))
+			return group->users;
+	}
+
+	return NULL;
+}
+#endif
+
 #define LIST_ADD_IPv6_USER(user) \
 	if (FlagSet((user)->flags, USER_FLAG_HAS_IPV6)) { \
 		\
@@ -175,6 +275,11 @@ BOOL user_init(void) {
 
 	for (idx = 0; idx < ONLINEHOST_HASHSIZE; ++idx)
 		hashtable_onlinehost[idx] = NULL;
+
+	#ifdef ENABLE_CAPAB_NICKIP
+	for (idx = 0; idx < RDNS_HOST_HASHSIZE; ++idx)
+		hashtable_rdns_host[idx] = NULL;
+	#endif
 
 	#ifdef FIX_USE_MPOOL
 	user_mempool = mempool_create(MEMPOOL_ID_USER, sizeof(User), MP_IPB_USERS, MB_IBC_USERS);
@@ -608,6 +713,10 @@ void user_delete_user(User *user) {
 	if (!(user_onlinehost_remove(user)))
 		log_error(FACILITY_USERS_DELETE_USER, __LINE__, LOG_TYPE_ERROR_SANITY, LOG_SEVERITY_ERROR_PROPAGATED,
 			"user_delete_user(): Failed to remove onlinehost entry for user %s (%s@%s)", user->nick, user->username, user->host);
+
+	#ifdef ENABLE_CAPAB_NICKIP
+	user_rdns_host_remove(user);
+	#endif
 
 	LIST_DEL_IPv6_USER(user);
 
@@ -1186,6 +1295,10 @@ void user_handle_NICK(CSTR source, const int ac, char **av) {
 			log_error(FACILITY_USERS_HANDLE_NICK, __LINE__, LOG_TYPE_ERROR_SANITY, LOG_SEVERITY_ERROR_PROPAGATED,
 				"Failed to add onlinehost entry for user %s (%s@%s)", user->nick, user->username, user->host);
 
+		#ifdef ENABLE_CAPAB_NICKIP
+		user_rdns_host_add(user);
+		#endif
+
 		LIST_ADD_IPv6_USER(user);
 
 		TRACE_MAIN();
@@ -1323,6 +1436,8 @@ void user_handle_NICK(CSTR source, const int ac, char **av) {
 			}
 			else
 				check_clones(user);
+
+			check_clones_rdns(user);
 		}
 
 		TRACE_MAIN();
@@ -3760,6 +3875,9 @@ unsigned long user_mem_report(CSTR sourceNick, const User *callerUser) {
 	User			*user;
 	unsigned long		count = 0, mem = 0, mem_total;
 	int			idx;
+	#ifdef ENABLE_CAPAB_NICKIP
+	RdnsHostGroup		*rdnsHost;
+	#endif
 
 	ChanListItem		*item;
 
@@ -3780,6 +3898,10 @@ unsigned long user_mem_report(CSTR sourceNick, const User *callerUser) {
 			TRACE();
 			++count;
 			mem += sizeof(User) + sizeof(User_AltListItem);
+			#ifdef ENABLE_CAPAB_NICKIP
+			if (IS_NOT_NULL(user->rdns_host_item))
+				mem += sizeof(User_AltListItem);
+			#endif
 
 			if (IS_NOT_NULL(user->username))
 				mem += str_len(user->username) + 1;
@@ -3803,6 +3925,14 @@ unsigned long user_mem_report(CSTR sourceNick, const User *callerUser) {
 				mem += str_len(*idnicks);
 		}
 	}
+
+	#ifdef ENABLE_CAPAB_NICKIP
+	for (idx = 0; idx < RDNS_HOST_HASHSIZE; ++idx) {
+
+		for (rdnsHost = hashtable_rdns_host[idx]; IS_NOT_NULL(rdnsHost); rdnsHost = rdnsHost->next)
+			mem += sizeof(RdnsHostGroup) + str_len(rdnsHost->host) + 1;
+	}
+	#endif
 
 	TRACE();
 	mem_total = mem;

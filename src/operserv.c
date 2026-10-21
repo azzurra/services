@@ -63,6 +63,16 @@ struct _clone_warning {
 	tiny_flags_t		flags;
 };
 
+typedef struct _rdns_clone_warning	RdnsCloneWarning;
+
+struct _rdns_clone_warning {
+
+	char		host[HOSTSIZE];
+	time_t		timeAdded;
+	int		cloneCount;
+	BOOL		used;
+};
+
 #define WARNINGS_FLAG_USED	0x0001
 #define WARNINGS_FLAG_HOST	0x0002
 #define WARNINGS_FLAG_IPV6	0x0004
@@ -74,6 +84,7 @@ struct _clone_warning {
 
 /* List of clone warnings. Statically initialized to zeros. */
 static CloneWarning warnings[CLONE_DETECT_SIZE + 1];
+static RdnsCloneWarning rdnsWarnings[CLONE_DETECT_SIZE + 1];
 
 /* Stuff to pass to the command handler. */
 static Agent a_OperServ;
@@ -90,6 +101,9 @@ static void do_masskill(CSTR source, User *callerUser, ServiceCommandData *data)
 static void do_mass_op_voice(CSTR source, User *callerUser, ServiceCommandData *data);
 static void do_settings(CSTR source, User *callerUser, ServiceCommandData *data);
 static void do_stats(CSTR source, User *callerUser, ServiceCommandData *data);
+static void clear_rdns_warning(CSTR host);
+static BOOL rdns_component_has_numeric_suffix(CSTR component, CSTR pattern, unsigned int suffixStart);
+static BOOL rdns_contains_possible_cgnat(CSTR host);
 
 
 /*********************************************************
@@ -773,6 +787,208 @@ void check_clones_v6(const User *newUser) {
 	}
 }
 
+
+
+/*********************************************************
+ * Additional clone detection by hostname.               *
+ *********************************************************/
+
+/* Remove stale rate-limit state when a hostname exception becomes active. */
+static void clear_rdns_warning(CSTR host) {
+
+	int warningIdx;
+
+
+	for (warningIdx = 0; warningIdx <= CLONE_DETECT_SIZE; ++warningIdx) {
+
+		if (rdnsWarnings[warningIdx].used && str_equals_nocase(rdnsWarnings[warningIdx].host, host)) {
+			memset(&(rdnsWarnings[warningIdx]), 0, sizeof(RdnsCloneWarning));
+			return;
+		}
+	}
+}
+
+
+/* Match a component prefix followed only by optional decimal digits. */
+static BOOL rdns_component_has_numeric_suffix(CSTR component, CSTR pattern, unsigned int suffixStart) {
+	unsigned int idx;
+
+
+	if ((str_len(component) < suffixStart) || !str_match_wild_nocase(pattern, component))
+		return FALSE;
+
+	for (idx = suffixStart; component[idx] != c_NULL; ++idx) {
+
+		if ((component[idx] < '0') || (component[idx] > '9'))
+			return FALSE;
+	}
+
+	return TRUE;
+}
+
+
+/* Recognize CGNAT-like labels without matching substrings such as "national". */
+static BOOL rdns_contains_possible_cgnat(CSTR host) {
+	char component[HOSTSIZE];
+	const char *start, *cursor;
+	size_t componentLen;
+
+
+	start = host;
+	cursor = host;
+
+	while (TRUE) {
+
+		if ((*cursor == c_NULL) || (*cursor == '.') || (*cursor == '-') || (*cursor == '_')) {
+
+			componentLen = (size_t)(cursor - start);
+
+			if ((componentLen > 0) && (componentLen < sizeof(component))) {
+
+				memcpy(component, start, componentLen);
+				component[componentLen] = c_NULL;
+
+				if (rdns_component_has_numeric_suffix(component, "cgnat*", 5) ||
+					rdns_component_has_numeric_suffix(component, "nat*", 3) ||
+					rdns_component_has_numeric_suffix(component, "shared*", 6))
+					return TRUE;
+			}
+
+			if (*cursor == c_NULL)
+				break;
+
+			start = ++cursor;
+		}
+		else
+			++cursor;
+	}
+
+	return FALSE;
+}
+
+
+#ifdef ENABLE_CAPAB_NICKIP
+/* Compare the scan key used by the existing IPv4 and IPv6 clone scanners. */
+static BOOL rdns_same_clone_scan_key(const User *first, const User *second) {
+	BOOL firstIsNativeIPv6, secondIsNativeIPv6;
+
+
+	firstIsNativeIPv6 = FlagSet(first->flags, USER_FLAG_HAS_IPV6) &&
+		FlagUnset(first->flags, USER_FLAG_6TO4 | USER_FLAG_TEREDO);
+	secondIsNativeIPv6 = FlagSet(second->flags, USER_FLAG_HAS_IPV6) &&
+		FlagUnset(second->flags, USER_FLAG_6TO4 | USER_FLAG_TEREDO);
+
+	if (firstIsNativeIPv6 != secondIsNativeIPv6)
+		return FALSE;
+
+	if (firstIsNativeIPv6)
+		return (memcmp(first->ipv6, second->ipv6, CONF_CLONE_SCAN_V6 * 2) == 0);
+
+	return (first->ip == second->ip);
+}
+#endif
+
+
+/* Warn operators when IPv4 and IPv6 users share one hostname. */
+void check_clones_rdns(const User *newUser) {
+	BOOL isExempt = FALSE, possibleCgnat;
+	TRIGGER_RESULT triggerResult;
+	HOST_TYPE hostType;
+	int cloneCount = 0, warningIdx = -1;
+	#ifdef ENABLE_CAPAB_NICKIP
+	User *user;
+	BOOL hasAddressDiversity = FALSE;
+	User_AltListItem *hostItem;
+	#endif
+
+
+	TRACE_FCLT(FACILITY_OPERSERV_CHECK_CLONES);
+
+	if (IS_NULL(newUser) || IS_EMPTY_STR(newUser->host))
+		return;
+
+	if (user_is_services_agent(newUser) || user_is_services_client(newUser))
+		return;
+
+	hostType = host_type(newUser->host, NULL);
+	if ((hostType == htIPv4) || (hostType == htIPv6))
+		return;
+
+	#ifdef ENABLE_CAPAB_NICKIP
+	if (FlagUnset(uplink_capab, CAPAB_NICKIP))
+		return;
+	#else
+	return;
+	#endif
+
+	#ifdef ENABLE_CAPAB_NICKIP
+	hostItem = user_rdns_host_find(newUser->host);
+	for (; IS_NOT_NULL(hostItem); hostItem = hostItem->next) {
+
+		user = hostItem->user;
+
+		if (user_is_services_agent(user) || user_is_services_client(user))
+			continue;
+
+		++cloneCount;
+
+		#ifdef ENABLE_CAPAB_NICKIP
+		if (!rdns_same_clone_scan_key(newUser, user))
+			hasAddressDiversity = TRUE;
+		#endif
+
+		if (user_is_ircop(user) || is_services_valid_oper(user))
+			isExempt = TRUE;
+	}
+
+	if (!hasAddressDiversity) {
+		clear_rdns_warning(newUser->host);
+		return;
+	}
+	#endif
+
+	triggerResult = trigger_hostname_match(newUser->host, cloneCount);
+	if (triggerResult == triggerExempt) {
+		clear_rdns_warning(newUser->host);
+		return;
+	}
+
+	if ((triggerResult != triggerFound) && (cloneCount < CONF_CLONE_MIN_USERS))
+		return;
+
+	for (warningIdx = CLONE_DETECT_SIZE; warningIdx >= 0; --warningIdx) {
+
+		if (rdnsWarnings[warningIdx].used && str_equals_nocase(rdnsWarnings[warningIdx].host, newUser->host))
+			break;
+	}
+
+	if (warningIdx >= 0) {
+
+		time_t warningDelay = isExempt ? 300 : CONF_CLONE_WARNING_DELAY;
+
+		if (((cloneCount - rdnsWarnings[warningIdx].cloneCount) < 5) &&
+			((NOW - rdnsWarnings[warningIdx].timeAdded) < warningDelay))
+			return;
+
+		rdnsWarnings[warningIdx].timeAdded = NOW;
+		rdnsWarnings[warningIdx].cloneCount = cloneCount;
+	}
+	else {
+
+		memmove(rdnsWarnings, rdnsWarnings + 1, sizeof(RdnsCloneWarning) * CLONE_DETECT_SIZE);
+		warningIdx = CLONE_DETECT_SIZE;
+
+		memset(&(rdnsWarnings[warningIdx]), 0, sizeof(RdnsCloneWarning));
+		rdnsWarnings[warningIdx].used = TRUE;
+		str_copy_checked(newUser->host, rdnsWarnings[warningIdx].host, sizeof(rdnsWarnings[warningIdx].host));
+		rdnsWarnings[warningIdx].timeAdded = NOW;
+		rdnsWarnings[warningIdx].cloneCount = cloneCount;
+	}
+
+	possibleCgnat = rdns_contains_possible_cgnat(newUser->host);
+	send_globops(s_OperServ, "[RDNS CLONES] %d IPv4/IPv6 connections share hostname %s%s. Manual IRCop verification required.",
+		cloneCount, newUser->host, possibleCgnat ? " [POSSIBLE CGNAT]" : "");
+}
 
 
 /*********************************************************
@@ -1820,7 +2036,7 @@ void operserv_ds_dump(CSTR sourceNick, const User *callerUser, STR request) {
 
 unsigned long int operserv_mem_report(CSTR sourceNick, const User *callerUser) {
 
-	unsigned long int	mem = 0;
+	unsigned long int	mem = 0, rdnsMem;
 	int					warningIdx;
 
 
@@ -1839,5 +2055,9 @@ unsigned long int operserv_mem_report(CSTR sourceNick, const User *callerUser) {
 	}
 
 	send_notice_to_user(sourceNick, callerUser, "Clone warnings list: \2%d\2 -> \2%lu\2 KB (\2%lu\2 B)", CLONE_DETECT_SIZE, mem / 1024, mem);
-	return mem;
+
+	rdnsMem = sizeof(RdnsCloneWarning) * (CLONE_DETECT_SIZE + 1);
+	send_notice_to_user(sourceNick, callerUser, "rDNS clone warnings list: \2%d\2 -> \2%lu\2 KB (\2%lu\2 B)", CLONE_DETECT_SIZE, rdnsMem / 1024, rdnsMem);
+
+	return mem + rdnsMem;
 }

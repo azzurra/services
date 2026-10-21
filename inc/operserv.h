@@ -29,6 +29,7 @@ extern void operserv_init(void);
 // Clones stuff
 extern void check_clones(const User *user);
 extern void check_clones_v6(const User *user);
+extern void check_clones_rdns(const User *user);
 
 // Debug stuff
 extern void operserv_ds_dump(CSTR sourceNick, const User *callerUser, STR request);
