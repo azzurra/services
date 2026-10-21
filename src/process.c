@@ -103,11 +103,26 @@ static __inline__ int process_split_message(const char *buffer) {
 			case ' ':
 				/* Space. End current param and move on to the next. */
 				*ptr = '\0';
-				ptr = argv[++argc];
 
 				/* Watch out for more than one space in a row. */
 				while (*buffer == c_SPACE)
 					++buffer;
+
+				/* Preserve a trailing empty parameter when there is room. */
+				if (*buffer == c_NULL) {
+
+					if (argc + 1 < IRCD_MAX_PARAMS) {
+						ptr = argv[++argc];
+						*ptr = '\0';
+					}
+
+					return (argc + 1);
+				}
+
+				if (argc + 1 >= IRCD_MAX_PARAMS)
+					return -1;
+
+				ptr = argv[++argc];
 
 				break;
 
@@ -120,8 +135,13 @@ static __inline__ int process_split_message(const char *buffer) {
 				if (lastchar == c_SPACE) {
 
 					/* This is the last parameter. Copy the remaining buffer into it and we're done. */
-					while (*buffer != '\0')
+					while (*buffer != '\0') {
+
+						if ((ptr - argv[argc]) >= (IRCBUFSIZE - 1))
+							return -1;
+
 						*ptr++ = *buffer++;
+					}
 
 					/* Get rid of the extra spaces at the end, if any.
 					   Commented: breaks users' real names.
@@ -138,6 +158,9 @@ static __inline__ int process_split_message(const char *buffer) {
 
 			default:
 				/* Copy this char into the current param buffer. */
+				if ((ptr - argv[argc]) >= (IRCBUFSIZE - 1))
+					return -1;
+
 				*ptr++ = c;
 				break;
 		}
@@ -161,7 +184,7 @@ static __inline__ int process_split_message(const char *buffer) {
 
 void process_parse() {
 
-	char	source[HOSTSIZE];
+	char	source[BUFSIZE];
 	char	command[IRCBUFSIZE];
 	char	*ptr, *buffer;
 	Message	*msg;
@@ -195,8 +218,16 @@ void process_parse() {
 		++buffer;
 		TRACE_MAIN();
 
-		while (*buffer != c_SPACE && *buffer != c_NULL)
+		while (*buffer != c_SPACE && *buffer != c_NULL) {
+
+			if ((ptr - source) >= (BUFSIZE - 1)) {
+
+				LOG_DEBUG_SNOOP("Invalid IB: %s", serv_input_buffer);
+				return;
+			}
+
 			*ptr++ = *buffer++;
+		}
 
 		*ptr = c_NULL;
 	}
@@ -218,8 +249,16 @@ void process_parse() {
 
 	ptr = command;
 
-	while (*buffer != c_SPACE && *buffer != c_NULL)
+	while (*buffer != c_SPACE && *buffer != c_NULL) {
+
+		if ((ptr - command) >= (IRCBUFSIZE - 1)) {
+
+			LOG_DEBUG_SNOOP("Invalid IB: %s", serv_input_buffer);
+			return;
+		}
+
 		*ptr++ = *buffer++;
+	}
 
 	*ptr = c_NULL;
 
@@ -246,6 +285,16 @@ void process_parse() {
 				argc = process_split_message(buffer);
 			else
 				argc = 0;	/* This is valid (BURST, etc.)! */
+
+			if (argc < 0) {
+
+				LOG_DEBUG_SNOOP("Invalid IB: %s", serv_input_buffer);
+
+				for (i = 0; i < IRCD_MAX_PARAMS; ++i)
+					memset(argv[i], 0, IRCBUFSIZE);
+
+				return;
+			}
 
 			dispatched = TRUE;
 
