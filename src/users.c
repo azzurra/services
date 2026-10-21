@@ -159,6 +159,72 @@ unsigned int		user_online_user_max = 0;
 static void user_handle_newuserMODE(User *user, char *newmodes, const NickInfo *ni);
 static void user_handle_newuserMODE_stats(User *user, char *newmodes, SeenInfo *si);
 
+typedef struct _PendingCloneScan PendingCloneScan;
+struct _PendingCloneScan {
+	char			nick[NICKMAX];
+};
+
+static void user_check_clones(const User *user) {
+
+	/*Teredo and 6to4 users will trigger the IPv4 clone scanner*/
+	if (FlagSet(user->flags, USER_FLAG_HAS_IPV6) && FlagUnset(user->flags, USER_FLAG_6TO4 | USER_FLAG_TEREDO)) {
+
+		if (CONF_CLONE_SCAN_V6 > 0)
+			check_clones_v6(user);
+	}
+	else
+		check_clones(user);
+}
+
+void user_scan_pending_clones(void) {
+
+	PendingCloneScan	*pending;
+	User			*user;
+	unsigned int		idx, pending_count = 0, pending_idx = 0;
+
+	HASH_FOREACH_BRANCH(idx, ONLINEUSER_HASHSIZE) {
+
+		HASH_FOREACH_BRANCH_ITEM(onlineuser, idx, user) {
+
+			if (FlagSet(user->flags, USER_FLAG_CLONE_SCAN_PENDING) &&
+				FlagUnset(user->server->flags, SERVER_FLAG_BURSTING))
+				++pending_count;
+		}
+	}
+
+	if (pending_count == 0)
+		return;
+
+	pending = mem_malloc(sizeof(PendingCloneScan) * pending_count);
+
+	/* Copy nicknames before scanning. A clone scan can remove users. */
+	HASH_FOREACH_BRANCH(idx, ONLINEUSER_HASHSIZE) {
+
+		HASH_FOREACH_BRANCH_ITEM(onlineuser, idx, user) {
+
+			if (FlagSet(user->flags, USER_FLAG_CLONE_SCAN_PENDING) &&
+				FlagUnset(user->server->flags, SERVER_FLAG_BURSTING)) {
+
+				str_copy_checked(user->nick, pending[pending_idx].nick, sizeof(pending[pending_idx].nick));
+				++pending_idx;
+
+				RemoveFlag(user->flags, USER_FLAG_CLONE_SCAN_PENDING);
+			}
+		}
+	}
+
+	for (pending_idx = 0; pending_idx < pending_count; ++pending_idx) {
+
+		user = hash_onlineuser_find(pending[pending_idx].nick);
+
+		if (IS_NOT_NULL(user) && (CONF_SET_CLONE == TRUE) && (synched == TRUE) &&
+			FlagUnset(user->server->flags, SERVER_FLAG_BURSTING))
+			user_check_clones(user);
+	}
+
+	mem_free(pending);
+}
+
 /*********************************************************
  * Helper                                                *
  *********************************************************/
@@ -1315,14 +1381,10 @@ void user_handle_NICK(CSTR source, const int ac, char **av) {
 		/* Check to see if it looks like clones. */
 		if ((CONF_SET_CLONE == TRUE) && (synched == TRUE)) {
 
-			/*Teredo and 6to4 users will trigger the IPv4 clone scanner*/
-			if (FlagSet(user->flags, USER_FLAG_HAS_IPV6) && FlagUnset(user->flags, USER_FLAG_6TO4 | USER_FLAG_TEREDO)) {
-
-				if (CONF_CLONE_SCAN_V6 > 0)
-					check_clones_v6(user);
-			}
+			if (FlagSet(server->flags, SERVER_FLAG_BURSTING))
+				AddFlag(user->flags, USER_FLAG_CLONE_SCAN_PENDING);
 			else
-				check_clones(user);
+				user_check_clones(user);
 		}
 
 		TRACE_MAIN();
@@ -3568,6 +3630,7 @@ char *get_user_flags(long int flags) {
 	APPEND_FLAG(flags, USER_FLAG_EMPTYUSERINFO, "USER_FLAG_EMPTYUSERINFO")
 	APPEND_FLAG(flags, USER_FLAG_6TO4, "USER_FLAG_6TO4")
 	APPEND_FLAG(flags, USER_FLAG_TEREDO, "USER_FLAG_TEREDO")
+	APPEND_FLAG(flags, USER_FLAG_CLONE_SCAN_PENDING, "USER_FLAG_CLONE_SCAN_PENDING")
 
 	if (len == 0)
 		return "None";

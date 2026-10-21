@@ -708,6 +708,7 @@ static void m_gnotice(CSTR source, const int ac, char **av) {
 		}
 
 		burst_servers(server);
+		user_scan_pending_clones();
 	}
 }
 

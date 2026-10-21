@@ -138,6 +138,7 @@ struct _user_alt_list_item {
 #define USER_FLAG_PASSHACK		0x00000400
 #define USER_FLAG_6TO4			0x00000800
 #define USER_FLAG_TEREDO		0x00001000
+#define USER_FLAG_CLONE_SCAN_PENDING	0x00002000
 
 // Users lists index validation
 #define FIRST_VALID_NICK_CHAR	65
@@ -191,6 +192,7 @@ extern User *user_add_services_agent(CSTR nick, long int mode, CSTR realname);
 extern void user_delete_services_client(CSTR nick);
 
 extern User *user_add_enforcer(NickInfo *ni);
+extern void user_scan_pending_clones(void);
 
 #define IS_INVALID_NICK_CHAR(c)	( ((c) < FIRST_VALID_NICK_CHAR) || ((c) > LAST_VALID_NICK_CHAR) )
 #define IS_INVALID_HOST_CHAR(c)	( ((c) < FIRST_VALID_HOST_CHAR) || ((c) > LAST_VALID_HOST_CHAR) )
