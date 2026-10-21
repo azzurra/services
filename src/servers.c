@@ -450,11 +450,11 @@ void servers_user_remove(User *user) {
 		return;
 	}
 
-	/* Decrease this server's user count. */
-	--(server->userCount);
-
 	if (user_is_services_client(user))
 		return;
+
+	/* Decrease this server's user count. */
+	--(server->userCount);
 
 	if (IS_NULL(stats = server->stats)) {
 
