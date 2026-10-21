@@ -1447,6 +1447,15 @@ static void do_global(CSTR source, User *callerUser, ServiceCommandData *data) {
 
 /*********************************************************/
 
+static BOOL masskill_user_is_protected(const User *user) {
+
+	return (user_is_services_client(user) || user_is_services_agent(user) || user_is_ircop(user) ||
+		is_services_valid_oper(user) || str_equals_nocase("azzurra.chat", user->host) ||
+		str_match_wild_nocase("*.azzurra.chat", user->host));
+}
+
+/*********************************************************/
+
 static void do_masskill(CSTR source, User *callerUser, ServiceCommandData *data) {
 
 	char *target, *reason;
@@ -1467,6 +1476,7 @@ static void do_masskill(CSTR source, User *callerUser, ServiceCommandData *data)
 		User *targetUser;
 		char *mask, defreason[32];
 		int count = 0, size = 0;
+		float percent;
 
 		if (IS_NULL(targetUser = hash_onlineuser_find(target))) {
 
@@ -1564,22 +1574,10 @@ static void do_masskill(CSTR source, User *callerUser, ServiceCommandData *data)
 
 		HASH_FOREACH_BRANCH(idx, ONLINEUSER_HASHSIZE) {
 
-			HASH_FOREACH_BRANCH_ITEM_SAFE(onlineuser, idx, user, next) {
+			HASH_FOREACH_BRANCH_ITEM(onlineuser, idx, user) {
 
-				if (user_usermask_match(mask, user, TRUE, TRUE)) {
-
-					if (!user_is_services_agent(user) && !user_is_ircop(user)) {
-
-						++count;
-						if (IS_NULL(reason)) {
-
-							snprintf(defreason, sizeof(defreason), "Cloning [%d]", count);
-							send_KILL(NULL, user->nick, defreason, TRUE);
-						}
-						else
-							send_KILL(NULL, user->nick, reason, TRUE);
-					}
-				}
+				if (user_usermask_match(mask, user, TRUE, TRUE) && !masskill_user_is_protected(user))
+					++count;
 			}
 		}
 
@@ -1597,8 +1595,54 @@ static void do_masskill(CSTR source, User *callerUser, ServiceCommandData *data)
 			}
 
 			send_notice_to_user(s_OperServ, callerUser, "No users matching \2%s\2 found.", mask);
+			mem_free(mask);
 			return;
 		}
+
+		percent = ((count + .0) * 100.0) / user_online_user_count;
+
+		if (percent > CONF_AKILL_PERCENT) {
+
+			if (data->operMatch) {
+
+				send_globops(s_OperServ, "\2%s\2 tried to masskill \2%.3f%s\2 of the network! (Limit: %.3f%s)", source, percent, "%", CONF_AKILL_PERCENT, "%");
+
+				LOG_SNOOP(s_OperServ, "OS *Mk %s -- by %s (%s@%s) [%.3f%s > %.3f%s]", mask, callerUser->nick, callerUser->username, callerUser->host, percent, "%", CONF_AKILL_PERCENT, "%");
+				log_services(LOG_SERVICES_OPERSERV, "*Mk %s -- by %s (%s@%s) [%.3f%s > %.3f%s]", mask, callerUser->nick, callerUser->username, callerUser->host, percent, "%", CONF_AKILL_PERCENT, "%");
+			}
+			else {
+
+				send_globops(s_OperServ, "\2%s\2 (through \2%s\2) tried to masskill \2%.3f%s\2 of the network! (Limit: %.3f%s)", source, data->operName, percent, "%", CONF_AKILL_PERCENT, "%");
+
+				LOG_SNOOP(s_OperServ, "OS *Mk %s -- by %s (%s@%s) through %s [%.3f%s > %.3f%s]", mask, callerUser->nick, callerUser->username, callerUser->host, data->operName, percent, "%", CONF_AKILL_PERCENT, "%");
+				log_services(LOG_SERVICES_OPERSERV, "*Mk %s -- by %s (%s@%s) through %s [%.3f%s > %.3f%s]", mask, callerUser->nick, callerUser->username, callerUser->host, data->operName, percent, "%", CONF_AKILL_PERCENT, "%");
+			}
+
+			send_notice_to_user(s_OperServ, callerUser, "Masskill rejected. Affected users would be greater than %.3f%s", CONF_AKILL_PERCENT, "%");
+			mem_free(mask);
+			return;
+		}
+
+		count = 0;
+
+		HASH_FOREACH_BRANCH(idx, ONLINEUSER_HASHSIZE) {
+
+			HASH_FOREACH_BRANCH_ITEM_SAFE(onlineuser, idx, user, next) {
+
+				if (user_usermask_match(mask, user, TRUE, TRUE) && !masskill_user_is_protected(user)) {
+
+					++count;
+					if (IS_NULL(reason)) {
+
+						snprintf(defreason, sizeof(defreason), "Cloning [%d]", count);
+						send_KILL(NULL, user->nick, defreason, TRUE);
+					}
+					else
+						send_KILL(NULL, user->nick, reason, TRUE);
+				}
+			}
+		}
+
 		TRACE_MAIN();
 
 		if (data->operMatch) {
@@ -1620,9 +1664,9 @@ static void do_masskill(CSTR source, User *callerUser, ServiceCommandData *data)
 	else {
 
 		char defreason[32];
-		int i, count = 0, x = 0, check = 0;
+		int count = 0;
 		float percent;
-		User *matches[512];
+		User *protectedUser = NULL;
 
 		TRACE_MAIN();
 
@@ -1643,41 +1687,29 @@ static void do_masskill(CSTR source, User *callerUser, ServiceCommandData *data)
 			return;
 		}
 
-		for (i = 0; i < 512; ++i)
-			matches[i] = NULL;
-
 		HASH_FOREACH_BRANCH(idx, ONLINEUSER_HASHSIZE) {
 
 			HASH_FOREACH_BRANCH_ITEM_SAFE(onlineuser, idx, user, next) {
 
 				if (user_usermask_match(target, user, TRUE, TRUE)) {
 
-					matches[x] = user;
+					if (masskill_user_is_protected(user)) {
 
-					if (user_is_services_client(user) || user_is_services_agent(user) || user_is_ircop(user) ||
-						str_equals_nocase("azzurra.chat", user->host) || str_match_wild_nocase("*.azzurra.chat", user->host)) {
-
-						check = 1;
+						protectedUser = user;
 						break;
 					}
 
-					++x;
+					++count;
 				}
 			}
 
-			if (check == 1)
+			if (IS_NOT_NULL(protectedUser))
 				break;
 		}
 
-		if (check == 1) {
+		if (IS_NOT_NULL(protectedUser)) {
 
-			user = matches[x];
-
-			if (IS_NULL(user)) {
-
-				LOG_DEBUG_SNOOP("MK: No user!");
-				return;
-			}
+			user = protectedUser;
 
 			if (data->operMatch) {
 
@@ -1698,7 +1730,7 @@ static void do_masskill(CSTR source, User *callerUser, ServiceCommandData *data)
 			return;
 		}
 
-		if (x == 0) {
+		if (count == 0) {
 
 			if (data->operMatch) {
 
@@ -1715,7 +1747,7 @@ static void do_masskill(CSTR source, User *callerUser, ServiceCommandData *data)
 			return;
 		}
 
-		percent = ((x + .0) * 100.0) / user_online_user_count;
+		percent = ((count + .0) * 100.0) / user_online_user_count;
 
 		if (percent > CONF_AKILL_PERCENT) {
 
@@ -1738,24 +1770,27 @@ static void do_masskill(CSTR source, User *callerUser, ServiceCommandData *data)
 			return;
 		}
 
-		for (i = 0; i < x && matches[i]; ++i) {
+		count = 0;
 
-			TRACE_MAIN();
+		HASH_FOREACH_BRANCH(idx, ONLINEUSER_HASHSIZE) {
 
-			user = matches[i];
+			HASH_FOREACH_BRANCH_ITEM_SAFE(onlineuser, idx, user, next) {
 
-			if (IS_NULL(user))
-				continue;
+				TRACE_MAIN();
 
-			++count;
+				if (!user_usermask_match(target, user, TRUE, TRUE) || masskill_user_is_protected(user))
+					continue;
 
-			if (IS_NULL(reason)) {
+				++count;
 
-				snprintf(defreason, sizeof(defreason), "Cloning [%d]", count);
-				send_KILL(NULL, user->nick, defreason, TRUE);
+				if (IS_NULL(reason)) {
+
+					snprintf(defreason, sizeof(defreason), "Cloning [%d]", count);
+					send_KILL(NULL, user->nick, defreason, TRUE);
+				}
+				else
+					send_KILL(NULL, user->nick, reason, TRUE);
 			}
-			else
-				send_KILL(NULL, user->nick, reason, TRUE);
 		}
 
 		TRACE_MAIN();
